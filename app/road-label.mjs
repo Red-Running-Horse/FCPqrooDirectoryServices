@@ -5,7 +5,8 @@ export function roadLabel(value) {
   if (
     !name ||
     /^(?:N\/D|N\/A)$/i.test(name) ||
-    /^(?:[A-Z]{1,4}[\s-]*)?\d+(?:[\s./-]*\d+)*(?:[\s-]*[A-Z])?$/i.test(name)
+    /^[\d\s./-]+[A-Z]?$/i.test(name) ||
+    /^[A-Z]{1,4}[- ]*\d[\d\s./-]*[A-Z]?$/i.test(name)
   ) {
     return null;
   }
