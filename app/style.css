@@ -1,0 +1,32 @@
+html,
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+main {
+  padding: 1rem;
+}
+
+h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+.map {
+  height: calc(100vh - 8rem);
+  min-height: 400px;
+  width: 100%;
+}
+
+.road-label {
+  font-weight: 600;
+  color: #153d58;
+  background: rgba(255, 255, 255, 0.85);
+  border: 0;
+  box-shadow: none;
+}

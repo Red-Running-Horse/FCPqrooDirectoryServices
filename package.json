@@ -1,0 +1,24 @@
+{
+  "name": "fcpqroodirectoryservices",
+  "version": "1.0.0",
+  "description": "Three-day MVP for a Spanish-first tourism and local services directory for Felipe Carrillo Puerto, Quintana Roo, including an interactive map.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://localhost:26831/Red-Running-Horse/FCPqrooDirectoryServices"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "leaflet": "1.9.4",
+    "next": "16.3.6",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  }
+}
