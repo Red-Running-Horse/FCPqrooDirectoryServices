@@ -19,10 +19,46 @@ const DEMO_VERIFICATION_NOTE = {
 
 const DEMO_LAST_UPDATED = "2026-09-29";
 
+// Verified local places should carry exact coordinates and a working directionsUrl.
+const VERIFIED_MARKET = {
+  id: "mercado-felipe-carrillo-puerto",
+  category: "food",
+  name: {
+    es: "Mercado Público Municipal de Felipe Carrillo Puerto",
+    en: "Felipe Carrillo Puerto Municipal Public Market",
+  },
+  description: {
+    es: "Mercado municipal con puestos de comida tradicional yucateca, productos locales y artesanías en el centro de la ciudad.",
+    en: "Municipal market with traditional Yucatecan food stalls, local products and crafts in the city center.",
+  },
+  latitude: 19.580894458770345,
+  longitude: -88.04402730793707,
+  status: "verified",
+  locationAccuracy: "exact",
+  directionsUrl: "https://maps.app.goo.gl/zJbo8V1rE4ZmYT537",
+  address: {
+    es: "Calle 66 entre 65 y 67, Col. Centro, Felipe Carrillo Puerto, Quintana Roo",
+    en: "66 Street between 65th and 67th, Col. Centro, Felipe Carrillo Puerto, Quintana Roo",
+  },
+  hours: {
+    es: "Lun - Dom: 05:00 - 21:00",
+    en: "Mon - Sun: 05:00 - 21:00",
+  },
+  phone: "800 911 6666",
+  whatsapp: null,
+  website: "https://www.felipecarrillopuerto.gob.mx/component/tags/tag/mercado",
+  verificationNote: {
+    es: "Ubicación verificada físicamente en sitio y confirmada por el equipo; coordenadas tomadas del punto directo en Google Maps.",
+    en: "Location physically verified on site and confirmed by the team; coordinates taken from the direct Google Maps pin.",
+  },
+  lastUpdated: "2026-09-29",
+};
+
 // Demo pins only: these coordinates are approximate points inside Felipe Carrillo Puerto and do
 // not identify verified businesses or attractions. Set status to "verified" (and add a
 // directionsUrl) only after confirming the real destination and its coordinates.
 export const attractions = [
+  VERIFIED_MARKET,
   {
     id: "nature-demo-1",
     name: { es: "Punto de naturaleza (demo)", en: "Nature spot (demo)" },
