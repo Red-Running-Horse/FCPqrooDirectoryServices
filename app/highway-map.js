@@ -2,6 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { roadLabel } from "./road-label.mjs";
+import {
+  FCP_MAX_BOUNDS,
+  FCP_VIEW_BOUNDS,
+  MAX_ZOOM,
+  MIN_ZOOM,
+  TOURIST_MAP_STYLE,
+  shouldShowLabels,
+} from "./map-view.mjs";
 
 export default function HighwayMap() {
   const container = useRef(null);
@@ -16,14 +24,27 @@ export default function HighwayMap() {
       const L = (await import("leaflet")).default;
       if (disposed) return;
 
-      map = L.map(container.current, { preferCanvas: true }).setView(
-        [19.6, -88.05],
-        10
-      );
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 19,
-      }).addTo(map);
+      map = L.map(container.current, {
+        preferCanvas: true,
+        attributionControl: false,
+        minZoom: MIN_ZOOM,
+        maxZoom: MAX_ZOOM,
+        maxBounds: FCP_MAX_BOUNDS,
+        maxBoundsViscosity: 0.8,
+      });
+      map.fitBounds(FCP_VIEW_BOUNDS);
+
+      const reset = L.control({ position: "topleft" });
+      reset.onAdd = () => {
+        const wrapper = L.DomUtil.create("div", "leaflet-bar reset-view");
+        const button = L.DomUtil.create("button", "", wrapper);
+        button.type = "button";
+        button.textContent = "Volver a Felipe Carrillo Puerto";
+        L.DomEvent.disableClickPropagation(wrapper);
+        L.DomEvent.on(button, "click", () => map.fitBounds(FCP_VIEW_BOUNDS));
+        return wrapper;
+      };
+      reset.addTo(map);
 
       const response = await fetch("/regional-highways.geojson", {
         signal: controller.signal,
@@ -33,10 +54,25 @@ export default function HighwayMap() {
       const data = await response.json();
       if (disposed) return;
 
+      L.geoJSON(data, {
+        style: {
+          color: TOURIST_MAP_STYLE.highwayCasing,
+          weight: 7,
+          opacity: 1,
+          lineCap: "round",
+          lineJoin: "round",
+        },
+      }).addTo(map);
+
       const labels = [];
-      const active = new Set();
-      const roads = L.geoJSON(data, {
-        style: { color: "#17649a", weight: 2.5, opacity: 0.8 },
+      L.geoJSON(data, {
+        style: {
+          color: TOURIST_MAP_STYLE.highway,
+          weight: 3,
+          opacity: 1,
+          lineCap: "round",
+          lineJoin: "round",
+        },
         onEachFeature(feature, layer) {
           const name = roadLabel(feature.properties?.NOMBRE);
           if (name) {
@@ -48,11 +84,11 @@ export default function HighwayMap() {
         },
       }).addTo(map);
 
-      map.fitBounds(roads.getBounds(), { padding: [20, 20] });
+      const active = new Set();
 
       function updateLabels() {
         const visible = new Set();
-        if (map.getZoom() >= 12) {
+        if (shouldShowLabels(map.getZoom())) {
           const bounds = map.getBounds();
           const names = new Set();
           for (const { name, layer } of labels) {
@@ -92,7 +128,7 @@ export default function HighwayMap() {
   return (
     <>
       {error && <p role="alert">{error}</p>}
-      <div ref={container} className="map" aria-label="Mapa de carreteras regionales" />
+      <div ref={container} className="map" aria-label="Mapa turístico de Felipe Carrillo Puerto" />
     </>
   );
 }
