@@ -1,76 +1,112 @@
 export const CATEGORIES = [
-  { id: "all", label: "Todos" },
-  { id: "nature", label: "Naturaleza" },
-  { id: "culture", label: "Cultura" },
-  { id: "food", label: "Comida" },
-  { id: "lodging", label: "Hospedaje" },
-  { id: "tours", label: "Tours" },
+  { id: "all", label: { es: "Todos", en: "All" } },
+  { id: "nature", label: { es: "Naturaleza", en: "Nature" } },
+  { id: "culture", label: { es: "Cultura", en: "Culture" } },
+  { id: "food", label: { es: "Comida", en: "Food" } },
+  { id: "lodging", label: { es: "Hospedaje", en: "Lodging" } },
+  { id: "tours", label: { es: "Tours", en: "Tours" } },
 ];
 
-// Demo pins only: these coordinates do not identify verified businesses or attractions.
+// Demo pins only: these coordinates are approximate points inside Felipe Carrillo Puerto and do
+// not identify verified businesses or attractions. Set status to "verified" (and add a
+// directionsUrl) only after confirming the real destination and its coordinates.
 export const attractions = [
   {
     id: "nature-demo-1",
-    name: "Punto de naturaleza (demo)",
+    name: { es: "Punto de naturaleza (demo)", en: "Nature spot (demo)" },
     category: "nature",
-    description: "Ejemplo de un sitio natural; ubicación y detalles pendientes de verificar.",
+    description: {
+      es: "Ejemplo de un sitio natural; ubicación aproximada y detalles pendientes de verificar.",
+      en: "Example of a natural site; approximate location, details not yet verified.",
+    },
     latitude: 19.59,
     longitude: -88.055,
+    status: "unverified",
+    locationAccuracy: "approximate",
     directionsUrl: null,
-    status: "placeholder",
   },
   {
     id: "nature-demo-2",
-    name: "Segundo punto de naturaleza (demo)",
+    name: { es: "Segundo punto de naturaleza (demo)", en: "Second nature spot (demo)" },
     category: "nature",
-    description: "Ejemplo adicional; no representa una atracción confirmada.",
-    latitude: 19.555,
-    longitude: -88.065,
+    description: {
+      es: "Ejemplo adicional con ubicación aproximada; no representa una atracción confirmada.",
+      en: "Additional example with an approximate location; not a confirmed attraction.",
+    },
+    latitude: 19.563,
+    longitude: -88.062,
+    status: "unverified",
+    locationAccuracy: "approximate",
     directionsUrl: null,
-    status: "placeholder",
   },
   {
     id: "culture-demo",
-    name: "Punto cultural (demo)",
+    name: { es: "Punto cultural (demo)", en: "Culture spot (demo)" },
     category: "culture",
-    description: "Ejemplo de espacio cultural; ubicación pendiente de verificar.",
+    description: {
+      es: "Ejemplo de espacio cultural; ubicación aproximada pendiente de verificar.",
+      en: "Example of a cultural venue; approximate location not yet verified.",
+    },
     latitude: 19.585,
     longitude: -88.03,
+    status: "unverified",
+    locationAccuracy: "approximate",
     directionsUrl: null,
-    status: "placeholder",
   },
   {
     id: "food-demo",
-    name: "Punto de comida (demo)",
+    name: { es: "Punto de comida (demo)", en: "Food spot (demo)" },
     category: "food",
-    description: "Ejemplo de comida local; no representa un negocio confirmado.",
+    description: {
+      es: "Ejemplo de comida local con ubicación aproximada; no representa un negocio confirmado.",
+      en: "Example of local food with an approximate location; not a confirmed business.",
+    },
     latitude: 19.575,
-    longitude: -88.07,
+    longitude: -88.068,
+    status: "unverified",
+    locationAccuracy: "approximate",
     directionsUrl: null,
-    status: "placeholder",
   },
   {
     id: "lodging-demo",
-    name: "Punto de hospedaje (demo)",
+    name: { es: "Punto de hospedaje (demo)", en: "Lodging spot (demo)" },
     category: "lodging",
-    description: "Ejemplo de alojamiento; no representa un negocio confirmado.",
+    description: {
+      es: "Ejemplo de alojamiento con ubicación aproximada; no representa un negocio confirmado.",
+      en: "Example of lodging with an approximate location; not a confirmed business.",
+    },
     latitude: 19.57,
     longitude: -88.025,
+    status: "unverified",
+    locationAccuracy: "approximate",
     directionsUrl: null,
-    status: "placeholder",
   },
   {
     id: "tours-demo",
-    name: "Punto de tours (demo)",
+    name: { es: "Punto de tours (demo)", en: "Tours spot (demo)" },
     category: "tours",
-    description: "Ejemplo de recorrido; operador y ubicación pendientes de verificar.",
-    latitude: 19.6,
+    description: {
+      es: "Ejemplo de recorrido; operador y ubicación aproximada pendientes de verificar.",
+      en: "Example of a tour; operator and approximate location not yet verified.",
+    },
+    latitude: 19.598,
     longitude: -88.04,
+    status: "unverified",
+    locationAccuracy: "approximate",
     directionsUrl: null,
-    status: "placeholder",
   },
 ];
 
 export function filterAttractions(category) {
   return attractions.filter((attraction) => category === "all" || attraction.category === category);
+}
+
+export function isVerified(attraction) {
+  return attraction.status === "verified" && attraction.locationAccuracy === "exact";
+}
+
+// Directions are only offered for verified destinations with an https link.
+export function directionsUrlFor(attraction) {
+  const url = attraction.directionsUrl;
+  return isVerified(attraction) && typeof url === "string" && url.startsWith("https://") ? url : null;
 }

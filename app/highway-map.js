@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { attractions, CATEGORIES, filterAttractions } from "./attractions.mjs";
+import {
+  attractions,
+  CATEGORIES,
+  directionsUrlFor,
+  filterAttractions,
+  isVerified,
+} from "./attractions.mjs";
+import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
 import { roadLabel } from "./road-label.mjs";
 import {
   FCP_MAX_BOUNDS,
@@ -12,12 +19,70 @@ import {
   shouldShowLabels,
 } from "./map-view.mjs";
 
+function categoryLabel(id, language) {
+  return localize(CATEGORIES.find((category) => category.id === id).label, language);
+}
+
+function markerTitle(attraction, language) {
+  return `${localize(attraction.name, language)} — ${categoryLabel(attraction.category, language)}`;
+}
+
+function attractionPopup(attraction, language) {
+  const text = uiText(language);
+  const popup = document.createElement("div");
+  popup.className = "attraction-popup";
+  popup.lang = language;
+  const heading = document.createElement("strong");
+  heading.textContent = localize(attraction.name, language);
+  const details = document.createElement("p");
+  details.textContent = `${categoryLabel(attraction.category, language)} · ${
+    isVerified(attraction) ? text.statusVerified : text.statusUnverified
+  }`;
+  const description = document.createElement("p");
+  description.textContent = localize(attraction.description, language);
+  popup.append(heading, details, description);
+  const url = directionsUrlFor(attraction);
+  if (url) {
+    const link = document.createElement("a");
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = text.directions;
+    popup.append(link);
+  } else {
+    const unavailable = document.createElement("p");
+    unavailable.className = "attraction-popup__note";
+    unavailable.textContent = text.directionsUnavailable;
+    popup.append(unavailable);
+  }
+  return popup;
+}
+
 export default function HighwayMap() {
   const container = useRef(null);
   const attractionLayer = useRef(null);
+  const resetButton = useRef(null);
   const selectedCategory = useRef("all");
+  const selectedLanguage = useRef(DEFAULT_LANGUAGE);
   const [category, setCategory] = useState("all");
-  const [error, setError] = useState("");
+  const [language, setLanguage] = useState(DEFAULT_LANGUAGE);
+  const [error, setError] = useState(false);
+  const text = uiText(language);
+
+  useEffect(() => {
+    document.documentElement.lang = language;
+    if (resetButton.current) resetButton.current.textContent = uiText(language).resetView;
+    const current = attractionLayer.current;
+    if (!current) return;
+    for (const attraction of attractions) {
+      const marker = current.markers.get(attraction.id);
+      const title = markerTitle(attraction, language);
+      marker.options.title = title;
+      marker.getElement()?.setAttribute("title", title);
+      marker.getElement()?.setAttribute("aria-label", title);
+      marker.setPopupContent(attractionPopup(attraction, language));
+    }
+  }, [language]);
 
   useEffect(() => {
     const current = attractionLayer.current;
@@ -52,7 +117,8 @@ export default function HighwayMap() {
         const wrapper = L.DomUtil.create("div", "leaflet-bar reset-view");
         const button = L.DomUtil.create("button", "", wrapper);
         button.type = "button";
-        button.textContent = "Volver a Felipe Carrillo Puerto";
+        button.textContent = uiText(selectedLanguage.current).resetView;
+        resetButton.current = button;
         L.DomEvent.disableClickPropagation(wrapper);
         L.DomEvent.on(button, "click", () => map.fitBounds(FCP_VIEW_BOUNDS));
         return wrapper;
@@ -62,37 +128,21 @@ export default function HighwayMap() {
       const group = L.layerGroup().addTo(map);
       const markers = new Map();
       for (const attraction of attractions) {
-        const categoryName = CATEGORIES.find(({ id }) => id === attraction.category).label;
+        const approximate = isVerified(attraction) ? "" : " attraction-marker--approximate";
         const icon = L.divIcon({
-          className: `attraction-marker attraction-marker--${attraction.category}`,
+          className: `attraction-marker attraction-marker--${attraction.category}${approximate}`,
           html: '<span aria-hidden="true"></span>',
           iconSize: [28, 28],
           iconAnchor: [14, 14],
         });
+        const title = markerTitle(attraction, selectedLanguage.current);
         const marker = L.marker([attraction.latitude, attraction.longitude], {
           icon,
-          title: `${attraction.name} — ${categoryName}`,
-          alt: `${attraction.name} — ${categoryName}`,
+          title,
           keyboard: true,
         });
-        const popup = document.createElement("div");
-        popup.className = "attraction-popup";
-        const heading = document.createElement("strong");
-        heading.textContent = attraction.name;
-        const details = document.createElement("p");
-        details.textContent = `${categoryName} · ${attraction.status === "verified" ? "Verificado" : "Demo: sin verificar"}`;
-        const description = document.createElement("p");
-        description.textContent = attraction.description;
-        popup.append(heading, details, description);
-        if (attraction.directionsUrl) {
-          const link = document.createElement("a");
-          link.href = attraction.directionsUrl;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = "Cómo llegar (abre otra pestaña)";
-          popup.append(link);
-        }
-        marker.bindPopup(popup);
+        marker.on("add", () => marker.getElement()?.setAttribute("aria-label", marker.options.title));
+        marker.bindPopup(attractionPopup(attraction, selectedLanguage.current));
         markers.set(attraction.id, marker);
       }
       attractionLayer.current = { group, markers };
@@ -103,7 +153,7 @@ export default function HighwayMap() {
       const response = await fetch("/regional-highways.geojson", {
         signal: controller.signal,
       });
-      if (!response.ok) throw new Error("No se pudo cargar el archivo de carreteras.");
+      if (!response.ok) throw new Error(`Road data request failed: ${response.status}`);
 
       const data = await response.json();
       if (disposed) return;
@@ -168,7 +218,7 @@ export default function HighwayMap() {
 
     initialize().catch((cause) => {
       if (!disposed && cause.name !== "AbortError") {
-        setError("No se pudo cargar el mapa de carreteras.");
+        setError(true);
       }
     });
 
@@ -176,13 +226,45 @@ export default function HighwayMap() {
       disposed = true;
       controller.abort();
       attractionLayer.current = null;
+      resetButton.current = null;
       map?.remove();
     };
   }, []);
 
   return (
     <>
-      <nav className="category-filters" aria-label="Filtrar puntos del mapa">
+      <div className="map-header">
+        <h1>{text.heading}</h1>
+        <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
+          {LANGUAGES.map(({ id, label, name }) => (
+            <button
+              key={id}
+              type="button"
+              lang={id}
+              aria-label={name}
+              aria-pressed={language === id}
+              onClick={() => {
+                selectedLanguage.current = id;
+                setLanguage(id);
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+      <p>{text.instructions}</p>
+      <ul className="legend">
+        <li>
+          <span className="swatch" aria-hidden="true" />
+          {text.legendRoad}
+        </li>
+        <li>
+          <span className="swatch swatch--approximate" aria-hidden="true" />
+          {text.legendApproximate}
+        </li>
+      </ul>
+      <nav className="category-filters" aria-label={text.filtersLabel}>
         {CATEGORIES.map(({ id, label }) => (
           <button
             key={id}
@@ -193,12 +275,12 @@ export default function HighwayMap() {
               setCategory(id);
             }}
           >
-            {label}
+            {localize(label, language)}
           </button>
         ))}
       </nav>
-      {error && <p role="alert">{error}</p>}
-      <div ref={container} className="map" aria-label="Mapa turístico de Felipe Carrillo Puerto" />
+      {error && <p role="alert">{text.loadError}</p>}
+      <div ref={container} className="map" aria-label={text.mapLabel} />
     </>
   );
 }

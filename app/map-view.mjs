@@ -5,10 +5,13 @@ export const TOURIST_MAP_STYLE = {
   label: "#3c3028",
 };
 
-// Felipe Carrillo Puerto and the nearby attractions worth reaching by road.
+// Town centre of Felipe Carrillo Puerto.
+export const FCP_CENTER = [19.5797, -88.0453];
+
+// Initial view: the town of Felipe Carrillo Puerto (roughly 5 km across), not the whole region.
 export const FCP_VIEW_BOUNDS = [
-  [19.2, -88.5],
-  [19.95, -87.4],
+  [19.555, -88.075],
+  [19.605, -88.015],
 ];
 
 // Panning limit: wider than the initial view so nearby coast, lagoons and

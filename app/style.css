@@ -54,6 +54,42 @@ p {
   color: white;
 }
 
+.map-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 0.5rem;
+}
+
+.map-header h1 {
+  margin: 0;
+}
+
+.language-toggle {
+  display: flex;
+  border: 1px solid #c96f3b;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.language-toggle button {
+  border: 0;
+  background: #fff7e8;
+  color: #3c3028;
+  padding: 0.4rem 0.75rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.language-toggle button[aria-pressed="true"] {
+  background: #a75030;
+  color: white;
+}
+
+.language-toggle button:focus-visible,
 .category-filters button:focus-visible,
 .leaflet-marker-icon:focus-visible,
 .leaflet-popup a:focus-visible {
@@ -82,6 +118,11 @@ p {
 .attraction-marker--lodging { background: #536c98; }
 .attraction-marker--tours { background: #77663d; }
 
+.attraction-marker--approximate {
+  border-style: dashed;
+  opacity: 0.85;
+}
+
 .attraction-popup {
   color: #3c3028;
   max-width: 16rem;
@@ -89,6 +130,10 @@ p {
 
 .attraction-popup p {
   margin: 0.4rem 0;
+}
+
+.attraction-popup__note {
+  font-style: italic;
 }
 
 .road-label {
@@ -151,4 +196,12 @@ p {
   border-radius: 999px;
   background: #c96f3b;
   box-shadow: 0 0 0 2px #fff7e8;
+}
+
+.legend .swatch--approximate {
+  width: 0.9rem;
+  height: 0.9rem;
+  border: 2px dashed #3c3028;
+  background: #47775b;
+  box-shadow: none;
 }
