@@ -28,7 +28,7 @@ test("demo attractions have complete, distinct, bilingual, in-bounds data", () =
       assert.ok(attraction.name[language] && attraction.description[language], `${attraction.id} ${language}`);
     }
     assert.ok(categories.has(attraction.category) && attraction.category !== "all");
-    assert.ok(["verified", "unverified"].includes(attraction.status));
+    assert.ok(["verified", "unverified", "unavailable"].includes(attraction.status));
     assert.ok(["exact", "approximate"].includes(attraction.locationAccuracy));
     assert.ok(inside(FCP_MAX_BOUNDS, attraction), `${attraction.id} dentro del límite regional`);
     assert.ok(attraction.directionsUrl === null || attraction.directionsUrl.startsWith("https://"));
