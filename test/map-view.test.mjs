@@ -28,6 +28,7 @@ test("the initial view covers Felipe Carrillo Puerto and stays inside the pan li
 });
 
 test("labels only appear once the visitor zooms in, within the allowed zoom range", () => {
+  assert.equal(MAX_ZOOM, 20);
   assert.ok(MIN_ZOOM < LABEL_MIN_ZOOM && LABEL_MIN_ZOOM <= MAX_ZOOM);
   assert.equal(shouldShowLabels(LABEL_MIN_ZOOM - 1), false);
   assert.equal(shouldShowLabels(LABEL_MIN_ZOOM), true);
