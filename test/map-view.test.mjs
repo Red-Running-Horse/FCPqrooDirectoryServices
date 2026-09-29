@@ -7,6 +7,8 @@ import {
   LABEL_MIN_ZOOM,
   MAX_ZOOM,
   MIN_ZOOM,
+  STREET_LABEL_MIN_ZOOM,
+  labelTier,
   shouldShowLabels,
 } from "../app/map-view.mjs";
 
@@ -50,4 +52,16 @@ test("labels only appear once the visitor zooms in, within the allowed zoom rang
   assert.equal(shouldShowLabels(LABEL_MIN_ZOOM - 1), false);
   assert.equal(shouldShowLabels(LABEL_MIN_ZOOM), true);
   assert.equal(shouldShowLabels(undefined), false);
+});
+
+test("local street names appear from city-level close zoom, highways earlier", () => {
+  assert.equal(STREET_LABEL_MIN_ZOOM, 14);
+  assert.ok(LABEL_MIN_ZOOM < STREET_LABEL_MIN_ZOOM && STREET_LABEL_MIN_ZOOM < MAX_ZOOM);
+  assert.equal(labelTier("Calle"), "street");
+  assert.equal(labelTier("Avenida"), "street");
+  assert.equal(labelTier("Carretera"), "highway");
+  assert.equal(shouldShowLabels(13, "street"), false);
+  assert.equal(shouldShowLabels(14, "street"), true);
+  assert.equal(shouldShowLabels(13, "highway"), true);
+  assert.equal(shouldShowLabels(undefined, "street"), false);
 });

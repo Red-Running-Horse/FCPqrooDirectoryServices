@@ -3,14 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import { attractions, CATEGORIES, filterAttractions, isVerified } from "./attractions.mjs";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
+import { syncMarkerSelection } from "./marker-selection.mjs";
 import PlacePortal from "./place-portal";
-import { roadLabel, roadLabelPlacement } from "./road-label.mjs";
+import { placePopup } from "./place-portal.mjs";
+import { labelsOverlap, mergeRoadSegments, placeRoadLabel, roadLabel } from "./road-label.mjs";
 import {
   FCP_MAX_BOUNDS,
   FCP_VIEW_BOUNDS,
   MAX_ZOOM,
   MIN_ZOOM,
   TOURIST_MAP_STYLE,
+  labelTier,
   shouldShowLabels,
 } from "./map-view.mjs";
 
@@ -20,6 +23,40 @@ function categoryLabel(id, language) {
 
 function markerTitle(attraction, language) {
   return `${localize(attraction.name, language)} — ${categoryLabel(attraction.category, language)}`;
+}
+
+function showPortal() {
+  const portal = document.getElementById("place-portal");
+  portal?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  portal?.focus({ preventScroll: true });
+}
+
+// Lightweight marker popup: name, category and status only; full details live in the portal.
+function popupContent(attraction, language) {
+  const view = placePopup(attraction, language);
+  const root = document.createElement("div");
+  root.className = "place-popup";
+  root.lang = language;
+  const name = document.createElement("p");
+  name.className = "place-popup__name";
+  name.textContent = view.name;
+  const meta = document.createElement("p");
+  meta.className = "place-popup__meta";
+  meta.textContent = view.category ?? "";
+  const badge = document.createElement("span");
+  badge.className = `status-badge status-badge--${view.status}`;
+  badge.textContent = view.statusLabel;
+  meta.append(badge);
+  const hint = document.createElement("p");
+  hint.className = "place-popup__hint";
+  hint.textContent = view.hint;
+  const details = document.createElement("button");
+  details.type = "button";
+  details.className = "place-popup__details";
+  details.textContent = view.detailsLabel;
+  details.addEventListener("click", showPortal);
+  root.append(name, meta, hint, details);
+  return root;
 }
 
 export default function HighwayMap() {
@@ -46,6 +83,7 @@ export default function HighwayMap() {
       marker.options.title = title;
       marker.getElement()?.setAttribute("title", title);
       marker.getElement()?.setAttribute("aria-label", title);
+      if (marker.isPopupOpen()) marker.getPopup().update();
     }
   }, [language]);
 
@@ -62,10 +100,7 @@ export default function HighwayMap() {
     selectedPlace.current = selectedId;
     const current = attractionLayer.current;
     if (!current) return;
-    for (const [id, marker] of current.markers) {
-      marker.getElement()?.classList.toggle("attraction-marker--selected", id === selectedId);
-      marker.getElement()?.setAttribute("aria-pressed", String(id === selectedId));
-    }
+    syncMarkerSelection(current.markers, selectedId);
   }, [selectedId]);
 
   useEffect(() => {
@@ -109,12 +144,18 @@ export default function HighwayMap() {
           html: '<span aria-hidden="true"></span>',
           iconSize: [28, 28],
           iconAnchor: [14, 14],
+          popupAnchor: [0, -14],
         });
         const title = markerTitle(attraction, selectedLanguage.current);
         const marker = L.marker([attraction.latitude, attraction.longitude], {
           icon,
           title,
           keyboard: true,
+        });
+        marker.bindPopup(() => popupContent(attraction, selectedLanguage.current), {
+          className: "place-popup-container",
+          maxWidth: 240,
+          autoPanPadding: [16, 16],
         });
         marker.on("add", () => {
           const element = marker.getElement();
@@ -123,9 +164,14 @@ export default function HighwayMap() {
           element?.setAttribute("aria-pressed", String(selected));
           element?.classList.toggle("attraction-marker--selected", selected);
         });
-        marker.on("click", () => setSelectedId(attraction.id));
+        // Leaflet toggles a bound popup on repeat clicks; selecting always shows the summary.
+        const select = () => {
+          setSelectedId(attraction.id);
+          if (!marker.isPopupOpen()) marker.openPopup();
+        };
+        marker.on("click", select);
         marker.on("keypress", (event) => {
-          if (event.originalEvent.key === "Enter") setSelectedId(attraction.id);
+          if (event.originalEvent.key === "Enter") select();
         });
         markers.set(attraction.id, marker);
       }
@@ -152,9 +198,7 @@ export default function HighwayMap() {
         },
       }).addTo(map);
 
-      const labels = [];
-      const measure = document.createElement("canvas").getContext("2d");
-      measure.font = "600 12px Arial";
+      const segments = [];
       L.geoJSON(data, {
         style: {
           color: TOURIST_MAP_STYLE.highway,
@@ -163,36 +207,55 @@ export default function HighwayMap() {
           lineCap: "round",
           lineJoin: "round",
         },
-        onEachFeature(feature, layer) {
+        onEachFeature(feature) {
           const name = roadLabel(feature.properties?.NOMBRE);
-          if (name) {
-            const label = document.createElement("span");
-            label.textContent = name;
-            const tooltip = L.tooltip({ direction: "center", className: "road-label", interactive: false })
-              .setContent(label);
-            labels.push({ name, layer, tooltip, label, width: measure.measureText(name).width });
+          if (name && feature.geometry?.type === "LineString") {
+            segments.push({
+              name,
+              group: labelTier(feature.properties?.TIPO_VIAL),
+              coordinates: feature.geometry.coordinates,
+            });
           }
         },
       }).addTo(map);
+
+      const measure = document.createElement("canvas").getContext("2d");
+      measure.font = "600 12px Arial";
+      const labels = mergeRoadSegments(segments).map(({ name, group, coordinates }) => {
+        const label = document.createElement("span");
+        label.textContent = name;
+        const tooltip = L.tooltip({
+          direction: "center",
+          className: "road-label",
+          interactive: false,
+          permanent: true,
+        })
+          .setContent(label);
+        const bounds = L.latLngBounds(coordinates.map(([lng, lat]) => [lat, lng]));
+        return { name, tier: group, coordinates, bounds, tooltip, label, width: measure.measureText(name).width };
+      });
 
       const active = new Set();
 
       function updateLabels() {
         const visible = new Set();
-        if (shouldShowLabels(map.getZoom())) {
+        const zoom = map.getZoom();
+        if (shouldShowLabels(zoom)) {
           const bounds = map.getBounds();
           const size = map.getSize();
           const names = new Set();
+          const placed = [];
           for (const entry of labels) {
-            const { name, layer, label, tooltip, width } = entry;
-            if (names.has(name) || !bounds.intersects(layer.getBounds())) continue;
-            const placement = roadLabelPlacement(
-              layer.feature.geometry.coordinates,
+            const { name, tier, coordinates, label, tooltip, width } = entry;
+            if (!shouldShowLabels(zoom, tier) || names.has(name) || !bounds.intersects(entry.bounds)) continue;
+            const placement = placeRoadLabel(
+              coordinates,
               ([lng, lat]) => map.latLngToContainerPoint([lat, lng]),
               width,
               size,
             );
-            if (!placement) continue;
+            if (!placement || placed.some((other) => labelsOverlap(placement, other))) continue;
+            placed.push(placement);
             names.add(name);
             label.style.transform = `rotate(${placement.angle}deg)`;
             tooltip.setLatLng(map.containerPointToLatLng(placement.point));

@@ -23,8 +23,18 @@ export const FCP_MAX_BOUNDS = [
 
 export const MIN_ZOOM = 8;
 export const MAX_ZOOM = 20;
+// Regional roads are labelled from LABEL_MIN_ZOOM; local town streets from STREET_LABEL_MIN_ZOOM
+// (city-level close zoom) so the town view is readable without clutter at regional zooms.
 export const LABEL_MIN_ZOOM = 11;
+export const STREET_LABEL_MIN_ZOOM = 14;
 
-export function shouldShowLabels(zoom) {
-  return typeof zoom === "number" && zoom >= LABEL_MIN_ZOOM;
+const HIGHWAY_TYPES = new Set(["Carretera", "Camino", "Enlace"]);
+
+export function labelTier(roadType) {
+  return HIGHWAY_TYPES.has(roadType) ? "highway" : "street";
+}
+
+export function shouldShowLabels(zoom, tier = "highway") {
+  const minimum = tier === "street" ? STREET_LABEL_MIN_ZOOM : LABEL_MIN_ZOOM;
+  return typeof zoom === "number" && zoom >= minimum;
 }
