@@ -9,7 +9,7 @@ import {
   isVerified,
 } from "./attractions.mjs";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
-import { roadLabel } from "./road-label.mjs";
+import { roadLabel, roadLabelPlacement } from "./road-label.mjs";
 import {
   FCP_MAX_BOUNDS,
   FCP_VIEW_BOUNDS,
@@ -169,6 +169,8 @@ export default function HighwayMap() {
       }).addTo(map);
 
       const labels = [];
+      const measure = document.createElement("canvas").getContext("2d");
+      measure.font = "600 12px Arial";
       L.geoJSON(data, {
         style: {
           color: TOURIST_MAP_STYLE.highway,
@@ -182,8 +184,9 @@ export default function HighwayMap() {
           if (name) {
             const label = document.createElement("span");
             label.textContent = name;
-            layer.bindTooltip(label, { direction: "center", className: "road-label" });
-            labels.push({ name, layer });
+            const tooltip = L.tooltip({ direction: "center", className: "road-label", interactive: false })
+              .setContent(label);
+            labels.push({ name, layer, tooltip, label, width: measure.measureText(name).width });
           }
         },
       }).addTo(map);
@@ -194,22 +197,33 @@ export default function HighwayMap() {
         const visible = new Set();
         if (shouldShowLabels(map.getZoom())) {
           const bounds = map.getBounds();
+          const size = map.getSize();
           const names = new Set();
-          for (const { name, layer } of labels) {
-            if (names.has(name) || !bounds.contains(layer.getCenter())) continue;
+          for (const entry of labels) {
+            const { name, layer, label, tooltip, width } = entry;
+            if (names.has(name) || !bounds.intersects(layer.getBounds())) continue;
+            const placement = roadLabelPlacement(
+              layer.feature.geometry.coordinates,
+              ([lng, lat]) => map.latLngToContainerPoint([lat, lng]),
+              width,
+              size,
+            );
+            if (!placement) continue;
             names.add(name);
-            visible.add(layer);
+            label.style.transform = `rotate(${placement.angle}deg)`;
+            tooltip.setLatLng(map.containerPointToLatLng(placement.point));
+            visible.add(entry);
           }
         }
 
-        for (const layer of active) {
-          if (!visible.has(layer)) layer.closeTooltip();
+        for (const entry of active) {
+          if (!visible.has(entry)) entry.tooltip.close();
         }
-        for (const layer of visible) {
-          if (!active.has(layer)) layer.openTooltip();
+        for (const entry of visible) {
+          if (!active.has(entry)) entry.tooltip.openOn(map);
         }
         active.clear();
-        for (const layer of visible) active.add(layer);
+        for (const entry of visible) active.add(entry);
       }
 
       map.on("moveend", updateLabels);

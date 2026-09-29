@@ -4,7 +4,9 @@ Spanish-first, bilingual (ES/EN) tourist map for Felipe Carrillo Puerto, Quintan
 has no external basemap: it draws the regional highways from `public/regional-highways.geojson`
 over a warm cream background, with terracotta roads on a cream casing and dark-brown road labels
 that appear once the visitor zooms in. Roads with usable `NOMBRE` values are labelled; blank,
-`N/D`, `N/A` and code-like values are skipped. The QGIS working files remain in the repository root.
+`N/D`, `N/A` and code-like values are skipped. Labels sit on sufficiently straight road
+centerline segments and rotate to their direction; short, sharply curved or clipped segments
+are left unlabelled. The QGIS working files remain in the repository root.
 
 - **City start:** the map opens on the town of Felipe Carrillo Puerto (`FCP_VIEW_BOUNDS` in
   `app/map-view.mjs`, about 5 km across), not the whole state. Panning is limited to the

@@ -137,7 +137,7 @@ p {
 }
 
 .road-label {
-  font-weight: 600;
+  font: 600 12px Arial, sans-serif;
   color: #3c3028;
   background: transparent;
   border: 0;
@@ -147,6 +147,11 @@ p {
     0 0 3px #fff7e8,
     0 0 3px #fff7e8,
     0 0 3px #fff7e8;
+}
+
+.road-label span {
+  display: inline-block;
+  transform-origin: center;
 }
 
 .road-label::before {
