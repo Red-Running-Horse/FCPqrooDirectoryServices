@@ -29,10 +29,23 @@ function fakeMarker() {
   return marker;
 }
 
+const market = attractions.find(({ id }) => id === "mercado-felipe-carrillo-puerto");
+
+const approximatePlace = {
+  id: "approximate-test",
+  name: { es: "Sitio de prueba", en: "Test site" },
+  category: "nature",
+  description: { es: "Ubicación aproximada.", en: "Approximate location." },
+  latitude: 19.58,
+  longitude: -88.05,
+  status: "unverified",
+  locationAccuracy: "approximate",
+  directionsUrl: null,
+};
+
 test("the marker popup is a short bilingual summary, not the full details", () => {
-  const place = attractions[0];
-  const es = placePopup(place, "es");
-  const en = placePopup(place, "en");
+  const es = placePopup(market, "es");
+  const en = placePopup(market, "en");
 
   assert.deepEqual(Object.keys(es).sort(), [
     "category",
@@ -43,41 +56,46 @@ test("the marker popup is a short bilingual summary, not the full details", () =
     "status",
     "statusLabel",
   ]);
-  assert.equal(es.name, place.name.es);
-  assert.equal(en.name, place.name.en);
-  assert.equal(es.category, "Naturaleza");
-  assert.equal(en.category, "Nature");
-  assert.equal(es.status, "approximate");
-  assert.equal(es.statusLabel, "Ubicación aproximada");
-  assert.equal(en.statusLabel, "Approximate location");
+  assert.equal(es.name, market.name.es);
+  assert.equal(en.name, market.name.en);
+  assert.equal(es.category, "Comida");
+  assert.equal(en.category, "Food");
+  assert.equal(es.status, "verified");
+  assert.equal(es.statusLabel, "Verificado");
+  assert.equal(en.statusLabel, "Verified");
   assert.equal(es.detailsLabel, "Ver detalles");
   assert.equal(en.detailsLabel, "View details");
   assert.match(es.hint, /debajo del mapa/);
   assert.match(en.hint, /below the map/);
   assert.equal(placePopup(null, "es"), null);
+
+  const approx = placePopup(approximatePlace, "en");
+  assert.equal(approx.status, "approximate");
+  assert.equal(approx.statusLabel, "Approximate location");
 });
 
 test("selecting a marker opens only its popup and marks it selected", () => {
-  const markers = new Map(attractions.map(({ id }) => [id, fakeMarker()]));
-  const [first, second] = attractions;
+  const ids = [market.id, approximatePlace.id];
+  const markers = new Map(ids.map((id) => [id, fakeMarker()]));
+  const [first, second] = ids;
 
-  syncMarkerSelection(markers, first.id);
+  syncMarkerSelection(markers, first);
   for (const [id, marker] of markers) {
-    assert.equal(marker.open, id === first.id, id);
-    assert.equal(marker.attributes["aria-pressed"], String(id === first.id));
-    assert.equal(marker.classes.has("attraction-marker--selected"), id === first.id);
+    assert.equal(marker.open, id === first, id);
+    assert.equal(marker.attributes["aria-pressed"], String(id === first));
+    assert.equal(marker.classes.has("attraction-marker--selected"), id === first);
   }
 
-  syncMarkerSelection(markers, second.id);
-  assert.equal(markers.get(first.id).open, false);
-  assert.equal(markers.get(second.id).open, true);
+  syncMarkerSelection(markers, second);
+  assert.equal(markers.get(first).open, false);
+  assert.equal(markers.get(second).open, true);
 
   syncMarkerSelection(markers, null);
   assert.ok([...markers.values()].every((marker) => !marker.open && marker.attributes["aria-pressed"] === "false"));
 });
 
 test("marker selection still drives the below-map portal with matching content", () => {
-  for (const place of attractions) {
+  for (const place of [...attractions, approximatePlace]) {
     for (const language of ["es", "en"]) {
       const popup = placePopup(place, language);
       const portal = placePortal(place, language);
@@ -87,8 +105,8 @@ test("marker selection still drives the below-map portal with matching content",
       assert.equal(portal.category, popup.category);
       assert.equal(portal.status, popup.status);
       assert.equal(portal.statusLabel, popup.statusLabel);
-      // Demo places stay unverified: no action buttons in the portal.
-      assert.deepEqual(portal.actions, []);
     }
   }
+  assert.deepEqual(placePortal(approximatePlace, "es").actions, []);
+  assert.deepEqual(placePortal(market, "es").actions.map(({ id }) => id), ["directions", "call", "website"]);
 });
