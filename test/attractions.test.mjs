@@ -18,8 +18,10 @@ function inside(bounds, { latitude, longitude }) {
   );
 }
 
-test("demo attractions have complete, distinct, bilingual, in-bounds data", () => {
-  assert.ok(attractions.length >= 5 && attractions.length <= 10);
+const market = attractions.find(({ id }) => id === "mercado-felipe-carrillo-puerto");
+
+test("attractions have complete, distinct, bilingual, in-bounds data", () => {
+  assert.ok(attractions.length >= 1);
   assert.equal(new Set(attractions.map(({ id }) => id)).size, attractions.length);
   const categories = new Set(CATEGORIES.map(({ id }) => id));
   for (const attraction of attractions) {
@@ -35,22 +37,30 @@ test("demo attractions have complete, distinct, bilingual, in-bounds data", () =
   }
 });
 
-test("the six demo attractions are marked unverified and approximate, and sit in the town view", () => {
-  assert.equal(attractions.length, 6);
+test("no demo placeholder points remain", () => {
   for (const attraction of attractions) {
-    assert.equal(attraction.status, "unverified");
-    assert.equal(attraction.locationAccuracy, "approximate");
-    assert.equal(isVerified(attraction), false);
-    assert.match(attraction.name.es, /demo/i);
-    assert.match(attraction.name.en, /demo/i);
-    assert.match(attraction.description.es, /aproximada/i);
-    assert.match(attraction.description.en, /approximate/i);
-    assert.ok(inside(FCP_VIEW_BOUNDS, attraction), `${attraction.id} visible en la vista inicial`);
+    assert.doesNotMatch(attraction.id, /demo/i);
+    assert.doesNotMatch(attraction.name.es, /demo/i);
+    assert.doesNotMatch(attraction.name.en, /demo/i);
   }
 });
 
+test("the physically confirmed market is exact, verified and in the town view", () => {
+  assert.ok(market);
+  assert.equal(market.category, "food");
+  assert.equal(market.status, "verified");
+  assert.equal(market.locationAccuracy, "exact");
+  assert.equal(isVerified(market), true);
+  assert.equal(market.latitude, 19.580894458770345);
+  assert.equal(market.longitude, -88.04402730793707);
+  assert.equal(directionsUrlFor(market), "https://maps.app.goo.gl/zJbo8V1rE4ZmYT537");
+  assert.ok(inside(FCP_VIEW_BOUNDS, market));
+});
+
 test("directions are only offered for verified destinations", () => {
-  for (const attraction of attractions) assert.equal(directionsUrlFor(attraction), null);
+  for (const attraction of attractions) {
+    if (!isVerified(attraction)) assert.equal(directionsUrlFor(attraction), null);
+  }
 
   const url = "https://www.openstreetmap.org/?mlat=19.58&mlon=-88.04";
   const base = { directionsUrl: url, locationAccuracy: "exact" };
@@ -61,13 +71,13 @@ test("directions are only offered for verified destinations", () => {
   assert.equal(directionsUrlFor({ ...base, status: "verified", directionsUrl: null }), null);
 });
 
-test("all categories filter locally and All restores every attraction", () => {
+test("categories filter locally (empty categories allowed) and All restores every attraction", () => {
   assert.deepEqual(CATEGORIES.map(({ id }) => id), ["all", "nature", "culture", "food", "lodging", "tours"]);
   for (const { id, label } of CATEGORIES) {
     assert.ok(label.es && label.en, `${id} bilingüe`);
     const filtered = filterAttractions(id);
-    assert.ok(filtered.length > 0);
     assert.ok(filtered.every(({ category }) => id === "all" || category === id));
   }
   assert.deepEqual(filterAttractions("all"), attractions);
+  assert.ok(filterAttractions("food").includes(market));
 });

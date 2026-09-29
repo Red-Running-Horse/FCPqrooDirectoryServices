@@ -23,6 +23,20 @@ const verifiedPlace = {
   lastUpdated: "2026-09-01",
 };
 
+const approximatePlace = {
+  ...verifiedPlace,
+  id: "approximate-test",
+  status: "unverified",
+  locationAccuracy: "approximate",
+  directionsUrl: null,
+  hours: null,
+  phone: null,
+  whatsapp: null,
+  website: null,
+  verificationNote: { es: "Sin verificar.", en: "Not verified." },
+};
+
+const market = attractions.find(({ id }) => id === "mercado-felipe-carrillo-puerto");
 const actionIds = (view) => view.actions.map(({ id }) => id);
 
 test("default portal state prompts the user to select a place in ES and EN", () => {
@@ -89,17 +103,26 @@ test("portal text follows the ES/EN toggle", () => {
   }
 });
 
-test("demo places show the approximate badge, notes and no action buttons", () => {
-  for (const attraction of attractions) {
-    for (const language of ["es", "en"]) {
-      const view = placePortal(attraction, language);
-      assert.equal(view.status, "approximate");
-      assert.equal(view.statusLabel, UI_TEXT[language].badgeApproximate);
-      assert.deepEqual(view.actions, []);
-      assert.equal(view.directionsNote, UI_TEXT[language].directionsUnavailable);
-      assert.ok(view.verificationNote && view.lastUpdated);
-      assert.deepEqual(view.details.map(({ id }) => id), ["address"]);
-    }
+test("approximate places show the approximate badge, notes and no action buttons", () => {
+  for (const language of ["es", "en"]) {
+    const view = placePortal(approximatePlace, language);
+    assert.equal(view.status, "approximate");
+    assert.equal(view.statusLabel, UI_TEXT[language].badgeApproximate);
+    assert.deepEqual(view.actions, []);
+    assert.equal(view.directionsNote, UI_TEXT[language].directionsUnavailable);
+    assert.ok(view.verificationNote && view.lastUpdated);
+    assert.deepEqual(view.details.map(({ id }) => id), ["address"]);
+  }
+});
+
+test("the verified market exposes only its available details and actions", () => {
+  for (const language of ["es", "en"]) {
+    const view = placePortal(market, language);
+    assert.equal(view.status, "verified");
+    assert.equal(view.statusLabel, UI_TEXT[language].badgeVerified);
+    assert.deepEqual(actionIds(view), ["directions", "call", "website"]);
+    assert.equal(view.directionsNote, null);
+    assert.deepEqual(view.details.map(({ id }) => id), ["address", "hours", "phone", "website"]);
   }
 });
 

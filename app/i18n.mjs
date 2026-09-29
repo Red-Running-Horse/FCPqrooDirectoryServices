@@ -9,7 +9,7 @@ export const UI_TEXT = {
   es: {
     heading: "Explora Felipe Carrillo Puerto",
     instructions:
-      "Mapa turístico de las carreteras regionales. Acércate para ver los nombres de las carreteras. Los puntos de interés son ejemplos con ubicación aproximada, no destinos confirmados.",
+      "Mapa turístico de las carreteras regionales. Acércate para ver los nombres de las calles y carreteras. Los puntos de interés son ejemplos con ubicación aproximada, no destinos confirmados.",
     legendRoad: "Carretera regional",
     legendApproximate: "Punto de ejemplo (ubicación aproximada)",
     languageLabel: "Idioma",
@@ -38,11 +38,13 @@ export const UI_TEXT = {
     actionCall: "Llamar",
     actionWhatsapp: "WhatsApp (abre otra pestaña)",
     actionWebsite: "Sitio web (abre otra pestaña)",
+    popupHint: "Detalles completos debajo del mapa.",
+    popupDetails: "Ver detalles",
   },
   en: {
     heading: "Explore Felipe Carrillo Puerto",
     instructions:
-      "Tourist map of the regional roads. Zoom in to see road names. Points of interest are examples with approximate locations, not confirmed destinations.",
+      "Tourist map of the regional roads. Zoom in to see street and road names. Points of interest are examples with approximate locations, not confirmed destinations.",
     legendRoad: "Regional road",
     legendApproximate: "Example point (approximate location)",
     languageLabel: "Language",
@@ -71,6 +73,8 @@ export const UI_TEXT = {
     actionCall: "Call",
     actionWhatsapp: "WhatsApp (opens a new tab)",
     actionWebsite: "Website (opens a new tab)",
+    popupHint: "Full details below the map.",
+    popupDetails: "View details",
   },
 };
 
