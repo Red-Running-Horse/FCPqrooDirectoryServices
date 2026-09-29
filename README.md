@@ -6,6 +6,11 @@ background, with terracotta roads on a cream casing and dark-brown road labels t
 visitor zooms in. Roads with usable `NOMBRE` values are labelled; blank, `N/D`, `N/A` and
 code-like values are skipped. The view opens on the Felipe Carrillo Puerto area and panning is
 limited to the surrounding region. The QGIS working files remain in the repository root.
+The map supports zoom up to level 20 for a closer road view. Its six category-colored attraction
+pins are **demo placeholders**, not verified destinations: their coordinates and details must be
+checked before visiting. Edit `app/attractions.mjs` to replace them with verified entries; only
+add a directions URL after confirming the destination. The local category buttons filter markers
+without a server, and popup directions links appear only for entries with a URL.
 
 ## Run locally
 
@@ -16,7 +21,7 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:3000. Run `npm test` for the road-label and map-view tests.
+Open http://localhost:3000. Run `npm test` for the road-label, map-view and attraction tests.
 
 ## Deploy to Hostinger
 
