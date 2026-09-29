@@ -20,7 +20,7 @@ p {
 }
 
 .map {
-  height: calc(100vh - 12rem);
+  height: calc(100vh - 15rem);
   min-height: 400px;
   width: 100%;
   border: 1px solid #e0d3ba;
@@ -29,6 +29,66 @@ p {
 
 .leaflet-container {
   background: #f3eddf;
+}
+
+.category-filters {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.25rem 0.1rem 0.75rem;
+}
+
+.category-filters button {
+  flex: 0 0 auto;
+  border: 1px solid #c96f3b;
+  border-radius: 999px;
+  background: #fff7e8;
+  color: #3c3028;
+  padding: 0.5rem 0.8rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.category-filters button[aria-pressed="true"] {
+  background: #a75030;
+  color: white;
+}
+
+.category-filters button:focus-visible,
+.leaflet-marker-icon:focus-visible,
+.leaflet-popup a:focus-visible {
+  outline: 2px solid #3c3028;
+  outline-offset: 2px;
+}
+
+.attraction-marker {
+  display: grid;
+  place-items: center;
+  border: 2px solid #fff7e8;
+  border-radius: 50%;
+  background: #47775b;
+  box-shadow: 0 1px 4px #3c3028;
+}
+
+.attraction-marker span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff7e8;
+}
+
+.attraction-marker--culture { background: #914e70; }
+.attraction-marker--food { background: #aa602b; }
+.attraction-marker--lodging { background: #536c98; }
+.attraction-marker--tours { background: #77663d; }
+
+.attraction-popup {
+  color: #3c3028;
+  max-width: 16rem;
+}
+
+.attraction-popup p {
+  margin: 0.4rem 0;
 }
 
 .road-label {

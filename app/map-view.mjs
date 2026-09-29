@@ -19,7 +19,7 @@ export const FCP_MAX_BOUNDS = [
 ];
 
 export const MIN_ZOOM = 8;
-export const MAX_ZOOM = 14;
+export const MAX_ZOOM = 20;
 export const LABEL_MIN_ZOOM = 11;
 
 export function shouldShowLabels(zoom) {
