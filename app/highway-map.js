@@ -1,14 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  attractions,
-  CATEGORIES,
-  directionsUrlFor,
-  filterAttractions,
-  isVerified,
-} from "./attractions.mjs";
+import { attractions, CATEGORIES, filterAttractions, isVerified } from "./attractions.mjs";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
+import PlacePortal from "./place-portal";
 import { roadLabel, roadLabelPlacement } from "./road-label.mjs";
 import {
   FCP_MAX_BOUNDS,
@@ -27,44 +22,15 @@ function markerTitle(attraction, language) {
   return `${localize(attraction.name, language)} — ${categoryLabel(attraction.category, language)}`;
 }
 
-function attractionPopup(attraction, language) {
-  const text = uiText(language);
-  const popup = document.createElement("div");
-  popup.className = "attraction-popup";
-  popup.lang = language;
-  const heading = document.createElement("strong");
-  heading.textContent = localize(attraction.name, language);
-  const details = document.createElement("p");
-  details.textContent = `${categoryLabel(attraction.category, language)} · ${
-    isVerified(attraction) ? text.statusVerified : text.statusUnverified
-  }`;
-  const description = document.createElement("p");
-  description.textContent = localize(attraction.description, language);
-  popup.append(heading, details, description);
-  const url = directionsUrlFor(attraction);
-  if (url) {
-    const link = document.createElement("a");
-    link.href = url;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.textContent = text.directions;
-    popup.append(link);
-  } else {
-    const unavailable = document.createElement("p");
-    unavailable.className = "attraction-popup__note";
-    unavailable.textContent = text.directionsUnavailable;
-    popup.append(unavailable);
-  }
-  return popup;
-}
-
 export default function HighwayMap() {
   const container = useRef(null);
   const attractionLayer = useRef(null);
   const resetButton = useRef(null);
   const selectedCategory = useRef("all");
   const selectedLanguage = useRef(DEFAULT_LANGUAGE);
+  const selectedPlace = useRef(null);
   const [category, setCategory] = useState("all");
+  const [selectedId, setSelectedId] = useState(null);
   const [language, setLanguage] = useState(DEFAULT_LANGUAGE);
   const [error, setError] = useState(false);
   const text = uiText(language);
@@ -80,7 +46,6 @@ export default function HighwayMap() {
       marker.options.title = title;
       marker.getElement()?.setAttribute("title", title);
       marker.getElement()?.setAttribute("aria-label", title);
-      marker.setPopupContent(attractionPopup(attraction, language));
     }
   }, [language]);
 
@@ -92,6 +57,16 @@ export default function HighwayMap() {
       current.group.addLayer(current.markers.get(attraction.id));
     }
   }, [category]);
+
+  useEffect(() => {
+    selectedPlace.current = selectedId;
+    const current = attractionLayer.current;
+    if (!current) return;
+    for (const [id, marker] of current.markers) {
+      marker.getElement()?.classList.toggle("attraction-marker--selected", id === selectedId);
+      marker.getElement()?.setAttribute("aria-pressed", String(id === selectedId));
+    }
+  }, [selectedId]);
 
   useEffect(() => {
     let map;
@@ -141,8 +116,17 @@ export default function HighwayMap() {
           title,
           keyboard: true,
         });
-        marker.on("add", () => marker.getElement()?.setAttribute("aria-label", marker.options.title));
-        marker.bindPopup(attractionPopup(attraction, selectedLanguage.current));
+        marker.on("add", () => {
+          const element = marker.getElement();
+          const selected = selectedPlace.current === attraction.id;
+          element?.setAttribute("aria-label", marker.options.title);
+          element?.setAttribute("aria-pressed", String(selected));
+          element?.classList.toggle("attraction-marker--selected", selected);
+        });
+        marker.on("click", () => setSelectedId(attraction.id));
+        marker.on("keypress", (event) => {
+          if (event.originalEvent.key === "Enter") setSelectedId(attraction.id);
+        });
         markers.set(attraction.id, marker);
       }
       attractionLayer.current = { group, markers };
@@ -287,6 +271,9 @@ export default function HighwayMap() {
             onClick={() => {
               selectedCategory.current = id;
               setCategory(id);
+              if (!filterAttractions(id).some((attraction) => attraction.id === selectedPlace.current)) {
+                setSelectedId(null);
+              }
             }}
           >
             {localize(label, language)}
@@ -294,7 +281,14 @@ export default function HighwayMap() {
         ))}
       </nav>
       {error && <p role="alert">{text.loadError}</p>}
-      <div ref={container} className="map" aria-label={text.mapLabel} />
+      <div className="map-container">
+        <div ref={container} className="map" aria-label={text.mapLabel} />
+        <PlacePortal
+          attraction={attractions.find(({ id }) => id === selectedId) ?? null}
+          language={language}
+          onClear={() => setSelectedId(null)}
+        />
+      </div>
     </>
   );
 }

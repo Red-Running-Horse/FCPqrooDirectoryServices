@@ -19,9 +19,14 @@ p {
   margin: 0 0 1rem;
 }
 
+.map-container {
+  display: grid;
+  gap: 0.75rem;
+}
+
 .map {
-  height: calc(100vh - 15rem);
-  min-height: 400px;
+  height: min(60vh, calc(100vh - 15rem));
+  min-height: 320px;
   width: 100%;
   border: 1px solid #e0d3ba;
   border-radius: 6px;
@@ -91,8 +96,7 @@ p {
 
 .language-toggle button:focus-visible,
 .category-filters button:focus-visible,
-.leaflet-marker-icon:focus-visible,
-.leaflet-popup a:focus-visible {
+.leaflet-marker-icon:focus-visible {
   outline: 2px solid #3c3028;
   outline-offset: 2px;
 }
@@ -123,17 +127,152 @@ p {
   opacity: 0.85;
 }
 
-.attraction-popup {
-  color: #3c3028;
-  max-width: 16rem;
+.attraction-marker--selected {
+  outline: 3px solid #3c3028;
+  outline-offset: 1px;
+  opacity: 1;
 }
 
-.attraction-popup p {
-  margin: 0.4rem 0;
+.place-portal {
+  border: 1px solid #e0d3ba;
+  border-radius: 6px;
+  background: #fff7e8;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.95rem;
 }
 
-.attraction-popup__note {
+.place-portal__heading {
+  margin: 0 0 0.4rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #a75030;
+}
+
+.place-portal p {
+  margin: 0 0 0.6rem;
+}
+
+.place-portal .place-portal__prompt {
+  margin: 0;
+}
+
+.place-portal__title {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.place-portal__title h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.place-portal .place-portal__alt-name {
+  margin: 0.1rem 0 0;
+  font-size: 0.85rem;
   font-style: italic;
+}
+
+.place-portal__clear {
+  flex: 0 0 auto;
+  border: 1px solid #c96f3b;
+  border-radius: 999px;
+  background: transparent;
+  color: #3c3028;
+  padding: 0.3rem 0.6rem;
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.place-portal__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.status-badge {
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+}
+
+.status-badge--verified { background: #47775b; }
+.status-badge--approximate { background: #8a6d1f; }
+.status-badge--unavailable { background: #6f625a; }
+
+.place-portal__details {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0 0 0.6rem;
+}
+
+.place-portal__details div {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, auto) 1fr;
+  gap: 0.5rem;
+}
+
+.place-portal__details dt {
+  font-weight: 600;
+}
+
+.place-portal__details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.place-portal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 0.6rem;
+}
+
+.place-portal__actions a {
+  border-radius: 999px;
+  background: #a75030;
+  color: white;
+  padding: 0.45rem 0.8rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.place-portal .place-portal__note {
+  font-style: italic;
+}
+
+.place-portal .place-portal__verification {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #5c4d42;
+}
+
+.place-portal__clear:focus-visible,
+.place-portal__actions a:focus-visible {
+  outline: 2px solid #3c3028;
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (min-width: 48rem) {
+  .place-portal {
+    padding: 1rem 1.25rem;
+  }
 }
 
 .road-label {

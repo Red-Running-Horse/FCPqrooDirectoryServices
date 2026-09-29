@@ -7,6 +7,18 @@ export const CATEGORIES = [
   { id: "tours", label: { es: "Tours", en: "Tours" } },
 ];
 
+const DEMO_ADDRESS = {
+  es: "Felipe Carrillo Puerto, Quintana Roo (zona aproximada)",
+  en: "Felipe Carrillo Puerto, Quintana Roo (approximate area)",
+};
+
+const DEMO_VERIFICATION_NOTE = {
+  es: "Punto de ejemplo: ubicación, horario y contacto aún no verificados.",
+  en: "Example point: location, hours and contact not yet verified.",
+};
+
+const DEMO_LAST_UPDATED = "2026-09-29";
+
 // Demo pins only: these coordinates are approximate points inside Felipe Carrillo Puerto and do
 // not identify verified businesses or attractions. Set status to "verified" (and add a
 // directionsUrl) only after confirming the real destination and its coordinates.
@@ -24,6 +36,13 @@ export const attractions = [
     status: "unverified",
     locationAccuracy: "approximate",
     directionsUrl: null,
+    address: DEMO_ADDRESS,
+    hours: null,
+    phone: null,
+    whatsapp: null,
+    website: null,
+    verificationNote: DEMO_VERIFICATION_NOTE,
+    lastUpdated: DEMO_LAST_UPDATED,
   },
   {
     id: "nature-demo-2",
@@ -38,6 +57,13 @@ export const attractions = [
     status: "unverified",
     locationAccuracy: "approximate",
     directionsUrl: null,
+    address: DEMO_ADDRESS,
+    hours: null,
+    phone: null,
+    whatsapp: null,
+    website: null,
+    verificationNote: DEMO_VERIFICATION_NOTE,
+    lastUpdated: DEMO_LAST_UPDATED,
   },
   {
     id: "culture-demo",
@@ -52,6 +78,13 @@ export const attractions = [
     status: "unverified",
     locationAccuracy: "approximate",
     directionsUrl: null,
+    address: DEMO_ADDRESS,
+    hours: null,
+    phone: null,
+    whatsapp: null,
+    website: null,
+    verificationNote: DEMO_VERIFICATION_NOTE,
+    lastUpdated: DEMO_LAST_UPDATED,
   },
   {
     id: "food-demo",
@@ -66,6 +99,13 @@ export const attractions = [
     status: "unverified",
     locationAccuracy: "approximate",
     directionsUrl: null,
+    address: DEMO_ADDRESS,
+    hours: null,
+    phone: null,
+    whatsapp: null,
+    website: null,
+    verificationNote: DEMO_VERIFICATION_NOTE,
+    lastUpdated: DEMO_LAST_UPDATED,
   },
   {
     id: "lodging-demo",
@@ -80,6 +120,13 @@ export const attractions = [
     status: "unverified",
     locationAccuracy: "approximate",
     directionsUrl: null,
+    address: DEMO_ADDRESS,
+    hours: null,
+    phone: null,
+    whatsapp: null,
+    website: null,
+    verificationNote: DEMO_VERIFICATION_NOTE,
+    lastUpdated: DEMO_LAST_UPDATED,
   },
   {
     id: "tours-demo",
@@ -94,6 +141,13 @@ export const attractions = [
     status: "unverified",
     locationAccuracy: "approximate",
     directionsUrl: null,
+    address: DEMO_ADDRESS,
+    hours: null,
+    phone: null,
+    whatsapp: null,
+    website: null,
+    verificationNote: DEMO_VERIFICATION_NOTE,
+    lastUpdated: DEMO_LAST_UPDATED,
   },
 ];
 

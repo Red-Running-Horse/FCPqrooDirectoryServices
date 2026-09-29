@@ -14,16 +14,22 @@ are left unlabelled. The QGIS working files remain in the repository root.
   "Volver a Felipe Carrillo Puerto" / "Back to Felipe Carrillo Puerto" button returns to the
   town. Zoom goes up to level 20 for a close road view.
 - **Language toggle:** the ES/EN buttons next to the heading switch the heading, instructions,
-  legend, filters, reset button and attraction popups between Spanish (default) and English.
+  legend, filters, reset button and the selected-place panel between Spanish (default) and English.
   UI strings live in `app/i18n.mjs`; attraction names, descriptions and category labels are
   `{ es, en }` objects in `app/attractions.mjs`.
 - **Demo attractions:** the six category-colored pins are **demo placeholders with approximate
   locations**, not verified destinations. They are marked `status: "unverified"` and
   `locationAccuracy: "approximate"`, drawn with a dashed border, labelled "Demo" in both
-  languages, and their popups say directions are unavailable. A directions link is shown only
+  languages, and the selected-place panel says directions are unavailable. A directions link is shown only
   when an entry has `status: "verified"`, `locationAccuracy: "exact"` and an `https://`
   `directionsUrl`; set those only after confirming the real destination and coordinates. The
   category buttons filter markers locally without a server.
+- **Selected-place panel:** below the map, `app/place-portal.js` shows a prompt until a marker is
+  clicked (or focused and activated with Enter). It then shows the name in both languages,
+  category, a status badge (verified / approximate / unavailable), description, address, hours,
+  contact details, verification note and last-updated date. Directions, Call, WhatsApp and
+  Website buttons appear only when that data exists (directions also require a verified, exact
+  location). The content is built by `placePortal()` in `app/place-portal.mjs`.
 
 ## Run locally
 
@@ -34,7 +40,7 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:3000. Run `npm test` for the road-label, map-view, attraction and translation tests.
+Open http://localhost:3000. Run `npm test` for the road-label, map-view, attraction, selected-place panel and translation tests.
 
 ## Deploy to Hostinger
 
