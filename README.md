@@ -6,7 +6,10 @@ over a warm cream background, with terracotta roads on a cream casing and dark-b
 that appear once the visitor zooms in. Roads with usable `NOMBRE` values are labelled; blank,
 `N/D`, `N/A` and code-like values are skipped. Labels sit on sufficiently straight road
 centerline segments and rotate to their direction; short, sharply curved or clipped segments
-are left unlabelled. The QGIS working files remain in the repository root.
+are left unlabelled. Block-long pieces of the same street are joined into one chain before
+placement, and overlapping labels are dropped. Regional roads (`Carretera`, `Camino`, `Enlace`)
+are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
+(`STREET_LABEL_MIN_ZOOM`). The QGIS working files remain in the repository root.
 
 - **City start:** the map opens on the town of Felipe Carrillo Puerto (`FCP_VIEW_BOUNDS` in
   `app/map-view.mjs`, about 5 km across), not the whole state. Panning is limited to the
@@ -30,6 +33,9 @@ are left unlabelled. The QGIS working files remain in the repository root.
   contact details, verification note and last-updated date. Directions, Call, WhatsApp and
   Website buttons appear only when that data exists (directions also require a verified, exact
   location). The content is built by `placePortal()` in `app/place-portal.mjs`.
+- **Marker popup:** selecting a marker also opens a small in-map popup with the name, category,
+  status badge and a "Ver detalles" / "View details" button that jumps to the panel. The panel
+  stays the full details view. The popup summary comes from `placePopup()` in `app/place-portal.mjs`.
 
 ## Run locally
 
@@ -40,7 +46,7 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:3000. Run `npm test` for the road-label, map-view, attraction, selected-place panel and translation tests.
+Open http://localhost:3000. Run `npm test` for the road-label, map-view, attraction, marker-popup, selected-place panel and translation tests.
 
 ## Deploy to Hostinger
 

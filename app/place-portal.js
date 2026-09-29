@@ -4,7 +4,14 @@ export default function PlacePortal({ attraction, language, onClear }) {
   const view = placePortal(attraction, language);
 
   return (
-    <section className="place-portal" aria-labelledby="place-portal-heading" aria-live="polite" lang={language}>
+    <section
+      id="place-portal"
+      className="place-portal"
+      tabIndex={-1}
+      aria-labelledby="place-portal-heading"
+      aria-live="polite"
+      lang={language}
+    >
       <h2 id="place-portal-heading" className="place-portal__heading">
         {view.heading}
       </h2>

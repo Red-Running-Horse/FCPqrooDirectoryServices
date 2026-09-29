@@ -92,3 +92,19 @@ export function placePortal(attraction, language) {
     clearLabel: ui.clearSelection,
   };
 }
+
+// Quick in-map popup summary for the selected marker; the portal stays the full details view.
+export function placePopup(attraction, language) {
+  if (!attraction) return null;
+  const view = placePortal(attraction, language);
+  const ui = uiText(language);
+  return {
+    id: view.id,
+    name: view.name,
+    category: view.category,
+    status: view.status,
+    statusLabel: view.statusLabel,
+    hint: ui.popupHint,
+    detailsLabel: ui.popupDetails,
+  };
+}
