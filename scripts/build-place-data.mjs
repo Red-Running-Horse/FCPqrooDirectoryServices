@@ -62,8 +62,12 @@ export function placeDetail(place) {
 
 export function buildPlaceData(places) {
   const index = places.map(placeIndexEntry);
-  const details = new Map(places.map((place) => [safePlaceId(place.id), placeDetail(place)]));
-  if (details.size !== places.length) throw new Error("Duplicate place id");
+  const details = new Map();
+  for (const place of places) {
+    const id = safePlaceId(place.id);
+    if (details.has(id)) throw new Error(`Duplicate place id: ${id}`);
+    details.set(id, placeDetail(place));
+  }
   return { index, details };
 }
 

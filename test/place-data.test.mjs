@@ -74,6 +74,11 @@ test("markers, filtering, search and popups work from the index alone", () => {
   assert.equal(filterPlaces(committedIndex, "all", "").length, committedIndex.length);
 });
 
+test("the generator names the duplicate when two places share an id", () => {
+  const place = { id: "twice", category: "culture" };
+  assert.throws(() => buildPlaceData([place, place]), /Duplicate place id: twice/);
+});
+
 test("the generator rejects ids that are unsafe as file names or URL segments", () => {
   for (const id of ["../escape", "Upper Case", "with/slash", ""]) {
     assert.throws(() => placeIndexEntry({ id, category: "culture" }), /Unsafe place id/, id);
