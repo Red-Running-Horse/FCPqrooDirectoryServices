@@ -406,8 +406,8 @@ const whippingFountain = {
 };
 
 // Historical-memory record: the original tree fell on 23 June 2017 and no current specimen,
-// monument or exact point is independently verified, so it is intentionally kept out of
-// `attractions` (the map list) despite retaining user-provided approximate coordinates.
+// monument or exact point is independently verified. The user-provided coordinates are retained
+// as an approximate map point without implying that the original or current site is verified.
 const pichTree = {
   id: "arbol-del-pich-felipe-carrillo-puerto",
   category: "nature",
@@ -454,28 +454,11 @@ const pichTree = {
   verifiedAt: null,
   verifiedBy: null,
   verificationSourceUrls: [],
-  verificationNotes: "The original ~200-year-old Pich tree fell on June 23, 2017, one month before its traditional annual festival; this is the only firmly reported fact. CURRENT STATUS UNCERTAIN: no confirmation of a replanted specimen, of a monument at the original site, or of the exact location of the original tree. The source citation supplied with this record (footnote 4) was not accompanied by a URL, so no verification source URL is stored. The coordinates 19.609933175898494, -88.55789465767205 were provided by the user and have not been independently GPS-verified; they remain approximate and no directions are offered. This is a historical-memory record, not a mappable visitable attraction. Verify on the ground before promoting it to the map.",
+  verificationNotes: "The original ~200-year-old Pich tree fell on June 23, 2017, one month before its traditional annual festival; this is the only firmly reported fact. CURRENT STATUS UNCERTAIN: no confirmation of a replanted specimen, of a monument at the original site, or of the exact location of the original tree. The source citation supplied with this record (footnote 4) was not accompanied by a URL, so no verification source URL is stored. The coordinates 19.609933175898494, -88.55789465767205 were provided by the user and have not been independently GPS-verified; they remain approximate and no directions are offered. This map marker is a historical-memory point, not confirmation of a currently visitable attraction. Verify on the ground before relying on its location.",
   lastUpdated: "2026-09-30",
 };
 
-// Records kept out of the map on purpose: no independently verified current site.
-// They must not be merged into `attractions`, even when approximate coordinates are retained.
-export const nonMappablePlaces = [
-  {
-    ...pichTree,
-    name: { es: pichTree.nameEs, en: pichTree.nameEn },
-    description: { es: pichTree.shortDescriptionEs, en: pichTree.shortDescriptionEn },
-    address: { es: pichTree.addressEs, en: pichTree.addressEn },
-    hoursDisplay: {
-      es: "Sitio histórico; el árbol original cayó el 23 de junio de 2017",
-      en: "Historic site; the original tree fell on June 23, 2017",
-    },
-    status: "unverified",
-    locationAccuracy: "approximate",
-    mappable: false,
-    verificationNote: pichTree.verificationNotes,
-  },
-];
+export const nonMappablePlaces = [];
 
 // Verified local places should carry exact coordinates and a working directionsUrl.
 export const attractions = [
@@ -591,6 +574,20 @@ export const attractions = [
     status: "unverified",
     locationAccuracy: "approximate",
     verificationNote: whippingFountain.verificationNotes,
+  },
+  {
+    ...pichTree,
+    name: { es: pichTree.nameEs, en: pichTree.nameEn },
+    description: { es: pichTree.shortDescriptionEs, en: pichTree.shortDescriptionEn },
+    address: { es: pichTree.addressEs, en: pichTree.addressEn },
+    hoursDisplay: {
+      es: "Sitio histórico; el árbol original cayó el 23 de junio de 2017",
+      en: "Historic site; the original tree fell on June 23, 2017",
+    },
+    status: "unverified",
+    locationAccuracy: "approximate",
+    mappable: true,
+    verificationNote: pichTree.verificationNotes,
   },
 ];
 
