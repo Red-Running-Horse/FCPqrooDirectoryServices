@@ -18,14 +18,14 @@ import { pathToFileURL } from "node:url";
 // app/highway-map.js reads only these two feature properties: NOMBRE, passed to roadLabel()
 // in app/road-label.mjs for the label text, and TIPO_VIAL, passed to labelTier() in
 // app/map-view.mjs for the label tier. Add a key here before a consumer starts using it.
-export const REQUIRED_PROPERTIES = ["TIPO_VIAL", "NOMBRE"];
+export const RETAINED_PROPERTIES = ["TIPO_VIAL", "NOMBRE"];
 
 export function optimizeGeoJson(collection) {
   return {
     ...collection,
     features: collection.features.map((feature) => {
       const properties = {};
-      for (const key of REQUIRED_PROPERTIES) {
+      for (const key of RETAINED_PROPERTIES) {
         if (feature.properties && key in feature.properties) properties[key] = feature.properties[key];
       }
       return { ...feature, properties };
@@ -47,7 +47,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     if (before === after) {
       console.log(`public/regional-highways.geojson is already optimized (${afterBytes} bytes)`);
     } else {
-      console.error(`public/regional-highways.geojson is not optimized: ${report}`);
+      const extra = saved > 0 ? report : "only the serialization differs";
+      console.error(`public/regional-highways.geojson is not optimized: ${extra}`);
       process.exitCode = 1;
     }
   } else {

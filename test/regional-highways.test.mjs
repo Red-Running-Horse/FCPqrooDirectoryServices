@@ -3,10 +3,19 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import { labelTier } from "../app/map-view.mjs";
 import { mergeRoadSegments, roadLabel } from "../app/road-label.mjs";
-import { REQUIRED_PROPERTIES, optimizeGeoJson } from "../scripts/optimize-geojson.mjs";
+import { RETAINED_PROPERTIES, optimizeGeoJson } from "../scripts/optimize-geojson.mjs";
 
 const source = readFileSync(new URL("../public/regional-highways.geojson", import.meta.url), "utf8");
 const data = JSON.parse(source);
+
+// Counts of the current QGIS export. They guard against features or joins being lost by an
+// optimization step; update them deliberately when regional-highways.gpkg is re-exported.
+const FEATURE_COUNT = 5114;
+const SHARED_ENDPOINTS = 3091;
+
+// A generous box around Quintana Roo; any coordinate outside it means the export is wrong.
+const LNG_RANGE = [-90, -86];
+const LAT_RANGE = [18, 22];
 
 test("keeps the collection shape Leaflet loads", () => {
   assert.equal(data.type, "FeatureCollection");
@@ -14,11 +23,6 @@ test("keeps the collection shape Leaflet loads", () => {
   assert.equal(data.crs.properties.name, "urn:ogc:def:crs:OGC:1.3:CRS84");
   assert.ok(Array.isArray(data.features));
 });
-
-// Counts of the current QGIS export. They guard against features or joins being lost by an
-// optimization step; update them deliberately when regional-highways.gpkg is re-exported.
-const FEATURE_COUNT = 5114;
-const SHARED_ENDPOINTS = 3091;
 
 test("keeps every exported road feature with a drawable LineString", () => {
   assert.equal(data.features.length, FEATURE_COUNT);
@@ -29,15 +33,15 @@ test("keeps every exported road feature with a drawable LineString", () => {
     for (const point of feature.geometry.coordinates) {
       assert.equal(point.length, 2);
       const [lng, lat] = point;
-      assert.ok(Number.isFinite(lng) && lng > -90 && lng < -86, String(lng));
-      assert.ok(Number.isFinite(lat) && lat > 18 && lat < 22, String(lat));
+      assert.ok(Number.isFinite(lng) && lng > LNG_RANGE[0] && lng < LNG_RANGE[1], String(lng));
+      assert.ok(Number.isFinite(lat) && lat > LAT_RANGE[0] && lat < LAT_RANGE[1], String(lat));
     }
   }
 });
 
 test("keeps only the properties the map and labels read", () => {
   for (const feature of data.features) {
-    assert.deepEqual(Object.keys(feature.properties), REQUIRED_PROPERTIES);
+    assert.deepEqual(Object.keys(feature.properties), RETAINED_PROPERTIES);
     assert.equal(typeof feature.properties.NOMBRE, "string");
     assert.equal(typeof feature.properties.TIPO_VIAL, "string");
   }
@@ -57,7 +61,8 @@ test("keeps the shared endpoints that join street pieces into labelled chains", 
   const ends = new Map();
   for (const { geometry } of data.features) {
     for (const point of [geometry.coordinates[0], geometry.coordinates.at(-1)]) {
-      ends.set(key(point), (ends.get(key(point)) ?? 0) + 1);
+      const end = key(point);
+      ends.set(end, (ends.get(end) ?? 0) + 1);
     }
   }
   const shared = [...ends.values()].filter((count) => count > 1).length;
