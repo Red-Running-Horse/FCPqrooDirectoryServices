@@ -58,7 +58,13 @@ Repository → Settings → Secrets and variables → Actions.
 | Variable | `HOSTINGER_REMOTE_DIR` | Absolute target directory, e.g. `/home/u853557685/domains/staging.fcpqroo.mx/public_html` |
 
 No credentials belong in source control; the workflow reads everything from
-secrets/variables and deletes the private key from the runner when it finishes.
+secrets/variables and deletes the private key and known-hosts file from the
+runner when it finishes.
+
+The workflow validates these values before connecting: the host may contain only
+letters, digits, `.`, `-` and `:`; the user only letters, digits, `.`, `-` and
+`_`; the port must be numeric; and the remote directory must be a single-line
+absolute path without spaces, quotes, backslashes, `$` or backticks.
 
 If any of the values above are unknown, leave them unset: the workflow fails
 fast with a message naming the missing secret, variable or input.
