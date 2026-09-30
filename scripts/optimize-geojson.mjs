@@ -13,9 +13,11 @@
 //   node scripts/optimize-geojson.mjs --check    report whether it is already optimized
 
 import { readFileSync, writeFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 
-// app/highway-map.js reads only these two properties (NOMBRE for the label text, TIPO_VIAL for
-// the label tier in app/map-view.mjs). Add a key here before a consumer starts using it.
+// app/highway-map.js reads only these two feature properties: NOMBRE, passed to roadLabel()
+// in app/road-label.mjs for the label text, and TIPO_VIAL, passed to labelTier() in
+// app/map-view.mjs for the label tier. Add a key here before a consumer starts using it.
 export const REQUIRED_PROPERTIES = ["TIPO_VIAL", "NOMBRE"];
 
 export function optimizeGeoJson(collection) {
@@ -33,7 +35,7 @@ export function optimizeGeoJson(collection) {
 
 const target = new URL("../public/regional-highways.geojson", import.meta.url);
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const before = readFileSync(target, "utf8");
   const after = JSON.stringify(optimizeGeoJson(JSON.parse(before)));
   const beforeBytes = Buffer.byteLength(before);

@@ -15,8 +15,13 @@ test("keeps the collection shape Leaflet loads", () => {
   assert.ok(Array.isArray(data.features));
 });
 
+// Counts of the current QGIS export. They guard against features or joins being lost by an
+// optimization step; update them deliberately when regional-highways.gpkg is re-exported.
+const FEATURE_COUNT = 5114;
+const SHARED_ENDPOINTS = 3091;
+
 test("keeps every exported road feature with a drawable LineString", () => {
-  assert.equal(data.features.length, 5114);
+  assert.equal(data.features.length, FEATURE_COUNT);
   for (const feature of data.features) {
     assert.equal(feature.type, "Feature");
     assert.equal(feature.geometry.type, "LineString");
@@ -56,7 +61,7 @@ test("keeps the shared endpoints that join street pieces into labelled chains", 
     }
   }
   const shared = [...ends.values()].filter((count) => count > 1).length;
-  assert.equal(shared, 3091);
+  assert.equal(shared, SHARED_ENDPOINTS);
 
   const segments = data.features
     .map(({ properties, geometry }) => ({
@@ -66,6 +71,7 @@ test("keeps the shared endpoints that join street pieces into labelled chains", 
     }))
     .filter(({ name }) => name);
   const chains = mergeRoadSegments(segments);
+  assert.ok(chains.length > 0, "named roads still produce label chains");
   assert.ok(chains.length < segments.length, "pieces still join into longer chains");
   assert.ok(chains[0].coordinates.length > 2);
 });
