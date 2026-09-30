@@ -23,6 +23,9 @@ function inside(bounds, { latitude, longitude }) {
 const market = attractions.find(({ id }) => id === "mercado-felipe-carrillo-puerto");
 const sanctuary = attractions.find(({ id }) => id === "santuario-de-la-cruz-parlante-fcp");
 const museum = attractions.find(({ id }) => id === "museo-de-la-ciudad-felipe-carrillo-puerto");
+const casaDeLaCultura = attractions.find(
+  ({ id }) => id === "casa-de-la-cultura-felipe-carrillo-puerto",
+);
 const plaza = attractions.find(
   ({ id }) => id === "plaza-civica-parque-de-las-palapas-monumento-felipe-carrillo-puerto",
 );
@@ -152,6 +155,47 @@ test("the City Museum retains its unverified bilingual source data", () => {
     assert.match(portal.details.find(({ id }) => id === "hours").value, /09:00 - 18:00/);
     assert.equal(portal.actions.some(({ id }) => id === "directions"), false);
   }
+});
+
+test("the House of Culture retains its unverified approximate source data", () => {
+  assert.ok(casaDeLaCultura);
+  assert.equal(casaDeLaCultura.category, "culture");
+  assert.equal(casaDeLaCultura.name.es, casaDeLaCultura.nameEs);
+  assert.equal(casaDeLaCultura.name.en, casaDeLaCultura.nameEn);
+  assert.equal(casaDeLaCultura.description.es, casaDeLaCultura.shortDescriptionEs);
+  assert.equal(casaDeLaCultura.description.en, casaDeLaCultura.shortDescriptionEn);
+  assert.match(casaDeLaCultura.fullDescriptionEs, /Calle 67 \nCopied\n#768\n, Col. Centro/);
+  assert.match(casaDeLaCultura.fullDescriptionEn, /Calle 67 \nCopied\n#768\n, Col. Centro/);
+  assert.equal(casaDeLaCultura.latitude, 19.5795);
+  assert.equal(casaDeLaCultura.longitude, -88.0453);
+  assert.ok(inside(FCP_VIEW_BOUNDS, casaDeLaCultura));
+  assert.equal(casaDeLaCultura.addressEs.includes("Calle 67 \nCopied\n#768\n"), true);
+  assert.equal(casaDeLaCultura.addressEn.includes("67 Street \nCopied\n#768\n"), true);
+  assert.equal(casaDeLaCultura.address.es, casaDeLaCultura.addressEs);
+  assert.equal(casaDeLaCultura.address.en, casaDeLaCultura.addressEn);
+  assert.deepEqual(casaDeLaCultura.hours.map(({ day }) => day), [
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+    "Sun",
+  ]);
+  assert.ok(casaDeLaCultura.hours.every(({ open, close }) => open === "09:00" && close === "18:00"));
+  assert.deepEqual(casaDeLaCultura.hoursDisplay, {
+    es: "Lun - Dom: 09:00 - 18:00",
+    en: "Mon - Sun: 09:00 - 18:00",
+  });
+  assert.equal(casaDeLaCultura.verified, false);
+  assert.equal(casaDeLaCultura.status, "unverified");
+  assert.equal(casaDeLaCultura.locationAccuracy, "approximate");
+  assert.equal(isVerified(casaDeLaCultura), false);
+  assert.equal(directionsUrlFor(casaDeLaCultura), null);
+  assert.match(casaDeLaCultura.verificationNotes, /Calle 67 \nCopied\n#768\n/);
+  assert.equal(casaDeLaCultura.verificationNote, casaDeLaCultura.verificationNotes);
+  assert.equal(casaDeLaCultura.verificationSourceUrls.length, 4);
+  assert.equal(casaDeLaCultura.lastUpdated, "2026-09-30");
 });
 
 test("the civic plaza / palapa park retains its unverified bilingual source data", () => {
