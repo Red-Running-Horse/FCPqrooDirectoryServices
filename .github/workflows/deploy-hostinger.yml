@@ -44,9 +44,11 @@ jobs:
           cache: ${{ steps.lockfile.outputs.present == 'true' && 'npm' || '' }}
 
       - name: Install dependencies
+        env:
+          LOCKFILE_PRESENT: ${{ steps.lockfile.outputs.present }}
         run: |
           set -euo pipefail
-          if [ "${{ steps.lockfile.outputs.present }}" = "true" ]; then
+          if [ "$LOCKFILE_PRESENT" = "true" ]; then
             npm ci
           else
             npm install
@@ -116,7 +118,8 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           (umask 077; printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/hostinger_deploy_key)
-          (umask 077; printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts)
+          (umask 077; printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/hostinger_known_hosts)
+          chmod 600 ~/.ssh/hostinger_deploy_key ~/.ssh/hostinger_known_hosts
 
           {
             echo "SSH_PORT=${SSH_PORT:-22}"
@@ -129,7 +132,7 @@ jobs:
           SSH_USER: ${{ secrets.HOSTINGER_SSH_USER }}
         run: |
           set -euo pipefail
-          ssh_cmd="ssh -i $HOME/.ssh/hostinger_deploy_key -p $SSH_PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o IdentitiesOnly=yes -o BatchMode=yes"
+          ssh_cmd="ssh -i $HOME/.ssh/hostinger_deploy_key -p $SSH_PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/hostinger_known_hosts -o IdentitiesOnly=yes -o BatchMode=yes"
 
           # shellcheck disable=SC2086
           $ssh_cmd "$SSH_USER@$SSH_HOST" "mkdir -p -- \"$REMOTE_DIR\""
@@ -146,6 +149,6 @@ jobs:
               | $ssh_cmd "$SSH_USER@$SSH_HOST" "tar -xzf - -C \"$REMOTE_DIR\""
           fi
 
-      - name: Remove SSH key
+      - name: Remove SSH credentials from the runner
         if: always()
-        run: rm -f ~/.ssh/hostinger_deploy_key
+        run: rm -f ~/.ssh/hostinger_deploy_key ~/.ssh/hostinger_known_hosts

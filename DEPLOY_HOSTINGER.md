@@ -71,8 +71,10 @@ fast with a message naming the missing secret, variable or input.
    elsewhere). It must be an absolute path without spaces or shell
    metacharacters.
 3. The run checks out the source, sets up Node.js 22 (npm cache when
-   `package-lock.json` exists), installs with `npm ci`, runs `npm test`, builds,
-   asserts that `out/index.html` exists, and only then uploads.
+   `package-lock.json` exists), installs with `npm ci` (falling back to
+   `npm install` only if the lockfile is ever removed), runs `npm test` (skipped
+   if the `test` script is ever removed), builds, asserts that `out/index.html`
+   exists, and only then uploads.
 
 Transfer method: the workflow checks whether `rsync` exists on the Hostinger
 host and uses `rsync` over SSH if it does; otherwise it streams a tar archive
