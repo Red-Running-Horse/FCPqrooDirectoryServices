@@ -30,6 +30,8 @@ test("search and business CTA copy is translated in Spanish and English", () => 
   );
   assert.equal(UI_TEXT.es.ctaLearn, "Conoce el proyecto");
   assert.equal(UI_TEXT.es.ctaRequest, "Solicita información");
+  assert.equal(UI_TEXT.es.comingSoon, "Próximamente");
+  assert.equal(UI_TEXT.es.ctaUnderConstruction, "Esta sección está en construcción.");
   assert.equal(UI_TEXT.en.ctaHeading, "Do you run a local business?");
   assert.equal(
     UI_TEXT.en.ctaDescription,
@@ -37,6 +39,8 @@ test("search and business CTA copy is translated in Spanish and English", () => 
   );
   assert.equal(UI_TEXT.en.ctaLearn, "Learn about the project");
   assert.equal(UI_TEXT.en.ctaRequest, "Request information");
+  assert.equal(UI_TEXT.en.comingSoon, "Coming soon");
+  assert.equal(UI_TEXT.en.ctaUnderConstruction, "This section is under construction.");
   assert.equal(UI_TEXT.es.labelLastUpdated, "Última actualización");
   assert.equal(UI_TEXT.es.labelVerification, "Nota de verificación");
   assert.equal(UI_TEXT.en.labelLastUpdated, "Last updated");
