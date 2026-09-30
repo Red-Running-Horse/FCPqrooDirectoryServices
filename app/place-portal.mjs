@@ -57,7 +57,7 @@ export function placePortal(attraction, language) {
 
   const details = [
     { id: "address", label: ui.labelAddress, value: text(attraction.address, language) },
-    { id: "hours", label: ui.labelHours, value: text(attraction.hours, language) },
+    { id: "hours", label: ui.labelHours, value: text(attraction.hoursDisplay ?? attraction.hours, language) },
     { id: "phone", label: ui.labelPhone, value: call ? attraction.phone.trim() : null },
     { id: "whatsapp", label: ui.labelWhatsapp, value: whatsapp ? attraction.whatsapp.trim() : null },
     { id: "website", label: ui.labelWebsite, value: website ?? text(attraction.websiteNote, language) },
