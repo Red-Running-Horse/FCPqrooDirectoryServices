@@ -1,3 +1,6 @@
+import "leaflet/dist/leaflet.css";
+import "./style.css";
+
 export const metadata = {
   metadataBase: new URL("https://fcpqroo.mx"),
   title: {

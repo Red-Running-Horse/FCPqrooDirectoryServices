@@ -28,6 +28,7 @@ test("root metadata and homepage JSON-LD target Spanish-language SEO", () => {
   const layout = readFileSync(new URL("../app/layout.js", import.meta.url), "utf8");
   const page = readFileSync(new URL("../app/page.js", import.meta.url), "utf8");
 
+  assert.match(layout, /^import "leaflet\/dist\/leaflet\.css";\nimport "\.\/style\.css";/);
   assert.match(layout, /metadataBase: new URL\("https:\/\/fcpqroo\.mx"\)/);
   assert.match(layout, /canonical: "\/"/);
   assert.match(layout, /locale: "es_MX"/);
