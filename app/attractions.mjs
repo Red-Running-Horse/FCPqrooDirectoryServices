@@ -47,7 +47,8 @@ export const attractions = [
     },
     phone: "800 911 6666",
     whatsapp: null,
-    website: "https://www.felipecarrillopuerto.gob.mx/component/tags/tag/mercado",
+    website: null,
+    websiteNote: "Under Construction",
     verificationNote: {
       es: "Ubicación verificada físicamente en sitio y confirmada por el equipo; coordenadas tomadas del punto directo en Google Maps.",
       en: "Location physically verified on site and confirmed by the team; coordinates taken from the direct Google Maps pin.",

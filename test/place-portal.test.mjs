@@ -120,9 +120,11 @@ test("the verified market exposes only its available details and actions", () =>
     const view = placePortal(market, language);
     assert.equal(view.status, "verified");
     assert.equal(view.statusLabel, UI_TEXT[language].badgeVerified);
-    assert.deepEqual(actionIds(view), ["directions", "call", "website"]);
+    assert.deepEqual(actionIds(view), ["directions", "call"]);
     assert.equal(view.directionsNote, null);
     assert.deepEqual(view.details.map(({ id }) => id), ["address", "hours", "phone", "website"]);
+    assert.equal(view.details.find(({ id }) => id === "website").value, "Under Construction");
+    assert.ok(!JSON.stringify(view).includes("https://www.felipecarrillopuerto.gob.mx/component/tags/tag/mercado"));
   }
 });
 

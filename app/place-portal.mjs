@@ -60,7 +60,7 @@ export function placePortal(attraction, language) {
     { id: "hours", label: ui.labelHours, value: text(attraction.hours, language) },
     { id: "phone", label: ui.labelPhone, value: call ? attraction.phone.trim() : null },
     { id: "whatsapp", label: ui.labelWhatsapp, value: whatsapp ? attraction.whatsapp.trim() : null },
-    { id: "website", label: ui.labelWebsite, value: website },
+    { id: "website", label: ui.labelWebsite, value: website ?? text(attraction.websiteNote, language) },
   ].filter(({ value }) => value);
 
   const actions = [
