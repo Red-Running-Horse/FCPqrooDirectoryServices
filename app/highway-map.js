@@ -421,8 +421,8 @@ export default function HighwayMap() {
             {text.ctaRequest}
           </button>
         </div>
-        <p id="business-cta-under-construction" className="business-cta__message">
-          {text.comingSoon}. {text.ctaUnderConstruction}
+        <p id="business-cta-under-construction" className="business-cta__helper">
+          {text.businessCtaUnderConstruction}
         </p>
         <p id="business-cta-message" className="business-cta__message" role="status">
           {ctaMessage === "learn" && text.ctaLearnMessage}

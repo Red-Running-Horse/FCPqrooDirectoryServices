@@ -50,8 +50,7 @@ export const UI_TEXT = {
       "Ayuda a los visitantes a descubrir tu negocio en Felipe Carrillo Puerto. Podemos ayudarte con tu ficha, sitio web y presencia en redes sociales.",
     ctaLearn: "Conoce el proyecto",
     ctaRequest: "Solicita información",
-    comingSoon: "Próximamente",
-    ctaUnderConstruction: "Esta sección está en construcción.",
+    businessCtaUnderConstruction: "Esta sección está en construcción.",
     ctaLearnMessage:
       "Este mapa es una guía local de Felipe Carrillo Puerto. Los lugares se incluyen según información verificada, no por pago.",
   },
@@ -99,8 +98,7 @@ export const UI_TEXT = {
       "Help visitors discover your business in Felipe Carrillo Puerto. We can help with your listing, website, and social media presence.",
     ctaLearn: "Learn about the project",
     ctaRequest: "Request information",
-    comingSoon: "Coming soon",
-    ctaUnderConstruction: "This section is under construction.",
+    businessCtaUnderConstruction: "This section is under construction.",
     ctaLearnMessage:
       "This map is a local guide to Felipe Carrillo Puerto. Places are listed based on verified information, not payment.",
   },
