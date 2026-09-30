@@ -65,13 +65,28 @@ export default function HighwayMap() {
   const attractionLayer = useRef(null);
   const resetButton = useRef(null);
   const selectedCategory = useRef("all");
+  const selectedSearch = useRef("");
   const selectedLanguage = useRef(DEFAULT_LANGUAGE);
   const selectedPlace = useRef(null);
   const [category, setCategory] = useState("all");
+  const [search, setSearch] = useState("");
+  const [ctaMessage, setCtaMessage] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [language, setLanguage] = useState(DEFAULT_LANGUAGE);
   const [error, setError] = useState(false);
   const text = uiText(language);
+  const noResults = search.trim() !== "" && filterAttractions(category, search).length === 0;
+
+  // Clears the selected place when it drops out of the active category + search results.
+  function applyFilters(nextCategory, nextSearch) {
+    selectedCategory.current = nextCategory;
+    selectedSearch.current = nextSearch;
+    setCategory(nextCategory);
+    setSearch(nextSearch);
+    if (!filterAttractions(nextCategory, nextSearch).some((attraction) => attraction.id === selectedPlace.current)) {
+      setSelectedId(null);
+    }
+  }
 
   useEffect(() => {
     document.documentElement.lang = language;
@@ -92,10 +107,10 @@ export default function HighwayMap() {
     const current = attractionLayer.current;
     if (!current) return;
     current.group.clearLayers();
-    for (const attraction of filterAttractions(category)) {
+    for (const attraction of filterAttractions(category, search)) {
       current.group.addLayer(current.markers.get(attraction.id));
     }
-  }, [category]);
+  }, [category, search]);
 
   useEffect(() => {
     selectedPlace.current = selectedId;
@@ -177,7 +192,7 @@ export default function HighwayMap() {
         markers.set(attraction.id, marker);
       }
       attractionLayer.current = { group, markers };
-      for (const attraction of filterAttractions(selectedCategory.current)) {
+      for (const attraction of filterAttractions(selectedCategory.current, selectedSearch.current)) {
         group.addLayer(markers.get(attraction.id));
       }
 
@@ -322,6 +337,41 @@ export default function HighwayMap() {
           </div>
         </div>
       </section>
+      <div className="map-search" role="search">
+        <label className="map-search__label" htmlFor="map-search-input">
+          {text.searchLabel}
+        </label>
+        <input
+          id="map-search-input"
+          className="map-search__input"
+          type="search"
+          value={search}
+          placeholder={text.searchPlaceholder}
+          autoComplete="off"
+          aria-describedby="map-search-empty"
+          onChange={(event) => applyFilters(category, event.target.value)}
+        />
+        <p id="map-search-empty" className="map-search__empty" role="status">
+          {noResults ? text.searchEmpty : ""}
+        </p>
+      </div>
+      <nav className="category-filters" aria-label={text.filtersLabel}>
+        {CATEGORIES.map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            aria-pressed={category === id}
+            onClick={() => applyFilters(id, search)}
+          >
+            <span
+              className="category-filters__icon"
+              aria-hidden="true"
+              dangerouslySetInnerHTML={{ __html: categoryIconSvg(id, { size: 16, className: "category-icon" }) }}
+            />
+            {localize(label, language)}
+          </button>
+        ))}
+      </nav>
       <ul className="legend" aria-label={text.legendCategories}>
         <li>
           <span className="swatch" aria-hidden="true" />
@@ -338,38 +388,43 @@ export default function HighwayMap() {
           </li>
         ))}
       </ul>
-      <nav className="category-filters" aria-label={text.filtersLabel}>
-        {CATEGORIES.map(({ id, label }) => (
-          <button
-            key={id}
-            type="button"
-            aria-pressed={category === id}
-            onClick={() => {
-              selectedCategory.current = id;
-              setCategory(id);
-              if (!filterAttractions(id).some((attraction) => attraction.id === selectedPlace.current)) {
-                setSelectedId(null);
-              }
-            }}
-          >
-            <span
-              className="category-filters__icon"
-              aria-hidden="true"
-              dangerouslySetInnerHTML={{ __html: categoryIconSvg(id, { size: 16, className: "category-icon" }) }}
-            />
-            {localize(label, language)}
-          </button>
-        ))}
-      </nav>
       {error && <p role="alert">{text.loadError}</p>}
-      <div className="map-container">
-        <div ref={container} className="map" aria-label={text.mapLabel} />
-        <PlacePortal
-          attraction={attractions.find(({ id }) => id === selectedId) ?? null}
-          language={language}
-          onClear={() => setSelectedId(null)}
-        />
+      <div className="map-container map-workspace">
+        <div className="map-workspace__map">
+          <div ref={container} className="map" aria-label={text.mapLabel} />
+        </div>
+        <div className="map-workspace__portal">
+          <PlacePortal
+            attraction={attractions.find(({ id }) => id === selectedId) ?? null}
+            language={language}
+            onClear={() => setSelectedId(null)}
+          />
+        </div>
       </div>
+      <section className="business-cta" aria-labelledby="business-cta-heading">
+        <h2 id="business-cta-heading">{text.ctaHeading}</h2>
+        <p>{text.ctaDescription}</p>
+        <div className="business-cta__actions">
+          {[
+            ["learn", text.ctaLearn],
+            ["request", text.ctaRequest],
+          ].map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              aria-expanded={ctaMessage === id}
+              aria-controls="business-cta-message"
+              onClick={() => setCtaMessage(ctaMessage === id ? null : id)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <p id="business-cta-message" className="business-cta__message" role="status">
+          {ctaMessage === "learn" && text.ctaLearnMessage}
+          {ctaMessage === "request" && text.ctaRequestMessage}
+        </p>
+      </section>
     </>
   );
 }
