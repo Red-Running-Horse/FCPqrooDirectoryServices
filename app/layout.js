@@ -1,6 +1,4 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
+export const metadata = {
   metadataBase: new URL("https://fcpqroo.mx"),
   title: {
     default: "Directorio de Servicios | Felipe Carrillo Puerto",
@@ -36,3 +34,11 @@ export const metadata: Metadata = {
     images: ["/og/cover.jpg"],
   },
 };
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="es-MX">
+      <body>{children}</body>
+    </html>
+  );
+}
