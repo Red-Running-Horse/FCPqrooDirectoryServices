@@ -47,7 +47,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     if (before === after) {
       console.log(`public/regional-highways.geojson is already optimized (${afterBytes} bytes)`);
     } else {
-      const extra = saved > 0 ? report : "only the serialization differs";
+      const extra = saved === 0 ? "only the serialization differs" : report;
       console.error(`public/regional-highways.geojson is not optimized: ${extra}`);
       process.exitCode = 1;
     }
