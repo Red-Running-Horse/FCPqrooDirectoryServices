@@ -538,6 +538,13 @@ p {
   outline-offset: 2px;
 }
 
+.business-cta .business-cta__helper {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--charcoal-soft);
+}
+
 .business-cta .business-cta__message {
   margin: 0;
   font-size: 0.9rem;
