@@ -115,10 +115,8 @@ jobs:
 
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/hostinger_deploy_key
-          chmod 600 ~/.ssh/hostinger_deploy_key
-          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
+          (umask 077; printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/hostinger_deploy_key)
+          (umask 077; printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts)
 
           {
             echo "SSH_PORT=${SSH_PORT:-22}"
@@ -131,9 +129,7 @@ jobs:
           SSH_USER: ${{ secrets.HOSTINGER_SSH_USER }}
         run: |
           set -euo pipefail
-          ssh_cmd="ssh -i $HOME/.ssh/hostinger_deploy_key -p $SSH_PORT \
-            -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts \
-            -o IdentitiesOnly=yes -o BatchMode=yes"
+          ssh_cmd="ssh -i $HOME/.ssh/hostinger_deploy_key -p $SSH_PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -o IdentitiesOnly=yes -o BatchMode=yes"
 
           # shellcheck disable=SC2086
           $ssh_cmd "$SSH_USER@$SSH_HOST" "mkdir -p -- \"$REMOTE_DIR\""

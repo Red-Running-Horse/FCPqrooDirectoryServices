@@ -54,7 +54,7 @@ Repository → Settings → Secrets and variables → Actions.
 | Secret | `HOSTINGER_SSH_USER` | SSH username from hPanel (e.g. `u853557685`) |
 | Secret | `HOSTINGER_SSH_PRIVATE_KEY` | Full contents of `~/.ssh/fcpqroo_deploy` (private key, including the BEGIN/END lines) |
 | Secret | `HOSTINGER_SSH_KNOWN_HOSTS` | Output of `ssh-keyscan -p <PORT> -H <HOST>` |
-| Variable | `HOSTINGER_SSH_PORT` | SSH port from hPanel (defaults to `22` if unset) |
+| Variable | `HOSTINGER_SSH_PORT` | SSH port from hPanel (defaults to `22` when unset or empty) |
 | Variable | `HOSTINGER_REMOTE_DIR` | Absolute target directory, e.g. `/home/u853557685/domains/staging.fcpqroo.mx/public_html` |
 
 No credentials belong in source control; the workflow reads everything from
