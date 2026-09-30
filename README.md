@@ -57,3 +57,9 @@ Run `npm run build` and upload the contents of `out/` to the site's document roo
 `public_html/`). This is a static Next.js export: the GeoJSON is included at
 `/regional-highways.geojson`, and no Node.js server, map API token or external tile service is
 required, so the map also works without an internet connection.
+
+To automate the same upload, run the manually triggered
+[`Deploy static export to Hostinger`](.github/workflows/deploy-hostinger.yml) workflow, which
+builds the export on GitHub and copies the contents of `out/` over SSH. See
+[DEPLOY_HOSTINGER.md](DEPLOY_HOSTINGER.md) for the required Hostinger SSH setup and the GitHub
+secrets and variables it uses.

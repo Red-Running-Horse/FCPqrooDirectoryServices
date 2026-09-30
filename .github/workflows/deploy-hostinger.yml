@@ -1,0 +1,154 @@
+name: Deploy static export to Hostinger
+
+# Manual only: this workflow never runs on push. Deploy to the staging target
+# first and only point it at production after verifying the staging site.
+on:
+  workflow_dispatch:
+    inputs:
+      remote_dir:
+        description: >-
+          Absolute remote directory to publish into (for example
+          /home/uXXXXXXXXX/domains/staging.fcpqroo.mx/public_html).
+          Leave empty to use the HOSTINGER_REMOTE_DIR repository variable.
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-hostinger
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Detect lockfile
+        id: lockfile
+        run: |
+          set -euo pipefail
+          if [ -f package-lock.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: ${{ steps.lockfile.outputs.present == 'true' && 'npm' || '' }}
+
+      - name: Install dependencies
+        env:
+          LOCKFILE_PRESENT: ${{ steps.lockfile.outputs.present }}
+        run: |
+          set -euo pipefail
+          if [ "$LOCKFILE_PRESENT" = "true" ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Run tests
+        run: |
+          set -euo pipefail
+          if node -e "process.exit(require('./package.json').scripts?.test ? 0 : 1)"; then
+            npm test
+          else
+            echo "No test script defined; skipping."
+          fi
+
+      - name: Build static export
+        run: npm run build
+
+      - name: Verify build output
+        run: |
+          set -euo pipefail
+          test -f out/index.html
+          echo "Files to upload: $(find out -type f | wc -l)"
+
+      - name: Configure SSH
+        env:
+          SSH_HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
+          SSH_USER: ${{ secrets.HOSTINGER_SSH_USER }}
+          SSH_PORT: ${{ vars.HOSTINGER_SSH_PORT }}
+          SSH_PRIVATE_KEY: ${{ secrets.HOSTINGER_SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.HOSTINGER_SSH_KNOWN_HOSTS }}
+          REMOTE_DIR: ${{ inputs.remote_dir || vars.HOSTINGER_REMOTE_DIR }}
+        run: |
+          set -euo pipefail
+          missing=""
+          [ -n "$SSH_HOST" ] || missing="$missing HOSTINGER_SSH_HOST(secret)"
+          [ -n "$SSH_USER" ] || missing="$missing HOSTINGER_SSH_USER(secret)"
+          [ -n "$SSH_PRIVATE_KEY" ] || missing="$missing HOSTINGER_SSH_PRIVATE_KEY(secret)"
+          [ -n "$SSH_KNOWN_HOSTS" ] || missing="$missing HOSTINGER_SSH_KNOWN_HOSTS(secret)"
+          [ -n "$REMOTE_DIR" ] || missing="$missing remote_dir(input) or HOSTINGER_REMOTE_DIR(variable)"
+          if [ -n "$missing" ]; then
+            echo "Missing required configuration:$missing" >&2
+            exit 1
+          fi
+          case "$REMOTE_DIR" in
+            /*) ;;
+            *) echo "Remote directory must be an absolute path: $REMOTE_DIR" >&2; exit 1 ;;
+          esac
+          case "$REMOTE_DIR" in
+            *[\"\'\\\$\`]*|*' '*)
+              echo "Remote directory must not contain quotes, backslashes, \$, backticks or spaces." >&2
+              exit 1 ;;
+          esac
+          if [ "$(printf '%s' "$REMOTE_DIR" | wc -l)" -ne 0 ]; then
+            echo "Remote directory must be a single line." >&2
+            exit 1
+          fi
+          case "${SSH_PORT:-22}" in
+            ''|*[!0-9]*) echo "HOSTINGER_SSH_PORT must be a number." >&2; exit 1 ;;
+          esac
+          case "$SSH_HOST" in
+            *[!A-Za-z0-9.:-]*) echo "HOSTINGER_SSH_HOST contains unexpected characters." >&2; exit 1 ;;
+          esac
+          case "$SSH_USER" in
+            *[!A-Za-z0-9._-]*) echo "HOSTINGER_SSH_USER contains unexpected characters." >&2; exit 1 ;;
+          esac
+
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          (umask 077; printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/hostinger_deploy_key)
+          (umask 077; printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/hostinger_known_hosts)
+          chmod 600 ~/.ssh/hostinger_deploy_key ~/.ssh/hostinger_known_hosts
+
+          {
+            echo "SSH_PORT=${SSH_PORT:-22}"
+            echo "REMOTE_DIR=$REMOTE_DIR"
+          } >> "$GITHUB_ENV"
+
+      - name: Upload contents of out/ over SSH
+        env:
+          SSH_HOST: ${{ secrets.HOSTINGER_SSH_HOST }}
+          SSH_USER: ${{ secrets.HOSTINGER_SSH_USER }}
+        run: |
+          set -euo pipefail
+          ssh_cmd="ssh -i $HOME/.ssh/hostinger_deploy_key -p $SSH_PORT -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/hostinger_known_hosts -o IdentitiesOnly=yes -o BatchMode=yes"
+
+          # shellcheck disable=SC2086
+          $ssh_cmd "$SSH_USER@$SSH_HOST" "mkdir -p -- \"$REMOTE_DIR\""
+
+          # shellcheck disable=SC2086
+          if $ssh_cmd "$SSH_USER@$SSH_HOST" 'command -v rsync >/dev/null 2>&1'; then
+            echo "Using rsync over SSH."
+            # No --delete: unrelated files already on the remote target are left untouched.
+            rsync -rlptz --checksum -e "$ssh_cmd" out/ "$SSH_USER@$SSH_HOST:$REMOTE_DIR/"
+          else
+            echo "rsync not available on the host; falling back to tar over SSH."
+            # shellcheck disable=SC2086
+            tar -czf - -C out . \
+              | $ssh_cmd "$SSH_USER@$SSH_HOST" "tar -xzf - -C \"$REMOTE_DIR\""
+          fi
+
+      - name: Remove SSH credentials from the runner
+        if: always()
+        run: rm -f ~/.ssh/hostinger_deploy_key ~/.ssh/hostinger_known_hosts
