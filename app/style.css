@@ -516,7 +516,10 @@ p {
   gap: 0.5rem;
 }
 
-.business-cta__actions button {
+.business-cta__actions button,
+.business-cta__actions a {
+  display: inline-flex;
+  align-items: center;
   min-height: 2.75rem;
   border: 1px solid var(--terracotta);
   border-radius: var(--radius-chip);
@@ -526,14 +529,17 @@ p {
   font: inherit;
   font-weight: 600;
   cursor: pointer;
+  text-decoration: none;
 }
 
-.business-cta__actions button:first-child {
+.business-cta__actions button:first-child,
+.business-cta__actions a:first-child {
   background: var(--terracotta);
   color: white;
 }
 
-.business-cta__actions button:focus-visible {
+.business-cta__actions button:focus-visible,
+.business-cta__actions a:focus-visible {
   outline: 2px solid var(--charcoal);
   outline-offset: 2px;
 }

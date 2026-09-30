@@ -45,6 +45,10 @@ export const UI_TEXT = {
     searchLabel: "Buscar lugares",
     searchPlaceholder: "Nombre o categoría (p. ej., mercado, comida)",
     searchEmpty: "No hay lugares que coincidan con tu búsqueda en esta categoría.",
+    radioHeading: "XEPET — Radio Maya",
+    radioDescription: "Escucha la transmisión de la radio maya del INPI.",
+    radioListen: "Escuchar en vivo (abre otra pestaña)",
+    radioUnavailable: "Si la transmisión no está disponible, inténtalo más tarde.",
     ctaHeading: "¿Tienes un negocio local?",
     ctaDescription:
       "Ayuda a los visitantes a descubrir tu negocio en Felipe Carrillo Puerto. Podemos ayudarte con tu ficha, sitio web y presencia en redes sociales.",
@@ -93,6 +97,10 @@ export const UI_TEXT = {
     searchLabel: "Search places",
     searchPlaceholder: "Name or category (e.g., market, food)",
     searchEmpty: "No places match your search in this category.",
+    radioHeading: "XEPET — Maya Radio",
+    radioDescription: "Listen to the INPI Maya radio stream.",
+    radioListen: "Listen live (opens a new tab)",
+    radioUnavailable: "If the stream is unavailable, please try again later.",
     ctaHeading: "Do you run a local business?",
     ctaDescription:
       "Help visitors discover your business in Felipe Carrillo Puerto. We can help with your listing, website, and social media presence.",
