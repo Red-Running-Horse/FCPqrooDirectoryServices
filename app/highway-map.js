@@ -405,24 +405,27 @@ export default function HighwayMap() {
         <h2 id="business-cta-heading">{text.ctaHeading}</h2>
         <p>{text.ctaDescription}</p>
         <div className="business-cta__actions">
-          {[
-            ["learn", text.ctaLearn],
-            ["request", text.ctaRequest],
-          ].map(([id, label]) => (
-            <button
-              key={id}
-              type="button"
-              aria-expanded={ctaMessage === id}
-              aria-controls="business-cta-message"
-              onClick={() => setCtaMessage(ctaMessage === id ? null : id)}
-            >
-              {label}
-            </button>
-          ))}
+          <button
+            type="button"
+            aria-expanded={ctaMessage === "learn"}
+            aria-controls="business-cta-message"
+            onClick={() => setCtaMessage(ctaMessage === "learn" ? null : "learn")}
+          >
+            {text.ctaLearn}
+          </button>
+          <button
+            type="button"
+            aria-disabled="true"
+            aria-describedby="business-cta-under-construction"
+          >
+            {text.ctaRequest}
+          </button>
         </div>
+        <p id="business-cta-under-construction" className="business-cta__message">
+          {text.comingSoon}. {text.ctaUnderConstruction}
+        </p>
         <p id="business-cta-message" className="business-cta__message" role="status">
           {ctaMessage === "learn" && text.ctaLearnMessage}
-          {ctaMessage === "request" && text.ctaRequestMessage}
         </p>
       </section>
     </>
