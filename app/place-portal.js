@@ -38,16 +38,6 @@ export default function PlacePortal({ attraction, language, onClear }) {
             <span className={`status-badge status-badge--${view.status}`}>{view.statusLabel}</span>
           </p>
           {view.description && <p>{view.description}</p>}
-          {view.details.length > 0 && (
-            <dl className="place-portal__details">
-              {view.details.map(({ id, label, value }) => (
-                <div key={id}>
-                  <dt>{label}</dt>
-                  <dd>{value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
           {view.actions.length > 0 && (
             <div className="place-portal__actions">
               {view.actions.map(({ id, label, href, external }) => (
@@ -62,19 +52,26 @@ export default function PlacePortal({ attraction, language, onClear }) {
             </div>
           )}
           {view.directionsNote && <p className="place-portal__note">{view.directionsNote}</p>}
-          <p className="place-portal__verification">
-            {view.verificationNote && (
-              <>
-                <strong>{view.verificationLabel}:</strong> {view.verificationNote}
-                <br />
-              </>
-            )}
-            {view.lastUpdated && (
-              <>
-                <strong>{view.lastUpdatedLabel}:</strong> <time dateTime={view.lastUpdated}>{view.lastUpdated}</time>
-              </>
-            )}
-          </p>
+          {view.details.length > 0 && (
+            <dl className="place-portal__details">
+              {view.details.map(({ id, label, value }) => (
+                <div key={id}>
+                  <dt>{label}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+          {view.verificationNote && (
+            <p className="place-portal__verification">
+              <strong>{view.verificationLabel}:</strong> {view.verificationNote}
+            </p>
+          )}
+          {view.lastUpdated && (
+            <p className="place-portal__updated">
+              <strong>{view.lastUpdatedLabel}:</strong> <time dateTime={view.lastUpdated}>{view.lastUpdated}</time>
+            </p>
+          )}
         </article>
       )}
     </section>

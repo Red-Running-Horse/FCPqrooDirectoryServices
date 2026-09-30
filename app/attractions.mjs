@@ -56,8 +56,21 @@ export const attractions = [
   },
 ];
 
-export function filterAttractions(category) {
-  return attractions.filter((attraction) => category === "all" || attraction.category === category);
+// Case-insensitive match on the Spanish/English name and category label; blank queries match everything.
+export function matchesSearch(attraction, query) {
+  const normalized = typeof query === "string" ? query.trim().toLocaleLowerCase() : "";
+  if (!normalized) return true;
+
+  const category = CATEGORIES.find(({ id }) => id === attraction.category);
+  const values = [attraction.name?.es, attraction.name?.en, category?.label?.es, category?.label?.en];
+
+  return values.some((value) => typeof value === "string" && value.toLocaleLowerCase().includes(normalized));
+}
+
+export function filterAttractions(category, query = "") {
+  return attractions.filter(
+    (attraction) => (category === "all" || attraction.category === category) && matchesSearch(attraction, query),
+  );
 }
 
 export function isVerified(attraction) {

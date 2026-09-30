@@ -42,6 +42,17 @@ export const UI_TEXT = {
     actionWebsite: "Sitio web (abre otra pestaña)",
     popupHint: "Detalles completos debajo del mapa.",
     popupDetails: "Ver detalles",
+    searchLabel: "Buscar lugares",
+    searchPlaceholder: "Nombre o categoría (p. ej., mercado, comida)",
+    searchEmpty: "No hay lugares que coincidan con tu búsqueda en esta categoría.",
+    ctaHeading: "¿Tienes un negocio local?",
+    ctaDescription:
+      "Ayuda a los visitantes a descubrir tu negocio en Felipe Carrillo Puerto. Podemos ayudarte con tu ficha, sitio web y presencia en redes sociales.",
+    ctaLearn: "Conoce el proyecto",
+    ctaRequest: "Solicita información",
+    ctaLearnMessage:
+      "Este mapa es una guía local de Felipe Carrillo Puerto. Los lugares se incluyen según información verificada, no por pago.",
+    ctaRequestMessage: "El contacto directo aún no está disponible; pronto publicaremos cómo solicitar información.",
   },
   en: {
     heading: "Explore Felipe Carrillo Puerto",
@@ -79,6 +90,17 @@ export const UI_TEXT = {
     actionWebsite: "Website (opens a new tab)",
     popupHint: "Full details below the map.",
     popupDetails: "View details",
+    searchLabel: "Search places",
+    searchPlaceholder: "Name or category (e.g., market, food)",
+    searchEmpty: "No places match your search in this category.",
+    ctaHeading: "Do you run a local business?",
+    ctaDescription:
+      "Help visitors discover your business in Felipe Carrillo Puerto. We can help with your listing, website, and social media presence.",
+    ctaLearn: "Learn about the project",
+    ctaRequest: "Request information",
+    ctaLearnMessage:
+      "This map is a local guide to Felipe Carrillo Puerto. Places are listed based on verified information, not payment.",
+    ctaRequestMessage: "Direct contact is not available yet; we will soon publish how to request information.",
   },
 };
 
