@@ -288,7 +288,7 @@ test("the Pila de los Azotes is unverified with an approximate historic-centre p
   }
 });
 
-test("the historic Pich tree is non-mappable and stays out of the map attractions", () => {
+test("the historic Pich tree retains user coordinates but stays non-mappable and unverified", () => {
   assert.ok(pichTree);
   assert.equal(attractions.some(({ id }) => id === "arbol-del-pich-felipe-carrillo-puerto"), false);
   assert.equal(pichTree.category, "nature");
@@ -296,8 +296,9 @@ test("the historic Pich tree is non-mappable and stays out of the map attraction
   assert.equal(pichTree.name.en, "The Pich Tree (historic)");
   assert.equal(pichTree.description.es, pichTree.shortDescriptionEs);
   assert.equal(pichTree.description.en, pichTree.shortDescriptionEn);
-  assert.equal(pichTree.latitude, null);
-  assert.equal(pichTree.longitude, null);
+  assert.equal(pichTree.latitude, 19.609933175898494);
+  assert.equal(pichTree.longitude, -88.55789465767205);
+  assert.match(pichTree.coordinateSource, /User-provided.*not independently GPS-verified/);
   assert.equal(pichTree.mappable, false);
   assert.equal(pichTree.verified, false);
   assert.equal(pichTree.status, "unverified");
@@ -309,6 +310,10 @@ test("the historic Pich tree is non-mappable and stays out of the map attraction
   assert.match(pichTree.shortDescriptionEn, /June 23, 2017/);
   assert.match(pichTree.fullDescriptionEs, /ESTADO ACTUAL INCIERTO/);
   assert.match(pichTree.fullDescriptionEn, /CURRENT STATUS UNCERTAIN/);
+  assert.match(pichTree.verificationNotes, /no confirmation of a replanted specimen/);
+  assert.match(pichTree.verificationNotes, /monument at the original site/);
+  assert.match(pichTree.verificationNotes, /exact location of the original tree/);
+  assert.match(pichTree.verificationNotes, /provided by the user and have not been independently GPS-verified/);
   assert.match(pichTree.verificationNotes, /historical-memory record, not a mappable visitable attraction/);
   assert.equal(pichTree.verificationNote, pichTree.verificationNotes);
   assert.equal(pichTree.lastUpdated, "2026-09-30");
