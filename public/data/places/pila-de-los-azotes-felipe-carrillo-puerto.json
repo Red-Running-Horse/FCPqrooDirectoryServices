@@ -1,0 +1,116 @@
+{
+  "id": "pila-de-los-azotes-felipe-carrillo-puerto",
+  "nameEs": "Pila de los Azotes",
+  "nameEn": "Whipping Fountain (Pila de los Azotes)",
+  "shortDescriptionEs": "Pila histórica del centro de la ciudad usada para aplicar castigos corporales según los usos y costumbres mayas de Chan Santa Cruz. Uno de los atractivos culturales más singulares de la 'capital de la cultura maya'.",
+  "shortDescriptionEn": "Historic downtown fountain used to administer corporal punishment under the Maya uses and customs of Chan Santa Cruz. One of the most unusual cultural attractions of the 'capital of Maya culture'.",
+  "fullDescriptionEs": "La Pila de los Azotes es una pileta de origen histórico ubicada en el centro de Felipe Carrillo Puerto, cerca de la iglesia Balá'an Naj / Parroquia de Santa Cruz. Las fuentes oficiales difieren sobre su fecha de construcción: el gobierno municipal indica que fue construida en 1918 durante el gobierno del general Francisco May Pech \n2, mientras que el portal estatal Zona Maya la atribuye a 1864-1870 bajo el gobernador maya general Crescencio Poot \n3. Lo que sí coinciden todas las fuentes es su función: se usaba para castigar a quienes violaban las leyes de usos y costumbres mayas. La práctica de infringir azotes data desde 1915: el culpable era conducido ante la Cruz, puesto de rodillas con los brazos tendidos, y recibía doce azotes de uno de dos guardias presentes; al terminar rezaba varias oraciones frente a la cruz y quedaba libre de culpa \n2. Con la llegada masiva de trabajadores chicleros de Veracruz, Tabasco y Belice (a quienes los nativos llamaban 'Huaches'), aumentaron los pleitos, y el general May Pech mandó construir la pila para aplicar justicia ejemplar \n1. Según la tradición, por adulterio se aplicaban 50 azotes en público, seguidos de jugo de naranja agria en las heridas y oración frente a la cruz \n1. Hoy es un monumento histórico y punto de interés turístico dentro del circuito del centro histórico.",
+  "fullDescriptionEn": "The Pila de los Azotes is a historic fountain in downtown Felipe Carrillo Puerto, near the Balá'an Naj church / Parish of Santa Cruz. Official sources disagree on its construction date: the municipal government states it was built in 1918 during the government of General Francisco May Pech \n2, while the state's Zona Maya portal attributes it to 1864-1870 under Maya governor General Crescencio Poot \n3. All sources agree on its function: it was used to punish those who violated Maya laws, uses and customs. The practice of flogging dates from 1915: the offender was led before the Cross, placed on his knees with arms outstretched, and received twelve lashes from one of two guards present; afterwards he prayed several prayers before the cross and was cleared of guilt \n2. With the mass arrival of chicle workers from Veracruz, Tabasco and Belize (whom locals called 'Huaches'), fights increased, and General May Pech ordered the fountain built to apply exemplary justice \n1. According to tradition, adultery was punished with 50 public lashes, followed by sour orange juice rubbed into the wounds and prayer before the cross \n1. Today it is a historic monument and tourist point of interest within the historic-center circuit.",
+  "coordinateSource": "Approximate placeholder for the historic centre near the Parroquia de Santa Cruz / Balá'an Naj, offset from the church estimate so the marker stays visible; no coordinates are published for this monument and the point is not GPS-verified",
+  "addressEs": "Centro histórico, junto a la Parroquia de Santa Cruz / Balá'an Naj, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo (dirección exacta no publicada)",
+  "addressEn": "Historic center, next to the Parish of Santa Cruz / Balá'an Naj, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo (exact address not published)",
+  "community": "Felipe Carrillo Puerto",
+  "hours": [
+    {
+      "day": "Mon",
+      "open": "",
+      "close": "",
+      "notesEs": "Monumento al aire libre, acceso público",
+      "notesEn": "Outdoor monument, public access"
+    },
+    {
+      "day": "Tue",
+      "open": "",
+      "close": "",
+      "notesEs": "",
+      "notesEn": ""
+    },
+    {
+      "day": "Wed",
+      "open": "",
+      "close": "",
+      "notesEs": "",
+      "notesEn": ""
+    },
+    {
+      "day": "Thu",
+      "open": "",
+      "close": "",
+      "notesEs": "",
+      "notesEn": ""
+    },
+    {
+      "day": "Fri",
+      "open": "",
+      "close": "",
+      "notesEs": "",
+      "notesEn": ""
+    },
+    {
+      "day": "Sat",
+      "open": "",
+      "close": "",
+      "notesEs": "",
+      "notesEn": ""
+    },
+    {
+      "day": "Sun",
+      "open": "",
+      "close": "",
+      "notesEs": "",
+      "notesEn": ""
+    }
+  ],
+  "phone": null,
+  "whatsapp": null,
+  "email": null,
+  "website": "https://felipecarrillopuerto.gob.mx/catastro?id=44&amp;view=category",
+  "socialLinks": {
+    "facebook": null,
+    "instagram": null,
+    "tiktok": null
+  },
+  "directionsUrl": "https://www.google.com/maps/search/Pila+de+los+Azotes+Felipe+Carrillo+Puerto",
+  "priceLevel": null,
+  "paymentMethods": [],
+  "languagesSpoken": [
+    "es",
+    "maya"
+  ],
+  "amenities": [
+    "historic_monument",
+    "outdoor_site",
+    "part_of_historic_center_circuit"
+  ],
+  "accessibility": {
+    "wheelchairAccess": null,
+    "parking": null,
+    "notesEs": "Sin información verificada sobre accesibilidad.",
+    "notesEn": "No verified accessibility information."
+  },
+  "photos": [],
+  "verified": false,
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verificationSourceUrls": [
+    "https://quintanaroohoy.com/quintanaroo/fcp/felipe-carrillo-puerto-marcado-por-la-historia/",
+    "https://felipecarrillopuerto.gob.mx/catastro?id=44&amp;view=category",
+    "http://zonamaya.qroo.gob.mx/centro-historico-de-felipe-carrillo-puerto/",
+    "https://paseopormexico.com/lugares/1792/pila_de_los_azotes_en_felipe_carrillo_puerto"
+  ],
+  "verificationNotes": "Existence and historical function confirmed by two official sources: the municipal government tourism page \n2 and the state Zona Maya portal \n3. MAJOR DATE CONFLICT between official sources: municipality says built 1918 under General Francisco May Pech \n2; state portal and Paseo por México say built 1864-1870 under General Crescencio Poot \n3 \n4. The municipal page itself adds that flogging as a practice dates from 1915 — internally inconsistent with the 1864 attribution but also at odds with its own 1918 date framing. Do not publish a construction date without resolving this. Exact street address and GPS coordinates are NOT published anywhere found; location described only as 'near the Balá'an Naj church' in the historic center \n3. The mapped point is an approximate historic-centre placeholder near the Parroquia de Santa Cruz, not a surveyed or GPS-verified position, so the entry stays unverified/approximate and no directions link is offered. No hours (open-air public monument), no fees documented. No phone, social media or accessibility info exists for this site.",
+  "lastUpdated": "2026-09-30",
+  "description": {
+    "es": "Pila histórica del centro de la ciudad usada para aplicar castigos corporales según los usos y costumbres mayas de Chan Santa Cruz. Uno de los atractivos culturales más singulares de la 'capital de la cultura maya'.",
+    "en": "Historic downtown fountain used to administer corporal punishment under the Maya uses and customs of Chan Santa Cruz. One of the most unusual cultural attractions of the 'capital of Maya culture'."
+  },
+  "address": {
+    "es": "Centro histórico, junto a la Parroquia de Santa Cruz / Balá'an Naj, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo (dirección exacta no publicada)",
+    "en": "Historic center, next to the Parish of Santa Cruz / Balá'an Naj, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo (exact address not published)"
+  },
+  "hoursDisplay": {
+    "es": "Todos los días: monumento al aire libre, acceso público",
+    "en": "Every day: outdoor monument, public access"
+  },
+  "verificationNote": "Existence and historical function confirmed by two official sources: the municipal government tourism page \n2 and the state Zona Maya portal \n3. MAJOR DATE CONFLICT between official sources: municipality says built 1918 under General Francisco May Pech \n2; state portal and Paseo por México say built 1864-1870 under General Crescencio Poot \n3 \n4. The municipal page itself adds that flogging as a practice dates from 1915 — internally inconsistent with the 1864 attribution but also at odds with its own 1918 date framing. Do not publish a construction date without resolving this. Exact street address and GPS coordinates are NOT published anywhere found; location described only as 'near the Balá'an Naj church' in the historic center \n3. The mapped point is an approximate historic-centre placeholder near the Parroquia de Santa Cruz, not a surveyed or GPS-verified position, so the entry stays unverified/approximate and no directions link is offered. No hours (open-air public monument), no fees documented. No phone, social media or accessibility info exists for this site."
+}

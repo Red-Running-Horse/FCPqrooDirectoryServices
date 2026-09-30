@@ -1,0 +1,110 @@
+[
+  {
+    "id": "mercado-felipe-carrillo-puerto",
+    "category": "food",
+    "latitude": 19.580894458770345,
+    "longitude": -88.04402730793707,
+    "status": "verified",
+    "locationAccuracy": "exact",
+    "name": {
+      "es": "Mercado Público Municipal de Felipe Carrillo Puerto",
+      "en": "Felipe Carrillo Puerto Municipal Public Market"
+    }
+  },
+  {
+    "id": "santuario-de-la-cruz-parlante-fcp",
+    "category": "culture",
+    "latitude": 19.580901,
+    "longitude": -88.049242,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Santuario de la Cruz Parlante",
+      "en": "Sanctuary of the Talking Cross"
+    }
+  },
+  {
+    "id": "museo-de-la-ciudad-felipe-carrillo-puerto",
+    "category": "culture",
+    "latitude": 19.5795,
+    "longitude": -88.0453,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Museo de la Ciudad de Felipe Carrillo Puerto",
+      "en": "Felipe Carrillo Puerto City Museum"
+    }
+  },
+  {
+    "id": "casa-de-la-cultura-felipe-carrillo-puerto",
+    "category": "culture",
+    "latitude": 19.5796,
+    "longitude": -88.0451,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Casa de la Cultura de Felipe Carrillo Puerto",
+      "en": "Felipe Carrillo Puerto House of Culture"
+    }
+  },
+  {
+    "id": "plaza-civica-parque-de-las-palapas-monumento-felipe-carrillo-puerto",
+    "category": "culture",
+    "latitude": 19.5792,
+    "longitude": -88.0448,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Plaza Cívica / Parque de las Palapas + Monumento a Felipe Carrillo Puerto",
+      "en": "Civic Plaza / Palapa Park + Monument to Felipe Carrillo Puerto"
+    }
+  },
+  {
+    "id": "iglesia-de-san-servacio-felipe-carrillo-puerto",
+    "category": "culture",
+    "latitude": 19.5798,
+    "longitude": -88.0455,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Iglesia de San Servacio",
+      "en": "Church of Saint Servatius"
+    }
+  },
+  {
+    "id": "balam-nah-felipe-carrillo-puerto",
+    "category": "culture",
+    "latitude": 19.476991842956,
+    "longitude": -88.06736291757169,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Balam-Nah",
+      "en": "Balam-Nah"
+    }
+  },
+  {
+    "id": "pila-de-los-azotes-felipe-carrillo-puerto",
+    "category": "culture",
+    "latitude": 19.5799,
+    "longitude": -88.0458,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Pila de los Azotes",
+      "en": "Whipping Fountain (Pila de los Azotes)"
+    }
+  },
+  {
+    "id": "arbol-del-pich-felipe-carrillo-puerto",
+    "category": "nature",
+    "latitude": 19.609933175898494,
+    "longitude": -88.55789465767205,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Árbol del Pich (histórico)",
+      "en": "The Pich Tree (historic)"
+    }
+  }
+]

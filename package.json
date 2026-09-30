@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build --webpack",
     "optimize:geojson": "node scripts/optimize-geojson.mjs",
+    "generate:places": "node scripts/build-place-data.mjs",
     "test": "node --test"
   },
   "repository": {

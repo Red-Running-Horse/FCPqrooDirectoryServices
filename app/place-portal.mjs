@@ -1,4 +1,4 @@
-import { CATEGORIES, directionsUrlFor, isVerified } from "./attractions.mjs";
+import { CATEGORIES, directionsUrlFor, isVerified } from "./place-index.mjs";
 import { LANGUAGES, localize, uiText } from "./i18n.mjs";
 
 // Badge shown in the portal: "unavailable" wins, then "verified" (exact + verified), else "approximate".

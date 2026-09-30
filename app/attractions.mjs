@@ -1,11 +1,9 @@
-export const CATEGORIES = [
-  { id: "all", label: { es: "Todos", en: "All" } },
-  { id: "nature", label: { es: "Naturaleza", en: "Nature" } },
-  { id: "culture", label: { es: "Cultura", en: "Culture" } },
-  { id: "food", label: { es: "Comida", en: "Food" } },
-  { id: "lodging", label: { es: "Hospedaje", en: "Lodging" } },
-  { id: "tours", label: { es: "Tours", en: "Tours" } },
-];
+import { filterPlaces } from "./place-index.mjs";
+
+// Source of truth for the committed place records. The map bundle does not import this module:
+// scripts/build-place-data.mjs splits it into public/data/places-index.json and
+// public/data/places/<id>.json, which the client loads instead.
+export { CATEGORIES, directionsUrlFor, isVerified, matchesSearch } from "./place-index.mjs";
 
 const DEMO_ADDRESS = {
   es: "Felipe Carrillo Puerto, Quintana Roo (zona aproximada)",
@@ -591,29 +589,6 @@ export const attractions = [
   },
 ];
 
-// Case-insensitive match on the Spanish/English name and category label; blank queries match everything.
-export function matchesSearch(attraction, query) {
-  const normalized = typeof query === "string" ? query.trim().toLocaleLowerCase() : "";
-  if (!normalized) return true;
-
-  const category = CATEGORIES.find(({ id }) => id === attraction.category);
-  const values = [attraction.name?.es, attraction.name?.en, category?.label?.es, category?.label?.en];
-
-  return values.some((value) => typeof value === "string" && value.toLocaleLowerCase().includes(normalized));
-}
-
 export function filterAttractions(category, query = "") {
-  return attractions.filter(
-    (attraction) => (category === "all" || attraction.category === category) && matchesSearch(attraction, query),
-  );
-}
-
-export function isVerified(attraction) {
-  return attraction.status === "verified" && attraction.locationAccuracy === "exact";
-}
-
-// Directions are only offered for verified destinations with an https link.
-export function directionsUrlFor(attraction) {
-  const url = attraction.directionsUrl;
-  return isVerified(attraction) && typeof url === "string" && url.startsWith("https://") ? url : null;
+  return filterPlaces(attractions, category, query);
 }
