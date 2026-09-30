@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
+    "optimize:geojson": "node scripts/optimize-geojson.mjs",
     "test": "node --test"
   },
   "repository": {
