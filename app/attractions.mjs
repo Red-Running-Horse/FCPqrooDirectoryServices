@@ -405,8 +405,8 @@ const whippingFountain = {
 };
 
 // Historical-memory record: the original tree fell on 23 June 2017 and no current specimen,
-// monument or exact point is documented, so it is intentionally kept out of `attractions`
-// (the map list) and exported separately with null coordinates.
+// monument or exact point is independently verified, so it is intentionally kept out of
+// `attractions` (the map list) despite retaining user-provided approximate coordinates.
 const pichTree = {
   id: "arbol-del-pich-felipe-carrillo-puerto",
   category: "nature",
@@ -416,9 +416,9 @@ const pichTree = {
   shortDescriptionEn: "Legendary roughly 200-year-old tree tied to the history of Chan Santa Cruz and honored with a traditional annual festival. The original specimen fell on June 23, 2017.",
   fullDescriptionEs: "El 'Pich' (árbol de chaká / madera de rosa, Haematoxylum campechianum) fue un ejemplar legendario de aproximadamente 200 años de vida, considerado pieza importante de la historia del municipio de Felipe Carrillo Puerto y vinculado a la memoria de la antigua Chan Santa Cruz. Contaba con una fiesta tradicional anual ('la fiesta del árbol'). El árbol cayó el 23 de junio de 2017, un mes antes de la fiesta tradicional, generando fuerte conmoción entre los carrilloportenses: algunos lo interpretaron como mal augurio al inicio de la temporada de huracanes, otros como pérdida patrimonial para las nuevas generaciones, y otros propusieron sembrar un nuevo árbol para iniciar una nueva historia \n4. ESTADO ACTUAL INCIERTO: no se encontró confirmación de si existe un nuevo ejemplar plantado, un monumento en el sitio original, ni la ubicación exacta del árbol original. Verificar en campo antes de publicar esta entrada en un mapa.",
   fullDescriptionEn: "The 'Pich' (logwood tree, Haematoxylum campechianum) was a legendary specimen roughly 200 years old, considered an important piece of the history of the municipality of Felipe Carrillo Puerto and tied to the memory of ancient Chan Santa Cruz. It had a traditional annual celebration ('the tree festival'). The tree fell on June 23, 2017, one month before the traditional festival, causing strong emotion among residents: some read it as an ill omen at the start of hurricane season, others as a heritage loss for new generations, and others proposed planting a new tree to begin a new history \n4. CURRENT STATUS UNCERTAIN: no confirmation was found of a replanted specimen, a monument at the original site, or the exact location of the original tree. Verify on the ground before publishing this entry on a map.",
-  latitude: null,
-  longitude: null,
-  coordinateSource: "",
+  latitude: 19.609933175898494,
+  longitude: -88.55789465767205,
+  coordinateSource: "User-provided coordinates; not independently GPS-verified.",
   addressEs: "Municipio de Felipe Carrillo Puerto, Quintana Roo (ubicación exacta no documentada)",
   addressEn: "Municipality of Felipe Carrillo Puerto, Quintana Roo (exact location not documented)",
   community: "Felipe Carrillo Puerto",
@@ -453,12 +453,12 @@ const pichTree = {
   verifiedAt: null,
   verifiedBy: null,
   verificationSourceUrls: [],
-  verificationNotes: "The original ~200-year-old Pich tree fell on June 23, 2017, one month before its traditional annual festival; this is the only firmly reported fact. CURRENT STATUS UNCERTAIN: no confirmation of a replanted specimen, of a monument at the original site, or of the exact location of the original tree. The source citation supplied with this record (footnote 4) was not accompanied by a URL, so no verification source URL is stored. Coordinates are null and no directions are offered on purpose — this is a historical-memory record, not a mappable visitable attraction. Verify on the ground before promoting it to the map.",
+  verificationNotes: "The original ~200-year-old Pich tree fell on June 23, 2017, one month before its traditional annual festival; this is the only firmly reported fact. CURRENT STATUS UNCERTAIN: no confirmation of a replanted specimen, of a monument at the original site, or of the exact location of the original tree. The source citation supplied with this record (footnote 4) was not accompanied by a URL, so no verification source URL is stored. The coordinates 19.609933175898494, -88.55789465767205 were provided by the user and have not been independently GPS-verified; they remain approximate and no directions are offered. This is a historical-memory record, not a mappable visitable attraction. Verify on the ground before promoting it to the map.",
   lastUpdated: "2026-09-30",
 };
 
-// Records kept out of the map on purpose: no documented current site or coordinates.
-// They keep latitude/longitude null and must not be merged into `attractions`.
+// Records kept out of the map on purpose: no independently verified current site.
+// They must not be merged into `attractions`, even when approximate coordinates are retained.
 export const nonMappablePlaces = [
   {
     ...pichTree,
