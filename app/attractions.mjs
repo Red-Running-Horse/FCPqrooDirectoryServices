@@ -130,6 +130,115 @@ const museum = {
   lastUpdated: "2026-09-30",
 };
 
+const plaza = {
+  id: "plaza-civica-parque-de-las-palapas-monumento-felipe-carrillo-puerto",
+  category: "culture",
+  nameEs: "Plaza Cívica / Parque de las Palapas + Monumento a Felipe Carrillo Puerto",
+  nameEn: "Civic Plaza / Palapa Park + Monument to Felipe Carrillo Puerto",
+  shortDescriptionEs: "Parque central de la ciudad con palapas, monumentos históricos, una fuente y el monumento al gobernador revolucionario Felipe Carrillo Puerto. Punto de encuentro y punto de partida para rutas turísticas.",
+  shortDescriptionEn: "Town's central park with palapas, historic monuments, a fountain, and a monument to the revolutionary governor Felipe Carrillo Puerto. A gathering point and starting point for sightseeing routes.",
+  fullDescriptionEs: "La Plaza Cívica, conocida localmente como Parque de las Palapas, es el parque principal de Felipe Carrillo Puerto. Se encuentra en el centro de la ciudad, en la intersección de las calles 67 y 68, entre las calles 65 y 69. El parque cuenta con palapas típicas yucatecas, una fuente, bancas, y el Monumento a Felipe Carrillo Puerto — una estatua en bronce del gobernador revolucionario asesinado en 1924. El parque también alberga la Casa de la Cultura, el Museo de la Ciudad y la Parroquia de Santa Cruz en sus alrededores inmediatos. Es un espacio de encuentro comunitario, punto de venta de comida en las palapas y punto de partida para rutas turísticas del municipio. El parque es amplio, con palmeras de coco, caminos empedrados y un ambiente tranquilo. Se encuentra a una cuadra al oeste de la carretera federal 307.",
+  fullDescriptionEn: "The Plaza Cívica, locally known as Parque de las Palapas, is Felipe Carrillo Puerto's central park. It is located in the town center at the intersection of streets 67 and 68, between streets 65 and 69. The park features typical Yucatecan palapas, a fountain, benches, and the Monument to Felipe Carrillo Puerto — a bronze statue of the revolutionary governor assassinated in 1924. The park is surrounded by the Casa de la Cultura, the City Museum, and the Parish of Santa Cruz. It serves as a community gathering space, a food-selling area under the palapas, and a starting point for municipal sightseeing routes. The park is spacious, with coconut palms, paved walkways, and a tranquil atmosphere. It sits one block west of the federal highway 307.",
+  latitude: 19.5792,
+  longitude: -88.0448,
+  coordinateSource: "Estimated from town center coordinates (19°34'43\"N 88°02'43\"W) and park location at Calle 67/68 entre 65 y 69; not GPS-verified",
+  addressEs: "Calle 67 y 68 entre 65 y 69, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo",
+  addressEn: "Streets 67 and 68 between 65th and 69th, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo",
+  community: "Felipe Carrillo Puerto",
+  hours: [
+    { day: "Mon", open: "", close: "", notesEs: "Espacio público abierto todo el día", notesEn: "Public open space, accessible all day" },
+    { day: "Tue", open: "", close: "", notesEs: "", notesEn: "" },
+    { day: "Wed", open: "", close: "", notesEs: "", notesEn: "" },
+    { day: "Thu", open: "", close: "", notesEs: "", notesEn: "" },
+    { day: "Fri", open: "", close: "", notesEs: "", notesEn: "" },
+    { day: "Sat", open: "", close: "", notesEs: "", notesEn: "" },
+    { day: "Sun", open: "", close: "", notesEs: "", notesEn: "" },
+  ],
+  phone: null,
+  whatsapp: null,
+  email: null,
+  website: null,
+  socialLinks: { facebook: null, instagram: null, tiktok: null },
+  directionsUrl: "https://www.google.com/maps/search/Plaza+Civica+Felipe+Carrillo+Puerto+Quintana+Roo",
+  priceLevel: null,
+  paymentMethods: [],
+  languagesSpoken: ["es"],
+  amenities: ["public_park", "monument", "palapas", "food_stalls_nearby", "walking_paths", "cultural_venues_adjoining"],
+  accessibility: {
+    wheelchairAccess: null,
+    parking: null,
+    notesEs: "Espacio público con caminos empedrados. Sin información verificada sobre rampas o accesibilidad.",
+    notesEn: "Public space with paved walkways. No verified accessibility information.",
+  },
+  photos: [],
+  verified: false,
+  verifiedAt: null,
+  verifiedBy: null,
+  verificationSourceUrls: [
+    "https://visitmexico.com/es/destino/18025/felipe-carillo-puerto",
+    "https://www.turismotrenmaya.mx/ciudades/conoce-felipe-carrillo-puerto-quintana-roo/",
+    "https://republica-alterna.com.mx/que-lugares-turisticos-visitar-en-felipe-carrillo-puerto-quintana-roo/",
+    "https://en.wikivoyage.org/wiki/Felipe_Carrillo_Puerto",
+  ],
+  verificationNotes: "Address corroborated by Wikivoyage as Parque Principal / Calle 67 \nCopied\n#768\n (one block west of Highway 307) and by multiple sources placing it at Calle 67/68 entre 65 y 69. Coordinates are estimated from town center data — not GPS-verified. Hours are left blank because this is a public open-air park (no formal opening hours); the fields note 'espacio público abierto todo el día.' Price level is null (free public space). No phone, email, website, or social media found. The monument to Felipe Carrillo Puerto is consistently referenced across tourism sources. Some sources conflate the park with the Museo de la Ciudad (Calle 67 \nCopied\n#768\n) or the Parroquia de Santa Cruz — these are separate but adjoining buildings. The 'Palapa' designation is confirmed by local tourism pages.",
+  lastUpdated: "2026-09-30",
+};
+
+const church = {
+  id: "iglesia-de-san-servacio-felipe-carrillo-puerto",
+  category: "culture",
+  nameEs: "Iglesia de San Servacio",
+  nameEn: "Church of Saint Servatius",
+  shortDescriptionEs: "Iglesia colonial que combina elementos mayas y coloniales en su arquitectura. Situada en el parque central, es un punto de referencia histórico y religioso de la ciudad.",
+  shortDescriptionEn: "Colonial church combining Maya and colonial architectural elements. Located on the central park, it is a historic and religious landmark of the town.",
+  fullDescriptionEs: "La Iglesia de San Servacio (también mencionada como Parroquia de Santa Cruz en algunas fuentes) es una iglesia colonial que combina elementos mayas y coloniales en su arquitectura. Se encuentra en el parque central de Felipe Carrillo Puerto, en la Calle 66 con 69 No. 782, Col. Centro, C.P. 77200. La iglesia es parte de la Prelatura de Cancún–Chetumal y alberga misas diarias y eventos religiosos. Tiene un campanario, puertas de madera tallada y un altar principal con elementos decorativos. El templo ha sido descrito como modesto pero tranquilo y atractivo en su interior. Algunos visitantes y reseñas la llaman 'Iglesia de la Santa Cruz' o 'Parroquia de Santa Cruz', y una reseña de Tripadvisor menciona que fue la antigua casa de la 'Cruz Parlante' antes de que esta se trasladara al santuario dedicado en Calle 60. La iglesia tiene horarios de misa regulares: misa diaria a las 7:00 AM y 8:00 PM, misa precepto dominical a las 12:00 PM y 8:00 PM, misa con niños a las 8:30 AM del domingo, y bautismos comunitarios los domingos a las 10:00 AM. El horario de oficina es de lunes a viernes de 9:00 AM a 5:00 PM.",
+  fullDescriptionEn: "The Church of Saint Servatius (also referred to as the Parish of Santa Cruz in some sources) is a colonial church combining Maya and colonial architectural elements. It is located on the central park of Felipe Carrillo Puerto, at Calle 66 with 69 No. 782, Col. Centro, C.P. 77200. The church is part of the Prelature of Cancún–Chetumal and holds daily masses and religious events. It features a bell tower, carved wooden doors, and a main altar with decorative elements. The temple has been described as modest but tranquil and attractive on the interior. Some visitors and reviews call it the 'Holy Cross Catholic Church' or 'Parish of Santa Cruz,' and a Tripadvisor review notes it was the former home of the Talking Cross before it was relocated to the dedicated sanctuary on Calle 60. The church has regular mass schedules: daily mass at 7:00 AM and 8:00 PM, Sunday precept mass at 12:00 PM and 8:00 PM, Sunday children's mass at 8:30 AM, and community baptisms on Sundays at 10:00 AM. Office hours are Monday to Friday from 9:00 AM to 5:00 PM.",
+  latitude: 19.5798,
+  longitude: -88.0455,
+  coordinateSource: "Estimated from address on Calle 66 con 69 No. 782, Col. Centro; not GPS-verified",
+  addressEs: "Calle 66 con 69 No. 782, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo",
+  addressEn: "66 Street with 69 Street No. 782, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo",
+  community: "Felipe Carrillo Puerto",
+  hours: [
+    { day: "Mon", open: "07:00", close: "20:00", notesEs: "Misa diaria 7:00 AM y 8:00 PM; oficina 9:00 AM - 5:00 PM", notesEn: "Daily mass 7:00 AM and 8:00 PM; office 9:00 AM - 5:00 PM" },
+    { day: "Tue", open: "07:00", close: "20:00", notesEs: "", notesEn: "" },
+    { day: "Wed", open: "07:00", close: "20:00", notesEs: "", notesEn: "" },
+    { day: "Thu", open: "07:00", close: "20:00", notesEs: "", notesEn: "" },
+    { day: "Fri", open: "07:00", close: "20:00", notesEs: "", notesEn: "" },
+    { day: "Sat", open: "18:00", close: "18:00", notesEs: "Misa 6:00 PM", notesEn: "Mass 6:00 PM" },
+    { day: "Sun", open: "08:30", close: "20:00", notesEs: "Misa con niños 8:30 AM; Misa precepto 12:00 PM y 8:00 PM; Bautismos 10:00 AM", notesEn: "Children's mass 8:30 AM; Precept mass 12:00 PM and 8:00 PM; Baptisms 10:00 AM" },
+  ],
+  phone: null,
+  whatsapp: null,
+  email: null,
+  website: null,
+  socialLinks: { facebook: null, instagram: null, tiktok: null },
+  directionsUrl: "https://www.google.com/maps/search/Parroquia+Santa+Cruz+Felipe+Carrillo+Puerto+Quintana+Roo",
+  priceLevel: null,
+  paymentMethods: [],
+  languagesSpoken: ["es"],
+  amenities: ["church", "mass_services", "baptisms", "cultural_heritage", "colonial_architecture"],
+  accessibility: {
+    wheelchairAccess: null,
+    parking: null,
+    notesEs: "Sin información verificada sobre accesibilidad.",
+    notesEn: "No verified accessibility information.",
+  },
+  photos: [],
+  // Attributed "verified" by a third-party mass-time directory (naming/coordinates remain uncertain);
+  // this does NOT mean the location is physically/GPS verified — see locationAccuracy below.
+  verified: true,
+  verifiedAt: "2026-09-30",
+  verifiedBy: "horariodemisa.com.mx",
+  verificationSourceUrls: [
+    "https://horariodemisa.com.mx/quintana-roo/felipe-carrillo-puerto/parroquia-santa-cruz-felipe-carrillo-puerto/",
+    "https://www.turismotrenmaya.mx/ciudades/conoce-felipe-carrillo-puerto-quintana-roo/",
+    "https://www.tripadvisor.com/ShowUserReviews-g2048778-d23335693-r786979314-Holy_Cross_Catholic_Church_iglesia_Santa_Cruz-Felipe_Carrillo_Puerto_Yucatan_P.html",
+  ],
+  verificationNotes: "Address (Calle 66 con 69 No. 782, Col. Centro, CP 77200) and mass schedules are confirmed by horariodemisa.com.mx, a dedicated mass-time directory. Office hours (Mon–Fri 9:00 AM–5:00 PM) are also listed there. Tripadvisor corroborates the location as a historic church once housing the Talking Cross. Tourism sources describe it as combining Maya and colonial architectural elements. Coordinates are estimated from the address — not GPS-verified. The name varies in sources: 'Iglesia de San Servacio' (tourism pages), 'Parroquia de Santa Cruz' (mass directory), and 'Iglesia de la Santa Cruz' (Tripadvisor). These likely refer to the same building. Phone, email, website, and social media are undocumented. No official diocese page found. Mass schedule is sourced from the mass-time directory — verify before relying on it for planning.",
+  lastUpdated: "2026-09-30",
+};
+
 // Verified local places should carry exact coordinates and a working directionsUrl.
 export const attractions = [
   {
@@ -185,6 +294,32 @@ export const attractions = [
     status: "unverified",
     locationAccuracy: "approximate",
     verificationNote: museum.verificationNotes,
+  },
+  {
+    ...plaza,
+    name: { es: plaza.nameEs, en: plaza.nameEn },
+    description: { es: plaza.shortDescriptionEs, en: plaza.shortDescriptionEn },
+    address: { es: plaza.addressEs, en: plaza.addressEn },
+    hoursDisplay: { es: "Todos los días: espacio público abierto todo el día", en: "Every day: public open space, accessible all day" },
+    status: "unverified",
+    locationAccuracy: "approximate",
+    verificationNote: plaza.verificationNotes,
+  },
+  {
+    ...church,
+    name: { es: church.nameEs, en: church.nameEn },
+    description: { es: church.shortDescriptionEs, en: church.shortDescriptionEn },
+    address: { es: church.addressEs, en: church.addressEn },
+    hoursDisplay: {
+      es: "Lun-Vie: 07:00 - 20:00; Sáb: misa 18:00; Dom: 08:30 - 20:00",
+      en: "Mon-Fri: 07:00 - 20:00; Sat: mass 18:00; Sun: 08:30 - 20:00",
+    },
+    // Source's verified:true reflects third-party mass-directory attribution, not GPS/physical
+    // verification of coordinates or naming — status/locationAccuracy stay unverified/approximate
+    // so isVerified()/directionsUrlFor() never claim exact verification for this record.
+    status: "unverified",
+    locationAccuracy: "approximate",
+    verificationNote: church.verificationNotes,
   },
 ];
 
