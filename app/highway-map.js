@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { attractions, CATEGORIES, filterAttractions, isVerified } from "./attractions.mjs";
+import { categoryIconSvg } from "./category-icons.mjs";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
 import { syncMarkerSelection } from "./marker-selection.mjs";
 import PlacePortal from "./place-portal";
@@ -141,10 +142,10 @@ export default function HighwayMap() {
         const approximate = isVerified(attraction) ? "" : " attraction-marker--approximate";
         const icon = L.divIcon({
           className: `attraction-marker attraction-marker--${attraction.category}${approximate}`,
-          html: '<span aria-hidden="true"></span>',
-          iconSize: [28, 28],
-          iconAnchor: [14, 14],
-          popupAnchor: [0, -14],
+          html: categoryIconSvg(attraction.category, { size: 18, className: "attraction-marker__icon" }),
+          iconSize: [32, 32],
+          iconAnchor: [16, 16],
+          popupAnchor: [0, -16],
         });
         const title = markerTitle(attraction, selectedLanguage.current);
         const marker = L.marker([attraction.latitude, attraction.longitude], {
@@ -315,15 +316,21 @@ export default function HighwayMap() {
         </div>
       </div>
       <p>{text.instructions}</p>
-      <ul className="legend">
+      <ul className="legend" aria-label={text.legendCategories}>
         <li>
           <span className="swatch" aria-hidden="true" />
           {text.legendRoad}
         </li>
-        <li>
-          <span className="swatch swatch--approximate" aria-hidden="true" />
-          {text.legendApproximate}
-        </li>
+        {CATEGORIES.filter(({ id }) => id !== "all").map(({ id, label }) => (
+          <li key={id}>
+            <span
+              className={`legend__icon legend__icon--${id}`}
+              aria-hidden="true"
+              dangerouslySetInnerHTML={{ __html: categoryIconSvg(id, { size: 16, className: "category-icon" }) }}
+            />
+            {localize(label, language)}
+          </li>
+        ))}
       </ul>
       <nav className="category-filters" aria-label={text.filtersLabel}>
         {CATEGORIES.map(({ id, label }) => (
@@ -339,6 +346,11 @@ export default function HighwayMap() {
               }
             }}
           >
+            <span
+              className="category-filters__icon"
+              aria-hidden="true"
+              dangerouslySetInnerHTML={{ __html: categoryIconSvg(id, { size: 16, className: "category-icon" }) }}
+            />
             {localize(label, language)}
           </button>
         ))}

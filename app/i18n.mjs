@@ -9,9 +9,9 @@ export const UI_TEXT = {
   es: {
     heading: "Explora Felipe Carrillo Puerto",
     instructions:
-      "Mapa turístico de las carreteras regionales. Acércate para ver los nombres de las calles y carreteras. Los puntos de interés son ejemplos con ubicación aproximada, no destinos confirmados.",
+      "Mapa turístico de Felipe Carrillo Puerto, corazón de Maya Ka'an. Descubre naturaleza, cultura, comida y experiencias locales; toca un ícono para ver los detalles y acércate para leer los nombres de las calles.",
     legendRoad: "Carretera regional",
-    legendApproximate: "Punto de ejemplo (ubicación aproximada)",
+    legendCategories: "Categorías",
     languageLabel: "Idioma",
     filtersLabel: "Filtrar puntos del mapa",
     mapLabel: "Mapa turístico de Felipe Carrillo Puerto",
@@ -44,9 +44,9 @@ export const UI_TEXT = {
   en: {
     heading: "Explore Felipe Carrillo Puerto",
     instructions:
-      "Tourist map of the regional roads. Zoom in to see street and road names. Points of interest are examples with approximate locations, not confirmed destinations.",
+      "Tourist map of Felipe Carrillo Puerto, the heart of Maya Ka'an. Discover nature, culture, food and local experiences; tap an icon for details and zoom in to read the street names.",
     legendRoad: "Regional road",
-    legendApproximate: "Example point (approximate location)",
+    legendCategories: "Categories",
     languageLabel: "Language",
     filtersLabel: "Filter map points",
     mapLabel: "Tourist map of Felipe Carrillo Puerto",
