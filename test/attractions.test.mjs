@@ -8,6 +8,7 @@ import {
   isVerified,
 } from "../app/attractions.mjs";
 import { FCP_MAX_BOUNDS, FCP_VIEW_BOUNDS } from "../app/map-view.mjs";
+import { placePortal } from "../app/place-portal.mjs";
 
 function inside(bounds, { latitude, longitude }) {
   return (
@@ -19,6 +20,7 @@ function inside(bounds, { latitude, longitude }) {
 }
 
 const market = attractions.find(({ id }) => id === "mercado-felipe-carrillo-puerto");
+const sanctuary = attractions.find(({ id }) => id === "santuario-de-la-cruz-parlante-fcp");
 
 test("attractions have complete, distinct, bilingual, in-bounds data", () => {
   assert.ok(attractions.length >= 1);
@@ -55,6 +57,47 @@ test("the physically confirmed market is exact, verified and in the town view", 
   assert.equal(market.longitude, -88.04402730793707);
   assert.equal(directionsUrlFor(market), "https://maps.app.goo.gl/zJbo8V1rE4ZmYT537");
   assert.ok(inside(FCP_VIEW_BOUNDS, market));
+});
+
+test("the Talking Cross sanctuary retains its unverified bilingual source data", () => {
+  assert.ok(sanctuary);
+  assert.equal(sanctuary.category, "culture");
+  assert.equal(sanctuary.nameEs, "Santuario de la Cruz Parlante");
+  assert.equal(sanctuary.nameEn, "Sanctuary of the Talking Cross");
+  assert.equal(sanctuary.name.es, sanctuary.nameEs);
+  assert.equal(sanctuary.name.en, sanctuary.nameEn);
+  assert.equal(sanctuary.description.es, sanctuary.shortDescriptionEs);
+  assert.equal(sanctuary.description.en, sanctuary.shortDescriptionEn);
+  assert.match(sanctuary.fullDescriptionEs, /Cruzo'ob/);
+  assert.match(sanctuary.fullDescriptionEn, /Caste War/);
+  assert.equal(sanctuary.latitude, 19.580901);
+  assert.equal(sanctuary.longitude, -88.049242);
+  assert.ok(inside(FCP_VIEW_BOUNDS, sanctuary));
+  assert.equal(sanctuary.addressEs.includes("Calle 60 \nCopied\n#788\n"), true);
+  assert.equal(sanctuary.addressEn.includes("60 Street \nCopied\n#788\n"), true);
+  assert.equal(sanctuary.address.es, sanctuary.addressEs);
+  assert.equal(sanctuary.address.en, sanctuary.addressEn);
+  assert.deepEqual(sanctuary.hours.map(({ day }) => day), ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
+  assert.ok(sanctuary.hours.every(({ open, close }) => open === "07:00" && close === "18:00"));
+  assert.equal(sanctuary.verified, false);
+  assert.equal(sanctuary.status, "unverified");
+  assert.equal(isVerified(sanctuary), false);
+  assert.equal(directionsUrlFor(sanctuary), null);
+  assert.equal(sanctuary.verificationSourceUrls.length, 5);
+  assert.equal(sanctuary.verificationSourceUrls.at(-1), sanctuary.directionsUrl);
+  assert.match(sanctuary.verificationNotes, /Calle 60 \nCopied\n#788\n/);
+  assert.equal(sanctuary.verificationNote, sanctuary.verificationNotes);
+  assert.equal(sanctuary.lastUpdated, "2026-09-30");
+
+  for (const language of ["es", "en"]) {
+    const portal = placePortal(sanctuary, language);
+    assert.equal(portal.name, sanctuary.name[language]);
+    assert.equal(portal.status, "approximate");
+    assert.equal(portal.details.find(({ id }) => id === "address").value, sanctuary.address[language].trim());
+    assert.match(portal.details.find(({ id }) => id === "hours").value, /07:00 - 18:00/);
+    assert.equal(portal.verificationNote, sanctuary.verificationNotes);
+    assert.equal(portal.actions.some(({ id }) => id === "directions"), false);
+  }
 });
 
 test("directions are only offered for verified destinations", () => {
