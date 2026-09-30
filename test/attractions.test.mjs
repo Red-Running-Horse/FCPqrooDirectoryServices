@@ -26,6 +26,7 @@ const plaza = attractions.find(
   ({ id }) => id === "plaza-civica-parque-de-las-palapas-monumento-felipe-carrillo-puerto",
 );
 const church = attractions.find(({ id }) => id === "iglesia-de-san-servacio-felipe-carrillo-puerto");
+const balamNah = attractions.find(({ id }) => id === "balam-nah-felipe-carrillo-puerto");
 
 test("attractions have complete, distinct, bilingual, in-bounds data", () => {
   assert.ok(attractions.length >= 1);
@@ -217,6 +218,28 @@ test("the church of San Servacio preserves its source verified:true without upgr
     assert.equal(portal.status, "approximate");
     assert.equal(portal.actions.some(({ id }) => id === "directions"), false);
   }
+});
+
+test("Balam-Nah remains unverified with an approximate in-bounds point and no directions", () => {
+  assert.ok(balamNah);
+  assert.equal(balamNah.category, "culture");
+  assert.equal(balamNah.name.es, "Balam-Nah");
+  assert.equal(balamNah.name.en, "Balam-Nah");
+  assert.equal(balamNah.description.es, balamNah.shortDescriptionEs);
+  assert.equal(balamNah.description.en, balamNah.shortDescriptionEn);
+  assert.equal(balamNah.website, "https://balamnah.fcpqroo.mx/");
+  assert.ok(inside(FCP_MAX_BOUNDS, balamNah));
+  assert.equal(balamNah.verified, false);
+  assert.equal(balamNah.status, "unverified");
+  assert.equal(balamNah.locationAccuracy, "approximate");
+  assert.match(balamNah.coordinateSource, /placeholder.*not GPS-verified/);
+  assert.match(balamNah.verificationNotes, /has not been physically confirmed/);
+  assert.equal(balamNah.directionsUrl, null);
+  assert.equal(directionsUrlFor(balamNah), null);
+  assert.equal(
+    placePortal(balamNah, "en").actions.some(({ id }) => id === "directions"),
+    false,
+  );
 });
 
 test("directions are only offered for verified destinations", () => {
