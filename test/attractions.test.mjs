@@ -220,7 +220,7 @@ test("the church of San Servacio preserves its source verified:true without upgr
   }
 });
 
-test("Balam-Nah remains unverified with an approximate in-bounds point and no directions", () => {
+test("Balam-Nah user-provided coordinates remain unverified and approximate", () => {
   assert.ok(balamNah);
   assert.equal(balamNah.category, "culture");
   assert.equal(balamNah.name.es, "Balam-Nah");
@@ -228,12 +228,14 @@ test("Balam-Nah remains unverified with an approximate in-bounds point and no di
   assert.equal(balamNah.description.es, balamNah.shortDescriptionEs);
   assert.equal(balamNah.description.en, balamNah.shortDescriptionEn);
   assert.equal(balamNah.website, "https://balamnah.fcpqroo.mx/");
+  assert.equal(balamNah.latitude, 19.476991842956);
+  assert.equal(balamNah.longitude, -88.06736291757169);
   assert.ok(inside(FCP_MAX_BOUNDS, balamNah));
   assert.equal(balamNah.verified, false);
   assert.equal(balamNah.status, "unverified");
   assert.equal(balamNah.locationAccuracy, "approximate");
-  assert.match(balamNah.coordinateSource, /placeholder.*not GPS-verified/);
-  assert.match(balamNah.verificationNotes, /has not been physically confirmed/);
+  assert.match(balamNah.coordinateSource, /User-provided.*not independently GPS-verified/);
+  assert.match(balamNah.verificationNotes, /coordinates were provided by the user.*not been independently GPS-verified/);
   assert.equal(balamNah.directionsUrl, null);
   assert.equal(directionsUrlFor(balamNah), null);
   assert.equal(

@@ -248,9 +248,9 @@ const balamNah = {
   shortDescriptionEn: "Maya cultural center and museum dedicated to preserving the culture, language, and traditions of the Maya people in Felipe Carrillo Puerto. Offers workshops, exhibitions, and cultural events.",
   fullDescriptionEs: "Balam-Nah es un centro cultural y museo maya ubicado en Felipe Carrillo Puerto, Quintana Roo. Su nombre significa 'Casa del Jaguar' en lengua maya (balam = jaguar, nah = casa). El centro se enfoca en la preservación y difusión de la cultura maya, incluyendo su lengua, tradiciones, artesanías y conocimientos ancestrales. Cuenta con espacios para exposiciones, talleres educativos y eventos culturales. El sitio web oficial es balamnah.fcpqroo.mx y está listado en Google Maps. Balam-Nah forma parte del circuito cultural de la ciudad junto con el Museo de la Ciudad, la Casa de la Cultura y el Santuario de la Cruz Parlante. Es un espacio importante para la identidad maya local y el turismo cultural.",
   fullDescriptionEn: "Balam-Nah is a Maya cultural center and museum located in Felipe Carrillo Puerto, Quintana Roo. Its name means 'Jaguar House' in the Maya language (balam = jaguar, nah = house). The center focuses on preserving and promoting Maya culture, including its language, traditions, crafts, and ancestral knowledge. It features spaces for exhibitions, educational workshops, and cultural events. The official website is balamnah.fcpqroo.mx and it is listed on Google Maps. Balam-Nah is part of the city's cultural circuit alongside the City Museum, the Casa de la Cultura, and the Sanctuary of the Talking Cross. It is an important space for local Maya identity and cultural tourism.",
-  latitude: 19.5797,
-  longitude: -88.0453,
-  coordinateSource: "Approximate placeholder at the town center of Felipe Carrillo Puerto because the precise location is unknown; not GPS-verified",
+  latitude: 19.476991842956,
+  longitude: -88.06736291757169,
+  coordinateSource: "User-provided coordinates; not independently GPS-verified",
   addressEs: "",
   addressEn: "",
   community: "Felipe Carrillo Puerto",
@@ -282,7 +282,7 @@ const balamNah = {
     "https://maps.app.goo.gl/KwaZNGD5pbZUf6bw8",
     "https://balamnah.fcpqroo.mx/",
   ],
-  verificationNotes: "Data is limited to the Google Maps listing and the official website (balamnah.fcpqroo.mx). No address, coordinates, hours, phone, or contact information could be extracted from either source — the Google Maps link does not reveal a precise address or coordinates in available snippets, and the website content was not accessible for extraction. The name 'Balam-Nah' means 'Casa del Jaguar' (jaguar house) in Maya. The center is described as focused on Maya cultural preservation, workshops, and exhibitions. It is mentioned in local tourism contexts as part of the cultural circuit. No independent verification of hours, accessibility, pricing, or physical location is available. The website domain (fcpqroo.mx) suggests a municipal or local affiliation but this is unconfirmed. Significant gaps remain: exact address, GPS coordinates, operating hours, contact details, and accessibility information are all unknown. The numeric map coordinate is only a town-center placeholder; Balam-Nah's actual position is unknown and has not been physically confirmed.",
+  verificationNotes: "Data is limited to the Google Maps listing and the official website (balamnah.fcpqroo.mx). No address, coordinates, hours, phone, or contact information could be extracted from either source — the Google Maps link does not reveal a precise address or coordinates in available snippets, and the website content was not accessible for extraction. The name 'Balam-Nah' means 'Casa del Jaguar' (jaguar house) in Maya. The center is described as focused on Maya cultural preservation, workshops, and exhibitions. It is mentioned in local tourism contexts as part of the cultural circuit. No independent verification of hours, accessibility, pricing, or physical location is available. The website domain (fcpqroo.mx) suggests a municipal or local affiliation but this is unconfirmed. Significant gaps remain: exact address, GPS coordinates, operating hours, contact details, and accessibility information are all unknown. The coordinates were provided by the user and have not been independently GPS-verified.",
   lastUpdated: "2026-09-30",
 };
 
