@@ -139,9 +139,9 @@ const casaDeLaCultura = {
   shortDescriptionEn: "Cultural center on the central park housing art galleries, cultural events, workshops, and the artisan shop 'Kábo'ob Ku Meyajo'ob' (Hands That Work) by local Maya artisans.",
   fullDescriptionEs: "La Casa de la Cultura de Felipe Carrillo Puerto es un centro cultural ubicado en el Parque Principal (Zócalo) de la ciudad, en la Calle 67 \nCopied\n#768\n, Col. Centro, C.P. 77200, prácticamente en el centro geográfico de la ciudad. Alberga galerías de arte, espacios para eventos culturales y talleres educativos. En 2018 se inauguró en sus instalaciones un punto de venta gratuito para artesanías de artesanos mayas del municipio llamado 'Kábo'ob Ku Meyajo'ob' (Manos que Trabajan), donde se exhiben y venden productos textiles y artesanales. El centro forma parte del circuito cultural del municipio junto con el Museo de la Ciudad, el Santuario de la Cruz Parlante y el Mercado Benito Juárez. La ciudad ha sido descrita como un bastión cultural y educativo con galerías de arte y centros culturales.",
   fullDescriptionEn: "The Felipe Carrillo Puerto House of Culture is a cultural center located on the town's main park (Zócalo) at Calle 67 \nCopied\n#768\n, Col. Centro, C.P. 77200, essentially in the geographic center of town. It houses art galleries, spaces for cultural events, and educational workshops. In 2018, a free sales point for crafts by Maya artisans from the municipality was inaugurated under its name, called 'Kábo'ob Ku Meyajo'ob' (Hands That Work), where textile and craft products are exhibited and sold. The center is part of the municipality's cultural circuit alongside the City Museum, the Sanctuary of the Talking Cross, and the Benito Juárez Market. The city has been described as a cultural and educational stronghold with art galleries and cultural centers.",
-  latitude: 19.5795,
-  longitude: -88.0453,
-  coordinateSource: "Estimated from town center coordinates (19°34'43\"N 88°02'43\"W) and address on Calle 67 \nCopied\n#768\n, Col. Centro; not GPS-verified",
+  latitude: 19.5796,
+  longitude: -88.0451,
+  coordinateSource: "Estimated from town center coordinates (19°34'43\"N 88°02'43\"W) and address on Calle 67 \nCopied\n#768\n, Col. Centro, offset a few metres from the adjoining City Museum estimate so both markers stay distinguishable; not GPS-verified",
   addressEs: "Calle 67 \nCopied\n#768\n, Parque Principal / Zócalo, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo",
   addressEn: "67 Street \nCopied\n#768\n, Main Park / Zócalo, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo",
   community: "Felipe Carrillo Puerto",
@@ -358,10 +358,11 @@ const whippingFountain = {
   fullDescriptionEn: "The Pila de los Azotes is a historic fountain in downtown Felipe Carrillo Puerto, near the Balá'an Naj church / Parish of Santa Cruz. Official sources disagree on its construction date: the municipal government states it was built in 1918 during the government of General Francisco May Pech \n2, while the state's Zona Maya portal attributes it to 1864-1870 under Maya governor General Crescencio Poot \n3. All sources agree on its function: it was used to punish those who violated Maya laws, uses and customs. The practice of flogging dates from 1915: the offender was led before the Cross, placed on his knees with arms outstretched, and received twelve lashes from one of two guards present; afterwards he prayed several prayers before the cross and was cleared of guilt \n2. With the mass arrival of chicle workers from Veracruz, Tabasco and Belize (whom locals called 'Huaches'), fights increased, and General May Pech ordered the fountain built to apply exemplary justice \n1. According to tradition, adultery was punished with 50 public lashes, followed by sour orange juice rubbed into the wounds and prayer before the cross \n1. Today it is a historic monument and tourist point of interest within the historic-center circuit.",
   // Source record carries latitude/longitude: null; the exported entry below uses a clearly
   // labelled approximate historic-centre point so the record satisfies coordinate validation
-  // without implying GPS verification.
-  latitude: 19.5798,
-  longitude: -88.0455,
-  coordinateSource: "Approximate placeholder for the historic centre near the Parroquia de Santa Cruz / Balá'an Naj; no coordinates are published for this monument and the point is not GPS-verified",
+  // without implying GPS verification. The point is offset from the church estimate so the
+  // marker is not hidden underneath it.
+  latitude: 19.5799,
+  longitude: -88.0458,
+  coordinateSource: "Approximate placeholder for the historic centre near the Parroquia de Santa Cruz / Balá'an Naj, offset from the church estimate so the marker stays visible; no coordinates are published for this monument and the point is not GPS-verified",
   addressEs: "Centro histórico, junto a la Parroquia de Santa Cruz / Balá'an Naj, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo (dirección exacta no publicada)",
   addressEn: "Historic center, next to the Parish of Santa Cruz / Balá'an Naj, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo (exact address not published)",
   community: "Felipe Carrillo Puerto",

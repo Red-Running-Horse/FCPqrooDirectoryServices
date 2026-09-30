@@ -166,8 +166,8 @@ test("the House of Culture retains its unverified approximate source data", () =
   assert.equal(casaDeLaCultura.description.en, casaDeLaCultura.shortDescriptionEn);
   assert.match(casaDeLaCultura.fullDescriptionEs, /Calle 67 \nCopied\n#768\n, Col. Centro/);
   assert.match(casaDeLaCultura.fullDescriptionEn, /Calle 67 \nCopied\n#768\n, Col. Centro/);
-  assert.equal(casaDeLaCultura.latitude, 19.5795);
-  assert.equal(casaDeLaCultura.longitude, -88.0453);
+  assert.equal(casaDeLaCultura.latitude, 19.5796);
+  assert.equal(casaDeLaCultura.longitude, -88.0451);
   assert.ok(inside(FCP_VIEW_BOUNDS, casaDeLaCultura));
   assert.equal(casaDeLaCultura.addressEs.includes("Calle 67 \nCopied\n#768\n"), true);
   assert.equal(casaDeLaCultura.addressEn.includes("67 Street \nCopied\n#768\n"), true);
@@ -361,6 +361,11 @@ test("the historic Pich tree retains user coordinates but stays non-mappable and
   assert.match(pichTree.verificationNotes, /historical-memory record, not a mappable visitable attraction/);
   assert.equal(pichTree.verificationNote, pichTree.verificationNotes);
   assert.equal(pichTree.lastUpdated, "2026-09-30");
+});
+
+test("every mapped attraction has its own point so no marker hides another", () => {
+  const points = attractions.map(({ latitude, longitude }) => `${latitude},${longitude}`);
+  assert.equal(new Set(points).size, attractions.length);
 });
 
 test("Expomaya is not published", () => {
