@@ -16,16 +16,42 @@ export async function loadPlaceIndex(signal) {
   return response.json();
 }
 
-export async function loadPlaceDetail(id, signal) {
-  const cached = detailCache.get(id);
-  if (cached) return cached;
-
-  const response = await fetch(placeDetailUrl(id), { signal });
+async function fetchPlaceDetail(id) {
+  const response = await fetch(placeDetailUrl(id));
   if (!response.ok) throw new Error(`Place detail request failed: ${response.status}`);
-  const detail = await response.json();
-  // A cancelled selection must not poison the cache with a partial or unused response.
-  if (!signal?.aborted) detailCache.set(id, detail);
-  return detail;
+  return response.json();
+}
+
+function abortError() {
+  const error = new Error("The place detail request was cancelled");
+  error.name = "AbortError";
+  return error;
+}
+
+// Rejects as soon as the caller stops caring about the result, without disturbing the shared
+// request: another selection of the same place still resolves from it.
+function untilAborted(pending, signal) {
+  if (signal.aborted) return Promise.reject(abortError());
+  return new Promise((resolve, reject) => {
+    const cancel = () => reject(abortError());
+    signal.addEventListener("abort", cancel, { once: true });
+    pending.then(resolve, reject).finally(() => signal.removeEventListener("abort", cancel));
+  });
+}
+
+// One request per place: the in-flight promise is cached, so reselecting a place while its
+// detail is loading never starts a second request. A failed request drops out of the cache so
+// the next selection can retry it.
+export function loadPlaceDetail(id, signal) {
+  let pending = detailCache.get(id);
+  if (!pending) {
+    pending = fetchPlaceDetail(id).catch((cause) => {
+      if (detailCache.get(id) === pending) detailCache.delete(id);
+      throw cause;
+    });
+    detailCache.set(id, pending);
+  }
+  return signal ? untilAborted(pending, signal) : pending;
 }
 
 export function clearPlaceDetailCache() {

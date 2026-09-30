@@ -138,35 +138,36 @@ test("detail URLs escape the id and failures reject instead of caching", async (
   }
 });
 
-test("an aborted detail request rejects and is not cached", async () => {
+test("a cancelled selection stops waiting but keeps the shared request usable", async () => {
   clearPlaceDetailCache();
-  const controller = new AbortController();
-  const fetched = stubFetch(async (url, options) => {
-    controller.abort();
-    const error = new Error("aborted");
-    error.name = "AbortError";
-    if (options?.signal?.aborted) throw error;
-    return jsonResponse({ id: "mercado-felipe-carrillo-puerto" });
-  });
+  let release;
+  const fetched = stubFetch(
+    () => new Promise((resolve) => (release = () => resolve(jsonResponse({ id: "mercado-felipe-carrillo-puerto" })))),
+  );
 
   try {
+    const controller = new AbortController();
+    const cancelled = loadPlaceDetail("mercado-felipe-carrillo-puerto", controller.signal);
+    // Reselecting the same place while it loads reuses the in-flight request.
+    const kept = loadPlaceDetail("mercado-felipe-carrillo-puerto");
+    controller.abort();
+    await assert.rejects(cancelled, (cause) => cause.name === "AbortError");
+
+    release();
+    assert.deepEqual(await kept, { id: "mercado-felipe-carrillo-puerto" });
+    assert.deepEqual(await loadPlaceDetail("mercado-felipe-carrillo-puerto"), {
+      id: "mercado-felipe-carrillo-puerto",
+    });
+    assert.equal(fetched.calls.length, 1, "one request per place");
+
+    const alreadyAborted = new AbortController();
+    alreadyAborted.abort();
     await assert.rejects(
-      loadPlaceDetail("mercado-felipe-carrillo-puerto", controller.signal),
+      loadPlaceDetail("mercado-felipe-carrillo-puerto", alreadyAborted.signal),
       (cause) => cause.name === "AbortError",
     );
   } finally {
     fetched.restore();
+    clearPlaceDetailCache();
   }
-
-  const retried = stubFetch(() => jsonResponse({ id: "mercado-felipe-carrillo-puerto", phone: null }));
-  try {
-    assert.deepEqual(await loadPlaceDetail("mercado-felipe-carrillo-puerto"), {
-      id: "mercado-felipe-carrillo-puerto",
-      phone: null,
-    });
-    assert.deepEqual(retried.calls, ["/data/places/mercado-felipe-carrillo-puerto.json"]);
-  } finally {
-    retried.restore();
-  }
-  clearPlaceDetailCache();
 });

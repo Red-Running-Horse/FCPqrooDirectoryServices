@@ -62,8 +62,9 @@ are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
 
   Spreading an index entry over its detail file reproduces the source record exactly, so
   `placePortal()` keeps rendering identical content. `app/place-data.mjs` loads the index on
-  startup and each detail on demand, caching details in memory so revisiting a place does not
-  refetch it; a cleared or changed selection aborts the in-flight request, and a failed request
+  startup and each detail on demand, caching the request per place so revisiting a place (or
+  reselecting it while it loads) issues only one fetch; a cleared or changed selection stops
+  waiting for its result without cancelling that shared request, and a failed request
   shows a bilingual notice under the panel while the index summary (name, category, status)
   stays visible. Ids must be lowercase slugs (`^[a-z0-9][a-z0-9-]*$`) because they become file
   names and URL segments; the generator refuses anything else.
