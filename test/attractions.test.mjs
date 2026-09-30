@@ -22,6 +22,10 @@ function inside(bounds, { latitude, longitude }) {
 const market = attractions.find(({ id }) => id === "mercado-felipe-carrillo-puerto");
 const sanctuary = attractions.find(({ id }) => id === "santuario-de-la-cruz-parlante-fcp");
 const museum = attractions.find(({ id }) => id === "museo-de-la-ciudad-felipe-carrillo-puerto");
+const plaza = attractions.find(
+  ({ id }) => id === "plaza-civica-parque-de-las-palapas-monumento-felipe-carrillo-puerto",
+);
+const church = attractions.find(({ id }) => id === "iglesia-de-san-servacio-felipe-carrillo-puerto");
 
 test("attractions have complete, distinct, bilingual, in-bounds data", () => {
   assert.ok(attractions.length >= 1);
@@ -140,6 +144,77 @@ test("the City Museum retains its unverified bilingual source data", () => {
     assert.equal(portal.name, museum.name[language]);
     assert.equal(portal.status, "approximate");
     assert.match(portal.details.find(({ id }) => id === "hours").value, /09:00 - 18:00/);
+    assert.equal(portal.actions.some(({ id }) => id === "directions"), false);
+  }
+});
+
+test("the civic plaza / palapa park retains its unverified bilingual source data", () => {
+  assert.ok(plaza);
+  assert.equal(plaza.category, "culture");
+  assert.equal(plaza.nameEs, "Plaza Cívica / Parque de las Palapas + Monumento a Felipe Carrillo Puerto");
+  assert.equal(plaza.nameEn, "Civic Plaza / Palapa Park + Monument to Felipe Carrillo Puerto");
+  assert.equal(plaza.name.es, plaza.nameEs);
+  assert.equal(plaza.name.en, plaza.nameEn);
+  assert.equal(plaza.description.es, plaza.shortDescriptionEs);
+  assert.equal(plaza.description.en, plaza.shortDescriptionEn);
+  assert.equal(plaza.latitude, 19.5792);
+  assert.equal(plaza.longitude, -88.0448);
+  assert.ok(inside(FCP_VIEW_BOUNDS, plaza));
+  assert.equal(plaza.address.es, plaza.addressEs);
+  assert.equal(plaza.address.en, plaza.addressEn);
+  assert.deepEqual(plaza.hours.map(({ day }) => day), ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
+  assert.ok(plaza.hours.every(({ open, close }) => open === "" && close === ""));
+  assert.equal(plaza.verified, false);
+  assert.equal(plaza.status, "unverified");
+  assert.equal(plaza.locationAccuracy, "approximate");
+  assert.equal(isVerified(plaza), false);
+  assert.equal(directionsUrlFor(plaza), null);
+  assert.match(plaza.verificationNotes, /Calle 67 \nCopied\n#768\n/);
+  assert.equal(plaza.verificationNote, plaza.verificationNotes);
+  assert.equal(plaza.lastUpdated, "2026-09-30");
+
+  for (const language of ["es", "en"]) {
+    const portal = placePortal(plaza, language);
+    assert.equal(portal.name, plaza.name[language]);
+    assert.equal(portal.status, "approximate");
+    assert.equal(portal.actions.some(({ id }) => id === "directions"), false);
+  }
+});
+
+test("the church of San Servacio preserves its source verified:true without upgrading location accuracy", () => {
+  assert.ok(church);
+  assert.equal(church.category, "culture");
+  assert.equal(church.nameEs, "Iglesia de San Servacio");
+  assert.equal(church.nameEn, "Church of Saint Servatius");
+  assert.equal(church.name.es, church.nameEs);
+  assert.equal(church.name.en, church.nameEn);
+  assert.equal(church.description.es, church.shortDescriptionEs);
+  assert.equal(church.description.en, church.shortDescriptionEn);
+  assert.equal(church.latitude, 19.5798);
+  assert.equal(church.longitude, -88.0455);
+  assert.ok(inside(FCP_VIEW_BOUNDS, church));
+  assert.equal(church.address.es, church.addressEs);
+  assert.equal(church.address.en, church.addressEn);
+  assert.deepEqual(church.hours.map(({ day }) => day), ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
+
+  // Source-level "verified" reflects a third-party mass directory's attribution, not a
+  // physical/GPS verification of coordinates or naming — it must be preserved as-is.
+  assert.equal(church.verified, true);
+  assert.equal(church.verifiedBy, "horariodemisa.com.mx");
+  // The exported attraction must not upgrade status/locationAccuracy on the strength of that
+  // source field alone, so the UI never asserts exact/physical verification for this record.
+  assert.equal(church.status, "unverified");
+  assert.equal(church.locationAccuracy, "approximate");
+  assert.equal(isVerified(church), false);
+  assert.equal(directionsUrlFor(church), null);
+  assert.match(church.verificationNotes, /not GPS-verified/);
+  assert.equal(church.verificationNote, church.verificationNotes);
+  assert.equal(church.lastUpdated, "2026-09-30");
+
+  for (const language of ["es", "en"]) {
+    const portal = placePortal(church, language);
+    assert.equal(portal.name, church.name[language]);
+    assert.equal(portal.status, "approximate");
     assert.equal(portal.actions.some(({ id }) => id === "directions"), false);
   }
 });
