@@ -11,6 +11,16 @@ placement, and overlapping labels are dropped. Regional roads (`Carretera`, `Cam
 are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
 (`STREET_LABEL_MIN_ZOOM`). The QGIS working files remain in the repository root.
 
+- **Road data payload:** `public/regional-highways.geojson` keeps every exported feature, its
+  order, its `LineString` geometry and every coordinate, but only the two properties the map
+  reads: `NOMBRE` (label text) and `TIPO_VIAL` (label tier). Dropping the other 21 QGIS
+  attributes took the published file from 4,428,376 to 1,903,435 bytes (57.0% smaller);
+  gzip drops from 590,086 to 372,397 bytes and Brotli from 398,480 to 261,216 bytes. The
+  optimized file is committed, so `npm run build` never rewrites it. After exporting a fresh
+  GeoJSON from `regional-highways.gpkg`, re-run `npm run optimize:geojson` (or
+  `node scripts/optimize-geojson.mjs --check` to verify an existing file); the full attribute
+  set stays in the GPKG. `test/regional-highways.test.mjs` guards the feature count, geometry,
+  retained properties and the shared endpoints that `mergeRoadSegments` joins.
 - **City start:** the map opens on the town of Felipe Carrillo Puerto (`FCP_VIEW_BOUNDS` in
   `app/map-view.mjs`, about 5 km across), not the whole state. Panning is limited to the
   surrounding region (`FCP_MAX_BOUNDS`), so nearby communities stay reachable, and the
