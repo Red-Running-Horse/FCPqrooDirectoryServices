@@ -22,6 +22,17 @@ test("hero copy is translated in Spanish and English", () => {
   );
 });
 
+test("Maya radio copy includes a bilingual live action and unavailable-stream guidance", () => {
+  assert.equal(UI_TEXT.es.radioHeading, "XEPET — Radio Maya");
+  assert.equal(UI_TEXT.en.radioHeading, "XEPET — Maya Radio");
+  assert.match(UI_TEXT.es.radioDescription, /INPI/);
+  assert.match(UI_TEXT.en.radioDescription, /INPI/);
+  assert.match(UI_TEXT.es.radioListen, /Escuchar en vivo.*otra pestaña/);
+  assert.match(UI_TEXT.en.radioListen, /Listen live.*new tab/);
+  assert.match(UI_TEXT.es.radioUnavailable, /no está disponible/);
+  assert.match(UI_TEXT.en.radioUnavailable, /unavailable/);
+});
+
 test("search and business CTA copy is translated in Spanish and English", () => {
   assert.equal(UI_TEXT.es.ctaHeading, "¿Tienes un negocio local?");
   assert.equal(
