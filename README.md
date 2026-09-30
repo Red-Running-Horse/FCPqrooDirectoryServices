@@ -20,13 +20,16 @@ are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
   legend, filters, reset button and the selected-place panel between Spanish (default) and English.
   UI strings live in `app/i18n.mjs`; attraction names, descriptions and category labels are
   `{ es, en }` objects in `app/attractions.mjs`.
-- **Demo attractions:** the six category-colored pins are **demo placeholders with approximate
-  locations**, not verified destinations. They are marked `status: "unverified"` and
-  `locationAccuracy: "approximate"`, drawn with a dashed border, labelled "Demo" in both
-  languages, and the selected-place panel says directions are unavailable. A directions link is shown only
-  when an entry has `status: "verified"`, `locationAccuracy: "exact"` and an `https://`
-  `directionsUrl`; set those only after confirming the real destination and coordinates. The
-  category buttons filter markers locally without a server.
+- **Category markers:** each pin combines its category color with an inline SVG icon (leaf,
+  stepped structure, bowl, house with bed, compass) from `app/category-icons.mjs`; the same
+  icons appear on the filter buttons and in the legend. `categoryIconSvg()` falls back to the
+  "all" list icon for unknown categories, and the icons are bundled inline, so no icon package
+  or CDN is needed. Entries that are not `status: "verified"` with `locationAccuracy: "exact"`
+  keep the dashed approximate border, and the selected-place panel says directions are
+  unavailable. A directions link is shown only when an entry has `status: "verified"`,
+  `locationAccuracy: "exact"` and an `https://` `directionsUrl`; set those only after confirming
+  the real destination and coordinates. The category buttons filter markers locally without a
+  server.
 - **Selected-place panel:** below the map, `app/place-portal.js` shows a prompt until a marker is
   clicked (or focused and activated with Enter). It then shows the name in both languages,
   category, a status badge (verified / approximate / unavailable), description, address, hours,
@@ -46,7 +49,7 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:3000. Run `npm test` for the road-label, map-view, attraction, marker-popup, selected-place panel and translation tests.
+Open http://localhost:3000. Run `npm test` for the road-label, map-view, attraction, category-icon, marker-popup, selected-place panel and translation tests.
 
 ## Deploy to Hostinger
 

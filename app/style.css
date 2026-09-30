@@ -1,9 +1,31 @@
+/* Phase A palette tokens (UI Spec v1): warm sand/cream, charcoal, jungle, turquoise,
+   terracotta and maize, mapped onto the existing visual language. */
+:root {
+  --sand: #f7f1e5;
+  --cream: #fff7e8;
+  --sand-deep: #f3eddf;
+  --sand-line: #e0d3ba;
+  --charcoal: #3c3028;
+  --charcoal-soft: #5c4d42;
+  --jungle: #47775b;
+  --turquoise: #2f7f92;
+  --terracotta: #a75030;
+  --terracotta-light: #c96f3b;
+  --maize: #8a6d1f;
+  --plum: #914e70;
+  --lagoon: #536c98;
+  --earth: #77663d;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --shadow-soft: 0 1px 3px rgba(60, 48, 40, 0.14);
+}
+
 html,
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f7f1e5;
-  color: #3c3028;
+  background: var(--sand);
+  color: var(--charcoal);
 }
 
 main {
@@ -28,12 +50,14 @@ p {
   height: min(60vh, calc(100vh - 15rem));
   min-height: 320px;
   width: 100%;
-  border: 1px solid #e0d3ba;
-  border-radius: 6px;
+  border: 1px solid var(--sand-line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
 }
 
 .leaflet-container {
-  background: #f3eddf;
+  background: var(--sand-deep);
+  border-radius: var(--radius-md);
 }
 
 .category-filters {
@@ -44,15 +68,36 @@ p {
 }
 
 .category-filters button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   flex: 0 0 auto;
-  border: 1px solid #c96f3b;
+  border: 1px solid var(--terracotta-light);
   border-radius: 999px;
-  background: #fff7e8;
-  color: #3c3028;
+  background: var(--cream);
+  color: var(--charcoal);
   padding: 0.5rem 0.8rem;
   font: inherit;
   cursor: pointer;
 }
+
+.category-filters__icon,
+.legend__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+.category-filters button[aria-pressed="true"] .category-filters__icon {
+  color: inherit;
+}
+
+.legend__icon--nature { color: var(--jungle); }
+.legend__icon--culture { color: var(--plum); }
+.legend__icon--food { color: var(--terracotta); }
+.legend__icon--lodging { color: var(--lagoon); }
+.legend__icon--tours { color: var(--earth); }
 
 .category-filters button[aria-pressed="true"] {
   background: #a75030;
@@ -104,23 +149,22 @@ p {
 .attraction-marker {
   display: grid;
   place-items: center;
-  border: 2px solid #fff7e8;
+  border: 2px solid var(--cream);
   border-radius: 50%;
-  background: #47775b;
-  box-shadow: 0 1px 4px #3c3028;
+  background: var(--jungle);
+  color: var(--cream);
+  box-shadow: 0 1px 4px var(--charcoal);
 }
 
-.attraction-marker span {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #fff7e8;
+.attraction-marker .attraction-marker__icon {
+  display: block;
+  stroke-width: 2;
 }
 
-.attraction-marker--culture { background: #914e70; }
+.attraction-marker--culture { background: var(--plum); }
 .attraction-marker--food { background: #aa602b; }
-.attraction-marker--lodging { background: #536c98; }
-.attraction-marker--tours { background: #77663d; }
+.attraction-marker--lodging { background: var(--lagoon); }
+.attraction-marker--tours { background: var(--earth); }
 
 .attraction-marker--approximate {
   border-style: dashed;
@@ -128,15 +172,16 @@ p {
 }
 
 .attraction-marker--selected {
-  outline: 3px solid #3c3028;
+  outline: 3px solid var(--charcoal);
   outline-offset: 1px;
   opacity: 1;
 }
 
 .place-portal {
-  border: 1px solid #e0d3ba;
-  border-radius: 6px;
-  background: #fff7e8;
+  border: 1px solid var(--sand-line);
+  border-radius: var(--radius-md);
+  background: var(--cream);
+  box-shadow: var(--shadow-soft);
   padding: 0.75rem 0.9rem;
   font-size: 0.95rem;
 }
@@ -203,12 +248,12 @@ p {
   color: white;
 }
 
-.status-badge--verified { background: #47775b; }
-.status-badge--approximate { background: #8a6d1f; }
+.status-badge--verified { background: var(--jungle); }
+.status-badge--approximate { background: var(--maize); }
 .status-badge--unavailable { background: #6f625a; }
 
 .place-portal:focus-visible {
-  outline: 2px solid #c96f3b;
+  outline: 2px solid var(--turquoise);
   outline-offset: 2px;
 }
 
@@ -366,7 +411,7 @@ p {
 
 .reset-view button:focus-visible,
 .leaflet-control-zoom a:focus-visible {
-  outline: 2px solid #c96f3b;
+  outline: 2px solid var(--turquoise);
   outline-offset: 2px;
 }
 
@@ -395,10 +440,7 @@ p {
   box-shadow: 0 0 0 2px #fff7e8;
 }
 
-.legend .swatch--approximate {
-  width: 0.9rem;
-  height: 0.9rem;
-  border: 2px dashed #3c3028;
-  background: #47775b;
-  box-shadow: none;
+.legend .swatch {
+  background: var(--terracotta-light);
+  box-shadow: 0 0 0 2px var(--cream);
 }
