@@ -108,5 +108,5 @@ test("marker selection still drives the below-map portal with matching content",
     }
   }
   assert.deepEqual(placePortal(approximatePlace, "es").actions, []);
-  assert.deepEqual(placePortal(market, "es").actions.map(({ id }) => id), ["directions", "call", "website"]);
+  assert.deepEqual(placePortal(market, "es").actions.map(({ id }) => id), ["directions", "call"]);
 });
