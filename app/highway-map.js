@@ -295,27 +295,33 @@ export default function HighwayMap() {
 
   return (
     <>
-      <div className="map-header">
-        <h1>{text.heading}</h1>
-        <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
-          {LANGUAGES.map(({ id, label, name }) => (
-            <button
-              key={id}
-              type="button"
-              lang={id}
-              aria-label={name}
-              aria-pressed={language === id}
-              onClick={() => {
-                selectedLanguage.current = id;
-                setLanguage(id);
-              }}
-            >
-              {label}
-            </button>
-          ))}
+      <section className="hero" aria-label={text.heading}>
+        <div className="hero__bar" aria-hidden="true" />
+        <div className="map-header">
+          <div className="hero__title-block">
+            <p className="hero__eyebrow">{text.heroEyebrow}</p>
+            <h1>{text.heading}</h1>
+            <p className="hero__subheading">{text.heroSubheading}</p>
+          </div>
+          <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
+            {LANGUAGES.map(({ id, label, name }) => (
+              <button
+                key={id}
+                type="button"
+                lang={id}
+                aria-label={name}
+                aria-pressed={language === id}
+                onClick={() => {
+                  selectedLanguage.current = id;
+                  setLanguage(id);
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
-      <p>{text.instructions}</p>
+      </section>
       <ul className="legend" aria-label={text.legendCategories}>
         <li>
           <span className="swatch" aria-hidden="true" />

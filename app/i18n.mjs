@@ -8,6 +8,8 @@ export const DEFAULT_LANGUAGE = "es";
 export const UI_TEXT = {
   es: {
     heading: "Explora Felipe Carrillo Puerto",
+    heroEyebrow: "Guía local de Maya Ka’an",
+    heroSubheading: "Naturaleza, cultura, comida y experiencias locales en un solo mapa.",
     instructions:
       "Mapa turístico de Felipe Carrillo Puerto, corazón de Maya Ka'an. Descubre naturaleza, cultura, comida y experiencias locales; toca un ícono para ver los detalles y acércate para leer los nombres de las calles.",
     legendRoad: "Carretera regional",
@@ -43,6 +45,8 @@ export const UI_TEXT = {
   },
   en: {
     heading: "Explore Felipe Carrillo Puerto",
+    heroEyebrow: "Maya Ka’an local guide",
+    heroSubheading: "Nature, culture, food, and local experiences in one map.",
     instructions:
       "Tourist map of Felipe Carrillo Puerto, the heart of Maya Ka'an. Discover nature, culture, food and local experiences; tap an icon for details and zoom in to read the street names.",
     legendRoad: "Regional road",
