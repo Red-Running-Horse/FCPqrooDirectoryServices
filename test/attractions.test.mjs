@@ -6,6 +6,7 @@ import {
   directionsUrlFor,
   filterAttractions,
   isVerified,
+  nonMappablePlaces,
 } from "../app/attractions.mjs";
 import { FCP_MAX_BOUNDS, FCP_VIEW_BOUNDS } from "../app/map-view.mjs";
 import { placePortal } from "../app/place-portal.mjs";
@@ -27,6 +28,10 @@ const plaza = attractions.find(
 );
 const church = attractions.find(({ id }) => id === "iglesia-de-san-servacio-felipe-carrillo-puerto");
 const balamNah = attractions.find(({ id }) => id === "balam-nah-felipe-carrillo-puerto");
+const whippingFountain = attractions.find(
+  ({ id }) => id === "pila-de-los-azotes-felipe-carrillo-puerto",
+);
+const pichTree = nonMappablePlaces.find(({ id }) => id === "arbol-del-pich-felipe-carrillo-puerto");
 
 test("attractions have complete, distinct, bilingual, in-bounds data", () => {
   assert.ok(attractions.length >= 1);
@@ -242,6 +247,77 @@ test("Balam-Nah user-provided coordinates remain unverified and approximate", ()
     placePortal(balamNah, "en").actions.some(({ id }) => id === "directions"),
     false,
   );
+});
+
+test("the Pila de los Azotes is unverified with an approximate historic-centre point", () => {
+  assert.ok(whippingFountain);
+  assert.equal(whippingFountain.category, "culture");
+  assert.equal(whippingFountain.nameEs, "Pila de los Azotes");
+  assert.equal(whippingFountain.nameEn, "Whipping Fountain (Pila de los Azotes)");
+  assert.equal(whippingFountain.name.es, whippingFountain.nameEs);
+  assert.equal(whippingFountain.name.en, whippingFountain.nameEn);
+  assert.equal(whippingFountain.description.es, whippingFountain.shortDescriptionEs);
+  assert.equal(whippingFountain.description.en, whippingFountain.shortDescriptionEn);
+  assert.equal(whippingFountain.address.es, whippingFountain.addressEs);
+  assert.equal(whippingFountain.address.en, whippingFountain.addressEn);
+  assert.equal(typeof whippingFountain.latitude, "number");
+  assert.equal(typeof whippingFountain.longitude, "number");
+  assert.ok(inside(FCP_VIEW_BOUNDS, whippingFountain));
+  assert.match(whippingFountain.coordinateSource, /Approximate placeholder.*not GPS-verified/);
+  assert.deepEqual(
+    whippingFountain.hours.map(({ day }) => day),
+    ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+  );
+  assert.equal(whippingFountain.verified, false);
+  assert.equal(whippingFountain.status, "unverified");
+  assert.equal(whippingFountain.locationAccuracy, "approximate");
+  assert.equal(isVerified(whippingFountain), false);
+  assert.equal(directionsUrlFor(whippingFountain), null);
+  assert.equal(whippingFountain.verificationSourceUrls.length, 4);
+  // The construction-date conflict must stay unresolved in the notes and out of the descriptions.
+  assert.match(whippingFountain.verificationNotes, /MAJOR DATE CONFLICT/);
+  assert.match(whippingFountain.verificationNotes, /Do not publish a construction date/);
+  assert.equal(whippingFountain.verificationNote, whippingFountain.verificationNotes);
+  assert.equal(whippingFountain.lastUpdated, "2026-09-30");
+
+  for (const language of ["es", "en"]) {
+    const portal = placePortal(whippingFountain, language);
+    assert.equal(portal.name, whippingFountain.name[language]);
+    assert.equal(portal.status, "approximate");
+    assert.equal(portal.actions.some(({ id }) => id === "directions"), false);
+  }
+});
+
+test("the historic Pich tree is non-mappable and stays out of the map attractions", () => {
+  assert.ok(pichTree);
+  assert.equal(attractions.some(({ id }) => id === "arbol-del-pich-felipe-carrillo-puerto"), false);
+  assert.equal(pichTree.category, "nature");
+  assert.equal(pichTree.name.es, "Árbol del Pich (histórico)");
+  assert.equal(pichTree.name.en, "The Pich Tree (historic)");
+  assert.equal(pichTree.description.es, pichTree.shortDescriptionEs);
+  assert.equal(pichTree.description.en, pichTree.shortDescriptionEn);
+  assert.equal(pichTree.latitude, null);
+  assert.equal(pichTree.longitude, null);
+  assert.equal(pichTree.mappable, false);
+  assert.equal(pichTree.verified, false);
+  assert.equal(pichTree.status, "unverified");
+  assert.equal(pichTree.locationAccuracy, "approximate");
+  assert.equal(isVerified(pichTree), false);
+  assert.equal(pichTree.directionsUrl, null);
+  assert.equal(directionsUrlFor(pichTree), null);
+  assert.match(pichTree.shortDescriptionEs, /23 de junio de 2017/);
+  assert.match(pichTree.shortDescriptionEn, /June 23, 2017/);
+  assert.match(pichTree.fullDescriptionEs, /ESTADO ACTUAL INCIERTO/);
+  assert.match(pichTree.fullDescriptionEn, /CURRENT STATUS UNCERTAIN/);
+  assert.match(pichTree.verificationNotes, /historical-memory record, not a mappable visitable attraction/);
+  assert.equal(pichTree.verificationNote, pichTree.verificationNotes);
+  assert.equal(pichTree.lastUpdated, "2026-09-30");
+});
+
+test("Expomaya is not published", () => {
+  for (const place of [...attractions, ...nonMappablePlaces]) {
+    assert.doesNotMatch(place.id, /expomaya/i);
+  }
 });
 
 test("directions are only offered for verified destinations", () => {
