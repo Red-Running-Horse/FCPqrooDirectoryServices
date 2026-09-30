@@ -21,6 +21,7 @@ function inside(bounds, { latitude, longitude }) {
 
 const market = attractions.find(({ id }) => id === "mercado-felipe-carrillo-puerto");
 const sanctuary = attractions.find(({ id }) => id === "santuario-de-la-cruz-parlante-fcp");
+const museum = attractions.find(({ id }) => id === "museo-de-la-ciudad-felipe-carrillo-puerto");
 
 test("attractions have complete, distinct, bilingual, in-bounds data", () => {
   assert.ok(attractions.length >= 1);
@@ -96,6 +97,49 @@ test("the Talking Cross sanctuary retains its unverified bilingual source data",
     assert.equal(portal.details.find(({ id }) => id === "address").value, sanctuary.address[language].trim());
     assert.match(portal.details.find(({ id }) => id === "hours").value, /07:00 - 18:00/);
     assert.equal(portal.verificationNote, sanctuary.verificationNotes);
+    assert.equal(portal.actions.some(({ id }) => id === "directions"), false);
+  }
+});
+
+test("the City Museum retains its unverified bilingual source data", () => {
+  assert.ok(museum);
+  assert.equal(museum.category, "culture");
+  assert.equal(museum.nameEs, "Museo de la Ciudad de Felipe Carrillo Puerto");
+  assert.equal(museum.nameEn, "Felipe Carrillo Puerto City Museum");
+  assert.equal(museum.name.es, museum.nameEs);
+  assert.equal(museum.name.en, museum.nameEn);
+  assert.equal(museum.description.es, museum.shortDescriptionEs);
+  assert.equal(museum.description.en, museum.shortDescriptionEn);
+  assert.match(museum.fullDescriptionEs, /Calle 67 \nCopied\n#768\n, Col. Centro/);
+  assert.match(museum.fullDescriptionEn, /assassinated in 1924/);
+  assert.equal(museum.latitude, 19.5795);
+  assert.equal(museum.longitude, -88.0453);
+  assert.ok(inside(FCP_VIEW_BOUNDS, museum));
+  assert.match(museum.coordinateSource, /19°34'43"N 88°02'43"W/);
+  assert.equal(museum.addressEs.includes("Calle 67 \nCopied\n#768\n"), true);
+  assert.equal(museum.addressEn.includes("67 Street \nCopied\n#768\n"), true);
+  assert.equal(museum.address.es, museum.addressEs);
+  assert.equal(museum.address.en, museum.addressEn);
+  assert.deepEqual(museum.hours.map(({ day }) => day), ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
+  assert.ok(museum.hours.every(({ open, close }) => open === "09:00" && close === "18:00"));
+  assert.equal(museum.verified, false);
+  assert.equal(museum.status, "unverified");
+  assert.equal(isVerified(museum), false);
+  assert.equal(directionsUrlFor(museum), null);
+  assert.equal(museum.verificationSourceUrls.length, 6);
+  assert.equal(
+    museum.verificationSourceUrls[1],
+    "https://www.felipecarrillopuerto.gob.mx/carnaval?view=article&amp;id=4&amp;catid=9",
+  );
+  assert.match(museum.verificationNotes, /Calle 67 \nCopied\n#768\n/);
+  assert.equal(museum.verificationNote, museum.verificationNotes);
+  assert.equal(museum.lastUpdated, "2026-09-30");
+
+  for (const language of ["es", "en"]) {
+    const portal = placePortal(museum, language);
+    assert.equal(portal.name, museum.name[language]);
+    assert.equal(portal.status, "approximate");
+    assert.match(portal.details.find(({ id }) => id === "hours").value, /09:00 - 18:00/);
     assert.equal(portal.actions.some(({ id }) => id === "directions"), false);
   }
 });

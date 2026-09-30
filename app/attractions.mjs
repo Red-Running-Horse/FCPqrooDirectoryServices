@@ -74,6 +74,62 @@ const sanctuary = {
   lastUpdated: "2026-09-30",
 };
 
+const museum = {
+  id: "museo-de-la-ciudad-felipe-carrillo-puerto",
+  category: "culture",
+  nameEs: "Museo de la Ciudad de Felipe Carrillo Puerto",
+  nameEn: "Felipe Carrillo Puerto City Museum",
+  shortDescriptionEs: "Museo dedicado a la historia y el patrimonio cultural de Felipe Carrillo Puerto, su pasado maya, la Guerra de Castas, el movimiento revolucionario y la vida cotidiana de la región.",
+  shortDescriptionEn: "Museum dedicated to the history and cultural heritage of Felipe Carrillo Puerto, its Maya past, the Caste War, the revolutionary movement, and everyday life in the region.",
+  fullDescriptionEs: "El Museo de la Ciudad de Felipe Carrillo Puerto documenta la historia local desde la época maya hasta el presente. Se encuentra en la Plaza Cívica (parque central) en Calle 67 \nCopied\n#768\n, Col. Centro, C.P. 77200, prácticamente en el centro geográfico de la ciudad. Exhibe piezas sobre la Guerra de Castas, Chan Santa Cruz, el legado de Felipe Carrillo Puerto como líder revolucionario asesinado en 1924, además de arte y artesanías locales. La ciudad ha sido descrita como un bastión cultural y educativo con galerías de arte y centros culturales. La Casa de la Cultura, también en el parque central, alberga galerías y eventos culturales. Las rutas turísticas del municipio mencionan el museo como parte del circuito cultural del centro. El recinto es pequeño pero con contenido histórico valioso; se recomienda combinar su visita con el Santuario de la Cruz Parlante, el Mercado Benito Juárez y la Parroquia de Santa Cruz.",
+  fullDescriptionEn: "The Felipe Carrillo Puerto City Museum documents local history from the Maya period to the present. It is located on the Plaza Cívica (central park) at Calle 67 \nCopied\n#768\n, Col. Centro, C.P. 77200, essentially in the geographic center of town. Exhibits cover the Caste War, Chan Santa Cruz, the legacy of Felipe Carrillo Puerto as a revolutionary leader assassinated in 1924, as well as local art and crafts. The city has been described as a cultural and educational stronghold with art galleries and cultural centers. The Casa de la Cultura, also on the central park, hosts galleries and cultural events. Municipal tourism routes include the museum as part of the downtown cultural circuit. The museum is small but packed with valuable historical content; it is recommended to combine a visit with the Sanctuary of the Talking Cross, the Benito Juárez Market, and the Parish of Santa Cruz.",
+  latitude: 19.5795,
+  longitude: -88.0453,
+  coordinateSource: "Estimated from town center coordinates (19°34'43\"N 88°02'43\"W) and museum address on Calle 67 \nCopied\n#768\n, Col. Centro; not GPS-verified",
+  addressEs: "Plaza Cívica / Calle 67 \nCopied\n#768\n, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo",
+  addressEn: "Civic Plaza / 67 Street \nCopied\n#768\n, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo",
+  community: "Felipe Carrillo Puerto",
+  hours: [
+    { day: "Mon", open: "09:00", close: "18:00", notesEs: "", notesEn: "" },
+    { day: "Tue", open: "09:00", close: "18:00", notesEs: "", notesEn: "" },
+    { day: "Wed", open: "09:00", close: "18:00", notesEs: "", notesEn: "" },
+    { day: "Thu", open: "09:00", close: "18:00", notesEs: "", notesEn: "" },
+    { day: "Fri", open: "09:00", close: "18:00", notesEs: "", notesEn: "" },
+    { day: "Sat", open: "09:00", close: "18:00", notesEs: "", notesEn: "" },
+    { day: "Sun", open: "09:00", close: "18:00", notesEs: "", notesEn: "" },
+  ],
+  phone: null,
+  whatsapp: null,
+  email: null,
+  website: null,
+  socialLinks: { facebook: null, instagram: null, tiktok: null },
+  directionsUrl: "https://www.google.com/maps/search/Museo+de+la+Ciudad+Felipe+Carrillo+Puerto+Quintana+Roo",
+  priceLevel: "$",
+  paymentMethods: ["cash"],
+  languagesSpoken: ["es", "maya"],
+  amenities: ["museum", "historical_exhibits", "cultural_events", "local_art"],
+  accessibility: {
+    wheelchairAccess: null,
+    parking: null,
+    notesEs: "Sin información verificada sobre accesibilidad.",
+    notesEn: "No verified accessibility information.",
+  },
+  photos: [],
+  verified: false,
+  verifiedAt: null,
+  verifiedBy: null,
+  verificationSourceUrls: [
+    "https://visitmexico.com/es/destino/18025/felipe-carillo-puerto",
+    "https://www.felipecarrillopuerto.gob.mx/carnaval?view=article&amp;id=4&amp;catid=9",
+    "https://republica-alterna.com.mx/que-lugares-turisticos-visitar-en-felipe-carrillo-puerto-quintana-roo/",
+    "https://www.turismotrenmaya.mx/ciudades/conoce-felipe-carrillo-puerto-quintana-roo/",
+    "https://www.komoot.com/es-es/guide/3699063/los-mejores-sitios-que-ver-en-felipe-carrillo-puerto",
+    "https://www.felipecarrillopuerto.gob.mx/component/tags/tag/mercado",
+  ],
+  verificationNotes: "Address (Calle 67 \nCopied\n#768\n, Plaza Cívica, Col. Centro, CP 77200) comes from Visit Mexico's official destination page and is corroborated by the municipal government site. Coordinates are estimated from town center data and the stated address — not GPS-verified. Hours (09:00-18:00 daily) are plausible for a municipal museum but are unverified; no official source lists hours. Price level '$' is inferred from context (small local museum, likely free or low-cost) — not documented. Phone, email, website, social media, and accessibility details are all undocumented. The museum is consistently mentioned across multiple tourism sources as part of the downtown cultural circuit alongside the Casa de la Cultura, Santuario de la Cruz Parlante and the Market. No official phone or social media found. Note: some sources conflate the museum with the Casa de la Cultura or the Parroquia de Santa Cruz (Calle 66 con 69); the municipal government page references the museum separately from the parish church.",
+  lastUpdated: "2026-09-30",
+};
+
 // Verified local places should carry exact coordinates and a working directionsUrl.
 export const attractions = [
   {
@@ -119,6 +175,16 @@ export const attractions = [
     status: "unverified",
     locationAccuracy: "approximate",
     verificationNote: sanctuary.verificationNotes,
+  },
+  {
+    ...museum,
+    name: { es: museum.nameEs, en: museum.nameEn },
+    description: { es: museum.shortDescriptionEs, en: museum.shortDescriptionEn },
+    address: { es: museum.addressEs, en: museum.addressEn },
+    hoursDisplay: { es: "Lun - Dom: 09:00 - 18:00", en: "Mon - Sun: 09:00 - 18:00" },
+    status: "unverified",
+    locationAccuracy: "approximate",
+    verificationNote: museum.verificationNotes,
   },
 ];
 
