@@ -91,6 +91,41 @@ are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
   buttons focus markers on the map; full details stay in the interactive map portal, not on
   standalone place pages. This makes references visible in initial HTML, but a single homepage
   cannot guarantee individual search rankings for each listing.
+- **Bilingual tourist guide:** a dedicated travel and preparation guide for visitors and new arrivals
+  to Felipe Carrillo Puerto and the Riviera Maya, available directly on the homepage
+  (`#tourist-guide`) and at the standalone static route `/guide`. See [Tourist & Visitor Guide](#tourist--visitor-guide) below.
+
+## Tourist & Visitor Guide
+
+A dedicated bilingual (ES/EN) practical preparation and travel guide is built into the application, designed for tourists and travelers arriving in Quintana Roo and heading to Felipe Carrillo Puerto or the Riviera Maya.
+
+- **Editorial source & curation:** The guide is curated from the author's public Notion guide:
+  [Mexico Practical Relocation & Preparation Guide For Entry — Rivera Maya](https://tzolkin-homes1.notion.site/Mexico-Practical-Relocation-Preparation-Guide-For-Entry-Rivera-Maya-5bd4e3a7710c408b90cc5c2651fcbbd7?source=copy_link).
+  Because the application is hosted as a static export and operates offline, the guide is maintained as structured data in the repository rather than performing live Notion requests at runtime.
+- **Data location:** The source of truth for the guide is `app/guide-data.mjs` and the corresponding static export JSON `public/data/tourist-guide.json`. Pure helper functions for section retrieval, localization fallback, and offline resource resolution are in `app/tourist-guide.mjs`.
+- **How to update the guide from Notion:**
+  1. Review updates on the public Notion page or author drafts.
+  2. Update the structured entries in `app/guide-data.mjs` (bilingual `title`, `body`, and verified `officialLink` fields under the relevant section).
+  3. Update `lastReviewed` (e.g. `2026-10`) and `lastReviewedDisplay` in `app/guide-data.mjs`.
+  4. Update `public/data/tourist-guide.json` to keep the static JSON snapshot in sync with `GUIDE_DATA`.
+  5. Run `npm test` and `npm run build` to verify data integrity, test suite, and static page exports.
+- **Editorial & legal review responsibilities:**
+  - This guide is travel and relocation preparation guidance, **not** official legal, immigration, medical, or financial advice.
+  - Never present user-authored advice as official Mexican government regulations.
+  - Preserve dates, uncertainty, and transitory details from the source.
+  - For time-sensitive matters (entry requirements, digital FMM, visas, customs limits, vaccinations), provide direct HTTPS links to official Mexican government bodies (such as INM, SRE, SAT/Aduanas) and instruct travelers to verify current rules before departure.
+- **Adding the downloadable PDF asset:**
+  - No PDF file is bundled by default until a verified asset is supplied. The UI displays an informative placeholder state ("PDF download will be added when the PDF asset is supplied") and does not guess URLs.
+  - To enable a local PDF download:
+    1. Place the authorized PDF file in the `public/` directory (for example, `public/downloads/guia-mexico-riviera-maya.pdf`).
+    2. Set `pdfAsset` in `app/guide-data.mjs` to the relative public path (e.g., `"/downloads/guia-mexico-riviera-maya.pdf"`).
+    3. Update `public/data/tourist-guide.json` to match.
+    4. Re-run `npm test` and `npm run build`. The UI will automatically switch from the placeholder state to an active download button.
+  - To link to a stable external PDF URL instead, set `pdfAsset` to the full `https://...` URL. Note that external URLs will not be cached in offline mode.
+- **Offline behavior:**
+  - The local guide data (`/data/tourist-guide.json`) and `/guide` page are static and bundled with the site export, making the guide fully readable without an active internet connection.
+  - Helper `guideOfflineResources()` in `app/tourist-guide.mjs` returns the local assets required for offline caching.
+  - External resources (the public Notion document, airline portals, and government websites) are marked with an external indicator and explicitly require an active internet connection; they are never included in offline cache manifests.
 
 ## Performance checks before and after deployment
 

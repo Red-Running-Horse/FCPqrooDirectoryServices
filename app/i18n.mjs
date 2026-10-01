@@ -61,6 +61,23 @@ export const UI_TEXT = {
     businessCtaUnderConstruction: "Esta sección está en construcción.",
     ctaLearnMessage:
       "Este mapa es una guía local de Felipe Carrillo Puerto. Los lugares se incluyen según información verificada, no por pago.",
+    guideNavLabel: "Guía práctica",
+    guideHeading: "Guía práctica para visitantes",
+    guideEyebrow: "Preparación para tu viaje a la Riviera Maya y Felipe Carrillo Puerto",
+    guideIntro:
+      "Información orientativa sobre preparación, transporte, dinero, conectividad, salud y respeto cultural en Maya Ka’an.",
+    guideDisclaimerHeading: "Aviso importante para viajeros",
+    guideDisclaimerBody:
+      "Esta guía contiene información de carácter práctico y orientativo; no constituye asesoría legal, migratoria, médica ni financiera. Los requisitos oficiales de entrada, visados y salud pueden cambiar sin previo aviso. Verifica siempre la información actualizada con las autoridades oficiales del Gobierno de México (INM, SRE) o tu aerolínea antes de viajar.",
+    guideSourceAttribution: "Fuente editorial:",
+    guideLastReviewed: "Última revisión:",
+    guideNotionAction: "Ver guía original en Notion (requiere conexión · abre en otra pestaña)",
+    guidePdfDownload: "Descargar guía en PDF",
+    guidePdfPlaceholder: "La descarga en formato PDF estará disponible cuando se incorpore el archivo.",
+    guideExternalNotice: "Requiere conexión a internet (abre en otra pestaña)",
+    guideSectionJump: "Secciones de la guía",
+    guideBackToMap: "Volver al mapa",
+    guideOfficialSourceLabel: "Fuente oficial (requiere conexión)",
   },
   en: {
     heading: "Explore Felipe Carrillo Puerto",
@@ -117,6 +134,23 @@ export const UI_TEXT = {
     businessCtaUnderConstruction: "This section is under construction.",
     ctaLearnMessage:
       "This map is a local guide to Felipe Carrillo Puerto. Places are listed based on verified information, not payment.",
+    guideNavLabel: "Visitor guide",
+    guideHeading: "Practical Visitor Guide",
+    guideEyebrow: "Trip preparation for Riviera Maya & Felipe Carrillo Puerto",
+    guideIntro:
+      "Practical guidance on arrival, transport, currency, connectivity, health, and cultural respect in Maya Ka’an.",
+    guideDisclaimerHeading: "Important notice for travelers",
+    guideDisclaimerBody:
+      "This guide contains practical, informational guidance; it does not constitute legal, immigration, medical, or financial advice. Official entry requirements, visas, and health rules may change without notice. Always verify current requirements with official Mexican government authorities (INM, SRE) or your airline prior to travel.",
+    guideSourceAttribution: "Editorial source:",
+    guideLastReviewed: "Last reviewed:",
+    guideNotionAction: "View original Notion guide (requires connection · opens in a new tab)",
+    guidePdfDownload: "Download guide as PDF",
+    guidePdfPlaceholder: "PDF download will be added when the PDF asset is supplied.",
+    guideExternalNotice: "Requires internet connection (opens in a new tab)",
+    guideSectionJump: "Guide sections",
+    guideBackToMap: "Back to map",
+    guideOfficialSourceLabel: "Official source (requires connection)",
   },
 };
 
