@@ -1,4 +1,4 @@
-import { CATEGORIES, directionsUrlFor, isVerified } from "./place-index.mjs";
+import { categorySummary, directionsUrlFor, isVerified } from "./place-index.mjs";
 import { LANGUAGES, localize, uiText } from "./i18n.mjs";
 
 // Badge shown in the portal: "unavailable" wins, then "verified" (exact + verified), else "approximate".
@@ -48,7 +48,6 @@ export function placePortal(attraction, language) {
   const name = text(attraction.name, language);
   const otherLanguage = LANGUAGES.find(({ id }) => id !== language && attraction.name?.[id])?.id;
   const otherName = otherLanguage ? text(attraction.name, otherLanguage) : null;
-  const category = CATEGORIES.find(({ id }) => id === attraction.category);
 
   const call = phoneUrl(attraction.phone);
   const whatsapp = whatsappUrl(attraction.whatsapp);
@@ -78,7 +77,7 @@ export function placePortal(attraction, language) {
     otherName: otherName && otherName !== name ? otherName : null,
     otherLanguage,
     categoryLabel: ui.labelCategory,
-    category: category ? localize(category.label, language) : null,
+    category: categorySummary(attraction, language),
     status,
     statusLabel: statusLabels[status],
     description: text(attraction.description, language),

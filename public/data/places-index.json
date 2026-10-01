@@ -73,7 +73,10 @@
   },
   {
     "id": "balam-nah-felipe-carrillo-puerto",
-    "category": "culture",
+    "category": "nature",
+    "secondaryCategories": [
+      "lodging"
+    ],
     "latitude": 19.476991842956,
     "longitude": -88.06736291757169,
     "status": "unverified",

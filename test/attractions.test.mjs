@@ -7,6 +7,7 @@ import {
   filterAttractions,
   isVerified,
   nonMappablePlaces,
+  placeCategories,
 } from "../app/attractions.mjs";
 import { FCP_MAX_BOUNDS, FCP_VIEW_BOUNDS } from "../app/map-view.mjs";
 import { placePortal } from "../app/place-portal.mjs";
@@ -271,7 +272,9 @@ test("the church of San Servacio preserves its source verified:true without upgr
 
 test("Balam-Nah user-provided coordinates remain unverified and approximate", () => {
   assert.ok(balamNah);
-  assert.equal(balamNah.category, "culture");
+  assert.equal(balamNah.category, "nature");
+  assert.deepEqual(balamNah.secondaryCategories, ["lodging"]);
+  assert.deepEqual(placeCategories(balamNah), ["nature", "lodging"]);
   assert.equal(balamNah.name.es, "Balam-Nah");
   assert.equal(balamNah.name.en, "Balam-Nah");
   assert.equal(balamNah.description.es, balamNah.shortDescriptionEs);
@@ -291,6 +294,17 @@ test("Balam-Nah user-provided coordinates remain unverified and approximate", ()
     placePortal(balamNah, "en").actions.some(({ id }) => id === "directions"),
     false,
   );
+});
+
+test("Balam-Nah is listed once under both Nature and Lodging", () => {
+  for (const category of ["all", "nature", "lodging"]) {
+    const results = filterAttractions(category, "");
+    assert.equal(results.filter(({ id }) => id === balamNah.id).length, 1, category);
+  }
+  assert.ok(!filterAttractions("culture", "").includes(balamNah));
+  // Secondary categories never widen a single-category place.
+  assert.equal(placeCategories(whippingFountain).length, 1);
+  assert.ok(!filterAttractions("lodging", "").includes(whippingFountain));
 });
 
 test("the Pila de los Azotes is unverified with an approximate historic-centre point", () => {
@@ -393,7 +407,8 @@ test("categories filter locally (empty categories allowed) and All restores ever
   for (const { id, label } of CATEGORIES) {
     assert.ok(label.es && label.en, `${id} bilingüe`);
     const filtered = filterAttractions(id);
-    assert.ok(filtered.every(({ category }) => id === "all" || category === id));
+    assert.ok(filtered.every((place) => id === "all" || placeCategories(place).includes(id)));
+    assert.equal(new Set(filtered.map((place) => place.id)).size, filtered.length, id);
   }
   assert.deepEqual(filterAttractions("all"), attractions);
   assert.ok(filterAttractions("food").includes(market));

@@ -12,20 +12,56 @@ export const CATEGORIES = [
   { id: "tours", label: { es: "Tours", en: "Tours" } },
 ];
 
-// Case-insensitive match on the Spanish/English name and category label; blank queries match everything.
+// A place has one primary `category` plus an optional `secondaryCategories` list (for example a
+// nature spot where visitors can also sleep over). The primary category stays first and drives the
+// marker icon and color; every category takes part in filtering and search, and a place is still
+// listed only once per result set.
+export function placeCategories(place) {
+  const ids = [
+    place?.category,
+    ...(Array.isArray(place?.secondaryCategories) ? place.secondaryCategories : []),
+  ];
+  return ids.filter(
+    (id, index) =>
+      typeof id === "string" &&
+      id !== "all" &&
+      ids.indexOf(id) === index &&
+      CATEGORIES.some((category) => category.id === id),
+  );
+}
+
+// Bilingual labels of the primary and secondary categories, primary first.
+export function categoryLabels(place, language) {
+  return placeCategories(place).map((id) => {
+    const { label } = CATEGORIES.find((category) => category.id === id);
+    return label[language] ?? label.es;
+  });
+}
+
+// Short display string for marker titles, popups, the portal and listing references.
+export function categorySummary(place, language) {
+  const labels = categoryLabels(place, language);
+  return labels.length > 0 ? labels.join(" · ") : null;
+}
+
+// Case-insensitive match on the Spanish/English name and category labels; blank queries match everything.
 export function matchesSearch(place, query) {
   const normalized = typeof query === "string" ? query.trim().toLocaleLowerCase() : "";
   if (!normalized) return true;
 
-  const category = CATEGORIES.find(({ id }) => id === place.category);
-  const values = [place.name?.es, place.name?.en, category?.label?.es, category?.label?.en];
+  const labels = placeCategories(place).flatMap((id) => {
+    const { label } = CATEGORIES.find((category) => category.id === id);
+    return [label.es, label.en];
+  });
+  const values = [place.name?.es, place.name?.en, ...labels];
 
   return values.some((value) => typeof value === "string" && value.toLocaleLowerCase().includes(normalized));
 }
 
 export function filterPlaces(places, category, query = "") {
   return places.filter(
-    (place) => (category === "all" || place.category === category) && matchesSearch(place, query),
+    (place) =>
+      (category === "all" || placeCategories(place).includes(category)) && matchesSearch(place, query),
   );
 }
 

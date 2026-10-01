@@ -5,7 +5,7 @@ import { categoryIconSvg } from "./category-icons.mjs";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
 import { syncMarkerSelection } from "./marker-selection.mjs";
 import { loadPlaceDetail } from "./place-data.mjs";
-import { CATEGORIES, filterPlaces, isVerified, listingReferences } from "./place-index.mjs";
+import { CATEGORIES, categorySummary, filterPlaces, isVerified, listingReferences } from "./place-index.mjs";
 import PlacePortal from "./place-portal";
 import { placePopup } from "./place-portal.mjs";
 import { labelsOverlap, mergeRoadSegments, placeRoadLabel, roadLabel } from "./road-label.mjs";
@@ -19,12 +19,9 @@ import {
   shouldShowLabels,
 } from "./map-view.mjs";
 
-function categoryLabel(id, language) {
-  return localize(CATEGORIES.find((category) => category.id === id).label, language);
-}
-
+// Primary category first, then any secondary ones ("Naturaleza · Hospedaje").
 function markerTitle(attraction, language) {
-  return `${localize(attraction.name, language)} — ${categoryLabel(attraction.category, language)}`;
+  return `${localize(attraction.name, language)} — ${categorySummary(attraction, language)}`;
 }
 
 function showPortal() {
@@ -484,11 +481,11 @@ export default function HighwayMap({ placesIndex }) {
                 <li key={place.id}>
                   <button
                     type="button"
-                    aria-label={`${text.listingsAction.replace("{name}", name)} — ${categoryLabel(place.category, language)}`}
+                    aria-label={`${text.listingsAction.replace("{name}", name)} — ${categorySummary(place, language)}`}
                     onClick={() => focusListing(place.id)}
                   >
                     <span className="listing-references__name">{name}</span>
-                    <span className="listing-references__category">{categoryLabel(place.category, language)}</span>
+                    <span className="listing-references__category">{categorySummary(place, language)}</span>
                   </button>
                 </li>
               );
