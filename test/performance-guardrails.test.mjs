@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { checkGeoJson, MAX_GEOJSON_BYTES } from "../scripts/check-performance-budgets.mjs";
 
@@ -11,7 +12,7 @@ test("the committed road file is inside the measured budget and remains optimize
   assert.deepEqual(checkGeoJson(source), { bytes: source.length, errors: [] });
   const before = readFileSync(roadFile);
   assert.match(execFileSync(process.execPath, [
-    new URL("../scripts/check-performance-budgets.mjs", import.meta.url).pathname,
+    fileURLToPath(new URL("../scripts/check-performance-budgets.mjs", import.meta.url)),
   ], { encoding: "utf8" }), new RegExp(`${source.length} / ${MAX_GEOJSON_BYTES} bytes`));
   assert.deepEqual(readFileSync(roadFile), before, "checking must not rewrite the payload");
 });
