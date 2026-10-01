@@ -130,10 +130,78 @@ Open http://localhost:3000. Run `npm test` for the road-label, map-view, attract
 
 Run `npm run build` and upload the contents of `out/` to the site's document root (for example,
 `public_html/`). This is a static Next.js export: the GeoJSON is included at
-`/regional-highways.geojson` and the place payloads at `/data/places-index.json` and
-`/data/places/<id>.json`, and no Node.js server, map API token or external tile service is
-required, so the map also works without an internet connection. Upload the whole `data/`
+`/regional-highways.geojson`, the place payloads at `/data/places-index.json` and
+`/data/places/<id>.json`, and the service worker at `/sw.js`. No Node.js server,
+map API token or external tile service is required. Upload the whole `data/`
 directory: a missing detail file leaves its place selectable but without panel details.
+
+## Opt-in offline map and saved places
+
+Tourists travelling through Maya Ka’an and central Quintana Roo often encounter areas without mobile data.
+The site provides a focused, client-side, opt-in offline map powered by Service Workers and Cache Storage.
+
+### Architecture
+
+1. **Shared offline map (one-time opt-in):**
+   - Downloads the site's HTML, compiled JavaScript, stylesheets, local icons, the regional road GeoJSON
+     (`/regional-highways.geojson`), and the marker index (`/data/places-index.json`).
+   - Enables the full map view, zooming, road labels, category filters, and search to work offline.
+   - Kept in a dedicated cache namespace (`fcp-shared-v1`) that is safely updated and pruned when new versions deploy.
+   - Status transitions: not saved/idle -> preparing -> ready -> updating -> failed -> removed (or unsupported on legacy browsers).
+2. **Individually saved places:**
+   - In any place's detail panel, visitors can click **"Guardar para uso sin conexión" / "Save for offline use"**.
+   - Caches *only* that specific place's detail JSON (`/data/places/<id>.json`) into `fcp-places-v1`.
+   - Displays a visible **"✓ Guardado sin conexión" / "Saved offline"** badge (not relying on color alone) and a remove button.
+3. **Offline management section:**
+   - Located below the listings on the homepage (`#offline-management`).
+   - Shows current shared map status with actions to **Update offline map** or **Remove offline map**.
+   - Lists all individually saved places with buttons to view each place on the map or remove it from storage.
+   - Communicates browser storage eviction caveats and connectivity requirements.
+
+### What is and is not available offline
+
+- **Available offline (after saving):**
+  - Interactive Leaflet map canvas, zoom, and regional road network.
+  - Street names and highway labels.
+  - Search and category filters.
+  - Marker pins, popups, and short listing references.
+  - Full details for any individually saved place.
+- **Not available offline (clearly labeled in UI):**
+  - Full details for unsaved places: displays an immediate bilingual notice ("Detalles no disponibles sin conexión" / "Details unavailable offline") rather than hanging or failing silently.
+  - External turn-by-turn directions (Google Maps).
+  - Phone calls and WhatsApp links.
+  - External third-party websites.
+  - Live Maya radio stream (XEPET).
+
+### Browser storage limitations
+
+- Cached data is stored in the browser's Cache Storage and localStorage.
+- Browsers may evict cached data under storage pressure if the device runs low on disk space, or if the user clears site data.
+- The UI and storage management area clearly explain this limitation and avoid claiming permanent storage.
+
+### How to test with offline DevTools or airplane mode
+
+1. **Start the local server or build:**
+   ```sh
+   npm run build
+   npx serve out # or npm run dev
+   ```
+2. **Save the shared map & a place:**
+   - Open the site in your browser.
+   - Click **"Guardar mapa para uso sin conexión"** in the top bar or offline management area.
+   - Wait until status displays **"Listo para uso sin conexión"**.
+   - Select a place (e.g. *Balam-Nah*) and click **"Guardar para uso sin conexión"**.
+3. **Switch to offline mode:**
+   - In Chrome, Edge, or Firefox DevTools: open the **Network** tab and select **Offline** in the throttling dropdown.
+   - Or on a mobile phone: turn on **Airplane Mode** (ensure Wi-Fi and cellular data are both disabled).
+4. **Verify offline operation:**
+   - Reload the page (`Ctrl+R` / `Cmd+R`).
+   - Confirm the map renders with roads and labels without network errors.
+   - Filter by categories and type in the search bar.
+   - Click the saved *Balam-Nah* marker: verify full details and the saved badge display correctly.
+   - Click an unsaved place (e.g. *Mercado Municipal*): verify the summary is shown and an immediate offline notice appears in the details panel without indefinite loading.
+   - Verify external direction, phone, and website links note that connectivity is required.
+   - Navigate to the offline management panel to inspect saved places or remove items.
 
 To automate the same upload, run the manually triggered
 [`Deploy static export to Hostinger`](.github/workflows/deploy-hostinger.yml) workflow, which

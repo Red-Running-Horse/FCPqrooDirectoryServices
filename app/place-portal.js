@@ -2,7 +2,14 @@ import { categoryIconSvg } from "./category-icons.mjs";
 import { placeCategoryStyle } from "./category-colors.mjs";
 import { placePortal } from "./place-portal.mjs";
 
-export default function PlacePortal({ attraction, language, onClear }) {
+export default function PlacePortal({
+  attraction,
+  language,
+  onClear,
+  isSaved = false,
+  onToggleSave = null,
+  detailUnavailable = false,
+}) {
   const view = placePortal(attraction, language);
 
   return (
@@ -50,19 +57,55 @@ export default function PlacePortal({ attraction, language, onClear }) {
             )}
             <span className={`status-badge status-badge--${view.status}`}>{view.statusLabel}</span>
           </p>
+          {onToggleSave && (
+            <div className="place-portal__offline-bar">
+              {isSaved ? (
+                <div className="place-portal__offline-saved">
+                  <span className="place-portal__offline-badge" role="status">
+                    ✓ {view.savedOfflineBadge}
+                  </span>
+                  <button
+                    type="button"
+                    className="place-portal__offline-btn place-portal__offline-btn--remove"
+                    onClick={() => onToggleSave(attraction.id)}
+                    aria-label={`${view.removeOfflineLabel}: ${view.name}`}
+                  >
+                    {view.removeOfflineLabel}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  className="place-portal__offline-btn"
+                  onClick={() => onToggleSave(attraction.id)}
+                  aria-label={`${view.saveOfflineLabel}: ${view.name}`}
+                >
+                  {view.saveOfflineLabel}
+                </button>
+              )}
+            </div>
+          )}
+          {detailUnavailable && (
+            <p className="place-portal__note place-portal__note--offline" role="alert">
+              {view.offlineDetailUnavailable}
+            </p>
+          )}
           {view.description && <p>{view.description}</p>}
           {view.actions.length > 0 && (
-            <div className="place-portal__actions">
-              {view.actions.map(({ id, label, href, external }) => (
-                <a
-                  key={id}
-                  href={href}
-                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  {label}
-                </a>
-              ))}
-            </div>
+            <>
+              <div className="place-portal__actions">
+                {view.actions.map(({ id, label, href, external }) => (
+                  <a
+                    key={id}
+                    href={href}
+                    {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  >
+                    {label}
+                  </a>
+                ))}
+              </div>
+              <p className="place-portal__network-note">{view.networkRequiredNote}</p>
+            </>
           )}
           {view.directionsNote && <p className="place-portal__note">{view.directionsNote}</p>}
           {view.details.length > 0 && (

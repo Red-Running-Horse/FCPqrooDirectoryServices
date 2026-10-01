@@ -89,6 +89,12 @@ export function placePortal(attraction, language) {
     actions,
     directionsNote: directions ? null : ui.directionsUnavailable,
     clearLabel: ui.clearSelection,
+    saveOfflineLabel: ui.savePlaceOffline,
+    removeOfflineLabel: ui.removePlaceOffline,
+    savedOfflineBadge: ui.placeSavedBadge,
+    notSavedOfflineBadge: ui.placeUnsavedBadge,
+    networkRequiredNote: ui.networkRequiredNote,
+    offlineDetailUnavailable: ui.offlineDetailUnavailable,
   };
 }
 

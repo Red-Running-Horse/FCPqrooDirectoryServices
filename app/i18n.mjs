@@ -61,6 +61,38 @@ export const UI_TEXT = {
     businessCtaUnderConstruction: "Esta sección está en construcción.",
     ctaLearnMessage:
       "Este mapa es una guía local de Felipe Carrillo Puerto. Los lugares se incluyen según información verificada, no por pago.",
+    offlineSaveMap: "Guardar mapa para uso sin conexión",
+    offlineUpdateMap: "Actualizar mapa sin conexión",
+    offlineRemoveMap: "Quitar mapa sin conexión",
+    offlineStatusNotSupported: "Almacenamiento sin conexión no compatible en este navegador.",
+    offlineStatusIdle: "El mapa no está guardado para uso sin conexión.",
+    offlineStatusPreparing: "Guardando mapa para uso sin conexión ({current}/{total})...",
+    offlineStatusReady: "Mapa guardado y listo para uso sin conexión.",
+    offlineStatusUpdating: "Actualizando mapa sin conexión ({current}/{total})...",
+    offlineStatusFailed: "No se pudo guardar el mapa sin conexión. Inténtalo de nuevo.",
+    offlineStatusRemoved: "Se quitó el mapa sin conexión.",
+    offlineHeading: "Mapa sin conexión",
+    offlineDescription:
+      "Descarga el mapa compartido (calles, carreteras, índice de lugares) para usarlo sin señal de celular. Guarda lugares específicos para ver sus detalles completos sin conexión.",
+    offlineSharedMapHeading: "Descarga compartida",
+    offlineStorageNotice:
+      "Aviso de almacenamiento: El navegador puede liberar los datos guardados si el dispositivo se queda con poco espacio. El almacenamiento no es permanente.",
+    offlineConnectivityNotice:
+      "Indicaciones externas, llamadas, WhatsApp y sitios web requieren conexión activa a internet.",
+    offlineSavedPlacesHeading: "Lugares guardados",
+    offlineNoSavedPlaces:
+      "No has guardado lugares individuales todavía. Abre la ficha de cualquier lugar en el mapa para guardarlo.",
+    offlineRemoveSavedPlace: "Quitar",
+    offlineViewOnMap: "Ver en el mapa",
+    offlineManage: "Administrar mapa sin conexión",
+    savePlaceOffline: "Guardar para uso sin conexión",
+    removePlaceOffline: "Quitar de guardados sin conexión",
+    placeSavedBadge: "Guardado sin conexión",
+    placeUnsavedBadge: "No guardado sin conexión",
+    offlineDetailUnavailable:
+      "Detalles no disponibles sin conexión. Este lugar no ha sido guardado previamente.",
+    networkRequiredNote:
+      "Indicaciones, llamadas, WhatsApp y sitios web requieren conexión a internet.",
   },
   en: {
     heading: "Explore Felipe Carrillo Puerto",
@@ -117,6 +149,38 @@ export const UI_TEXT = {
     businessCtaUnderConstruction: "This section is under construction.",
     ctaLearnMessage:
       "This map is a local guide to Felipe Carrillo Puerto. Places are listed based on verified information, not payment.",
+    offlineSaveMap: "Save map for offline use",
+    offlineUpdateMap: "Update offline map",
+    offlineRemoveMap: "Remove offline map",
+    offlineStatusNotSupported: "Offline storage not supported in this browser.",
+    offlineStatusIdle: "The map is not saved for offline use.",
+    offlineStatusPreparing: "Saving map for offline use ({current}/{total})...",
+    offlineStatusReady: "Map saved and ready for offline use.",
+    offlineStatusUpdating: "Updating offline map ({current}/{total})...",
+    offlineStatusFailed: "Could not save offline map. Please try again.",
+    offlineStatusRemoved: "Offline map removed.",
+    offlineHeading: "Offline map",
+    offlineDescription:
+      "Download the shared map (streets, highways, places index) to use without mobile data. Save specific places to view their full details offline.",
+    offlineSharedMapHeading: "Shared download",
+    offlineStorageNotice:
+      "Storage notice: Browsers may clear saved data if the device runs low on disk space. Storage is not permanent.",
+    offlineConnectivityNotice:
+      "External directions, phone calls, WhatsApp, and websites require an active internet connection.",
+    offlineSavedPlacesHeading: "Saved places",
+    offlineNoSavedPlaces:
+      "No individual places saved yet. Open any place's details on the map to save it.",
+    offlineRemoveSavedPlace: "Remove",
+    offlineViewOnMap: "View on map",
+    offlineManage: "Manage offline map",
+    savePlaceOffline: "Save for offline use",
+    removePlaceOffline: "Remove from offline saved",
+    placeSavedBadge: "Saved offline",
+    placeUnsavedBadge: "Not saved offline",
+    offlineDetailUnavailable:
+      "Details unavailable offline. This place was not previously saved.",
+    networkRequiredNote:
+      "Directions, phone calls, WhatsApp, and websites require an internet connection.",
   },
 };
 
