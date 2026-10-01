@@ -105,8 +105,17 @@ test("single-category fallback behavior preserves solid category colors", () => 
   assert.equal(categoryBandBackground(["non-existent"]), FALLBACK_CATEGORY_COLOR);
   assert.equal(categoryColor("all"), FALLBACK_CATEGORY_COLOR);
   assert.equal(categoryColor("not-a-category"), FALLBACK_CATEGORY_COLOR);
+  assert.equal(categoryColor("toString"), FALLBACK_CATEGORY_COLOR);
+  assert.equal(categoryColor("constructor"), FALLBACK_CATEGORY_COLOR);
   assert.equal(placeCategoryBackground(null), FALLBACK_CATEGORY_COLOR);
   assert.equal(placeCategoryBackground({}), FALLBACK_CATEGORY_COLOR);
+
+  // Prototype properties and invalid categories do not count as multi-category
+  assert.equal(isMultiCategory(null), false);
+  assert.equal(isMultiCategory(undefined), false);
+  assert.equal(isMultiCategory({ category: "nature", secondaryCategories: ["nature"] }), false);
+  assert.equal(isMultiCategory({ category: "nature", secondaryCategories: ["toString"] }), false);
+  assert.equal(isMultiCategory({ category: "nature", secondaryCategories: ["lodging"] }), true);
 });
 
 test("caps horizontal split bands to MAX_SPLIT_BANDS to prevent overly thin stripes", () => {

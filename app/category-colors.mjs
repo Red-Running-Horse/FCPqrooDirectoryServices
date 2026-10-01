@@ -25,13 +25,16 @@ const CANONICAL_CATEGORY_ORDER = CATEGORIES.filter(({ id }) => id !== "all").map
 
 // Returns the stable color token for a category id, falling back to the default nature token.
 export function categoryColor(categoryId) {
-  return CATEGORY_COLORS[categoryId] ?? FALLBACK_CATEGORY_COLOR;
+  if (typeof categoryId === "string" && Object.hasOwn(CATEGORY_COLORS, categoryId)) {
+    return CATEGORY_COLORS[categoryId];
+  }
+  return FALLBACK_CATEGORY_COLOR;
 }
 
 // Orders an array of category ids deterministically using the canonical order from CATEGORIES.
 export function orderCategories(categories) {
   if (!Array.isArray(categories)) return [];
-  const valid = categories.filter((id) => typeof id === "string" && id in CATEGORY_COLORS);
+  const valid = categories.filter((id) => typeof id === "string" && Object.hasOwn(CATEGORY_COLORS, id));
   const unique = [...new Set(valid)];
   return unique.sort((a, b) => {
     const ia = CANONICAL_CATEGORY_ORDER.indexOf(a);
@@ -40,9 +43,10 @@ export function orderCategories(categories) {
   });
 }
 
-// Whether a place has more than one valid category.
+// Whether a place has more than one valid, distinct category.
 export function isMultiCategory(place) {
-  return placeCategories(place).length > 1;
+  if (!place) return false;
+  return orderCategories(placeCategories(place)).length > 1;
 }
 
 // Generates a CSS background value for a given list of category ids:
