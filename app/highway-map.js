@@ -21,7 +21,9 @@ import {
 
 // Primary category first, then any secondary ones ("Naturaleza · Hospedaje").
 function markerTitle(attraction, language) {
-  return `${localize(attraction.name, language)} — ${categorySummary(attraction, language)}`;
+  const summary = categorySummary(attraction, language);
+  const name = localize(attraction.name, language);
+  return summary ? `${name} — ${summary}` : name;
 }
 
 function showPortal() {

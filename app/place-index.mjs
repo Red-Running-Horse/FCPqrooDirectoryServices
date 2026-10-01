@@ -3,6 +3,8 @@
 // filter, search and draw markers before any per-place detail JSON is fetched.
 // app/attractions.mjs re-exports these helpers for the committed source records.
 
+import { localize } from "./i18n.mjs";
+
 export const CATEGORIES = [
   { id: "all", label: { es: "Todos", en: "All" } },
   { id: "nature", label: { es: "Naturaleza", en: "Nature" } },
@@ -32,16 +34,15 @@ export function placeCategories(place) {
 
 // Bilingual labels of the primary and secondary categories, primary first.
 export function categoryLabels(place, language) {
-  return placeCategories(place).map((id) => {
-    const { label } = CATEGORIES.find((category) => category.id === id);
-    return label[language] ?? label.es;
-  });
+  return placeCategories(place).map((id) =>
+    localize(CATEGORIES.find((category) => category.id === id).label, language),
+  );
 }
 
 // Short display string for marker titles, popups, the portal and listing references.
 export function categorySummary(place, language) {
   const labels = categoryLabels(place, language);
-  return labels.length > 0 ? labels.join(" · ") : null;
+  return labels.join(" · ");
 }
 
 // Case-insensitive match on the Spanish/English name and category labels; blank queries match everything.
