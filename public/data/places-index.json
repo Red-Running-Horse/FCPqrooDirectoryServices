@@ -14,8 +14,8 @@
   {
     "id": "santuario-de-la-cruz-parlante-fcp",
     "category": "culture",
-    "latitude": 19.580901,
-    "longitude": -88.049242,
+    "latitude": 19.580684047331296,
+    "longitude": -88.04887785463087,
     "status": "unverified",
     "locationAccuracy": "approximate",
     "name": {
@@ -26,8 +26,8 @@
   {
     "id": "museo-de-la-ciudad-felipe-carrillo-puerto",
     "category": "culture",
-    "latitude": 19.5795,
-    "longitude": -88.0453,
+    "latitude": 19.57802448542231,
+    "longitude": -88.04537970768848,
     "status": "unverified",
     "locationAccuracy": "approximate",
     "name": {
@@ -38,8 +38,8 @@
   {
     "id": "casa-de-la-cultura-felipe-carrillo-puerto",
     "category": "culture",
-    "latitude": 19.5796,
-    "longitude": -88.0451,
+    "latitude": 19.578167300889525,
+    "longitude": -88.0453221173923,
     "status": "unverified",
     "locationAccuracy": "approximate",
     "name": {
@@ -50,8 +50,8 @@
   {
     "id": "plaza-civica-parque-de-las-palapas-monumento-felipe-carrillo-puerto",
     "category": "culture",
-    "latitude": 19.5792,
-    "longitude": -88.0448,
+    "latitude": 19.578135173994557,
+    "longitude": -88.0460485056746,
     "status": "unverified",
     "locationAccuracy": "approximate",
     "name": {
@@ -62,8 +62,8 @@
   {
     "id": "iglesia-de-san-servacio-felipe-carrillo-puerto",
     "category": "culture",
-    "latitude": 19.5798,
-    "longitude": -88.0455,
+    "latitude": 19.577906662241222,
+    "longitude": -88.0456236548112,
     "status": "unverified",
     "locationAccuracy": "approximate",
     "name": {
@@ -86,8 +86,8 @@
   {
     "id": "pila-de-los-azotes-felipe-carrillo-puerto",
     "category": "culture",
-    "latitude": 19.5799,
-    "longitude": -88.0458,
+    "latitude": 19.577544356982212,
+    "longitude": -88.0456050409815,
     "status": "unverified",
     "locationAccuracy": "approximate",
     "name": {
