@@ -14,6 +14,32 @@ function committedDetail(id) {
   return JSON.parse(readFileSync(new URL(`places/${id}.json`, dataDirectory), "utf8"));
 }
 
+test("user-provided coordinates remain approximate and unverified in source and static data", () => {
+  const corrections = new Map([
+    ["museo-de-la-ciudad-felipe-carrillo-puerto", [19.57802448542231, -88.04537970768848]],
+    ["casa-de-la-cultura-felipe-carrillo-puerto", [19.578167300889525, -88.0453221173923]],
+    ["plaza-civica-parque-de-las-palapas-monumento-felipe-carrillo-puerto", [19.578135173994557, -88.0460485056746]],
+    ["iglesia-de-san-servacio-felipe-carrillo-puerto", [19.577906662241222, -88.0456236548112]],
+    ["pila-de-los-azotes-felipe-carrillo-puerto", [19.577544356982212, -88.0456050409815]],
+    ["santuario-de-la-cruz-parlante-fcp", [19.580684047331296, -88.04887785463087]],
+  ]);
+  for (const [id, [latitude, longitude]] of corrections) {
+    const source = attractions.find((place) => place.id === id);
+    const index = committedIndex.find((place) => place.id === id);
+    const detail = committedDetail(id);
+    assert.ok(source, id);
+    assert.ok(index, id);
+    for (const place of [source, index]) {
+      assert.equal(place.latitude, latitude, id);
+      assert.equal(place.longitude, longitude, id);
+      assert.equal(place.status, "unverified", id);
+      assert.equal(place.locationAccuracy, "approximate", id);
+    }
+    assert.match(source.coordinateSource, /User-provided coordinates; not independently GPS-verified/, id);
+    assert.equal(detail.coordinateSource, source.coordinateSource, id);
+  }
+});
+
 test("the committed index and detail files match the source records", () => {
   const { index, details } = buildPlaceData(attractions);
 

@@ -84,8 +84,8 @@ test("the Talking Cross sanctuary retains its unverified bilingual source data",
   assert.equal(sanctuary.description.en, sanctuary.shortDescriptionEn);
   assert.match(sanctuary.fullDescriptionEs, /Cruzo'ob/);
   assert.match(sanctuary.fullDescriptionEn, /Caste War/);
-  assert.equal(sanctuary.latitude, 19.580901);
-  assert.equal(sanctuary.longitude, -88.049242);
+  assert.equal(sanctuary.latitude, 19.580684047331296);
+  assert.equal(sanctuary.longitude, -88.04887785463087);
   assert.ok(inside(FCP_VIEW_BOUNDS, sanctuary));
   assert.equal(sanctuary.addressEs.includes("Calle 60 \nCopied\n#788\n"), true);
   assert.equal(sanctuary.addressEn.includes("60 Street \nCopied\n#788\n"), true);
@@ -125,10 +125,10 @@ test("the City Museum retains its unverified bilingual source data", () => {
   assert.equal(museum.description.en, museum.shortDescriptionEn);
   assert.match(museum.fullDescriptionEs, /Calle 67 \nCopied\n#768\n, Col. Centro/);
   assert.match(museum.fullDescriptionEn, /assassinated in 1924/);
-  assert.equal(museum.latitude, 19.5795);
-  assert.equal(museum.longitude, -88.0453);
+  assert.equal(museum.latitude, 19.57802448542231);
+  assert.equal(museum.longitude, -88.04537970768848);
   assert.ok(inside(FCP_VIEW_BOUNDS, museum));
-  assert.match(museum.coordinateSource, /19°34'43"N 88°02'43"W/);
+  assert.match(museum.coordinateSource, /User-provided.*not independently GPS-verified/);
   assert.equal(museum.addressEs.includes("Calle 67 \nCopied\n#768\n"), true);
   assert.equal(museum.addressEn.includes("67 Street \nCopied\n#768\n"), true);
   assert.equal(museum.address.es, museum.addressEs);
@@ -166,8 +166,8 @@ test("the House of Culture retains its unverified approximate source data", () =
   assert.equal(casaDeLaCultura.description.en, casaDeLaCultura.shortDescriptionEn);
   assert.match(casaDeLaCultura.fullDescriptionEs, /Calle 67 \nCopied\n#768\n, Col. Centro/);
   assert.match(casaDeLaCultura.fullDescriptionEn, /Calle 67 \nCopied\n#768\n, Col. Centro/);
-  assert.equal(casaDeLaCultura.latitude, 19.5796);
-  assert.equal(casaDeLaCultura.longitude, -88.0451);
+  assert.equal(casaDeLaCultura.latitude, 19.578167300889525);
+  assert.equal(casaDeLaCultura.longitude, -88.0453221173923);
   assert.ok(inside(FCP_VIEW_BOUNDS, casaDeLaCultura));
   assert.equal(casaDeLaCultura.addressEs.includes("Calle 67 \nCopied\n#768\n"), true);
   assert.equal(casaDeLaCultura.addressEn.includes("67 Street \nCopied\n#768\n"), true);
@@ -207,8 +207,8 @@ test("the civic plaza / palapa park retains its unverified bilingual source data
   assert.equal(plaza.name.en, plaza.nameEn);
   assert.equal(plaza.description.es, plaza.shortDescriptionEs);
   assert.equal(plaza.description.en, plaza.shortDescriptionEn);
-  assert.equal(plaza.latitude, 19.5792);
-  assert.equal(plaza.longitude, -88.0448);
+  assert.equal(plaza.latitude, 19.578135173994557);
+  assert.equal(plaza.longitude, -88.0460485056746);
   assert.ok(inside(FCP_VIEW_BOUNDS, plaza));
   assert.equal(plaza.address.es, plaza.addressEs);
   assert.equal(plaza.address.en, plaza.addressEn);
@@ -240,8 +240,8 @@ test("the church of San Servacio preserves its source verified:true without upgr
   assert.equal(church.name.en, church.nameEn);
   assert.equal(church.description.es, church.shortDescriptionEs);
   assert.equal(church.description.en, church.shortDescriptionEn);
-  assert.equal(church.latitude, 19.5798);
-  assert.equal(church.longitude, -88.0455);
+  assert.equal(church.latitude, 19.577906662241222);
+  assert.equal(church.longitude, -88.0456236548112);
   assert.ok(inside(FCP_VIEW_BOUNDS, church));
   assert.equal(church.address.es, church.addressEs);
   assert.equal(church.address.en, church.addressEn);
@@ -257,7 +257,7 @@ test("the church of San Servacio preserves its source verified:true without upgr
   assert.equal(church.locationAccuracy, "approximate");
   assert.equal(isVerified(church), false);
   assert.equal(directionsUrlFor(church), null);
-  assert.match(church.verificationNotes, /not GPS-verified/);
+  assert.match(church.verificationNotes, /not been independently GPS-verified/);
   assert.equal(church.verificationNote, church.verificationNotes);
   assert.equal(church.lastUpdated, "2026-09-30");
 
@@ -307,7 +307,7 @@ test("the Pila de los Azotes is unverified with an approximate historic-centre p
   assert.equal(typeof whippingFountain.latitude, "number");
   assert.equal(typeof whippingFountain.longitude, "number");
   assert.ok(inside(FCP_VIEW_BOUNDS, whippingFountain));
-  assert.match(whippingFountain.coordinateSource, /Approximate placeholder.*not GPS-verified/);
+  assert.match(whippingFountain.coordinateSource, /User-provided.*not independently GPS-verified/);
   assert.deepEqual(
     whippingFountain.hours.map(({ day }) => day),
     ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
