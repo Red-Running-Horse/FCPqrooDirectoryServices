@@ -34,7 +34,9 @@ body {
 }
 
 main {
-  padding: 1rem;
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
 }
 
 h1 {
@@ -56,8 +58,7 @@ p {
 }
 
 .map {
-  height: min(60vh, calc(100vh - 15rem));
-  min-height: 320px;
+  height: clamp(360px, 62vh, 720px);
   width: 100%;
   border: 1px solid var(--sand-line);
   border-radius: var(--radius-card);
@@ -73,7 +74,7 @@ p {
   display: flex;
   gap: 0.5rem;
   overflow-x: auto;
-  padding: 0.25rem 0.1rem 0.75rem;
+  padding: 0.5rem 0.25rem 0.75rem;
 }
 
 .category-filters button {
@@ -109,8 +110,15 @@ p {
 .legend__icon--tours { color: var(--earth); }
 
 .category-filters button[aria-pressed="true"] {
-  background: #a75030;
+  background: var(--terracotta);
   color: white;
+}
+
+.category-filters button:hover:not([aria-pressed="true"]),
+.language-toggle button:hover:not([aria-pressed="true"]),
+.place-portal__clear:hover,
+.place-popup__details:hover {
+  background: var(--sand-deep);
 }
 
 .hero {
@@ -224,17 +232,22 @@ p {
 }
 
 .attraction-marker--selected {
-  outline: 3px solid var(--charcoal);
-  outline-offset: 1px;
+  outline: 4px solid var(--turquoise);
+  outline-offset: 2px;
   opacity: 1;
+  z-index: 1 !important;
+}
+
+.attraction-marker:hover {
+  box-shadow: 0 0 0 4px var(--sand-line), 0 1px 4px var(--charcoal);
 }
 
 .place-portal {
-  border: 1px solid var(--sand-line);
+  border: 1px solid var(--turquoise);
   border-radius: var(--radius-card);
   background: var(--cream);
   box-shadow: var(--shadow-soft);
-  padding: 0.75rem 0.9rem;
+  padding: 1rem;
   font-size: 0.95rem;
 }
 
@@ -243,7 +256,7 @@ p {
   font-size: 0.8rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #a75030;
+  color: var(--terracotta);
 }
 
 .place-portal p {
@@ -317,7 +330,7 @@ p {
 
 .place-popup-container .leaflet-popup-content {
   margin: 0.6rem 0.8rem;
-  font: 0.85rem/1.35 Arial, sans-serif;
+  font: 0.85rem/1.35 var(--font-body);
 }
 
 .place-popup p {
@@ -394,6 +407,10 @@ p {
   font-weight: 600;
 }
 
+.place-portal__actions a:hover {
+  background: var(--charcoal);
+}
+
 .place-portal .place-portal__note {
   border-left: 4px solid var(--maize);
   border-radius: var(--radius-sm);
@@ -434,8 +451,12 @@ p {
 
 .map-search {
   display: grid;
-  gap: 0.3rem;
+  gap: 0.35rem;
   margin: 0 0 0.5rem;
+  border: 1px solid var(--sand-line);
+  border-radius: var(--radius-card);
+  background: var(--cream);
+  padding: 0.8rem 1rem;
 }
 
 .map-search__label {
@@ -446,7 +467,7 @@ p {
 .map-search__input {
   box-sizing: border-box;
   width: 100%;
-  max-width: 32rem;
+  max-width: 40rem;
   min-height: 2.75rem;
   border: 1px solid var(--terracotta-light);
   border-radius: var(--radius-chip);
@@ -486,6 +507,67 @@ p {
 .map-workspace__map,
 .map-workspace__portal {
   min-width: 0;
+}
+
+.listing-references {
+  margin-top: 1rem;
+  border: 1px solid var(--sand-line);
+  border-radius: var(--radius-card);
+  background: var(--cream);
+  padding: 1rem;
+}
+
+.listing-references h2 {
+  margin: 0 0 0.35rem;
+  font: 600 1.3rem/1.2 var(--font-heading);
+}
+
+.listing-references p {
+  color: var(--charcoal-soft);
+}
+
+.listing-references ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.listing-references button {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--sand-line);
+  border-radius: var(--radius-sm);
+  background: var(--sand);
+  color: var(--charcoal);
+  padding: 0.65rem 0.8rem;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.listing-references button:hover {
+  border-color: var(--terracotta);
+  background: var(--sand-deep);
+}
+
+.listing-references button:focus-visible {
+  outline: 2px solid var(--turquoise);
+  outline-offset: 2px;
+}
+
+.listing-references__name {
+  font-weight: 650;
+}
+
+.listing-references__category {
+  color: var(--charcoal-soft);
+  font-size: 0.85rem;
 }
 
 .business-cta {
@@ -598,6 +680,11 @@ p {
 }
 
 @media (max-width: 47.99rem) {
+  .map {
+    height: 55vh;
+    min-height: 340px;
+  }
+
   .map-header {
     flex-direction: column;
   }

@@ -35,7 +35,7 @@ test("root metadata and homepage JSON-LD target Spanish-language SEO", () => {
   assert.match(layout, /lang="es-MX"/);
   assert.match(layout, /images: \["\/og\/cover\.jpg"\]/);
   assert.match(page, /type="application\/ld\+json"/);
-  assert.match(page, /"@type": "TouristInformationCenter"/);
-  assert.match(page, /areaServed:/);
+  assert.match(page, /"@type": "WebSite"/);
+  assert.match(page, /about:/);
   assert.match(page, /inLanguage: "es-MX"/);
 });

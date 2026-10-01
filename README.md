@@ -69,16 +69,20 @@ are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
   stays visible. Ids must be lowercase slugs (`^[a-z0-9][a-z0-9-]*$`) because they become file
   names and URL segments; the generator refuses anything else.
 
-  Effect on the initial download: the page chunk drops from 69,917 to 24,401 bytes (65%
-  smaller) and the whole `_next/static` output from 1,164,256 to 1,118,740 bytes, in exchange
-  for one 3,031-byte index request (761 bytes gzipped). The 62,963 bytes of detail files are
-  only fetched one place at a time (~7 KB each) and only when a visitor opens one.
+  The generated lightweight index is passed from the build-time homepage into the map so its
+  short listing references are present in the exported HTML without a second index request.
+  Detail files are fetched one at a time, only when a visitor selects a place.
 
   The generated files are committed, so `npm run build` never rewrites tracked sources; re-run
   `npm run generate:places` after editing `app/attractions.mjs` (or
   `node scripts/build-place-data.mjs --check` to verify the committed files are current).
   `test/place-data.test.mjs` guards the split, the round-trip back to the source records and
   the lazy-loading behavior.
+- **Map-first discovery:** the exported homepage includes short, Spanish-first listing references
+  (names, categories and broad regional context) from the same generated marker index. Their
+  buttons focus markers on the map; full details stay in the interactive map portal, not on
+  standalone place pages. This makes references visible in initial HTML, but a single homepage
+  cannot guarantee individual search rankings for each listing.
 
 ## Run locally
 

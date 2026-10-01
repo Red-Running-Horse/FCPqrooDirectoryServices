@@ -1,11 +1,12 @@
 import HighwayMap from "./highway-map";
+import placesIndex from "../public/data/places-index.json";
 
 const structuredData = {
   "@context": "https://schema.org",
-  "@type": "TouristInformationCenter",
+  "@type": "WebSite",
   name: "Directorio de Servicios de Felipe Carrillo Puerto",
   url: "https://fcpqroo.mx",
-  areaServed: {
+  about: {
     "@type": "AdministrativeArea",
     name: "Felipe Carrillo Puerto, Quintana Roo",
   },
@@ -21,7 +22,7 @@ export default function Home() {
           __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
         }}
       />
-      <HighwayMap />
+      <HighwayMap placesIndex={placesIndex} />
     </main>
   );
 }

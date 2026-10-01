@@ -8,7 +8,7 @@ export const metadata = {
     template: "%s | Directorio de Servicios FCP",
   },
   description:
-    "Encuentra servicios locales, turismo y puntos de interés en Felipe Carrillo Puerto, Quintana Roo.",
+    "Explora el mapa de Felipe Carrillo Puerto y comunidades de la región: naturaleza, cultura, comida y servicios locales.",
   alternates: {
     canonical: "/",
   },
@@ -19,7 +19,7 @@ export const metadata = {
     siteName: "Directorio de Servicios FCP",
     title: "Directorio de Servicios | Felipe Carrillo Puerto",
     description:
-      "Encuentra servicios locales, turismo y puntos de interés en Felipe Carrillo Puerto, Quintana Roo.",
+      "Explora el mapa de Felipe Carrillo Puerto y comunidades de la región: naturaleza, cultura, comida y servicios locales.",
     images: [
       {
         url: "/og/cover.jpg",
@@ -33,7 +33,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Directorio de Servicios | Felipe Carrillo Puerto",
     description:
-      "Encuentra servicios locales, turismo y puntos de interés en Felipe Carrillo Puerto, Quintana Roo.",
+      "Explora el mapa de Felipe Carrillo Puerto y comunidades de la región: naturaleza, cultura, comida y servicios locales.",
     images: ["/og/cover.jpg"],
   },
 };
