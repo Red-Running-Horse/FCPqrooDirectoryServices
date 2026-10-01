@@ -11,6 +11,17 @@ import PlacePortal from "./place-portal";
 import { placePopup } from "./place-portal.mjs";
 import { labelsOverlap, mergeRoadSegments, placeRoadLabel, roadLabel } from "./road-label.mjs";
 import {
+  getSavedPlaceIds,
+  isOfflineSupported,
+  isSharedMapReady,
+  registerServiceWorker,
+  removePlaceOffline,
+  removeSharedMap,
+  savePlaceOffline,
+  saveSharedMap,
+  updateSharedMap,
+} from "./offline.mjs";
+import {
   FCP_MAX_BOUNDS,
   FCP_VIEW_BOUNDS,
   MAX_ZOOM,
@@ -94,10 +105,116 @@ export default function HighwayMap({ placesIndex }) {
   const places = placesIndex;
   const [detail, setDetail] = useState(null);
   const [detailError, setDetailError] = useState(false);
+  const [offlineStatus, setOfflineStatus] = useState("idle");
+  const [offlineProgress, setOfflineProgress] = useState({ current: 0, total: 0 });
+  const [savedPlaceIds, setSavedPlaceIds] = useState([]);
+  const [isOnline, setIsOnline] = useState(true);
   const text = uiText(language);
   const references = listingReferences(placesIndex);
   const noResults = search.trim() !== "" && filterPlaces(places, category, search).length === 0;
   const selectedPlaceView = detail ?? places.find(({ id }) => id === selectedId) ?? null;
+
+  useEffect(() => {
+    if (!isOfflineSupported()) {
+      setOfflineStatus("unsupported");
+      return;
+    }
+    registerServiceWorker();
+    setSavedPlaceIds(getSavedPlaceIds());
+    isSharedMapReady().then((ready) => {
+      setOfflineStatus(ready ? "ready" : "idle");
+    });
+
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    if (typeof navigator !== "undefined" && !navigator.onLine) {
+      setIsOnline(false);
+    }
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  async function handleSaveSharedMap() {
+    if (!isOfflineSupported()) return;
+    setOfflineStatus("preparing");
+    setOfflineProgress({ current: 0, total: 0 });
+    try {
+      await saveSharedMap({
+        onProgress: (p) => setOfflineProgress(p),
+      });
+      setOfflineStatus("ready");
+    } catch (err) {
+      console.warn("Failed to save offline map:", err);
+      setOfflineStatus("failed");
+    }
+  }
+
+  async function handleUpdateSharedMap() {
+    if (!isOfflineSupported()) return;
+    setOfflineStatus("updating");
+    setOfflineProgress({ current: 0, total: 0 });
+    try {
+      await updateSharedMap({
+        onProgress: (p) => setOfflineProgress(p),
+      });
+      setOfflineStatus("ready");
+    } catch (err) {
+      console.warn("Failed to update offline map:", err);
+      setOfflineStatus("failed");
+    }
+  }
+
+  async function handleRemoveSharedMap() {
+    if (!isOfflineSupported()) return;
+    await removeSharedMap();
+    setOfflineStatus("idle");
+  }
+
+  async function handleToggleSavePlace(id) {
+    if (!isOfflineSupported()) return;
+    const currentlySaved = savedPlaceIds.includes(id);
+    if (currentlySaved) {
+      await removePlaceOffline(id);
+      setSavedPlaceIds(getSavedPlaceIds());
+    } else {
+      const placeData = detail?.id === id ? detail : null;
+      await savePlaceOffline(id, { placeData });
+      setSavedPlaceIds(getSavedPlaceIds());
+    }
+  }
+
+  async function handleRemoveSavedPlace(id) {
+    if (!isOfflineSupported()) return;
+    await removePlaceOffline(id);
+    setSavedPlaceIds(getSavedPlaceIds());
+  }
+
+  function offlineStatusLabel() {
+    switch (offlineStatus) {
+      case "unsupported":
+        return text.offlineStatusNotSupported;
+      case "preparing":
+        return text.offlineStatusPreparing
+          .replace("{current}", String(offlineProgress.current))
+          .replace("{total}", String(offlineProgress.total));
+      case "updating":
+        return text.offlineStatusUpdating
+          .replace("{current}", String(offlineProgress.current))
+          .replace("{total}", String(offlineProgress.total));
+      case "ready":
+        return text.offlineStatusReady;
+      case "failed":
+        return text.offlineStatusFailed;
+      default:
+        return text.offlineStatusIdle;
+    }
+  }
+
+  const savedPlacesList = places.filter((p) => savedPlaceIds.includes(p.id));
 
   // Clears the selected place when it drops out of the active category + search results.
   function applyFilters(nextCategory, nextSearch) {
@@ -425,6 +542,48 @@ export default function HighwayMap({ placesIndex }) {
           </div>
         </div>
       </section>
+      <div className="offline-quickbar" role="region" aria-label={text.offlineHeading}>
+        <div className="offline-quickbar__content">
+          <div className="offline-quickbar__status" role="status" aria-live="polite">
+            <span
+              className={`offline-quickbar__dot offline-quickbar__dot--${offlineStatus}`}
+              aria-hidden="true"
+            />
+            <span className="offline-quickbar__text">{offlineStatusLabel()}</span>
+          </div>
+          <div className="offline-quickbar__actions">
+            {offlineStatus === "unsupported" ? null : offlineStatus === "idle" || offlineStatus === "failed" ? (
+              <button
+                type="button"
+                className="offline-quickbar__btn offline-quickbar__btn--primary"
+                onClick={handleSaveSharedMap}
+              >
+                {text.offlineSaveMap}
+              </button>
+            ) : offlineStatus === "ready" ? (
+              <>
+                <button
+                  type="button"
+                  className="offline-quickbar__btn"
+                  onClick={handleUpdateSharedMap}
+                >
+                  {text.offlineUpdateMap}
+                </button>
+                <button
+                  type="button"
+                  className="offline-quickbar__btn offline-quickbar__btn--danger"
+                  onClick={handleRemoveSharedMap}
+                >
+                  {text.offlineRemoveMap}
+                </button>
+              </>
+            ) : null}
+            <a href="#offline-management" className="offline-quickbar__link">
+              {text.offlineManage}
+            </a>
+          </div>
+        </div>
+      </div>
       <div className="map-search" role="search">
         <label className="map-search__label" htmlFor="map-search-input">
           {text.searchLabel}
@@ -486,8 +645,11 @@ export default function HighwayMap({ placesIndex }) {
             attraction={selectedPlaceView}
             language={language}
             onClear={() => setSelectedId(null)}
+            isSaved={selectedId ? savedPlaceIds.includes(selectedId) : false}
+            onToggleSave={offlineStatus !== "unsupported" ? handleToggleSavePlace : null}
+            detailUnavailable={detailError && (!isOnline || (selectedId ? !savedPlaceIds.includes(selectedId) : true))}
           />
-          {detailError && (
+          {detailError && isOnline && selectedId && savedPlaceIds.includes(selectedId) && (
             <p className="place-portal__note" role="alert">
               {text.detailsError}
             </p>
@@ -528,6 +690,101 @@ export default function HighwayMap({ placesIndex }) {
               );
             })}
           </ul>
+      </section>
+      <section
+        id="offline-management"
+        className="offline-management"
+        aria-labelledby="offline-management-heading"
+      >
+        <div className="offline-management__header">
+          <h2 id="offline-management-heading">{text.offlineHeading}</h2>
+          <p>{text.offlineDescription}</p>
+        </div>
+        <div className="offline-management__grid">
+          <div className="offline-card offline-card--shared">
+            <h3>{text.offlineSharedMapHeading}</h3>
+            <p className="offline-card__status" role="status" aria-live="polite">
+              {offlineStatusLabel()}
+            </p>
+            {offlineStatus === "idle" && (
+              <button
+                type="button"
+                className="offline-btn offline-btn--primary"
+                onClick={handleSaveSharedMap}
+              >
+                {text.offlineSaveMap}
+              </button>
+            )}
+            {offlineStatus === "failed" && (
+              <button
+                type="button"
+                className="offline-btn offline-btn--primary"
+                onClick={handleSaveSharedMap}
+              >
+                {text.offlineSaveMap}
+              </button>
+            )}
+            {(offlineStatus === "ready" || offlineStatus === "updating") && (
+              <div className="offline-card__actions">
+                <button
+                  type="button"
+                  className="offline-btn"
+                  onClick={handleUpdateSharedMap}
+                  disabled={offlineStatus === "updating"}
+                >
+                  {text.offlineUpdateMap}
+                </button>
+                <button
+                  type="button"
+                  className="offline-btn offline-btn--danger"
+                  onClick={handleRemoveSharedMap}
+                >
+                  {text.offlineRemoveMap}
+                </button>
+              </div>
+            )}
+          </div>
+          <div className="offline-card offline-card--places">
+            <h3>
+              {text.offlineSavedPlacesHeading} ({savedPlacesList.length})
+            </h3>
+            {savedPlacesList.length === 0 ? (
+              <p className="offline-card__empty">{text.offlineNoSavedPlaces}</p>
+            ) : (
+              <ul className="offline-places-list" aria-label={text.offlineSavedPlacesHeading}>
+                {savedPlacesList.map((place) => {
+                  const placeName = localize(place.name, language);
+                  return (
+                    <li key={place.id} className="offline-places-list__item">
+                      <span className="offline-places-list__name">{placeName}</span>
+                      <div className="offline-places-list__actions">
+                        <button
+                          type="button"
+                          className="offline-places-list__btn offline-places-list__btn--view"
+                          onClick={() => focusListing(place.id)}
+                        >
+                          {text.offlineViewOnMap}
+                        </button>
+                        <button
+                          type="button"
+                          className="offline-places-list__btn offline-places-list__btn--remove"
+                          onClick={() => handleRemoveSavedPlace(place.id)}
+                          aria-label={`${text.offlineRemoveSavedPlace}: ${placeName}`}
+                        >
+                          {text.offlineRemoveSavedPlace}
+                        </button>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </div>
+        <div className="offline-management__notices">
+          <p className="offline-notice">{text.offlineStorageNotice}</p>
+          <p className="offline-notice">{text.offlineConnectivityNotice}</p>
+        </div>
       </section>
       <section className="business-cta" aria-labelledby="radio-heading">
         <h2 id="radio-heading">{text.radioHeading}</h2>
