@@ -112,7 +112,7 @@ export default function HighwayMap({ placesIndex }) {
     applyFilters("all", "");
     pendingFocus.current = id;
     setSelectedId(id);
-    if (attractionLayer.current) {
+    if (attractionLayer.current && category === "all" && search === "") {
       focusMarker(attractionLayer.current, id);
       pendingFocus.current = null;
     }
@@ -139,6 +139,13 @@ export default function HighwayMap({ placesIndex }) {
     current.group.clearLayers();
     for (const attraction of filterPlaces(places, category, search)) {
       current.group.addLayer(current.markers.get(attraction.id));
+    }
+    if (pendingFocus.current) {
+      syncMarkerSelection(current.markers, pendingFocus.current);
+      focusMarker(current, pendingFocus.current);
+      pendingFocus.current = null;
+    } else if (filterPlaces(places, category, search).some(({ id }) => id === selectedPlace.current)) {
+      syncMarkerSelection(current.markers, selectedPlace.current);
     }
   }, [category, search, places]);
 
@@ -454,7 +461,20 @@ export default function HighwayMap({ placesIndex }) {
         <div className="map-workspace__map">
           <div ref={container} className="map" aria-label={text.mapLabel} />
         </div>
-        <section className="listing-references" aria-labelledby="listing-references-heading">
+        <div className="map-workspace__portal">
+          <PlacePortal
+            attraction={selectedPlaceView}
+            language={language}
+            onClear={() => setSelectedId(null)}
+          />
+          {detailError && (
+            <p className="place-portal__note" role="alert">
+              {text.detailsError}
+            </p>
+          )}
+        </div>
+      </div>
+      <section className="listing-references" aria-labelledby="listing-references-heading">
           <h2 id="listing-references-heading">{text.listingsHeading}</h2>
           <p>{text.listingsContext}</p>
           <ul>
@@ -474,20 +494,7 @@ export default function HighwayMap({ placesIndex }) {
               );
             })}
           </ul>
-        </section>
-        <div className="map-workspace__portal">
-          <PlacePortal
-            attraction={selectedPlaceView}
-            language={language}
-            onClear={() => setSelectedId(null)}
-          />
-          {detailError && (
-            <p className="place-portal__note" role="alert">
-              {text.detailsError}
-            </p>
-          )}
-        </div>
-      </div>
+      </section>
       <section className="business-cta" aria-labelledby="radio-heading">
         <h2 id="radio-heading">{text.radioHeading}</h2>
         <p>{text.radioDescription}</p>

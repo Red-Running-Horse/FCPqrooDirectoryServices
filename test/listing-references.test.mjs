@@ -37,5 +37,6 @@ test("homepage passes the generated index to the map for prerendered references"
   assert.match(page, /<HighwayMap placesIndex=\{placesIndex\}/);
   assert.match(map, /listingReferences\(placesIndex\)/);
   assert.match(map, /onClick=\{\(\) => focusListing\(place\.id\)\}/);
+  assert.ok(map.indexOf('<section className="listing-references"') > map.indexOf('<div className="map-workspace__portal"'));
   assert.doesNotMatch(map, /href=\{[^}]*place\.id/);
 });
