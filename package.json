@@ -7,7 +7,8 @@
     "build": "next build --webpack",
     "optimize:geojson": "node scripts/optimize-geojson.mjs",
     "generate:places": "node scripts/build-place-data.mjs",
-    "test": "node --test"
+    "check:performance": "node scripts/check-performance-budgets.mjs",
+    "test": "node --test && npm run check:performance"
   },
   "repository": {
     "type": "git",
