@@ -66,15 +66,18 @@ export function localizeGuide(guideOrField, language) {
 }
 
 /**
- * Resolves the configured PDF asset URL or path, validating that it is non-empty
- * and not an unsafe URI scheme. Returns null if unconfigured or invalid.
+ * Resolves the configured PDF asset URL or path, validating that it is a safe
+ * root-relative path or https/http URL. Returns null if unconfigured or invalid.
  */
 export function getPdfAsset(metadataOrData = GUIDE_METADATA) {
   const meta = metadataOrData?.metadata ?? metadataOrData;
   const asset = meta?.pdfAsset;
   if (typeof asset !== "string") return null;
   const trimmed = asset.trim();
-  if (!trimmed || trimmed.toLowerCase().startsWith("javascript:")) return null;
+  if (!trimmed) return null;
+  const isLocal = trimmed.startsWith("/") && !trimmed.startsWith("//");
+  const isHttpUrl = /^https?:\/\//i.test(trimmed);
+  if (!isLocal && !isHttpUrl) return null;
   return trimmed;
 }
 

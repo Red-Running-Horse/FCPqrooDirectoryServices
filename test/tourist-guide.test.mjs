@@ -107,6 +107,10 @@ test("PDF asset resolver detects null, local, and external assets safely", () =>
   assert.equal(getPdfAsset({ metadata: { pdfAsset: "" } }), null);
   assert.equal(getPdfAsset({ metadata: { pdfAsset: "   " } }), null);
   assert.equal(getPdfAsset({ metadata: { pdfAsset: "javascript:alert(1)" } }), null);
+  assert.equal(getPdfAsset({ metadata: { pdfAsset: "data:application/pdf;base64,..." } }), null);
+  assert.equal(getPdfAsset({ metadata: { pdfAsset: "vbscript:msgbox(1)" } }), null);
+  assert.equal(getPdfAsset({ metadata: { pdfAsset: "relative/path/guide.pdf" } }), null);
+  assert.equal(getPdfAsset({ metadata: { pdfAsset: "//malicious.com/guide.pdf" } }), null);
   assert.equal(getPdfAsset({ metadata: { pdfAsset: "/downloads/mexico-guide.pdf" } }), "/downloads/mexico-guide.pdf");
   assert.equal(getPdfAsset({ metadata: { pdfAsset: "https://example.com/guide.pdf" } }), "https://example.com/guide.pdf");
 });

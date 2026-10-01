@@ -163,7 +163,7 @@ export default function TouristGuide({ language = "es", embedded = false }) {
       </div>
 
       <div className="tourist-guide__footer">
-        <a href="#map-top" className="tourist-guide__back-button">
+        <a href={embedded ? "#map-top" : "/#map-top"} className="tourist-guide__back-button">
           ↑ {text.guideBackToMap}
         </a>
       </div>
