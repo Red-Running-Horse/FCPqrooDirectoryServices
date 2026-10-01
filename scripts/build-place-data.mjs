@@ -25,6 +25,7 @@ import { attractions } from "../app/attractions.mjs";
 export const INDEX_FIELDS = [
   "id",
   "category",
+  "secondaryCategories",
   "latitude",
   "longitude",
   "status",

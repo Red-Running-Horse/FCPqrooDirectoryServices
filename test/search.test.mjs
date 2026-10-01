@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { attractions, filterAttractions, matchesSearch } from "../app/attractions.mjs";
+import {
+  attractions,
+  categorySummary,
+  filterAttractions,
+  matchesSearch,
+  placeCategories,
+} from "../app/attractions.mjs";
 
 const market = attractions.find(({ id }) => id === "mercado-felipe-carrillo-puerto");
 
@@ -38,13 +44,27 @@ test("search combines with the selected category", () => {
 
 test("an empty or blank search restores the category results", () => {
   for (const category of ["all", "nature", "culture", "food", "lodging", "tours"]) {
-    const expected = attractions.filter((place) => category === "all" || place.category === category);
+    const expected = attractions.filter(
+      (place) => category === "all" || placeCategories(place).includes(category),
+    );
     assert.deepEqual(filterAttractions(category, ""), expected, category);
     assert.deepEqual(filterAttractions(category, "   "), expected, category);
     assert.deepEqual(filterAttractions(category), expected, category);
   }
   assert.equal(matchesSearch(museum, ""), true);
   assert.equal(matchesSearch(museum, undefined), true);
+});
+
+test("a place with a secondary category is found by both category labels, once", () => {
+  const balamNah = attractions.find(({ id }) => id === "balam-nah-felipe-carrillo-puerto");
+  for (const query of ["naturaleza", "Nature", "hospedaje", "LODGING"]) {
+    const results = filterAttractions("all", query);
+    assert.equal(results.filter(({ id }) => id === balamNah.id).length, 1, query);
+  }
+  assert.equal(matchesSearch(balamNah, "cultura"), false);
+  assert.equal(categorySummary(balamNah, "es"), "Naturaleza · Hospedaje");
+  assert.equal(categorySummary(balamNah, "en"), "Nature · Lodging");
+  assert.equal(categorySummary(museum, "es"), "Cultura");
 });
 
 test("a query without matches returns no results", () => {

@@ -3,7 +3,15 @@ import { filterPlaces } from "./place-index.mjs";
 // Source of truth for the committed place records. The map bundle does not import this module:
 // scripts/build-place-data.mjs splits it into public/data/places-index.json and
 // public/data/places/<id>.json, which the client loads instead.
-export { CATEGORIES, directionsUrlFor, isVerified, matchesSearch } from "./place-index.mjs";
+export {
+  CATEGORIES,
+  categoryLabels,
+  categorySummary,
+  directionsUrlFor,
+  isVerified,
+  matchesSearch,
+  placeCategories,
+} from "./place-index.mjs";
 
 const DEMO_ADDRESS = {
   es: "Felipe Carrillo Puerto, Quintana Roo (zona aproximada)",
@@ -300,7 +308,11 @@ const church = {
 
 const balamNah = {
   id: "balam-nah-felipe-carrillo-puerto",
-  category: "culture",
+  // Primary category plus an optional secondary list: a nature spot that also offers lodging.
+  // Only the classification was corrected: the sourced descriptions below are kept verbatim
+  // because no verified nature or lodging details are available for this record yet.
+  category: "nature",
+  secondaryCategories: ["lodging"],
   nameEs: "Balam-Nah",
   nameEn: "Balam-Nah",
   shortDescriptionEs: "Centro cultural y museo maya dedicado a preservar la cultura, lengua y tradiciones del pueblo maya en Felipe Carrillo Puerto. Ofrece talleres, exposiciones y eventos culturales.",

@@ -40,6 +40,12 @@ are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
   `locationAccuracy: "exact"` and an `https://` `directionsUrl`; set those only after confirming
   the real destination and coordinates. The category buttons filter markers locally without a
   server.
+- **Primary and secondary categories:** a place has one primary `category` (its marker icon and
+  color) and may add `secondaryCategories: ["lodging"]` for extra classifications — Balam-Nah is
+  a nature spot where visitors can also sleep over. Every category takes part in filtering and
+  bilingual search, so the place appears under each of its categories while staying a single
+  marker, listing card and search result. Marker titles, the popup and the panel show the labels
+  primary-first ("Naturaleza · Hospedaje").
 - **Selected-place panel:** beside the map on wide screens and below it on small screens,
   `app/place-portal.js` shows a prompt until a marker is clicked (or focused and activated
   with Enter). It then shows the name in both languages,
@@ -54,7 +60,8 @@ are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
   `app/attractions.mjs` stays the committed source of truth, and `npm run generate:places`
   (`scripts/build-place-data.mjs`) splits it into two static payloads under `public/data/`:
   - `public/data/places-index.json` — one entry per place with only the fields the first paint
-    needs (`id`, `category`, `latitude`, `longitude`, `status`, `locationAccuracy`, `name`),
+    needs (`id`, `category`, optional `secondaryCategories`, `latitude`, `longitude`, `status`,
+    `locationAccuracy`, `name`),
     enough for marker placement and style, category filtering, bilingual search, marker titles
     and the popup summary.
   - `public/data/places/<id>.json` — the remaining fields of one place (descriptions, address,

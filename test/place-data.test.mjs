@@ -56,10 +56,18 @@ test("the committed index and detail files match the source records", () => {
 test("the index carries only the fields the first paint needs", () => {
   assert.equal(committedIndex.length, attractions.length);
   for (const entry of committedIndex) {
-    assert.deepEqual(Object.keys(entry).sort(), [...INDEX_FIELDS].sort());
+    // secondaryCategories is optional: only places with one carry it.
+    const expectedFields = INDEX_FIELDS.filter(
+      (field) => field !== "secondaryCategories" || "secondaryCategories" in entry,
+    );
+    assert.deepEqual(Object.keys(entry).sort(), expectedFields.sort());
     assert.match(entry.id, /^[a-z0-9][a-z0-9-]*$/);
     assert.ok(Number.isFinite(entry.latitude) && Number.isFinite(entry.longitude));
     assert.ok(CATEGORIES.some(({ id }) => id === entry.category) && entry.category !== "all");
+    for (const secondary of entry.secondaryCategories ?? []) {
+      assert.ok(CATEGORIES.some(({ id }) => id === secondary) && secondary !== "all");
+      assert.notEqual(secondary, entry.category);
+    }
     assert.ok(entry.name.es && entry.name.en);
     assert.ok(["verified", "unverified", "unavailable"].includes(entry.status));
     assert.ok(["exact", "approximate"].includes(entry.locationAccuracy));
