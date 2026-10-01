@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { attractions, CATEGORIES, filterAttractions, isVerified } from "./attractions.mjs";
 import { categoryIconSvg } from "./category-icons.mjs";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
 import { syncMarkerSelection } from "./marker-selection.mjs";
+import { loadPlaceDetail, loadPlaceIndex } from "./place-data.mjs";
+import { CATEGORIES, filterPlaces, isVerified } from "./place-index.mjs";
 import PlacePortal from "./place-portal";
 import { placePopup } from "./place-portal.mjs";
 import { labelsOverlap, mergeRoadSegments, placeRoadLabel, roadLabel } from "./road-label.mjs";
@@ -74,8 +75,14 @@ export default function HighwayMap() {
   const [selectedId, setSelectedId] = useState(null);
   const [language, setLanguage] = useState(DEFAULT_LANGUAGE);
   const [error, setError] = useState(false);
+  // places holds the lightweight index (marker fields only); detail holds the selected place
+  // merged with its lazily fetched detail file.
+  const [places, setPlaces] = useState([]);
+  const [detail, setDetail] = useState(null);
+  const [detailError, setDetailError] = useState(false);
   const text = uiText(language);
-  const noResults = search.trim() !== "" && filterAttractions(category, search).length === 0;
+  const noResults = search.trim() !== "" && filterPlaces(places, category, search).length === 0;
+  const selectedPlaceView = detail ?? places.find(({ id }) => id === selectedId) ?? null;
 
   // Clears the selected place when it drops out of the active category + search results.
   function applyFilters(nextCategory, nextSearch) {
@@ -83,7 +90,7 @@ export default function HighwayMap() {
     selectedSearch.current = nextSearch;
     setCategory(nextCategory);
     setSearch(nextSearch);
-    if (!filterAttractions(nextCategory, nextSearch).some((attraction) => attraction.id === selectedPlace.current)) {
+    if (!filterPlaces(places, nextCategory, nextSearch).some((place) => place.id === selectedPlace.current)) {
       setSelectedId(null);
     }
   }
@@ -93,7 +100,7 @@ export default function HighwayMap() {
     if (resetButton.current) resetButton.current.textContent = uiText(language).resetView;
     const current = attractionLayer.current;
     if (!current) return;
-    for (const attraction of attractions) {
+    for (const attraction of places) {
       const marker = current.markers.get(attraction.id);
       const title = markerTitle(attraction, language);
       marker.options.title = title;
@@ -101,16 +108,16 @@ export default function HighwayMap() {
       marker.getElement()?.setAttribute("aria-label", title);
       if (marker.isPopupOpen()) marker.getPopup().update();
     }
-  }, [language]);
+  }, [language, places]);
 
   useEffect(() => {
     const current = attractionLayer.current;
     if (!current) return;
     current.group.clearLayers();
-    for (const attraction of filterAttractions(category, search)) {
+    for (const attraction of filterPlaces(places, category, search)) {
       current.group.addLayer(current.markers.get(attraction.id));
     }
-  }, [category, search]);
+  }, [category, search, places]);
 
   useEffect(() => {
     selectedPlace.current = selectedId;
@@ -118,6 +125,32 @@ export default function HighwayMap() {
     if (!current) return;
     syncMarkerSelection(current.markers, selectedId);
   }, [selectedId]);
+
+  // Loads the selected place's detail file on demand. The portal shows the index summary while
+  // the request is in flight; a stale or cleared selection aborts it and drops its response.
+  useEffect(() => {
+    setDetail(null);
+    setDetailError(false);
+    if (!selectedId) return;
+
+    const entry = places.find(({ id }) => id === selectedId);
+    if (!entry) return;
+
+    let stale = false;
+    const controller = new AbortController();
+    loadPlaceDetail(selectedId, controller.signal)
+      .then((loaded) => {
+        if (!stale) setDetail({ ...entry, ...loaded });
+      })
+      .catch((cause) => {
+        if (!stale && cause.name !== "AbortError") setDetailError(true);
+      });
+
+    return () => {
+      stale = true;
+      controller.abort();
+    };
+  }, [selectedId, places]);
 
   useEffect(() => {
     let map;
@@ -151,9 +184,13 @@ export default function HighwayMap() {
       };
       reset.addTo(map);
 
+      const index = await loadPlaceIndex(controller.signal);
+      if (disposed) return;
+      setPlaces(index);
+
       const group = L.layerGroup().addTo(map);
       const markers = new Map();
-      for (const attraction of attractions) {
+      for (const attraction of index) {
         const approximate = isVerified(attraction) ? "" : " attraction-marker--approximate";
         const icon = L.divIcon({
           className: `attraction-marker attraction-marker--${attraction.category}${approximate}`,
@@ -192,7 +229,7 @@ export default function HighwayMap() {
         markers.set(attraction.id, marker);
       }
       attractionLayer.current = { group, markers };
-      for (const attraction of filterAttractions(selectedCategory.current, selectedSearch.current)) {
+      for (const attraction of filterPlaces(index, selectedCategory.current, selectedSearch.current)) {
         group.addLayer(markers.get(attraction.id));
       }
 
@@ -395,10 +432,15 @@ export default function HighwayMap() {
         </div>
         <div className="map-workspace__portal">
           <PlacePortal
-            attraction={attractions.find(({ id }) => id === selectedId) ?? null}
+            attraction={selectedPlaceView}
             language={language}
             onClear={() => setSelectedId(null)}
           />
+          {detailError && (
+            <p className="place-portal__note" role="alert">
+              {text.detailsError}
+            </p>
+          )}
         </div>
       </div>
       <section className="business-cta" aria-labelledby="radio-heading">

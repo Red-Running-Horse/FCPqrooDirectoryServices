@@ -49,6 +49,36 @@ are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
 - **Marker popup:** selecting a marker also opens a small in-map popup with the name, category,
   status badge and a "Ver detalles" / "View details" button that jumps to the panel. The panel
   stays the full details view. The popup summary comes from `placePopup()` in `app/place-portal.mjs`.
+- **Place data payload:** the map no longer ships every place record in the JavaScript bundle.
+  `app/attractions.mjs` stays the committed source of truth, and `npm run generate:places`
+  (`scripts/build-place-data.mjs`) splits it into two static payloads under `public/data/`:
+  - `public/data/places-index.json` — one entry per place with only the fields the first paint
+    needs (`id`, `category`, `latitude`, `longitude`, `status`, `locationAccuracy`, `name`),
+    enough for marker placement and style, category filtering, bilingual search, marker titles
+    and the popup summary.
+  - `public/data/places/<id>.json` — the remaining fields of one place (descriptions, address,
+    hours, contact links, verification metadata, last-updated date), fetched only when that
+    place is selected.
+
+  Spreading an index entry over its detail file reproduces the source record exactly, so
+  `placePortal()` keeps rendering identical content. `app/place-data.mjs` loads the index on
+  startup and each detail on demand, caching the request per place so revisiting a place (or
+  reselecting it while it loads) issues only one fetch; a cleared or changed selection stops
+  waiting for its result without cancelling that shared request, and a failed request
+  shows a bilingual notice under the panel while the index summary (name, category, status)
+  stays visible. Ids must be lowercase slugs (`^[a-z0-9][a-z0-9-]*$`) because they become file
+  names and URL segments; the generator refuses anything else.
+
+  Effect on the initial download: the page chunk drops from 69,917 to 24,401 bytes (65%
+  smaller) and the whole `_next/static` output from 1,164,256 to 1,118,740 bytes, in exchange
+  for one 3,031-byte index request (761 bytes gzipped). The 62,963 bytes of detail files are
+  only fetched one place at a time (~7 KB each) and only when a visitor opens one.
+
+  The generated files are committed, so `npm run build` never rewrites tracked sources; re-run
+  `npm run generate:places` after editing `app/attractions.mjs` (or
+  `node scripts/build-place-data.mjs --check` to verify the committed files are current).
+  `test/place-data.test.mjs` guards the split, the round-trip back to the source records and
+  the lazy-loading behavior.
 
 ## Run locally
 
@@ -59,14 +89,16 @@ npm ci
 npm run dev
 ```
 
-Open http://localhost:3000. Run `npm test` for the road-label, map-view, attraction, category-icon, marker-popup, selected-place panel and translation tests.
+Open http://localhost:3000. Run `npm test` for the road-label, map-view, attraction, category-icon, marker-popup, place-data, selected-place panel and translation tests.
 
 ## Deploy to Hostinger
 
 Run `npm run build` and upload the contents of `out/` to the site's document root (for example,
 `public_html/`). This is a static Next.js export: the GeoJSON is included at
-`/regional-highways.geojson`, and no Node.js server, map API token or external tile service is
-required, so the map also works without an internet connection.
+`/regional-highways.geojson` and the place payloads at `/data/places-index.json` and
+`/data/places/<id>.json`, and no Node.js server, map API token or external tile service is
+required, so the map also works without an internet connection. Upload the whole `data/`
+directory: a missing detail file leaves its place selectable but without panel details.
 
 To automate the same upload, run the manually triggered
 [`Deploy static export to Hostinger`](.github/workflows/deploy-hostinger.yml) workflow, which

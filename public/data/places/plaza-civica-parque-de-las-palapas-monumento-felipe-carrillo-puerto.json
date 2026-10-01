@@ -1,0 +1,118 @@
+{
+  "id": "plaza-civica-parque-de-las-palapas-monumento-felipe-carrillo-puerto",
+  "nameEs": "Plaza Cívica / Parque de las Palapas + Monumento a Felipe Carrillo Puerto",
+  "nameEn": "Civic Plaza / Palapa Park + Monument to Felipe Carrillo Puerto",
+  "shortDescriptionEs": "Parque central de la ciudad con palapas, monumentos históricos, una fuente y el monumento al gobernador revolucionario Felipe Carrillo Puerto. Punto de encuentro y punto de partida para rutas turísticas.",
+  "shortDescriptionEn": "Town's central park with palapas, historic monuments, a fountain, and a monument to the revolutionary governor Felipe Carrillo Puerto. A gathering point and starting point for sightseeing routes.",
+  "fullDescriptionEs": "La Plaza Cívica, conocida localmente como Parque de las Palapas, es el parque principal de Felipe Carrillo Puerto. Se encuentra en el centro de la ciudad, en la intersección de las calles 67 y 68, entre las calles 65 y 69. El parque cuenta con palapas típicas yucatecas, una fuente, bancas, y el Monumento a Felipe Carrillo Puerto — una estatua en bronce del gobernador revolucionario asesinado en 1924. El parque también alberga la Casa de la Cultura, el Museo de la Ciudad y la Parroquia de Santa Cruz en sus alrededores inmediatos. Es un espacio de encuentro comunitario, punto de venta de comida en las palapas y punto de partida para rutas turísticas del municipio. El parque es amplio, con palmeras de coco, caminos empedrados y un ambiente tranquilo. Se encuentra a una cuadra al oeste de la carretera federal 307.",
+  "fullDescriptionEn": "The Plaza Cívica, locally known as Parque de las Palapas, is Felipe Carrillo Puerto's central park. It is located in the town center at the intersection of streets 67 and 68, between streets 65 and 69. The park features typical Yucatecan palapas, a fountain, benches, and the Monument to Felipe Carrillo Puerto — a bronze statue of the revolutionary governor assassinated in 1924. The park is surrounded by the Casa de la Cultura, the City Museum, and the Parish of Santa Cruz. It serves as a community gathering space, a food-selling area under the palapas, and a starting point for municipal sightseeing routes. The park is spacious, with coconut palms, paved walkways, and a tranquil atmosphere. It sits one block west of the federal highway 307.",
+  "coordinateSource": "Estimated from town center coordinates (19°34'43\"N 88°02'43\"W) and park location at Calle 67/68 entre 65 y 69; not GPS-verified",
+  "addressEs": "Calle 67 y 68 entre 65 y 69, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo",
+  "addressEn": "Streets 67 and 68 between 65th and 69th, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo",
+  "community": "Felipe Carrillo Puerto",
+  "hours": [
+    {
+      "day": "Mon",
+      "open": "",
+      "close": "",
+      "notesEs": "Espacio público abierto todo el día",
+      "notesEn": "Public open space, accessible all day"
+    },
+    {
+      "day": "Tue",
+      "open": "",
+      "close": "",
+      "notesEs": "",
+      "notesEn": ""
+    },
+    {
+      "day": "Wed",
+      "open": "",
+      "close": "",
+      "notesEs": "",
+      "notesEn": ""
+    },
+    {
+      "day": "Thu",
+      "open": "",
+      "close": "",
+      "notesEs": "",
+      "notesEn": ""
+    },
+    {
+      "day": "Fri",
+      "open": "",
+      "close": "",
+      "notesEs": "",
+      "notesEn": ""
+    },
+    {
+      "day": "Sat",
+      "open": "",
+      "close": "",
+      "notesEs": "",
+      "notesEn": ""
+    },
+    {
+      "day": "Sun",
+      "open": "",
+      "close": "",
+      "notesEs": "",
+      "notesEn": ""
+    }
+  ],
+  "phone": null,
+  "whatsapp": null,
+  "email": null,
+  "website": null,
+  "socialLinks": {
+    "facebook": null,
+    "instagram": null,
+    "tiktok": null
+  },
+  "directionsUrl": "https://www.google.com/maps/search/Plaza+Civica+Felipe+Carrillo+Puerto+Quintana+Roo",
+  "priceLevel": null,
+  "paymentMethods": [],
+  "languagesSpoken": [
+    "es"
+  ],
+  "amenities": [
+    "public_park",
+    "monument",
+    "palapas",
+    "food_stalls_nearby",
+    "walking_paths",
+    "cultural_venues_adjoining"
+  ],
+  "accessibility": {
+    "wheelchairAccess": null,
+    "parking": null,
+    "notesEs": "Espacio público con caminos empedrados. Sin información verificada sobre rampas o accesibilidad.",
+    "notesEn": "Public space with paved walkways. No verified accessibility information."
+  },
+  "photos": [],
+  "verified": false,
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verificationSourceUrls": [
+    "https://visitmexico.com/es/destino/18025/felipe-carillo-puerto",
+    "https://www.turismotrenmaya.mx/ciudades/conoce-felipe-carrillo-puerto-quintana-roo/",
+    "https://republica-alterna.com.mx/que-lugares-turisticos-visitar-en-felipe-carrillo-puerto-quintana-roo/",
+    "https://en.wikivoyage.org/wiki/Felipe_Carrillo_Puerto"
+  ],
+  "verificationNotes": "Address corroborated by Wikivoyage as Parque Principal / Calle 67 \nCopied\n#768\n (one block west of Highway 307) and by multiple sources placing it at Calle 67/68 entre 65 y 69. Coordinates are estimated from town center data — not GPS-verified. Hours are left blank because this is a public open-air park (no formal opening hours); the fields note 'espacio público abierto todo el día.' Price level is null (free public space). No phone, email, website, or social media found. The monument to Felipe Carrillo Puerto is consistently referenced across tourism sources. Some sources conflate the park with the Museo de la Ciudad (Calle 67 \nCopied\n#768\n) or the Parroquia de Santa Cruz — these are separate but adjoining buildings. The 'Palapa' designation is confirmed by local tourism pages.",
+  "lastUpdated": "2026-09-30",
+  "description": {
+    "es": "Parque central de la ciudad con palapas, monumentos históricos, una fuente y el monumento al gobernador revolucionario Felipe Carrillo Puerto. Punto de encuentro y punto de partida para rutas turísticas.",
+    "en": "Town's central park with palapas, historic monuments, a fountain, and a monument to the revolutionary governor Felipe Carrillo Puerto. A gathering point and starting point for sightseeing routes."
+  },
+  "address": {
+    "es": "Calle 67 y 68 entre 65 y 69, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo",
+    "en": "Streets 67 and 68 between 65th and 69th, Col. Centro, C.P. 77200, Felipe Carrillo Puerto, Quintana Roo"
+  },
+  "hoursDisplay": {
+    "es": "Todos los días: espacio público abierto todo el día",
+    "en": "Every day: public open space, accessible all day"
+  },
+  "verificationNote": "Address corroborated by Wikivoyage as Parque Principal / Calle 67 \nCopied\n#768\n (one block west of Highway 307) and by multiple sources placing it at Calle 67/68 entre 65 y 69. Coordinates are estimated from town center data — not GPS-verified. Hours are left blank because this is a public open-air park (no formal opening hours); the fields note 'espacio público abierto todo el día.' Price level is null (free public space). No phone, email, website, or social media found. The monument to Felipe Carrillo Puerto is consistently referenced across tourism sources. Some sources conflate the park with the Museo de la Ciudad (Calle 67 \nCopied\n#768\n) or the Parroquia de Santa Cruz — these are separate but adjoining buildings. The 'Palapa' designation is confirmed by local tourism pages."
+}
