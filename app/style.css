@@ -15,6 +15,11 @@
   --plum: #914e70;
   --lagoon: #536c98;
   --earth: #77663d;
+  --category-nature: var(--jungle);
+  --category-culture: var(--plum);
+  --category-food: var(--terracotta);
+  --category-lodging: var(--lagoon);
+  --category-tours: var(--earth);
   --font-heading: Georgia, "Times New Roman", serif;
   --font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --radius-card: 12px;
@@ -103,11 +108,11 @@ p {
   color: inherit;
 }
 
-.legend__icon--nature { color: var(--jungle); }
-.legend__icon--culture { color: var(--plum); }
-.legend__icon--food { color: var(--terracotta); }
-.legend__icon--lodging { color: var(--lagoon); }
-.legend__icon--tours { color: var(--earth); }
+.legend__icon--nature { color: var(--category-nature); }
+.legend__icon--culture { color: var(--category-culture); }
+.legend__icon--food { color: var(--category-food); }
+.legend__icon--lodging { color: var(--category-lodging); }
+.legend__icon--tours { color: var(--category-tours); }
 
 .category-filters button[aria-pressed="true"] {
   background: var(--terracotta);
@@ -211,20 +216,23 @@ p {
   place-items: center;
   border: 2px solid var(--cream);
   border-radius: 50%;
-  background: var(--jungle);
+  background: var(--category-nature);
   color: var(--cream);
   box-shadow: 0 1px 4px var(--charcoal);
+  overflow: hidden;
 }
 
 .attraction-marker .attraction-marker__icon {
   display: block;
   stroke-width: 2;
+  filter: drop-shadow(0 1px 2px rgba(60, 48, 40, 0.6));
 }
 
-.attraction-marker--culture { background: var(--plum); }
-.attraction-marker--food { background: #aa602b; }
-.attraction-marker--lodging { background: var(--lagoon); }
-.attraction-marker--tours { background: var(--earth); }
+.attraction-marker--nature { background: var(--category-nature); }
+.attraction-marker--culture { background: var(--category-culture); }
+.attraction-marker--food { background: var(--category-food); }
+.attraction-marker--lodging { background: var(--category-lodging); }
+.attraction-marker--tours { background: var(--category-tours); }
 
 .attraction-marker--approximate {
   border-style: dashed;
@@ -315,6 +323,34 @@ p {
 .status-badge--verified { background: var(--jungle); }
 .status-badge--approximate { background: var(--maize); }
 .status-badge--unavailable { background: #6f625a; }
+
+.category-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: var(--radius-chip);
+  padding: 0.15rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cream);
+  text-shadow: 0 1px 2px rgba(60, 48, 40, 0.7);
+  box-shadow: 0 1px 2px rgba(60, 48, 40, 0.18);
+  border: 1px solid rgba(255, 247, 232, 0.4);
+}
+
+.category-chip__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--cream);
+  filter: drop-shadow(0 1px 1px rgba(60, 48, 40, 0.7));
+}
+
+.category-chip__label {
+  display: inline-block;
+  line-height: 1.25;
+}
 
 .place-portal:focus-visible {
   outline: 2px solid var(--turquoise);
@@ -537,35 +573,55 @@ p {
 .listing-references button {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.25rem;
   width: 100%;
   height: 100%;
-  border: 1px solid var(--sand-line);
+  border: 1px solid rgba(255, 247, 232, 0.4);
   border-radius: var(--radius-sm);
   background: var(--sand);
-  color: var(--charcoal);
+  color: var(--cream);
   padding: 0.65rem 0.8rem;
   text-align: left;
   font: inherit;
   cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  text-shadow: 0 1px 2px rgba(60, 48, 40, 0.7);
+  transition: filter 0.15s ease, box-shadow 0.15s ease;
 }
 
 .listing-references button:hover {
-  border-color: var(--terracotta);
-  background: var(--sand-deep);
+  filter: brightness(1.12);
+  box-shadow: 0 2px 6px rgba(60, 48, 40, 0.3);
 }
 
 .listing-references button:focus-visible {
-  outline: 2px solid var(--turquoise);
+  outline: 3px solid var(--charcoal);
   outline-offset: 2px;
+}
+
+.listing-references__header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.listing-references__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--cream);
+  filter: drop-shadow(0 1px 2px rgba(60, 48, 40, 0.7));
 }
 
 .listing-references__name {
   font-weight: 650;
+  color: var(--cream);
 }
 
 .listing-references__category {
-  color: var(--charcoal-soft);
+  color: var(--cream);
+  opacity: 0.92;
   font-size: 0.85rem;
 }
 

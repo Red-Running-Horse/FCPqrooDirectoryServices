@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { isMultiCategory, placeCategoryBackground, placeCategoryStyle } from "./category-colors.mjs";
 import { categoryIconSvg } from "./category-icons.mjs";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
 import { syncMarkerSelection } from "./marker-selection.mjs";
@@ -32,7 +33,7 @@ function showPortal() {
   portal?.focus({ preventScroll: true });
 }
 
-// Lightweight marker popup: name, category and status only; full details live in the portal.
+// Lightweight marker popup: name, category chip and status only; full details live in the portal.
 function popupContent(attraction, language) {
   const view = placePopup(attraction, language);
   const root = document.createElement("div");
@@ -43,7 +44,20 @@ function popupContent(attraction, language) {
   name.textContent = view.name;
   const meta = document.createElement("p");
   meta.className = "place-popup__meta";
-  meta.textContent = view.category ?? "";
+  if (view.category) {
+    const chip = document.createElement("span");
+    chip.className = "category-chip";
+    chip.style.background = placeCategoryBackground(attraction);
+    const icon = document.createElement("span");
+    icon.className = "category-chip__icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.innerHTML = categoryIconSvg(attraction?.category, { size: 14 });
+    const label = document.createElement("span");
+    label.className = "category-chip__label";
+    label.textContent = view.category;
+    chip.append(icon, label);
+    meta.append(chip);
+  }
   const badge = document.createElement("span");
   badge.className = `status-badge status-badge--${view.status}`;
   badge.textContent = view.statusLabel;
@@ -216,9 +230,13 @@ export default function HighwayMap({ placesIndex }) {
       const group = L.layerGroup().addTo(map);
       const markers = new Map();
       for (const attraction of placesIndex) {
+        // Single-category places use solid CSS class backgrounds; multi-category
+        // places receive horizontal split bands generated from canonical category colors.
         const approximate = isVerified(attraction) ? "" : " attraction-marker--approximate";
+        const multi = isMultiCategory(attraction);
+        const bg = placeCategoryBackground(attraction);
         const icon = L.divIcon({
-          className: `attraction-marker attraction-marker--${attraction.category}${approximate}`,
+          className: `attraction-marker attraction-marker--${attraction.category}${multi ? " attraction-marker--multi" : ""}${approximate}`,
           html: categoryIconSvg(attraction.category, { size: 18, className: "attraction-marker__icon" }),
           iconSize: [32, 32],
           iconAnchor: [16, 16],
@@ -241,6 +259,9 @@ export default function HighwayMap({ placesIndex }) {
           element?.setAttribute("aria-label", marker.options.title);
           element?.setAttribute("aria-pressed", String(selected));
           element?.classList.toggle("attraction-marker--selected", selected);
+          if (element && multi) {
+            element.style.background = bg;
+          }
         });
         // Leaflet toggles a bound popup on repeat clicks; selecting always shows the summary.
         const select = () => {
@@ -481,14 +502,26 @@ export default function HighwayMap({ placesIndex }) {
               const name = localize(place.name, language);
               const action = text.listingsAction.replace("{name}", name);
               const categories = categorySummary(place, language);
+              const isMulti = isMultiCategory(place);
               return (
                 <li key={place.id}>
                   <button
                     type="button"
+                    className={`listing-references__button${isMulti ? " listing-references__button--multi" : ""}`}
+                    style={placeCategoryStyle(place)}
                     aria-label={categories ? `${action} — ${categories}` : action}
                     onClick={() => focusListing(place.id)}
                   >
-                    <span className="listing-references__name">{name}</span>
+                    <span className="listing-references__header">
+                      <span
+                        className="listing-references__icon"
+                        aria-hidden="true"
+                        dangerouslySetInnerHTML={{
+                          __html: categoryIconSvg(place.category, { size: 16 }),
+                        }}
+                      />
+                      <span className="listing-references__name">{name}</span>
+                    </span>
                     <span className="listing-references__category">{categories}</span>
                   </button>
                 </li>

@@ -1,3 +1,5 @@
+import { categoryIconSvg } from "./category-icons.mjs";
+import { placeCategoryStyle } from "./category-colors.mjs";
 import { placePortal } from "./place-portal.mjs";
 
 export default function PlacePortal({ attraction, language, onClear }) {
@@ -34,7 +36,18 @@ export default function PlacePortal({ attraction, language, onClear }) {
           </div>
           <p className="place-portal__meta">
             <span className="visually-hidden">{view.categoryLabel}: </span>
-            {view.category}
+            {view.category && (
+              <span className="category-chip" style={placeCategoryStyle(attraction)}>
+                <span
+                  className="category-chip__icon"
+                  aria-hidden="true"
+                  dangerouslySetInnerHTML={{
+                    __html: categoryIconSvg(attraction?.category, { size: 14 }),
+                  }}
+                />
+                <span className="category-chip__label">{view.category}</span>
+              </span>
+            )}
             <span className={`status-badge status-badge--${view.status}`}>{view.statusLabel}</span>
           </p>
           {view.description && <p>{view.description}</p>}

@@ -40,3 +40,15 @@ test("homepage passes the generated index to the map for prerendered references"
   assert.ok(map.indexOf('<section className="listing-references"') > map.indexOf('<div className="map-workspace__portal"'));
   assert.doesNotMatch(map, /href=\{[^}]*place\.id/);
 });
+
+test("listing buttons apply split-color styles and icons for multi-category places", () => {
+  const map = readFileSync(new URL("../app/highway-map.js", import.meta.url), "utf8");
+  assert.match(map, /placeCategoryStyle\(place\)/);
+  assert.match(map, /listing-references__button--multi/);
+  assert.match(map, /categoryIconSvg\(place\.category/);
+
+  const balam = index.find(({ id }) => id === "balam-nah-felipe-carrillo-puerto");
+  assert.ok(balam, "Balam-Nah should be in index");
+  assert.ok(balam.secondaryCategories && balam.secondaryCategories.length > 0);
+});
+
