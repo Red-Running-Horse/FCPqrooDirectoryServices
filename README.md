@@ -92,6 +92,29 @@ are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
   standalone place pages. This makes references visible in initial HTML, but a single homepage
   cannot guarantee individual search rankings for each listing.
 
+## Performance checks before and after deployment
+
+- Before uploading, run `npm test`, `npm run check:performance` and `npm run build`. The
+  read-only performance check is also included in `npm test`, not in the static-export build.
+  The committed road payload measured **1,903,435 bytes** (`wc -c
+  public/regional-highways.geojson`); its **2,000,000-byte** ceiling allows **96,565 bytes
+  (~5%)** for routine road-data maintenance. The check also requires byte-for-byte agreement
+  with the existing optimizer. After replacing the road export, run `npm run optimize:geojson`,
+  then `npm run check:performance`; review any growth above the ceiling and deliberately update
+  the measured baseline and budget only if the additional roads are intended.
+- On the deployed URL, test a cold mobile load (disable cache, use mobile device emulation or
+  a real phone and throttling) with PageSpeed Insights or Chrome DevTools Performance. Record
+  **LCP** and its element against the prior release; the recent live improvement from 2.2s
+  to 1.7s is context, not a permanent guarantee.
+- Check **CLS** on that cold load and while the map initializes, road GeoJSON arrives and a
+  marker's place details load. Inspect layout-shift entries in DevTools and ensure the reserved
+  map workspace and listing references do not jump. Repeat on a narrow viewport.
+- Check **INP** with representative mobile interactions: type in search, filter categories,
+  pan/zoom the map, select a marker, toggle ES/EN, and open the detail portal. Use DevTools
+  interactions/Performance (and available field data in PageSpeed Insights) to investigate
+  slow responses; compare with the previous deployment rather than treating a lab result as
+  real-user monitoring.
+
 ## Run locally
 
 Requires Node.js 20.9 or newer.
