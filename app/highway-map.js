@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { categoryIconSvg } from "./category-icons.mjs";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
 import { syncMarkerSelection } from "./marker-selection.mjs";
-import { loadPlaceDetail, loadPlaceIndex } from "./place-data.mjs";
-import { CATEGORIES, filterPlaces, isVerified } from "./place-index.mjs";
+import { loadPlaceDetail } from "./place-data.mjs";
+import { CATEGORIES, filterPlaces, isVerified, listingReferences } from "./place-index.mjs";
 import PlacePortal from "./place-portal";
 import { placePopup } from "./place-portal.mjs";
 import { labelsOverlap, mergeRoadSegments, placeRoadLabel, roadLabel } from "./road-label.mjs";
@@ -61,7 +61,7 @@ function popupContent(attraction, language) {
   return root;
 }
 
-export default function HighwayMap() {
+export default function HighwayMap({ placesIndex }) {
   const container = useRef(null);
   const attractionLayer = useRef(null);
   const resetButton = useRef(null);
@@ -69,6 +69,7 @@ export default function HighwayMap() {
   const selectedSearch = useRef("");
   const selectedLanguage = useRef(DEFAULT_LANGUAGE);
   const selectedPlace = useRef(null);
+  const pendingFocus = useRef(null);
   const [category, setCategory] = useState("all");
   const [search, setSearch] = useState("");
   const [ctaMessage, setCtaMessage] = useState(null);
@@ -77,10 +78,11 @@ export default function HighwayMap() {
   const [error, setError] = useState(false);
   // places holds the lightweight index (marker fields only); detail holds the selected place
   // merged with its lazily fetched detail file.
-  const [places, setPlaces] = useState([]);
+  const places = placesIndex;
   const [detail, setDetail] = useState(null);
   const [detailError, setDetailError] = useState(false);
   const text = uiText(language);
+  const references = listingReferences(placesIndex);
   const noResults = search.trim() !== "" && filterPlaces(places, category, search).length === 0;
   const selectedPlaceView = detail ?? places.find(({ id }) => id === selectedId) ?? null;
 
@@ -92,6 +94,27 @@ export default function HighwayMap() {
     setSearch(nextSearch);
     if (!filterPlaces(places, nextCategory, nextSearch).some((place) => place.id === selectedPlace.current)) {
       setSelectedId(null);
+    }
+  }
+
+  function focusMarker(current, id) {
+    const marker = current.markers.get(id);
+    if (!marker) return;
+    current.group.addLayer(marker);
+    current.map.setView(marker.getLatLng(), Math.max(current.map.getZoom(), 13));
+    marker.openPopup();
+    marker.getElement()?.focus({ preventScroll: true });
+    container.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  function focusListing(id) {
+    if (!references.some((place) => place.id === id)) return;
+    applyFilters("all", "");
+    pendingFocus.current = id;
+    setSelectedId(id);
+    if (attractionLayer.current && category === "all" && search === "") {
+      focusMarker(attractionLayer.current, id);
+      pendingFocus.current = null;
     }
   }
 
@@ -116,6 +139,13 @@ export default function HighwayMap() {
     current.group.clearLayers();
     for (const attraction of filterPlaces(places, category, search)) {
       current.group.addLayer(current.markers.get(attraction.id));
+    }
+    if (pendingFocus.current) {
+      syncMarkerSelection(current.markers, pendingFocus.current);
+      focusMarker(current, pendingFocus.current);
+      pendingFocus.current = null;
+    } else if (filterPlaces(places, category, search).some(({ id }) => id === selectedPlace.current)) {
+      syncMarkerSelection(current.markers, selectedPlace.current);
     }
   }, [category, search, places]);
 
@@ -184,13 +214,9 @@ export default function HighwayMap() {
       };
       reset.addTo(map);
 
-      const index = await loadPlaceIndex(controller.signal);
-      if (disposed) return;
-      setPlaces(index);
-
       const group = L.layerGroup().addTo(map);
       const markers = new Map();
-      for (const attraction of index) {
+      for (const attraction of placesIndex) {
         const approximate = isVerified(attraction) ? "" : " attraction-marker--approximate";
         const icon = L.divIcon({
           className: `attraction-marker attraction-marker--${attraction.category}${approximate}`,
@@ -228,10 +254,15 @@ export default function HighwayMap() {
         });
         markers.set(attraction.id, marker);
       }
-      attractionLayer.current = { group, markers };
-      for (const attraction of filterPlaces(index, selectedCategory.current, selectedSearch.current)) {
+      attractionLayer.current = { group, markers, map };
+      for (const attraction of filterPlaces(placesIndex, selectedCategory.current, selectedSearch.current)) {
         group.addLayer(markers.get(attraction.id));
       }
+      if (pendingFocus.current) {
+        focusMarker(attractionLayer.current, pendingFocus.current);
+        pendingFocus.current = null;
+      }
+      syncMarkerSelection(markers, selectedPlace.current);
 
       const response = await fetch("/regional-highways.geojson", {
         signal: controller.signal,
@@ -443,6 +474,27 @@ export default function HighwayMap() {
           )}
         </div>
       </div>
+      <section className="listing-references" aria-labelledby="listing-references-heading">
+          <h2 id="listing-references-heading">{text.listingsHeading}</h2>
+          <p>{text.listingsContext}</p>
+          <ul>
+            {references.map((place) => {
+              const name = localize(place.name, language);
+              return (
+                <li key={place.id}>
+                  <button
+                    type="button"
+                    aria-label={`${text.listingsAction.replace("{name}", name)} — ${categoryLabel(place.category, language)}`}
+                    onClick={() => focusListing(place.id)}
+                  >
+                    <span className="listing-references__name">{name}</span>
+                    <span className="listing-references__category">{categoryLabel(place.category, language)}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+      </section>
       <section className="business-cta" aria-labelledby="radio-heading">
         <h2 id="radio-heading">{text.radioHeading}</h2>
         <p>{text.radioDescription}</p>

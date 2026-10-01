@@ -29,6 +29,17 @@ export function filterPlaces(places, category, query = "") {
   );
 }
 
+export function listingReferences(places) {
+  return places.filter((place) =>
+    place.status !== "unavailable" &&
+    CATEGORIES.some(({ id }) => id !== "all" && id === place.category) &&
+    typeof place.id === "string" &&
+    typeof place.name?.es === "string" &&
+    typeof place.latitude === "number" && Number.isFinite(place.latitude) &&
+    typeof place.longitude === "number" && Number.isFinite(place.longitude),
+  );
+}
+
 export function isVerified(place) {
   return place.status === "verified" && place.locationAccuracy === "exact";
 }

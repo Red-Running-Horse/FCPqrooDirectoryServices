@@ -40,8 +40,9 @@ are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
   `locationAccuracy: "exact"` and an `https://` `directionsUrl`; set those only after confirming
   the real destination and coordinates. The category buttons filter markers locally without a
   server.
-- **Selected-place panel:** below the map, `app/place-portal.js` shows a prompt until a marker is
-  clicked (or focused and activated with Enter). It then shows the name in both languages,
+- **Selected-place panel:** beside the map on wide screens and below it on small screens,
+  `app/place-portal.js` shows a prompt until a marker is clicked (or focused and activated
+  with Enter). It then shows the name in both languages,
   category, a status badge (verified / approximate / unavailable), description, address, hours,
   contact details, verification note and last-updated date. Directions, Call, WhatsApp and
   Website buttons appear only when that data exists (directions also require a verified, exact
@@ -61,24 +62,28 @@ are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
     place is selected.
 
   Spreading an index entry over its detail file reproduces the source record exactly, so
-  `placePortal()` keeps rendering identical content. `app/place-data.mjs` loads the index on
-  startup and each detail on demand, caching the request per place so revisiting a place (or
-  reselecting it while it loads) issues only one fetch; a cleared or changed selection stops
-  waiting for its result without cancelling that shared request, and a failed request
-  shows a bilingual notice under the panel while the index summary (name, category, status)
-  stays visible. Ids must be lowercase slugs (`^[a-z0-9][a-z0-9-]*$`) because they become file
-  names and URL segments; the generator refuses anything else.
+  `placePortal()` keeps rendering identical content. The homepage embeds the generated index
+  at build time; `app/place-data.mjs` loads each detail on demand, caching the request per place
+  so revisiting a place (or reselecting it while it loads) issues only one fetch; a cleared or
+  changed selection stops waiting for its result without cancelling that shared request. A
+  failed request shows a bilingual notice under the panel while the index summary (name,
+  category, status) stays visible. Ids must be lowercase slugs (`^[a-z0-9][a-z0-9-]*$`)
+  because they become file names and URL segments; the generator refuses anything else.
 
-  Effect on the initial download: the page chunk drops from 69,917 to 24,401 bytes (65%
-  smaller) and the whole `_next/static` output from 1,164,256 to 1,118,740 bytes, in exchange
-  for one 3,031-byte index request (761 bytes gzipped). The 62,963 bytes of detail files are
-  only fetched one place at a time (~7 KB each) and only when a visitor opens one.
+  The generated lightweight index is passed from the build-time homepage into the map so its
+  short listing references are present in the exported HTML without a second index request.
+  Detail files are fetched one at a time, only when a visitor selects a place.
 
   The generated files are committed, so `npm run build` never rewrites tracked sources; re-run
   `npm run generate:places` after editing `app/attractions.mjs` (or
   `node scripts/build-place-data.mjs --check` to verify the committed files are current).
   `test/place-data.test.mjs` guards the split, the round-trip back to the source records and
   the lazy-loading behavior.
+- **Map-first discovery:** the exported homepage includes short, Spanish-first listing references
+  (names, categories and broad regional context) from the same generated marker index. Their
+  buttons focus markers on the map; full details stay in the interactive map portal, not on
+  standalone place pages. This makes references visible in initial HTML, but a single homepage
+  cannot guarantee individual search rankings for each listing.
 
 ## Run locally
 
