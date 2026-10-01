@@ -210,3 +210,43 @@ test("a cancelled selection stops waiting but keeps the shared request usable", 
     clearPlaceDetailCache();
   }
 });
+
+test("loadPlaceDetail falls back to cache storage when network fetch fails", async () => {
+  clearPlaceDetailCache();
+  const mockPlace = { id: "cached-place", name: { es: "Lugar en caché" } };
+
+  // Setup mock caches
+  const originalCaches = globalThis.caches;
+  globalThis.caches = {
+    match: async (url) => {
+      if (url === "/data/places/cached-place.json") {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => mockPlace,
+        };
+      }
+      return null;
+    },
+  };
+
+  const fetched = stubFetch(async () => {
+    throw new TypeError("Network error (offline)");
+  });
+
+  try {
+    const result = await loadPlaceDetail("cached-place");
+    assert.deepEqual(result, mockPlace);
+
+    // Unsaved place fails when network is offline and not in cache
+    await assert.rejects(
+      loadPlaceDetail("unsaved-place"),
+      /Network error \(offline\)/,
+    );
+  } finally {
+    fetched.restore();
+    globalThis.caches = originalCaches;
+    clearPlaceDetailCache();
+  }
+});
+

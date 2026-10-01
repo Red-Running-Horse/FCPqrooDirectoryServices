@@ -2,6 +2,8 @@
 // on first paint, and one detail file per place when that place is selected. Details are cached
 // in memory so revisiting a place does not refetch it.
 
+import { PLACES_CACHE_NAME } from "./offline.mjs";
+
 const PLACE_INDEX_URL = "/data/places-index.json";
 
 const detailCache = new Map();
@@ -16,10 +18,41 @@ export async function loadPlaceIndex(signal) {
   return response.json();
 }
 
-async function fetchPlaceDetail(id) {
-  const response = await fetch(placeDetailUrl(id));
-  if (!response.ok) throw new Error(`Place detail request failed: ${response.status}`);
-  return response.json();
+async function fetchPlaceDetail(id, signal) {
+  const url = placeDetailUrl(id);
+  const timeoutSignal = typeof AbortSignal?.timeout === "function" ? AbortSignal.timeout(5000) : null;
+  const combinedSignal =
+    signal && timeoutSignal && typeof AbortSignal?.any === "function"
+      ? AbortSignal.any([signal, timeoutSignal])
+      : signal || timeoutSignal;
+
+  try {
+    const options = combinedSignal ? { signal: combinedSignal } : {};
+    const response = await fetch(url, options);
+    if (!response.ok) {
+      const err = new Error(`Place detail request failed: ${response.status}`);
+      err.status = response.status;
+      throw err;
+    }
+    return await response.json();
+  } catch (cause) {
+    if (typeof caches !== "undefined") {
+      try {
+        if (typeof caches.open === "function") {
+          const cache = await caches.open(PLACES_CACHE_NAME);
+          const cached = await cache.match(url);
+          if (cached) return await cached.json();
+        }
+        if (typeof caches.match === "function") {
+          const cached = await caches.match(url);
+          if (cached) return await cached.json();
+        }
+      } catch {
+        // ignore cache lookup error
+      }
+    }
+    throw cause;
+  }
 }
 
 function abortError() {
