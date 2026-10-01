@@ -40,8 +40,9 @@ are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
   `locationAccuracy: "exact"` and an `https://` `directionsUrl`; set those only after confirming
   the real destination and coordinates. The category buttons filter markers locally without a
   server.
-- **Selected-place panel:** below the map, `app/place-portal.js` shows a prompt until a marker is
-  clicked (or focused and activated with Enter). It then shows the name in both languages,
+- **Selected-place panel:** beside the map on wide screens and below it on small screens,
+  `app/place-portal.js` shows a prompt until a marker is clicked (or focused and activated
+  with Enter). It then shows the name in both languages,
   category, a status badge (verified / approximate / unavailable), description, address, hours,
   contact details, verification note and last-updated date. Directions, Call, WhatsApp and
   Website buttons appear only when that data exists (directions also require a verified, exact
@@ -61,13 +62,13 @@ are labelled from zoom 11 (`LABEL_MIN_ZOOM`) and town streets from zoom 14
     place is selected.
 
   Spreading an index entry over its detail file reproduces the source record exactly, so
-  `placePortal()` keeps rendering identical content. `app/place-data.mjs` loads the index on
-  startup and each detail on demand, caching the request per place so revisiting a place (or
-  reselecting it while it loads) issues only one fetch; a cleared or changed selection stops
-  waiting for its result without cancelling that shared request, and a failed request
-  shows a bilingual notice under the panel while the index summary (name, category, status)
-  stays visible. Ids must be lowercase slugs (`^[a-z0-9][a-z0-9-]*$`) because they become file
-  names and URL segments; the generator refuses anything else.
+  `placePortal()` keeps rendering identical content. The homepage embeds the generated index
+  at build time; `app/place-data.mjs` loads each detail on demand, caching the request per place
+  so revisiting a place (or reselecting it while it loads) issues only one fetch; a cleared or
+  changed selection stops waiting for its result without cancelling that shared request. A
+  failed request shows a bilingual notice under the panel while the index summary (name,
+  category, status) stays visible. Ids must be lowercase slugs (`^[a-z0-9][a-z0-9-]*$`)
+  because they become file names and URL segments; the generator refuses anything else.
 
   The generated lightweight index is passed from the build-time homepage into the map so its
   short listing references are present in the exported HTML without a second index request.

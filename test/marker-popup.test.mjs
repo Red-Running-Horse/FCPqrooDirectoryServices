@@ -17,6 +17,7 @@ function fakeMarker() {
     open: false,
     classes,
     attributes,
+    setZIndexOffset: (offset) => { marker.zIndexOffset = offset; },
     getElement: () => element,
     isPopupOpen: () => marker.open,
     openPopup: () => {
@@ -65,8 +66,8 @@ test("the marker popup is a short bilingual summary, not the full details", () =
   assert.equal(en.statusLabel, "Verified");
   assert.equal(es.detailsLabel, "Ver detalles");
   assert.equal(en.detailsLabel, "View details");
-  assert.match(es.hint, /debajo del mapa/);
-  assert.match(en.hint, /below the map/);
+  assert.match(es.hint, /panel del mapa/);
+  assert.match(en.hint, /map panel/);
   assert.equal(placePopup(null, "es"), null);
 
   const approx = placePopup(approximatePlace, "en");
@@ -84,11 +85,13 @@ test("selecting a marker opens only its popup and marks it selected", () => {
     assert.equal(marker.open, id === first, id);
     assert.equal(marker.attributes["aria-pressed"], String(id === first));
     assert.equal(marker.classes.has("attraction-marker--selected"), id === first);
+    assert.equal(marker.zIndexOffset, id === first ? 1000 : 0);
   }
 
   syncMarkerSelection(markers, second);
   assert.equal(markers.get(first).open, false);
   assert.equal(markers.get(second).open, true);
+  assert.equal(markers.get(first).zIndexOffset, 0);
 
   syncMarkerSelection(markers, null);
   assert.ok([...markers.values()].every((marker) => !marker.open && marker.attributes["aria-pressed"] === "false"));

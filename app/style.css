@@ -235,7 +235,6 @@ p {
   outline: 4px solid var(--turquoise);
   outline-offset: 2px;
   opacity: 1;
-  z-index: 1 !important;
 }
 
 .attraction-marker:hover {

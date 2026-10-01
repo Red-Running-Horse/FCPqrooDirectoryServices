@@ -10,6 +10,7 @@ test("homepage references use only available, mappable entries from the committe
   const references = listingReferences(index);
   assert.equal(references.length, index.length);
   assert.deepEqual(references.map(({ id }) => id), index.map(({ id }) => id));
+  assert.ok(references.every((place) => !("description" in place) && !("address" in place) && !("phone" in place)));
   assert.deepEqual(listingReferences([
     ...index,
     { id: "missing", category: "food", name: { es: "Missing" } },

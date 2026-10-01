@@ -5,6 +5,7 @@ export function syncMarkerSelection(markers, selectedId) {
     const element = marker.getElement();
     element?.classList.toggle("attraction-marker--selected", selected);
     element?.setAttribute("aria-pressed", String(selected));
+    marker.setZIndexOffset?.(selected ? 1000 : 0);
     if (selected && !marker.isPopupOpen()) marker.openPopup();
     if (!selected && marker.isPopupOpen()) marker.closePopup();
   }
