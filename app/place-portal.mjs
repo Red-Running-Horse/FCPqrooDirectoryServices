@@ -77,7 +77,7 @@ export function placePortal(attraction, language) {
     otherName: otherName && otherName !== name ? otherName : null,
     otherLanguage,
     categoryLabel: ui.labelCategory,
-    category: categorySummary(attraction, language),
+    category: categorySummary(attraction, language) || null,
     status,
     statusLabel: statusLabels[status],
     description: text(attraction.description, language),

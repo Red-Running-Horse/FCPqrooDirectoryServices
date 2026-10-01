@@ -309,7 +309,8 @@ const church = {
 const balamNah = {
   id: "balam-nah-felipe-carrillo-puerto",
   // Primary category plus an optional secondary list: a nature spot that also offers lodging.
-  // The descriptions below stay as sourced; only the classification was corrected.
+  // Only the classification was corrected: the sourced descriptions below are kept verbatim
+  // because no verified nature or lodging details are available for this record yet.
   category: "nature",
   secondaryCategories: ["lodging"],
   nameEs: "Balam-Nah",
