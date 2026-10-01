@@ -479,15 +479,17 @@ export default function HighwayMap({ placesIndex }) {
           <ul>
             {references.map((place) => {
               const name = localize(place.name, language);
+              const action = text.listingsAction.replace("{name}", name);
+              const categories = categorySummary(place, language);
               return (
                 <li key={place.id}>
                   <button
                     type="button"
-                    aria-label={`${text.listingsAction.replace("{name}", name)} — ${categorySummary(place, language)}`}
+                    aria-label={categories ? `${action} — ${categories}` : action}
                     onClick={() => focusListing(place.id)}
                   >
                     <span className="listing-references__name">{name}</span>
-                    <span className="listing-references__category">{categorySummary(place, language)}</span>
+                    <span className="listing-references__category">{categories}</span>
                   </button>
                 </li>
               );
