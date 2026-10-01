@@ -647,9 +647,9 @@ export default function HighwayMap({ placesIndex }) {
             onClear={() => setSelectedId(null)}
             isSaved={selectedId ? savedPlaceIds.includes(selectedId) : false}
             onToggleSave={offlineStatus !== "unsupported" ? handleToggleSavePlace : null}
-            detailUnavailable={detailError && (!isOnline || (selectedId ? !savedPlaceIds.includes(selectedId) : true))}
+            detailUnavailable={detailError && !isOnline && (selectedId ? !savedPlaceIds.includes(selectedId) : true)}
           />
-          {detailError && isOnline && selectedId && savedPlaceIds.includes(selectedId) && (
+          {detailError && isOnline && (
             <p className="place-portal__note" role="alert">
               {text.detailsError}
             </p>

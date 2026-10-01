@@ -178,8 +178,8 @@ test("collectAppShellUrls selects required static assets and excludes places & e
 
   // Must exclude external origins
   assert.ok(
-    urls.every((u) => !u.includes("external-tracker.example.com")),
-    "must not include external scripts"
+    urls.every((u) => new URL(u, "http://localhost:3000").hostname === "localhost"),
+    "must only include same-origin resources"
   );
 });
 

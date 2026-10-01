@@ -2,6 +2,8 @@
 // on first paint, and one detail file per place when that place is selected. Details are cached
 // in memory so revisiting a place does not refetch it.
 
+import { PLACES_CACHE_NAME } from "./offline.mjs";
+
 const PLACE_INDEX_URL = "/data/places-index.json";
 
 const detailCache = new Map();
@@ -37,7 +39,7 @@ async function fetchPlaceDetail(id, signal) {
     if (typeof caches !== "undefined") {
       try {
         if (typeof caches.open === "function") {
-          const cache = await caches.open("fcp-places-v1");
+          const cache = await caches.open(PLACES_CACHE_NAME);
           const cached = await cache.match(url);
           if (cached) return await cached.json();
         }
