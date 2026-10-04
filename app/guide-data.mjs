@@ -1,0 +1,437 @@
+// Structured tourist and visitor preparation guide data for Felipe Carrillo Puerto and Riviera Maya.
+// Editorial source: Public Notion guide by Tzolkin Homes.
+// Note: External live fetching of Notion is unavailable in the sandboxed build environment;
+// this module provides a maintainable local snapshot that functions offline and in static export.
+
+export const GUIDE_METADATA = {
+  id: "mexico-riviera-maya-preparation-guide",
+  sourceTitle: "Mexico Practical Relocation & Preparation Guide For Entry — Rivera Maya",
+  sourceAuthor: "Tzolkin Homes",
+  sourceUrl:
+    "https://tzolkin-homes1.notion.site/Mexico-Practical-Relocation-Preparation-Guide-For-Entry-Rivera-Maya-5bd4e3a7710c408b90cc5c2651fcbbd7?source=copy_link",
+  sourceMetadataNote: {
+    es: "Guía editorial basada en el documento público de Tzolkin Homes. Contenido curado para visitantes y viajeros hacia Felipe Carrillo Puerto y la Riviera Maya.",
+    en: "Editorial guide based on the public Tzolkin Homes document. Curated content for visitors and travelers heading to Felipe Carrillo Puerto and the Riviera Maya.",
+  },
+  lastReviewed: "2026-10",
+  lastReviewedDisplay: {
+    es: "Octubre de 2026",
+    en: "October 2026",
+  },
+  officialDisclaimer: {
+    es: "Aviso importante para viajeros: La información de esta guía es de carácter práctico, orientativo e informativo. No constituye asesoría legal, migratoria, médica ni financiera. Los requisitos de entrada, visados, costos y normativas oficiales pueden cambiar en cualquier momento. Verifica siempre la información actualizada con las autoridades oficiales del Gobierno de México (INM, SRE, consulados) o tu aerolínea antes de viajar.",
+    en: "Important notice for travelers: The information in this guide is practical, orientational, and informational. It does not constitute legal, immigration, medical, or financial advice. Official entry requirements, visas, costs, and regulations may change at any time. Always verify current requirements with official Mexican government authorities (INM, SRE, consulates) or your airline prior to travel.",
+  },
+  // Configurable local PDF asset path (e.g., "/guide/mexico-riviera-maya-guide.pdf")
+  // Keep null until a verified local PDF file or user-provided asset is added to the repository.
+  pdfAsset: null,
+};
+
+export const GUIDE_SECTIONS = [
+  {
+    id: "preparation-entry",
+    title: {
+      es: "Preparación y llegada a México",
+      en: "Preparation & Arrival in Mexico",
+    },
+    summary: {
+      es: "Pasos esenciales antes de viajar, vigencia de documentos y llegada a aeropuertos de la península.",
+      en: "Essential pre-trip steps, document validity, and arrival at regional airports.",
+    },
+    items: [
+      {
+        title: {
+          es: "Vigencia del pasaporte y planeación",
+          en: "Passport validity and planning",
+        },
+        body: {
+          es: "Verifica que tu pasaporte tenga una vigencia mínima recomendada de 6 meses a partir de la fecha de entrada prevista. Revisa con tu aerolínea los requisitos específicos de abordaje antes de partir.",
+          en: "Ensure your passport has a recommended minimum validity of 6 months beyond your planned entry date. Check specific boarding requirements with your airline prior to departure.",
+        },
+      },
+      {
+        title: {
+          es: "Proceso migratorio en aeropuertos (FMM digital)",
+          en: "Airport immigration process (Digital FMM)",
+        },
+        body: {
+          es: "En los principales aeropuertos internacionales como Cancún (CUN) y Tulum (TQO), el registro de entrada suele realizarse mediante quioscos digitales automatizados o sellado directo de pasaporte. Conserva tus comprobantes de vuelo de salida y confirmación de hospedaje.",
+          en: "At major international airports such as Cancún (CUN) and Tulum (TQO), entry registration is frequently handled via automated digital kiosks or direct passport stamping. Keep your departure flight confirmation and lodging details accessible.",
+        },
+        officialLink: {
+          url: "https://www.gob.mx/inm",
+          label: {
+            es: "Instituto Nacional de Migración (INM)",
+            en: "National Migration Institute (INM)",
+          },
+        },
+      },
+      {
+        title: {
+          es: "Declaración de aduanas",
+          en: "Customs declaration",
+        },
+        body: {
+          es: "Conoce las disposiciones aduanales de México relativas a franquicia de equipaje, medicamentos con receta y artículos restringidos para evitar demoras en el filtro aduanal.",
+          en: "Familiarize yourself with Mexican customs regulations regarding baggage allowance, prescription medications, and restricted items to avoid delays at customs screening.",
+        },
+        officialLink: {
+          url: "https://www.sat.gob.mx",
+          label: {
+            es: "Portal del SAT / Aduanas de México",
+            en: "SAT / Mexico Customs Portal",
+          },
+        },
+      },
+    ],
+  },
+  {
+    id: "documents",
+    title: {
+      es: "Documentos y estancias oficiales",
+      en: "Documents & Official Stays",
+    },
+    summary: {
+      es: "Consideraciones sobre estancias de turismo, comprobación de salida y fuentes consulares.",
+      en: "Considerations on tourist stays, return proof, and consular sources.",
+    },
+    items: [
+      {
+        title: {
+          es: "Condición de estancia turística",
+          en: "Tourist stay conditions",
+        },
+        body: {
+          es: "Para nacionalidades que no requieren visa consular, la autoridad migratoria determina los días autorizados de estancia al momento del ingreso (hasta un máximo habitual de 180 días). La estancia como visitante no permite actividades remuneradas en México.",
+          en: "For nationalities exempt from a consular visa, migration authorities determine the authorized duration of stay upon arrival (up to a usual maximum of 180 days). Visitor status does not permit remunerated work in Mexico.",
+        },
+        officialLink: {
+          url: "https://www.gob.mx/sre",
+          label: {
+            es: "Secretaría de Relaciones Exteriores (SRE)",
+            en: "Ministry of Foreign Affairs (SRE)",
+          },
+        },
+      },
+      {
+        title: {
+          es: "Trámites de residencia o estancia prolongada",
+          en: "Residency and long-term relocation",
+        },
+        body: {
+          es: "Si tu objetivo es la reubicación o residencia temporal/permanente, el trámite debe iniciarse en un consulado mexicano fuera del país antes de ingresar, nunca mediante cambio de estatus de turista dentro del territorio nacional.",
+          en: "If your goal is relocation or temporary/permanent residency, the process must be initiated at a Mexican consulate abroad before arrival, not by switching from a tourist status within the country.",
+        },
+      },
+      {
+        title: {
+          es: "Respaldo seguro de documentación",
+          en: "Secure document backups",
+        },
+        body: {
+          es: "Guarda copias digitales protegidas de tu pasaporte, póliza de seguro de viajero y reservaciones en la nube o en tu dispositivo para consulta sin conexión, además de llevar una copia física separada del original.",
+          en: "Keep encrypted digital copies of your passport, travel insurance policy, and reservations available offline on your device, plus a physical printed copy kept separate from original documents.",
+        },
+      },
+    ],
+  },
+  {
+    id: "transport",
+    title: {
+      es: "Transporte y movilidad regional",
+      en: "Transport & Getting Around",
+    },
+    summary: {
+      es: "Opciones para llegar y desplazarte entre Cancún, Tulum, Felipe Carrillo Puerto y comunidades.",
+      en: "Options for traveling between Cancún, Tulum, Felipe Carrillo Puerto, and local communities.",
+    },
+    items: [
+      {
+        title: {
+          es: "Aeropuertos de acceso: Cancún y Tulum",
+          en: "Access airports: Cancún & Tulum",
+        },
+        body: {
+          es: "El Aeropuerto Internacional de Tulum (Felipe Carrillo Puerto, TQO) es el más cercano para visitar la zona centro del estado. El Aeropuerto Internacional de Cancún (CUN) cuenta con mayor frecuencia de vuelos internacionales y conexiones directas de autobús.",
+          en: "Tulum International Airport (Felipe Carrillo Puerto, TQO) is the closest hub for visiting central Quintana Roo. Cancún International Airport (CUN) provides higher flight frequency and direct regional bus services.",
+        },
+      },
+      {
+        title: {
+          es: "Autobuses foráneos de larga distancia (ADO)",
+          en: "Long-distance regional buses (ADO)",
+        },
+        body: {
+          es: "La terminal de ADO en Felipe Carrillo Puerto ofrece conexiones diarias y seguras hacia Cancún, Playa del Carmen, Tulum, Chetumal y Mérida. Es un servicio puntual con aire acondicionado.",
+          en: "The ADO bus terminal in Felipe Carrillo Puerto provides reliable daily connections to Cancún, Playa del Carmen, Tulum, Chetumal, and Mérida. Buses are scheduled, air-conditioned, and comfortable.",
+        },
+      },
+      {
+        title: {
+          es: "Tren Maya y transporte interurbano",
+          en: "Maya Train & intercity transit",
+        },
+        body: {
+          es: "La ruta del Tren Maya contempla conectividad ferroviaria en Quintana Roo con estación en Felipe Carrillo Puerto. Revisa itinerarios y tarifas vigentes en el portal oficial antes de planear tu traslado.",
+          en: "The Maya Train network includes railway connectivity through Quintana Roo with a station at Felipe Carrillo Puerto. Check current schedules and ticketing on the official portal before traveling.",
+        },
+        officialLink: {
+          url: "https://www.trenmaya.gob.mx",
+          label: {
+            es: "Portal Oficial del Tren Maya",
+            en: "Official Maya Train Portal",
+          },
+        },
+      },
+      {
+        title: {
+          es: "Taxis locales y colectivos de ruta",
+          en: "Local taxis and shared vans (colectivos)",
+        },
+        body: {
+          es: "Dentro de Felipe Carrillo Puerto los taxis locales del sindicato operan con tarifas fijas por zona. Hacia comunidades de Maya Ka'an existen camionetas colectivas que salen desde paraderos cercanos al mercado municipal.",
+          en: "Within Felipe Carrillo Puerto, union taxis operate on zone-based flat fares. For trips to Maya Ka'an communities, shared passenger vans (colectivos) depart from points near the municipal market.",
+        },
+      },
+    ],
+  },
+  {
+    id: "money",
+    title: {
+      es: "Moneda, pagos y propinas",
+      en: "Money, Payments & Tipping",
+    },
+    summary: {
+      es: "Pesos mexicanos (MXN), manejo de efectivo en comercios locales y uso seguro de cajeros.",
+      en: "Mexican Pesos (MXN), cash necessity in local shops, and secure ATM usage.",
+    },
+    items: [
+      {
+        title: {
+          es: "Moneda oficial y tipo de cambio",
+          en: "Official currency and exchange rates",
+        },
+        body: {
+          es: "La moneda es el Peso Mexicano (MXN). En comercios de Felipe Carrillo Puerto y poblados cercanos los precios se expresan en pesos; no dependas de pagar en moneda extranjera ya que el tipo de cambio local puede ser desfavorable o no ser aceptado.",
+          en: "The official currency is the Mexican Peso (MXN). In Felipe Carrillo Puerto and surrounding towns, prices are marked in pesos; avoid relying on foreign currencies, which often face unfavorable local rates or refusal.",
+        },
+      },
+      {
+        title: {
+          es: "Efectivo indispensable en pequeños comercios",
+          en: "Cash is essential for small businesses",
+        },
+        body: {
+          es: "En mercados tradicionales, fondas, cooperativas comunitarias y taxis el pago es exclusivamente en efectivo. Procura llevar billetes de baja denominación ($20, $50, $100 y $200 MXN).",
+          en: "Traditional markets, small eateries, community cooperatives, and taxis operate on cash only. Carry small-denomination bills ($20, $50, $100, and $200 MXN) for daily expenses.",
+        },
+      },
+      {
+        title: {
+          es: "Cajeros automáticos bancarios (ATM)",
+          en: "Bank ATMs",
+        },
+        body: {
+          es: "Utiliza cajeros automáticos situados dentro de sucursales bancarias establecidas en el centro de la ciudad durante el día para mayor tranquilidad y para evitar comisiones no oficiales.",
+          en: "Use automated teller machines located inside established bank branches in the town center during daytime hours for greater security and standard bank fees.",
+        },
+      },
+      {
+        title: {
+          es: "Costumbre de propina",
+          en: "Tipping custom",
+        },
+        body: {
+          es: "En restaurantes con servicio a la mesa la propina habitual oscila entre el 10% y el 15% según el servicio. Por ley en México la propina es voluntaria y no debe agregarse obligatoriamente a la cuenta sin tu autorización.",
+          en: "In full-service restaurants, a customary gratuity ranges between 10% and 15% depending on service quality. Under Mexican consumer law, tipping is voluntary and cannot be mandatorily added to your bill without prior consent.",
+        },
+      },
+    ],
+  },
+  {
+    id: "connectivity",
+    title: {
+      es: "Conectividad y telefonía móvil",
+      en: "Connectivity & Mobile Networks",
+    },
+    summary: {
+      es: "SIMs locales, paquetes prepago y prevención de zonas sin señal en carreteras y selva.",
+      en: "Local SIMs, prepaid data, and preparing for offline zones on rural highways and jungle areas.",
+    },
+    items: [
+      {
+        title: {
+          es: "Tarjetas SIM prepago y eSIMs",
+          en: "Prepaid SIM cards & eSIMs",
+        },
+        body: {
+          es: "Puedes comprar chips prepago locales (Telcel, AT&T u otros operadores) en tiendas de conveniencia y locales autorizados. Telcel cuenta con la red de cobertura más extensa en las carreteras y pueblos del centro del estado.",
+          en: "You can purchase local prepaid SIM cards (Telcel, AT&T, and other carriers) at convenience stores and authorized dealers. Telcel provides the widest network footprint across central Quintana Roo highways and towns.",
+        },
+      },
+      {
+        title: {
+          es: "Zonas rurales sin señal celular",
+          en: "Rural zones without mobile reception",
+        },
+        body: {
+          es: "Al viajar por tramos de carretera entre Tulum, Felipe Carrillo Puerto, José María Morelos y Chetumal, la señal celular puede interrumpirse. Guarda con anticipación tus mapas, números de emergencia e itinerarios para consulta offline.",
+          en: "When driving along highway stretches connecting Tulum, Felipe Carrillo Puerto, José María Morelos, and Chetumal, mobile signals may drop. Save maps, emergency contacts, and itineraries for offline use in advance.",
+        },
+      },
+      {
+        title: {
+          es: "Conexión Wi-Fi en hospedajes",
+          en: "Lodging Wi-Fi",
+        },
+        body: {
+          es: "La mayoría de los hoteles del centro ofrecen conexión Wi-Fi para huéspedes. En comunidades ecoturísticas más alejadas la conectividad puede depender de enlaces satelitales o estar restringida a áreas comunes.",
+          en: "Most downtown hotels offer Wi-Fi access for guests. In remote ecotourism cooperatives, internet may rely on satellite connections or be restricted to common areas.",
+        },
+      },
+    ],
+  },
+  {
+    id: "health-safety",
+    title: {
+      es: "Salud, clima y seguridad",
+      en: "Health, Climate & Safety",
+    },
+    summary: {
+      es: "Consejos sobre consumo de agua, clima tropical, repelente biodegradable y atención médica.",
+      en: "Guidance on drinking water, tropical weather, biodegradable repellent, and medical care.",
+    },
+    items: [
+      {
+        title: {
+          es: "Agua potable y alimentos",
+          en: "Drinking water and dining",
+        },
+        body: {
+          es: "Bebe exclusivamente agua embotellada o purificada. Los restaurantes establecidos preparan sus bebidas y alimentos con agua y hielo purificados de proveedores certificados.",
+          en: "Drink only bottled or purified water. Established restaurants prepare beverages and ice using purified water from certified suppliers.",
+        },
+      },
+      {
+        title: {
+          es: "Protección solar y repelente ecológico",
+          en: "Sun protection and eco-friendly repellent",
+        },
+        body: {
+          es: "El clima es tropical cálido y húmedo. Usa ropa ligera, sombrero e hidratación constante. Si visitas lagunas, cenotes o áreas naturales protegidas, utiliza protectores solares y repelentes 100% biodegradables o libres de químicos para proteger la fauna.",
+          en: "The region has a warm, humid tropical climate. Wear breathable fabrics, hats, and stay well hydrated. When visiting lagoons, cenotes, or protected natural reserves, use 100% biodegradable or chemical-free repellents and sunscreens to protect ecosystems.",
+        },
+      },
+      {
+        title: {
+          es: "Servicios médicos y seguro de viaje",
+          en: "Medical services & travel insurance",
+        },
+        body: {
+          es: "Felipe Carrillo Puerto cuenta con el Hospital General, centros de salud y farmacias con consultorios adyacentes para consultas básicas. Se recomienda ampliamente contar con seguro de viaje con cobertura médica internacional para emergencias mayores.",
+          en: "Felipe Carrillo Puerto has a General Hospital, local clinics, and pharmacies with adjacent doctor offices for routine care. Comprehensive travel insurance with international medical evacuation coverage is strongly recommended.",
+        },
+      },
+    ],
+  },
+  {
+    id: "etiquette",
+    title: {
+      es: "Etiqueta local y respeto cultural",
+      en: "Local Etiquette & Cultural Respect",
+    },
+    summary: {
+      es: "Convivencia consciente en el corazón de la cultura maya viva y santuarios tradicionales.",
+      en: "Mindful travel in the heart of living Maya culture and traditional sanctuaries.",
+    },
+    items: [
+      {
+        title: {
+          es: "Cultura maya viva y lengua maya",
+          en: "Living Maya heritage and language",
+        },
+        body: {
+          es: "Felipe Carrillo Puerto es la capital histórica de la resistencia maya (Chan Santa Cruz). Muchas personas hablan maya peninsular como lengua materna. Un trato respetuoso y saludos cordiales son profundamente apreciados por la comunidad.",
+          en: "Felipe Carrillo Puerto is the historic center of Maya cultural resistance (Chan Santa Cruz). Many residents speak Yucatec Maya as their mother tongue. Polite greetings and respectful conduct are deeply valued across communities.",
+        },
+      },
+      {
+        title: {
+          es: "Visitas a santuarios y centros ceremoniales",
+          en: "Sanctuary and ceremonial site visits",
+        },
+        body: {
+          es: "En sitios de devoción como el Santuario de la Cruz Parlante y templos ceremoniales, viste con discreción (cubriendo hombros y rodillas), guarda silencio y respeta las oraciones de las dignidades mayas.",
+          en: "At revered places such as the Talking Cross Sanctuary and ceremonial churches, dress modestly (covering shoulders and knees), maintain silence, and respect community worship and Maya dignitaries.",
+        },
+      },
+      {
+        title: {
+          es: "Fotografía responsable y artesanías",
+          en: "Responsible photography and artisan crafts",
+        },
+        body: {
+          es: "Pide siempre permiso antes de fotografiar a personas locales o artesanos trabajando. Al adquirir bordados tradicionales, tallados en madera o productos de miel melipona, valora el trabajo artesanal y evita regatear injustamente.",
+          en: "Always ask permission before photographing local residents or artisans at work. When purchasing handmade embroidery, wood carvings, or stingless bee honey, appreciate the skilled craftsmanship and avoid unfair bargaining.",
+        },
+      },
+    ],
+  },
+  {
+    id: "emergency-contacts",
+    title: {
+      es: "Contactos de emergencia y asistencia",
+      en: "Emergency & Assistance Contacts",
+    },
+    summary: {
+      es: "Líneas telefónicas de asistencia vial, emergencias médicas y seguridad en México.",
+      en: "Helplines for roadside assistance, medical emergencies, and public safety in Mexico.",
+    },
+    items: [
+      {
+        title: {
+          es: "Número nacional de emergencias: 911",
+          en: "National emergency number: 911",
+        },
+        body: {
+          es: "Línea gratuita de emergencia en todo México para solicitar policía, bomberos o ambulancias. Disponible las 24 horas del día.",
+          en: "Toll-free emergency line across Mexico for police, ambulance, or fire services. Accessible 24 hours a day.",
+        },
+      },
+      {
+        title: {
+          es: "Auxilio Vial Ángeles Verdes: 078",
+          en: "Green Angels Roadside Assistance: 078",
+        },
+        body: {
+          es: "Servicio de auxilio mecánico básico, remolque y orientación turística en carreteras federales de México operado por la Secretaría de Turismo.",
+          en: "Basic roadside breakdown assistance, emergency towing, and tourist information on Mexico's federal highways, operated by the Ministry of Tourism.",
+        },
+        officialLink: {
+          url: "https://www.gob.mx/sectur/acciones-y-programas/angeles-verdes",
+          label: {
+            es: "Ángeles Verdes — Secretaría de Turismo",
+            en: "Green Angels — Ministry of Tourism",
+          },
+        },
+      },
+      {
+        title: {
+          es: "Denuncia anónima: 089",
+          en: "Anonymous reporting hotline: 089",
+        },
+        body: {
+          es: "Número confidencial y anónimo para reportar situaciones de riesgo o irregularidades ante autoridades competentes.",
+          en: "Confidential and anonymous national hotline to report suspicious activity or safety issues to competent authorities.",
+        },
+      },
+    ],
+  },
+];
+
+export const GUIDE_DATA = {
+  metadata: GUIDE_METADATA,
+  sections: GUIDE_SECTIONS,
+};
+
+export default GUIDE_DATA;

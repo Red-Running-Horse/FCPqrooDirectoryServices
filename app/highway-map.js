@@ -8,6 +8,7 @@ import { syncMarkerSelection } from "./marker-selection.mjs";
 import { loadPlaceDetail } from "./place-data.mjs";
 import { CATEGORIES, categorySummary, filterPlaces, isVerified, listingReferences } from "./place-index.mjs";
 import PlacePortal from "./place-portal";
+import TouristGuide from "./tourist-guide";
 import { placePopup } from "./place-portal.mjs";
 import { labelsOverlap, mergeRoadSegments, placeRoadLabel, roadLabel } from "./road-label.mjs";
 import {
@@ -515,7 +516,7 @@ export default function HighwayMap({ placesIndex }) {
 
   return (
     <>
-      <section className="hero" aria-label={text.heading}>
+      <section className="hero" id="map-top" aria-label={text.heading}>
         <div className="hero__bar" aria-hidden="true" />
         <div className="map-header">
           <div className="hero__title-block">
@@ -523,22 +524,28 @@ export default function HighwayMap({ placesIndex }) {
             <h1>{text.heading}</h1>
             <p className="hero__subheading">{text.heroSubheading}</p>
           </div>
-          <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
-            {LANGUAGES.map(({ id, label, name }) => (
-              <button
-                key={id}
-                type="button"
-                lang={id}
-                aria-label={name}
-                aria-pressed={language === id}
-                onClick={() => {
-                  selectedLanguage.current = id;
-                  setLanguage(id);
-                }}
-              >
-                {label}
-              </button>
-            ))}
+          <div className="map-header__actions">
+            <a href="#tourist-guide" className="guide-nav-link">
+              <span aria-hidden="true">📖 </span>
+              {text.guideNavLabel}
+            </a>
+            <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
+              {LANGUAGES.map(({ id, label, name }) => (
+                <button
+                  key={id}
+                  type="button"
+                  lang={id}
+                  aria-label={name}
+                  aria-pressed={language === id}
+                  onClick={() => {
+                    selectedLanguage.current = id;
+                    setLanguage(id);
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -823,6 +830,7 @@ export default function HighwayMap({ placesIndex }) {
           {ctaMessage === "learn" && text.ctaLearnMessage}
         </p>
       </section>
+      <TouristGuide language={language} embedded={true} />
     </>
   );
 }

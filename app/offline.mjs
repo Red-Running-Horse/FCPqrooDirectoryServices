@@ -2,6 +2,8 @@
 // Manages the shared offline map cache (app shell, road GeoJSON, place index) and
 // individually saved place details.
 
+import { guideOfflineResources } from "./tourist-guide.mjs";
+
 export const CACHE_VERSION = "v1";
 export const SHARED_CACHE_NAME = `fcp-shared-${CACHE_VERSION}`;
 export const PLACES_CACHE_NAME = `fcp-places-${CACHE_VERSION}`;
@@ -14,6 +16,7 @@ export const DEFAULT_SHARED_ASSETS = [
   "/",
   "/regional-highways.geojson",
   "/data/places-index.json",
+  ...guideOfflineResources(),
   "/icon.png",
   "/apple-icon.png",
 ];

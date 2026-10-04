@@ -166,6 +166,7 @@ test("collectAppShellUrls selects required static assets and excludes places & e
   assert.ok(urls.includes("/"), "includes root path");
   assert.ok(urls.includes("/regional-highways.geojson"), "includes road GeoJSON");
   assert.ok(urls.includes("/data/places-index.json"), "includes place index");
+  assert.ok(urls.includes("/data/tourist-guide.json"), "includes tourist guide data");
   assert.ok(urls.includes("/_next/static/chunks/app/page.js"), "includes app scripts");
   assert.ok(urls.includes("/_next/static/css/app.css"), "includes app stylesheet");
   assert.ok(urls.includes("/_next/static/chunks/leaflet.js"), "includes loaded webpack chunk");
