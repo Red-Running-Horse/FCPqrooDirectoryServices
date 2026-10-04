@@ -88,8 +88,8 @@ test("the Talking Cross sanctuary retains its unverified bilingual source data",
   assert.equal(sanctuary.latitude, 19.580684047331296);
   assert.equal(sanctuary.longitude, -88.04887785463087);
   assert.ok(inside(FCP_VIEW_BOUNDS, sanctuary));
-  assert.equal(sanctuary.addressEs.includes("Calle 60 \nCopied\n#788\n"), true);
-  assert.equal(sanctuary.addressEn.includes("60 Street \nCopied\n#788\n"), true);
+  assert.equal(sanctuary.addressEs.includes("Calle 60 #788"), true);
+  assert.equal(sanctuary.addressEn.includes("60 Street #788"), true);
   assert.equal(sanctuary.address.es, sanctuary.addressEs);
   assert.equal(sanctuary.address.en, sanctuary.addressEn);
   assert.deepEqual(sanctuary.hours.map(({ day }) => day), ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
@@ -100,7 +100,7 @@ test("the Talking Cross sanctuary retains its unverified bilingual source data",
   assert.equal(directionsUrlFor(sanctuary), null);
   assert.equal(sanctuary.verificationSourceUrls.length, 5);
   assert.equal(sanctuary.verificationSourceUrls.at(-1), sanctuary.directionsUrl);
-  assert.match(sanctuary.verificationNotes, /Calle 60 \nCopied\n#788\n/);
+  assert.match(sanctuary.verificationNotes, /Calle 60 #788/);
   assert.equal(sanctuary.verificationNote, sanctuary.verificationNotes);
   assert.equal(sanctuary.lastUpdated, "2026-09-30");
 
@@ -124,14 +124,14 @@ test("the City Museum retains its unverified bilingual source data", () => {
   assert.equal(museum.name.en, museum.nameEn);
   assert.equal(museum.description.es, museum.shortDescriptionEs);
   assert.equal(museum.description.en, museum.shortDescriptionEn);
-  assert.match(museum.fullDescriptionEs, /Calle 67 \nCopied\n#768\n, Col. Centro/);
+  assert.match(museum.fullDescriptionEs, /Calle 67 #768, Col. Centro/);
   assert.match(museum.fullDescriptionEn, /assassinated in 1924/);
   assert.equal(museum.latitude, 19.57802448542231);
   assert.equal(museum.longitude, -88.04537970768848);
   assert.ok(inside(FCP_VIEW_BOUNDS, museum));
   assert.match(museum.coordinateSource, /User-provided.*not independently GPS-verified/);
-  assert.equal(museum.addressEs.includes("Calle 67 \nCopied\n#768\n"), true);
-  assert.equal(museum.addressEn.includes("67 Street \nCopied\n#768\n"), true);
+  assert.equal(museum.addressEs.includes("Calle 67 #768"), true);
+  assert.equal(museum.addressEn.includes("67 Street #768"), true);
   assert.equal(museum.address.es, museum.addressEs);
   assert.equal(museum.address.en, museum.addressEn);
   assert.deepEqual(museum.hours.map(({ day }) => day), ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]);
@@ -145,7 +145,7 @@ test("the City Museum retains its unverified bilingual source data", () => {
     museum.verificationSourceUrls[1],
     "https://www.felipecarrillopuerto.gob.mx/carnaval?view=article&amp;id=4&amp;catid=9",
   );
-  assert.match(museum.verificationNotes, /Calle 67 \nCopied\n#768\n/);
+  assert.match(museum.verificationNotes, /Calle 67 #768/);
   assert.equal(museum.verificationNote, museum.verificationNotes);
   assert.equal(museum.lastUpdated, "2026-09-30");
 
@@ -165,13 +165,13 @@ test("the House of Culture retains its unverified approximate source data", () =
   assert.equal(casaDeLaCultura.name.en, casaDeLaCultura.nameEn);
   assert.equal(casaDeLaCultura.description.es, casaDeLaCultura.shortDescriptionEs);
   assert.equal(casaDeLaCultura.description.en, casaDeLaCultura.shortDescriptionEn);
-  assert.match(casaDeLaCultura.fullDescriptionEs, /Calle 67 \nCopied\n#768\n, Col. Centro/);
-  assert.match(casaDeLaCultura.fullDescriptionEn, /Calle 67 \nCopied\n#768\n, Col. Centro/);
+  assert.match(casaDeLaCultura.fullDescriptionEs, /Calle 67 #768, Col. Centro/);
+  assert.match(casaDeLaCultura.fullDescriptionEn, /Calle 67 #768, Col. Centro/);
   assert.equal(casaDeLaCultura.latitude, 19.578167300889525);
   assert.equal(casaDeLaCultura.longitude, -88.0453221173923);
   assert.ok(inside(FCP_VIEW_BOUNDS, casaDeLaCultura));
-  assert.equal(casaDeLaCultura.addressEs.includes("Calle 67 \nCopied\n#768\n"), true);
-  assert.equal(casaDeLaCultura.addressEn.includes("67 Street \nCopied\n#768\n"), true);
+  assert.equal(casaDeLaCultura.addressEs.includes("Calle 67 #768"), true);
+  assert.equal(casaDeLaCultura.addressEn.includes("67 Street #768"), true);
   assert.equal(casaDeLaCultura.address.es, casaDeLaCultura.addressEs);
   assert.equal(casaDeLaCultura.address.en, casaDeLaCultura.addressEn);
   assert.deepEqual(casaDeLaCultura.hours.map(({ day }) => day), [
@@ -193,7 +193,7 @@ test("the House of Culture retains its unverified approximate source data", () =
   assert.equal(casaDeLaCultura.locationAccuracy, "approximate");
   assert.equal(isVerified(casaDeLaCultura), false);
   assert.equal(directionsUrlFor(casaDeLaCultura), null);
-  assert.match(casaDeLaCultura.verificationNotes, /Calle 67 \nCopied\n#768\n/);
+  assert.match(casaDeLaCultura.verificationNotes, /Calle 67 #768/);
   assert.equal(casaDeLaCultura.verificationNote, casaDeLaCultura.verificationNotes);
   assert.equal(casaDeLaCultura.verificationSourceUrls.length, 4);
   assert.equal(casaDeLaCultura.lastUpdated, "2026-09-30");
@@ -220,7 +220,7 @@ test("the civic plaza / palapa park retains its unverified bilingual source data
   assert.equal(plaza.locationAccuracy, "approximate");
   assert.equal(isVerified(plaza), false);
   assert.equal(directionsUrlFor(plaza), null);
-  assert.match(plaza.verificationNotes, /Calle 67 \nCopied\n#768\n/);
+  assert.match(plaza.verificationNotes, /Calle 67 #768/);
   assert.equal(plaza.verificationNote, plaza.verificationNotes);
   assert.equal(plaza.lastUpdated, "2026-09-30");
 
