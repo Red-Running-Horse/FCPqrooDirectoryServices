@@ -1,0 +1,24 @@
+{
+  "id": "estacion-tren-maya-felipe-carrillo-puerto",
+  "description": {
+    "es": "Estación del Tren Maya (Tramo 6, Tulum–Chetumal) con base de mantenimiento y servicios de turismo Maya Ka'an. Punto de llegada recomendado: Tulum ~1 h, Bacalar ~45 min, Chetumal ~1 h. Compra boletos y consulta horarios en la app oficial del Tren Maya.",
+    "en": "Tren Maya station (Tramo 6, Tulum–Chetumal) with a maintenance base and Maya Ka'an tourism services. Recommended arrival point: Tulum ~1 h, Bacalar ~45 min, Chetumal ~1 h. Buy tickets and check schedules in the official Tren Maya app."
+  },
+  "directionsUrl": null,
+  "address": {
+    "es": "Zona de la estación del Tren Maya, Felipe Carrillo Puerto, Quintana Roo (ubicación exacta por confirmar)",
+    "en": "Tren Maya station area, Felipe Carrillo Puerto, Quintana Roo (exact location to be confirmed)"
+  },
+  "hoursDisplay": {
+    "es": "Según horarios de circulación del Tren Maya (consultar app oficial)",
+    "en": "Per Tren Maya circulation schedules (check official app)"
+  },
+  "phone": null,
+  "whatsapp": null,
+  "website": "https://trenmaya.gob.mx/",
+  "verificationNote": {
+    "es": "La estación existe y presta servicio en el Tramo 6 según el sitio oficial del Tren Maya; las coordenadas son un punto aproximado del área de la estación y deben confirmarse con GPS en campo antes de ofrecer indicaciones.",
+    "en": "The station exists and serves Tramo 6 per the official Tren Maya site; coordinates are an approximate point in the station area and must be GPS-confirmed in the field before offering directions."
+  },
+  "lastUpdated": "2026-10-03"
+}

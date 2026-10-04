@@ -109,5 +109,121 @@
       "es": "Árbol del Pich (histórico)",
       "en": "The Pich Tree (historic)"
     }
+  },
+  {
+    "id": "estacion-tren-maya-felipe-carrillo-puerto",
+    "category": "tours",
+    "secondaryCategories": [
+      "culture"
+    ],
+    "latitude": 19.5837,
+    "longitude": -88.055,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Estación Tren Maya Felipe Carrillo Puerto",
+      "en": "Felipe Carrillo Puerto Tren Maya Station"
+    }
+  },
+  {
+    "id": "terminal-ado-felipe-carrillo-puerto",
+    "category": "tours",
+    "latitude": 19.5776,
+    "longitude": -88.0448,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Terminal ADO Felipe Carrillo Puerto",
+      "en": "Felipe Carrillo Puerto ADO Terminal"
+    }
+  },
+  {
+    "id": "zona-arqueologica-muyil-chunyaxche",
+    "category": "culture",
+    "secondaryCategories": [
+      "nature"
+    ],
+    "latitude": 19.7586,
+    "longitude": -87.7067,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Zona Arqueológica de Muyil (Chunyaxché)",
+      "en": "Muyil Archaeological Site (Chunyaxché)"
+    }
+  },
+  {
+    "id": "laguna-muyil-flotador-sian-kaan",
+    "category": "nature",
+    "secondaryCategories": [
+      "tours"
+    ],
+    "latitude": 19.771,
+    "longitude": -87.724,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Laguna Muyil — Flotador del Canal Maya (Sian Ka'an)",
+      "en": "Muyil Lagoon — Maya Canal Float (Sian Ka'an)"
+    }
+  },
+  {
+    "id": "reserva-much-kanan-kaax-siijil-noh-ha",
+    "category": "nature",
+    "secondaryCategories": [
+      "lodging",
+      "tours"
+    ],
+    "latitude": 19.5108,
+    "longitude": -88.0803,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Reserva Comunitaria Much Kanan K'áax / Ecocabañas Síijil Noh Ha",
+      "en": "Much Kanan K'áax Community Reserve / Síijil Noh Ha Ecolodges"
+    }
+  },
+  {
+    "id": "museo-de-la-guerra-de-castas-tihosuco",
+    "category": "culture",
+    "latitude": 19.8628,
+    "longitude": -88.3717,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Museo de la Guerra de Castas (Tihosuco)",
+      "en": "Museum of the Caste War (Tihosuco)"
+    }
+  },
+  {
+    "id": "kantemo-cueva-de-las-serpientes-colgantes",
+    "category": "nature",
+    "secondaryCategories": [
+      "tours"
+    ],
+    "latitude": 19.9167,
+    "longitude": -88.8667,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Cueva de las Serpientes Colgantes (Kantemó)",
+      "en": "Cave of the Hanging Snakes (Kantemó)"
+    }
+  },
+  {
+    "id": "chunhuhub-secretos-de-la-cocina-maya",
+    "category": "tours",
+    "secondaryCategories": [
+      "food",
+      "culture"
+    ],
+    "latitude": 19.6139,
+    "longitude": -88.5997,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Chunhuhub — Secretos de la Cocina Maya (tour comunitario)",
+      "en": "Chunhuhub — Secrets of Maya Cooking (community tour)"
+    }
   }
 ]

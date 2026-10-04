@@ -1,0 +1,24 @@
+{
+  "id": "zona-arqueologica-muyil-chunyaxche",
+  "description": {
+    "es": "Sitio maya compacto envuelto en selva a orillas de la laguna Muyil, con la pirámide El Castillo como pieza principal. A ~30 min de FCP hacia Tulum; se combina con el paseo en lancha y el flotador por el canal Maya en la laguna. Cobro de acceso INAH; confirmar tarifa vigente.",
+    "en": "Compact Maya site wrapped in jungle on the shore of Muyil lagoon, with the El Castillo pyramid as its centerpiece. ~30 min from FCP toward Tulum; combine with the boat ride and canal float on the lagoon. INAH entrance fee applies; confirm current rate."
+  },
+  "directionsUrl": null,
+  "address": {
+    "es": "Muyil, a un lado de la carretera 307, Municipio de Felipe Carrillo Puerto, Quintana Roo",
+    "en": "Muyil, off Highway 307, Municipality of Felipe Carrillo Puerto, Quintana Roo"
+  },
+  "hoursDisplay": {
+    "es": "Lun - Dom: aprox. 08:00 - 17:00 (confirmar con INAH)",
+    "en": "Mon - Sun: approx. 08:00 - 17:00 (confirm with INAH)"
+  },
+  "phone": null,
+  "whatsapp": null,
+  "website": "https://www.inah.gob.mx/",
+  "verificationNote": {
+    "es": "Sitio publicado por INAH como Zona Arqueológica Muyil; las coordenadas corresponden al área del sitio publicada en mapas pero no se verificaron con GPS. Horarios y tarifas oficiales deben confirmarse en inah.gob.mx.",
+    "en": "Site published by INAH as Muyil Archaeological Zone; coordinates match the published site area on maps but were not GPS-verified. Official hours and fees must be confirmed at inah.gob.mx."
+  },
+  "lastUpdated": "2026-10-03"
+}

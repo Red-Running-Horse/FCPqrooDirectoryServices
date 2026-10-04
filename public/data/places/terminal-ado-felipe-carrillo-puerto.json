@@ -1,0 +1,24 @@
+{
+  "id": "terminal-ado-felipe-carrillo-puerto",
+  "description": {
+    "es": "Terminal de autobuses ADO en el centro: conexiones frecuentes con Tulum (~1 h), Playa del Carmen (~2 h), Cancún (~3.5–4 h) y Chetumal/Bacalar (~1.5–2 h). Junto a las salidas de colectivos hacia Tulum y comunidades de la Zona Maya. Boletos en la app ADO o en taquilla.",
+    "en": "Downtown ADO bus terminal: frequent services to Tulum (~1 h), Playa del Carmen (~2 h), Cancún (~3.5–4 h) and Chetumal/Bacalar (~1.5–2 h). Colectivo stands to Tulum and Zona Maya communities are adjacent. Tickets via the ADO app or at the counter."
+  },
+  "directionsUrl": null,
+  "address": {
+    "es": "Centro, Felipe Carrillo Puerto, Quintana Roo (dirección exacta por confirmar)",
+    "en": "Downtown, Felipe Carrillo Puerto, Quintana Roo (exact address to be confirmed)"
+  },
+  "hoursDisplay": {
+    "es": "Taquillas según horarios de salida (app ADO)",
+    "en": "Ticket counter per departure schedules (ADO app)"
+  },
+  "phone": null,
+  "whatsapp": null,
+  "website": "https://www.ado.com.mx/",
+  "verificationNote": {
+    "es": "La terminal ADO opera en el centro de FCP según la red nacional ADO; las coordenadas son aproximadas y deben verificarse en campo. Horarios y tarifas varían — confirmar siempre en la app ADO.",
+    "en": "The ADO terminal operates in downtown FCP per the national ADO network; coordinates are approximate and must be field-verified. Schedules and fares vary — always confirm in the ADO app."
+  },
+  "lastUpdated": "2026-10-03"
+}
