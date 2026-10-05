@@ -1,5 +1,10 @@
+import "@fontsource-variable/fraunces";
+import "@fontsource-variable/inter";
 import "leaflet/dist/leaflet.css";
 import "./style.css";
+import "./maya-theme.css";
+import "./featured-partners.css";
+import SiteHeader from "./site-header";
 
 export const metadata = {
   metadataBase: new URL("https://fcpqroo.mx"),
@@ -41,7 +46,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es-MX">
-      <body>{children}</body>
+      <body>
+        <SiteHeader />
+        {children}
+      </body>
     </html>
   );
 }
