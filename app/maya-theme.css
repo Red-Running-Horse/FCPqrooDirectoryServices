@@ -1,0 +1,142 @@
+/* ==========================================================================
+   maya-theme.css — "Casa de Piedra Caliza" theme layer (Phase 1)
+   Loaded AFTER style.css in app/layout.js. Re-maps the Phase A tokens onto
+   the obsidian / limewash / cochineal / marigold / jade / Maya blue palette,
+   swaps in Fraunces + Inter, and adds the site header + greca motif.
+   Accessibility (WCAG AA):
+     - Obsidian #241c15 on Limewash #f5eeda = 14.5:1 (body text)
+     - Cochineal #9e3b25 on Limewash = 5.7:1 (links/eyebrows)
+     - Marigold #c08a2d is DECORATIVE ONLY (2.6:1 on cream — never text)
+   ========================================================================== */
+
+:root {
+  /* surfaces */
+  --sand: #f5eeda;          /* limewash — page background */
+  --cream: #fbf6ea;         /* cards */
+  --sand-deep: #ece1c6;
+  --sand-line: #d8c9a6;
+  --obsidian: #241c15;
+  --obsidian-soft: #3a2f24;
+
+  /* accents */
+  --charcoal: #241c15;      /* obsidian replaces charcoal everywhere */
+  --charcoal-soft: #4a3f34;
+  --terracotta: #9e3b25;    /* cochineal */
+  --terracotta-light: #b8552f;
+  --jungle: #2e6b4f;        /* jade */
+  --turquoise: #2b677a;     /* Maya blue */
+  --maize: #7c5f10;         /* dark marigold — AA-safe with white badge text */
+  --marigold: #c08a2d;      /* decorative only */
+  --plum: #8a4a63;
+  --lagoon: #536c98;
+  --earth: #77663d;
+
+  --font-heading: "Fraunces Variable", "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* ---------- Site header ---------- */
+.site-header {
+  background: var(--obsidian);
+  color: var(--sand);
+  margin: 0 0 0.75rem;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.65rem 1rem 0.8rem;
+}
+
+.site-header__brand {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--sand);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.site-header__brand span {
+  color: var(--marigold);
+  font-weight: 500;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav a {
+  display: inline-block;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius-sm);
+  color: var(--sand);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  /* greca underline on hover/current */
+  background-image: linear-gradient(90deg, var(--marigold), var(--marigold));
+  background-repeat: no-repeat;
+  background-size: 0% 3px;
+  background-position: 50% 100%;
+  transition: background-size 0.18s ease;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  background-size: 70% 3px;
+}
+
+.site-nav a[aria-current="page"] {
+  color: #fff;
+  font-weight: 600;
+}
+
+.site-nav a:focus-visible {
+  outline: 2px solid var(--marigold);
+  outline-offset: 2px;
+}
+
+/* ---------- Greca bands ---------- */
+.greca {
+  display: block;
+  width: 100%;
+  height: 12px;
+}
+
+/* Hero: replace the striped bar with a greca band (pure CSS, no JS changes). */
+.hero__bar {
+  height: 12px;
+  border-radius: 0;
+  opacity: 1;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='12'%3E%3Cpath d='M0 12 V9 H6 V6 H12 V3 H18' fill='none' stroke='%239e3b25' stroke-width='2.2'/%3E%3Cpath d='M24 12 V9 H30 V6 H36 V3 H42' fill='none' stroke='%23c08a2d' stroke-width='2.2'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-size: 48px 12px;
+}
+
+/* Cards adopt a subtle stucco texture + greca top edge on the portal */
+.hero {
+  background: var(--cream);
+}
+
+@media (max-width: 47.99rem) {
+  .site-header__inner {
+    padding: 0.55rem 0.75rem 0.7rem;
+  }
+
+  .site-nav a {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.88rem;
+  }
+}

@@ -1,0 +1,145 @@
+/* ==========================================================================
+   featured-partners.css — attract band (sliced-image cascade) + partner cards
+   ========================================================================== */
+
+/* ---------- Attract band ---------- */
+.attract {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 2px solid var(--marigold);
+  background: var(--sand-deep);
+  aspect-ratio: 21 / 6;
+  margin-bottom: 1rem;
+}
+
+.attract__scene {
+  position: absolute;
+  inset: 0;
+}
+
+.attract__slice {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* each slice occupies 1/SLICES of the width */
+  width: calc(100% / 5 + 1px);
+  background-repeat: no-repeat;
+  /* hidden below or above depending on scene parity; JS sets --exit-y */
+  transform: translateY(102%);
+  transition: transform 0.55s cubic-bezier(0.7, 0, 0.3, 1);
+  will-change: transform;
+}
+
+.attract__scene[data-active="true"] .attract__slice {
+  transform: translateY(0);
+}
+
+/* position the five slices side by side */
+.attract__slice:nth-child(1) { left: 0; }
+.attract__slice:nth-child(2) { left: 20%; }
+.attract__slice:nth-child(3) { left: 40%; }
+.attract__slice:nth-child(4) { left: 60%; }
+.attract__slice:nth-child(5) { left: 80%; }
+
+/* polite motion */
+@media (prefers-reduced-motion: reduce) {
+  .attract__slice { transition: none; }
+}
+
+.attract__link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.9rem;
+  text-decoration: none;
+  background: linear-gradient(transparent 55%, rgba(36, 28, 21, 0.6));
+}
+
+.attract__badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--marigold);
+  color: var(--obsidian);
+  border-radius: 4px;
+  padding: 0.15rem 0.5rem;
+}
+
+.attract__name {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cream);
+  text-shadow: 0 1px 3px rgba(36, 28, 21, 0.6);
+}
+
+/* ---------- Partner cards ---------- */
+.partners-row {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.partner-card {
+  display: block;
+  background: var(--cream);
+  border: 1px solid var(--sand-line);
+  border-radius: 10px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.partner-card:hover {
+  border-color: var(--marigold);
+  transform: translateY(-2px);
+}
+
+.partner-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.partner-card__body { padding: 0.7rem 0.9rem 0.9rem; }
+
+.partner-card__badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--maize);
+}
+
+.partner-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  margin: 0.25rem 0 0.15rem;
+}
+
+.partner-card p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--charcoal-soft);
+}
+
+.partner-card__cta {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--turquoise);
+}
+
+@media (max-width: 47.99rem) {
+  .attract { aspect-ratio: 16 / 7; }
+  .partners-row { grid-template-columns: 1fr; }
+}
