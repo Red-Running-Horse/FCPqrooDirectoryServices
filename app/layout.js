@@ -1,9 +1,9 @@
-import "@fontsource-variable/fraunces";
-import "@fontsource-variable/inter";
 import "leaflet/dist/leaflet.css";
 import "./style.css";
 import "./maya-theme.css";
 import "./featured-partners.css";
+import "@fontsource-variable/fraunces";
+import "@fontsource-variable/inter";
 import SiteHeader from "./site-header";
 
 export const metadata = {
