@@ -140,6 +140,7 @@
 }
 
 @media (max-width: 47.99rem) {
-  .attract { aspect-ratio: 16 / 7; }
-  .partners-row { grid-template-columns: 1fr; }
+  .attract { aspect-ratio: 16 / 8; }
+  .attract__name { font-size: 0.95rem; }
+  .attract__badge { font-size: 0.62rem; }
 }
