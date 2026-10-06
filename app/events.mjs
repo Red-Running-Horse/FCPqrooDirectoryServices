@@ -42,7 +42,7 @@ const events = [
     promoted: true,
     promotion: {
       mediaType: "image",
-      mediaUrl: "/promo/promotion1_1680_840.webp",
+      mediaUrl: "/promo/promotion1_1680_487.webp",
       siteUrl: "https://example.com/1",
       tagline: { es: "Prueba uno / Test one", en: "Test one" },
     },
@@ -61,7 +61,7 @@ const events = [
     promoted: true,
     promotion: {
       mediaType: "image",
-      mediaUrl: "/promo/promotion2_1680_840.webp",
+      mediaUrl: "/promo/promotion2_1680_487.webp",
       siteUrl: "https://example.com/2",
       tagline: { es: "Prueba dos / Test two", en: "Test two" },
     },
