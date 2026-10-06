@@ -1,4 +1,5 @@
 import HighwayMap from "./highway-map";
+import FeaturedPartners from "./featured-partners";
 import placesIndex from "../public/data/places-index.json";
 
 const structuredData = {
@@ -22,6 +23,9 @@ export default function Home() {
           __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
         }}
       />
+      <div style={{ maxWidth: "60rem", margin: "0 auto", padding: "0 1rem" }}>
+        <FeaturedPartners />
+      </div>
       <HighwayMap placesIndex={placesIndex} />
     </main>
   );

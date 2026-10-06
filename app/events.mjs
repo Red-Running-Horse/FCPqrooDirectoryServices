@@ -11,57 +11,31 @@
 export const MAX_PROMOTED = 3;
 
 const events = [
-  // ---- SAMPLE promoted partner (replace with a real paid client) ----
   {
-    id: "example-promoted-circuito-ximbal",
+    id: "promo-balam-nah",
     promoted: true,
     promotion: {
-      mediaType: "image",              // "image" only in the band (video/youtube -> card only)
-      mediaUrl: "/promo/ximbal.jpg",   // put the file in /public/promo/
-      siteUrl: "https://ximbal.fcpqroo.mx",   // the client's microsite
+      mediaType: "image",
+      mediaUrl: "/promo/balamnah_1680_480.webp",
+      siteUrl: "https://balamnah.fcpqroo.mx",
       tagline: {
-        es: "Circuito comunitario de 2 días por Muyil, FCP y Tihosuco",
-        en: "2-day community circuit through Muyil, FCP and Tihosuco",
+        es: "Bed & Breakfast MXN850, a 10 minutos en la naturaleza.",
+        en: "Bed & Breakfast MXN850, 10 min away in nature",
       },
     },
-    title: {
-      es: "Circuito Maya Ximbal",
-      en: "Maya Ximbal Circuit",
-    },
+    title: { es: "Balam-Nah", en: "Balam-Nah" },
     description: {
-      es: "EXAMPLE — reemplazar con cliente real. Circuito comunitario con noche en la selva.",
-      en: "EXAMPLE — replace with a real client. Community circuit with a night in the jungle.",
+      es: "Talleres, exposiciones y eventos culturales dedicados a la preservación de la cultura maya.",
+      en: "Workshops, exhibitions and cultural events dedicated to preserving Maya culture.",
     },
-    dateStart: "2026-11-14",
-    dateEnd: "2026-11-15",
-    placeId: "reserva-much-kanan-kaax-siijil-noh-ha",
-    locationText: { es: "Salida: Tren Maya FCP", en: "Departure: Tren Maya FCP" },
-    cost: { es: "Consultar", en: "To be announced" },
-    sourceUrl: "https://example.org/replace-me",
+    dateStart: "2026-10-06",
+    dateEnd: "2026-12-31",
+    placeId: "balam-nah-felipe-carrillo-puerto",
+    locationText: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
+    cost: { es: "Consultar", en: "See site" },
+    sourceUrl: "https://balamnah.fcpqroo.mx",
     status: "unverified",
-    lastUpdated: "2026-10-05",
-  },
-
-  // ---- SAMPLE organic entry (chronological list) ----
-  {
-    id: "example-feria-santa-cruz",
-    promoted: false,
-    title: {
-      es: "Feria de la Santa Cruz",
-      en: "Holy Cross Fair",
-    },
-    description: {
-      es: "EXAMPLE — reemplazar con evento real. Peregrinación y feria anual en el Santuario (3 de mayo).",
-      en: "EXAMPLE — replace with a real event. Annual pilgrimage and fair at the Sanctuary (May 3).",
-    },
-    dateStart: "2027-05-03",
-    dateEnd: "2027-05-03",
-    placeId: "santuario-de-la-cruz-parlante-fcp",
-    locationText: { es: "Santuario de la Cruz Parlante", en: "Talking Cross Sanctuary" },
-    cost: { es: "Entrada libre", en: "Free entry" },
-    sourceUrl: "https://example.org/replace-me",
-    status: "unverified",
-    lastUpdated: "2026-10-05",
+    lastUpdated: "2026-10-06",
   },
 ];
 
