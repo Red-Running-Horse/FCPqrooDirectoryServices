@@ -140,3 +140,5 @@
     font-size: 0.88rem;
   }
 }
+/* Reserve scrollbar space so layout (and the map) never reflows sideways */
+html { scrollbar-gutter: stable; }
