@@ -83,7 +83,7 @@
 .partners-row {
   display: grid;
   gap: 0.9rem;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
 }
 
 .partner-card {
