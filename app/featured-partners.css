@@ -140,19 +140,9 @@
 }
 
 @media (max-width: 47.99rem) {
-  /* each partner becomes a horizontal banner, text overlaid on the image */
-  .partners-row { grid-template-columns: 1fr; }
-  .partner-card { position: relative; }
-  .partner-card img { aspect-ratio: 69 / 20; }
-  .partner-card__body {
-    position: absolute;
-    inset: auto 0 0 0;
-    padding: 1.6rem 0.8rem 0.6rem;
-    background: linear-gradient(transparent 20%, rgba(36, 28, 21, 0.8));
-  }
-  .partner-card h3,
-  .partner-card p,
-  .partner-card__cta { color: var(--cream); }
-  .partner-card__badge { color: var(--marigold); }
-  .partner-card__cta { margin-top: 0.25rem; }
+  /* mobile: rotating banner only — no card row */
+  .partners-row { display: none; }
+  .attract { aspect-ratio: 69 / 20; }
+  .attract__name { font-size: 0.95rem; }
+  .attract__badge { font-size: 0.62rem; }
 }
