@@ -134,9 +134,11 @@
 .hero__mark {
   display: block;
   width: 100%;
-  height: clamp(150px, 28vw, 300px);
+  max-width: 1200px;        /* never upscale past the source */
+  aspect-ratio: 1200 / 345; /* exact image ratio: no crop at any size */
+  height: auto;
   object-fit: cover;
-  margin-bottom: 0.75rem;
+  margin: 0 auto 0.75rem;   /* centers it with cream margins on wide screens */
 }
 
 /* Let the hero text actually fill its column */
