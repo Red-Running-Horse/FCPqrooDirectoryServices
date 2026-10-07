@@ -73,6 +73,12 @@ function AttractBand({ partners }) {
         </div>
       ))}
       <a
+        className="attract__image-link"
+        href={`/promo/${current.id}`}
+        tabIndex={-1}
+        aria-hidden="true"
+      />
+      <a
         className="attract__link"
         href={`/promo/${current.id}`}          // band — drop target="_blank" rel="noopener noreferrer"
         aria-label={`${current.title.es} (ver promoción / view promotion)`}
