@@ -520,8 +520,8 @@ export default function HighwayMap({ placesIndex }) {
           <img
             className="hero__mark"
             src="/img/fcp-sign.webp"
-            width={360}
-            height={360}
+            width={1200}
+            height={345}
             alt={language === "en"
             ? "Felipe Carrillo Puerto city sign"
             : "Letrero de la ciudad de Felipe Carrillo Puerto"}
