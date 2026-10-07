@@ -104,7 +104,7 @@ export default function FeaturedPartners() {
           >
             {p.promotion?.mediaType === "image" && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={p.promotion.mediaUrl} alt={p.title.es} loading="lazy" />
+              <img src={p.promotion.cardUrl || p.promotion.mediaUrl} alt={p.title.es} loading="lazy" />
             )}
             <div className="partner-card__body">
               <span className="partner-card__badge">
