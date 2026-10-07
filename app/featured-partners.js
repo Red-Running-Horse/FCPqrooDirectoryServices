@@ -74,10 +74,8 @@ function AttractBand({ partners }) {
       ))}
       <a
         className="attract__link"
-        href={current.promotion?.siteUrl || current.sourceUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`${current.title.es} (sitio del patrocinador / sponsor site)`}
+        href={`/promo/${current.id}`}          // band — drop target="_blank" rel="noopener noreferrer"
+        aria-label={`${current.title.es} (ver promoción / view promotion)`}
       >
         <span className="attract__badge">Promocionado / Sponsored</span>
         <span className="attract__name">{current.title.es}</span>
@@ -95,12 +93,10 @@ export default function FeaturedPartners() {
       {partners.length >= 2 && <AttractBand partners={partners} />}
       <div className="partners-row">
         {partners.map((p) => (
-          <a
+            <a
             key={p.id}
             className="partner-card"
-            href={p.promotion?.siteUrl || p.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`/promo/${p.id}`}               // card — drop target="_blank" rel="noopener noreferrer"
           >
             {p.promotion?.mediaType === "image" && (
               // eslint-disable-next-line @next/next/no-img-element

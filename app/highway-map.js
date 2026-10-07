@@ -400,7 +400,12 @@ export default function HighwayMap({ placesIndex }) {
         pendingFocus.current = null;
       }
       syncMarkerSelection(markers, selectedPlace.current);
-
+      // Deep link: /?lugar=<place-id> selects and focuses a place (promo landing pages).
+      const lugar = new URLSearchParams(window.location.search).get("lugar");
+      if (lugar && markers.has(lugar)) {
+        setSelectedId(lugar);
+        focusMarker({ map, markers, group }, lugar);
+      }
       const response = await fetch("/regional-highways.geojson", {
         signal: controller.signal,
       });

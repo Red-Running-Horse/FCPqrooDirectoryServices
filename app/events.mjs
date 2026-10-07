@@ -17,7 +17,7 @@ const events = [
     promotion: {
       mediaType: "image",
       mediaUrl: "/promo/balamnah_1680_487.webp",   // band (69:20 wide banner)
-      cardUrl: "/promo/balamnah_850_450.webp",     // ← ADD THIS (card image)
+      cardUrl: "/promo/balamnah_850_450.webp",     
       siteUrl: "https://balamnah.fcpqroo.mx",
       tagline: {
         es: "Bed & Breakfast MXN850, a 10 minutos en la naturaleza.",
@@ -28,6 +28,17 @@ const events = [
     description: {
       es: "Talleres, exposiciones y eventos culturales dedicados a la preservación de la cultura maya.",
       en: "Workshops, exhibitions and cultural events dedicated to preserving Maya culture.",
+    },
+    landing: {
+      details: {
+        es: "Balam-Nah («Casa del Jaguar») es un centro cultural y museo dedicado a preservar la lengua, el arte y las tradiciones del pueblo maya de la Zona Maya.",
+        en: "Balam-Nah ('Jaguar House') is a cultural center and museum dedicated to preserving the language, art and traditions of the Zona Maya people.",
+      },
+      highlights: [
+        { es: "Exposiciones de arte y cultura maya", en: "Maya art and culture exhibitions" },
+        { es: "Talleres de lengua y tradiciones", en: "Language and tradition workshops" },
+        { es: "Eventos y presentaciones culturales", en: "Cultural events and performances" },
+      ],
     },
     dateStart: "2026-10-06",
     dateEnd: "2026-12-31",
@@ -78,6 +89,7 @@ const events = [
     status: "unverified",
     lastUpdated: "2026-10-06",
   },
+
 ];
 
 // ---- Build-time guard: never more than MAX_PROMOTED sponsored events ----
@@ -88,5 +100,6 @@ if (promotedCount > MAX_PROMOTED) {
       `Demote one before building — the sponsored slots are capped at 3 by design.`
   );
 }
+
 
 export default events;

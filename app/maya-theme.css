@@ -162,5 +162,9 @@
     font-size: 0.88rem;
   }
 }
+
+.place-portal__promo { display: block; position: relative; margin: 0.5rem 0; border-radius: 8px; overflow: hidden; border: 2px solid var(--marigold); }
+.place-portal__promo img { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.place-portal__promo span { position: absolute; left: 0.5rem; bottom: 0.4rem; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background: var(--marigold); color: var(--obsidian); border-radius: 4px; padding: 0.1rem 0.4rem; }
 /* Reserve scrollbar space so layout (and the map) never reflows sideways */
 html { scrollbar-gutter: stable; }

@@ -36,6 +36,13 @@ export default function PlacePortal({
                   {view.otherName}
                 </p>
               )}
+              {attraction.promotion?.cardUrl && (
+                <a className="place-portal__promo" href={`/promo/${attraction.promotion.eventId}`}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={attraction.promotion.cardUrl} alt="" loading="lazy" />
+                  <span>Promoción / Promotion ↗</span>
+                </a>
+              )}
             </div>
             <button type="button" className="place-portal__clear" onClick={onClear}>
               {view.clearLabel}
