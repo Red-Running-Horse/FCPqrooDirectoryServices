@@ -5,6 +5,8 @@
 /* ---------- Attract band ---------- */
 .attract {
   position: relative;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   border-radius: 12px;
   border: 2px solid var(--marigold);
@@ -12,8 +14,19 @@
   margin-bottom: 1rem;
 }
 
+/* Invisible element that reserves the image area's height in the flow */
+.attract::before {
+  content: "";
+  display: block;
+  width: 100%;
+  aspect-ratio: 69 / 20;
+}
+
 .attract__scene {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   aspect-ratio: 69 / 20;
   overflow: hidden;
 }
