@@ -139,10 +139,6 @@
   margin-bottom: 0.75rem;
 }
 
-@media (min-width: 48rem) {
-  .hero__mark { width: 220px; }  /* smaller beside the heading on desktop */
-}
-
 /* Let the hero text actually fill its column */
 .hero__title-block {
   flex: 1 1 auto;
