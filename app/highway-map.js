@@ -517,7 +517,16 @@ export default function HighwayMap({ placesIndex }) {
     <>
       <section className="hero" aria-label={text.heading}>
         <div className="hero__bar" aria-hidden="true" />
-        <div className="map-header">
+          <img
+            className="hero__mark"
+            src="/img/fcp-sign.webp"
+            width={360}
+            height={360}
+            alt={language === "en"
+            ? "Felipe Carrillo Puerto city sign"
+            : "Letrero de la ciudad de Felipe Carrillo Puerto"}
+          />
+  <div className="map-header">
           <div className="hero__title-block">
             <p className="hero__eyebrow">{text.heroEyebrow}</p>
             <h1>{text.heading}</h1>

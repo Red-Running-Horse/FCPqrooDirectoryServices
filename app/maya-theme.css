@@ -130,6 +130,30 @@
   background: var(--cream);
 }
 
+/* City sign banner — full width across the hero */
+.hero__mark {
+  display: block;
+  width: 100%;
+  height: clamp(150px, 28vw, 300px);
+  object-fit: cover;
+  margin-bottom: 0.75rem;
+}
+
+@media (min-width: 48rem) {
+  .hero__mark { width: 220px; }  /* smaller beside the heading on desktop */
+}
+
+/* Let the hero text actually fill its column */
+.hero__title-block {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.hero__title-block h1 {
+  max-width: none;
+  text-wrap: wrap;   /* in case a balance rule is shortening the lines */
+}
+
 @media (max-width: 47.99rem) {
   .site-header__inner {
     padding: 0.55rem 0.75rem 0.7rem;
