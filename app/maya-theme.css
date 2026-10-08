@@ -37,12 +37,11 @@
 
 /* ---------- Site header ---------- */
 .site-header {
-  background: var(--obsidian);
+  background: var(--terracotta);   /* cochineal red — see below */
   color: var(--sand);
+  border-radius: 0;
   margin: 0 0 0.75rem;
-  border-radius: var(--radius-card);
-  overflow: hidden;
-  box-shadow: var(--shadow-soft);
+  box-shadow: none;
 }
 
 .site-header__inner {
