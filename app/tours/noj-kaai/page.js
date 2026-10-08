@@ -1,0 +1,1 @@
+mv public/promo/nojkaaj_resistance_tour_1280_720.webp public/img/ 2>/dev/null || mv public/promo/NojKaaj_resistance_tour_1280_720.webp public/img/nojkaaj_resistance_tour_1280_720.webp

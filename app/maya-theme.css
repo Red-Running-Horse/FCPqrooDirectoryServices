@@ -151,6 +151,17 @@
   text-wrap: wrap;   /* in case a balance rule is shortening the lines */
 }
 
+.place-portal__tour-link {
+  display: inline-block;
+  margin: 0.5rem 0;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--turquoise);
+  color: var(--turquoise);
+  font-weight: 600;
+  text-decoration: none;
+}
+
 @media (max-width: 47.99rem) {
   .site-header__inner {
     padding: 0.55rem 0.75rem 0.7rem;

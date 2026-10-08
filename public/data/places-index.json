@@ -24,6 +24,21 @@
     }
   },
   {
+    "id": "noj-kaaj-ruta-de-la-resistencia",
+    "category": "culture",
+    "secondaryCategories": [
+      "tours"
+    ],
+    "latitude": 19.57814,
+    "longitude": -88.04605,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Noj Kaaj — Ruta de la Resistencia",
+      "en": "Noj Kaaj — Resistance Route"
+    }
+  },
+  {
     "id": "museo-de-la-ciudad-felipe-carrillo-puerto",
     "category": "culture",
     "latitude": 19.57802448542231,

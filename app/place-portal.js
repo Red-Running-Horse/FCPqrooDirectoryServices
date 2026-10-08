@@ -43,6 +43,11 @@ export default function PlacePortal({
                   <span>Promoción / Promotion ↗</span>
                 </a>
               )}
+              {attraction.tourPage && (
+                <a className="place-portal__tour-link" href={attraction.tourPage.url}>
+                  Ver detalles del tour / View tour details ↗
+                </a>
+              )}
             </div>
             <button type="button" className="place-portal__clear" onClick={onClear}>
               {view.clearLabel}
