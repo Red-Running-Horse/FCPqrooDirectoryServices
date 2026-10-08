@@ -77,7 +77,7 @@
 
 .site-nav a {
   display: inline-block;
-  padding: 0.4rem 0.7rem;
+  padding: 0.4rem 0.85rem;   /* slightly roomier tap targets */
   border-radius: var(--radius-sm);
   color: var(--sand);
   text-decoration: none;

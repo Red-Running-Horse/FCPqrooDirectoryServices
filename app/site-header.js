@@ -25,9 +25,6 @@ export default function SiteHeader() {
     <header className="site-header">
       <GrecaBand />
       <div className="site-header__inner">
-        <Link href="/" className="site-header__brand">
-          FCP <span>· Maya Ka&rsquo;an</span>
-        </Link>
         <nav aria-label="Secciones del sitio / Site sections">
           <ul className="site-nav">
             {NAV_ITEMS.map(({ href, label, external, match }) => (
