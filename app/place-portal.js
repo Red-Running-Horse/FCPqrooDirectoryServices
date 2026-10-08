@@ -45,7 +45,7 @@ export default function PlacePortal({
               )}
               {attraction.tourPage && (
                 <a className="place-portal__tour-link" href={attraction.tourPage.url}>
-                  Ver detalles del tour / View tour details ↗
+                  {language === "en" ? "View tour details ↗" : "Ver detalles del tour ↗"}
                 </a>
               )}
             </div>

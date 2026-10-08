@@ -162,6 +162,72 @@
   text-decoration: none;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.places-dropdown {
+  margin: 0.75rem 0;
+  border: 1px solid var(--sand-line);
+  border-radius: 10px;
+  background: var(--cream);
+}
+
+.places-dropdown summary {
+  padding: 0.6rem 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+}
+
+.places-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+.places-dropdown summary::after {
+  content: "▾";
+  font-size: 0.85rem;
+  color: var(--terracotta);
+  transition: transform 0.2s;
+}
+
+.places-dropdown[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.places-dropdown__count {
+  background: var(--turquoise);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  font-weight: 700;
+}
+
+.places-dropdown .listing-references {
+  padding: 0 0.5rem 0.5rem;
+  margin: 0;
+  border: none;
+  background: transparent;
+}
+
+.places-dropdown .listing-references ul {
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
 @media (max-width: 47.99rem) {
   .site-header__inner {
     padding: 0.55rem 0.75rem 0.7rem;

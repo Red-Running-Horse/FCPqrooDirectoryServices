@@ -111,6 +111,14 @@ export default function HighwayMap({ placesIndex }) {
   const [isOnline, setIsOnline] = useState(true);
   const text = uiText(language);
   const references = listingReferences(placesIndex);
+  const filteredReferences =
+    category === "all"
+      ? references
+      : references.filter(
+          (p) =>
+            p.category === category ||
+            (p.secondaryCategories || []).includes(category)
+        );
   const noResults = search.trim() !== "" && filterPlaces(places, category, search).length === 0;
   const selectedPlaceView = detail ?? places.find(({ id }) => id === selectedId) ?? null;
 
@@ -670,11 +678,17 @@ export default function HighwayMap({ placesIndex }) {
           )}
         </div>
       </div>
-      <section className="listing-references" aria-labelledby="listing-references-heading">
-          <h2 id="listing-references-heading">{text.listingsHeading}</h2>
-          <p>{text.listingsContext}</p>
+      <details className="places-dropdown" open={category !== "all"}>
+        <summary>
+          <span>{language === "en" ? "Places on the map" : "Lugares en el mapa"}</span>
+          <span className="places-dropdown__count">{filteredReferences.length}</span>
+        </summary>
+        <section className="listing-references" aria-labelledby="listing-references-heading">
+          <h2 id="listing-references-heading" className="visually-hidden">
+            {text.listingsHeading}
+          </h2>
           <ul>
-            {references.map((place) => {
+            {filteredReferences.map((place) => {
               const name = localize(place.name, language);
               const action = text.listingsAction.replace("{name}", name);
               const categories = categorySummary(place, language);
@@ -704,7 +718,8 @@ export default function HighwayMap({ placesIndex }) {
               );
             })}
           </ul>
-      </section>
+        </section>
+      </details>
       <section
         id="offline-management"
         className="offline-management"
