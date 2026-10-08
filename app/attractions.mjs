@@ -339,6 +339,10 @@ const balamNah = {
   email: "",
   website: "https://balamnah.fcpqroo.mx/",
   socialLinks: { facebook: "", instagram: "", tiktok: "" },
+    promotion: {
+    cardUrl: "/promo/promotion0_1280_720.webp",
+    eventId: "promo-balam-nah",
+  },
   directionsUrl: null,
   priceLevel: null,
   paymentMethods: [],

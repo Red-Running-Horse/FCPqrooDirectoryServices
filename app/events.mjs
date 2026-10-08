@@ -16,8 +16,8 @@ const events = [
     promoted: true,
     promotion: {
       mediaType: "image",
-      mediaUrl: "/promo/balamnah_1680_487.webp",   // band (69:20 wide banner)
-      cardUrl: "/promo/balamnah_850_450.webp",     
+      mediaUrl: "/promo/promotion0_1680_487.webp",   // band (69:20 wide banner)
+      cardUrl: "/promo/promotion0_1280_720.webp",     
       siteUrl: "https://balamnah.fcpqroo.mx",
       tagline: {
         es: "Bed & Breakfast MXN850, a 10 minutos en la naturaleza.",
