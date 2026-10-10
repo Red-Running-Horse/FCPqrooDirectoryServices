@@ -47,7 +47,7 @@ test("the map workspace, portal placeholder and listing references are present w
   assert.match(map, /const references = listingReferences\(placesIndex\)/);
   assert.match(map, /const selectedPlaceView = detail \?\? places\.find\([^;]+ \?\? null;/);
   const initialMarkup = map.slice(map.indexOf('      <div className="map-container map-workspace">'));
-  assert.match(initialMarkup, /<div className="map-workspace__map">\s*<div ref=\{container\} className="map"/);
+  assert.match(initialMarkup, /<div className="map-workspace__map">\s*<div className="map-wrapper">\s*<div ref=\{container\} className="map"/);
   assert.match(initialMarkup, /<div className="map-workspace__portal">\s*<PlacePortal/);
   assert.match(initialMarkup, /<section className="listing-references"[\s\S]*\{filteredReferences\.map\(/);
   assert.match(portal, /!view\.selected\s*\?\s*\(\s*<p className="place-portal__prompt">/);

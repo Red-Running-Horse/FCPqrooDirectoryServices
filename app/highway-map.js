@@ -94,6 +94,7 @@ export default function HighwayMap({ placesIndex }) {
   const selectedLanguage = useRef(DEFAULT_LANGUAGE);
   const selectedPlace = useRef(null);
   const pendingFocus = useRef(null);
+  const mapActiveRef = useRef(false);
   const [category, setCategory] = useState("all");
   const [search, setSearch] = useState("");
   const [ctaMessage, setCtaMessage] = useState(null);
@@ -109,6 +110,7 @@ export default function HighwayMap({ placesIndex }) {
   const [offlineProgress, setOfflineProgress] = useState({ current: 0, total: 0 });
   const [savedPlaceIds, setSavedPlaceIds] = useState([]);
   const [isOnline, setIsOnline] = useState(true);
+  const [mapActive, setMapActive] = useState(false);
   const text = uiText(language);
   const references = listingReferences(placesIndex);
   const filteredReferences =
@@ -321,6 +323,19 @@ export default function HighwayMap({ placesIndex }) {
   }, [selectedId, places]);
 
   useEffect(() => {
+    mapActiveRef.current = mapActive;
+    const current = attractionLayer.current;
+    if (!current) return;
+    if (mapActive) {
+      current.map.dragging.enable();
+      current.map.touchZoom.enable();
+    } else {
+      current.map.dragging.disable();
+      current.map.touchZoom.disable();
+    }
+  }, [mapActive]);
+
+  useEffect(() => {
     let map;
     let disposed = false;
     const controller = new AbortController();
@@ -337,6 +352,10 @@ export default function HighwayMap({ placesIndex }) {
         maxBounds: FCP_MAX_BOUNDS,
         maxBoundsViscosity: 0.8,
       });
+      if (!mapActiveRef.current) {
+        map.dragging.disable();
+        map.touchZoom.disable();
+      }
       map.fitBounds(FCP_VIEW_BOUNDS);
 
       const reset = L.control({ position: "topleft" });
@@ -660,7 +679,27 @@ export default function HighwayMap({ placesIndex }) {
       {error && <p role="alert">{text.loadError}</p>}
       <div className="map-container map-workspace">
         <div className="map-workspace__map">
-          <div ref={container} className="map" aria-label={text.mapLabel} />
+          <div className="map-wrapper">
+            <div ref={container} className="map" aria-label={text.mapLabel} />
+            <div
+              className={`map-mobile-overlay${mapActive ? " hidden" : ""}`}
+              onClick={() => setMapActive(true)}
+            >
+              <span aria-hidden="true">👆</span>
+              <span>Pulsa para usar el mapa</span>
+              <span>Tap to use map</span>
+            </div>
+            {mapActive && (
+              <button
+                type="button"
+                className="map-mobile-done"
+                onClick={() => setMapActive(false)}
+                aria-label={language === "en" ? "Close map interaction" : "Cerrar interacción con mapa"}
+              >
+                ✕
+              </button>
+            )}
+          </div>
         </div>
         <div className="map-workspace__portal">
           <PlacePortal
