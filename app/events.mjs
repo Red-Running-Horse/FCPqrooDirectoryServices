@@ -112,6 +112,26 @@ const events = [
     status: "unverified",
     lastUpdated: "2026-10-06",
   },
+  {
+    // Submitted through the event suggestion form on 2026-10-11. Test data:
+    // ES mirrors EN — real submissions need proper translation before publishing.
+    id: "test-2",
+    title: { es: "Test 2", en: "Test 2" },
+    description: { es: "Test test", en: "Test test" },
+    startAt: "2026-10-11T10:25:00-05:00",
+    endAt: "2026-10-11T11:25:00-05:00",
+    venue: {
+      placeId: "mercado-felipe-carrillo-puerto",
+      name: {
+        es: "Mercado Público Municipal de Felipe Carrillo Puerto",
+        en: "Felipe Carrillo Puerto Municipal Public Market",
+      },
+    },
+    category: "culture",
+    contactNote: "Enviado por marcsir@tutanota.com el 2026-10-11 a las 15:26 (hora Cancún).",
+    status: "unverified",
+    lastUpdated: "2026-10-11",
+  },
 
 ];
 
