@@ -173,3 +173,16 @@ export function eventPopupView(event, language, places) {
     cost: localize(event.cost, language) ?? null,
   };
 }
+
+// ---- Promotion tiers --------------------------------------------------------
+// BASE: promoted: true — homepage strip + /promo/<id> landing.
+// PREMIUM: additionally carries a promotion media block — FeaturedPartners
+// banner + sponsor card. The banner is an upsell, never automatic.
+
+export function promotedEvents(events) {
+  return events.filter((event) => event.promoted === true);
+}
+
+export function premiumPromotions(events) {
+  return promotedEvents(events).filter((event) => event.promotion?.mediaType === "image");
+}

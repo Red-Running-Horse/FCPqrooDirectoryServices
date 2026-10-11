@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import events from "../../events.mjs";
 import GrecaBand from "../../greca";
 import placesIndex from "../../../public/data/places-index.json";
-import { eventVenueView, formatEventRange } from "../../event-utils.mjs";
+import { eventVenueView, formatEventRange, promotedEvents } from "../../event-utils.mjs";
 
 const placesById = new Map(placesIndex.map((place) => [place.id, place]));
 
@@ -15,7 +15,7 @@ const placesById = new Map(placesIndex.map((place) => [place.id, place]));
 // generateMetadata.
 
 export function generateStaticParams() {
-  return events.filter((e) => e.promoted).map((e) => ({ id: e.id }));
+  return promotedEvents(events).map((e) => ({ id: e.id }));
 }
 
 export async function generateMetadata({ params }) {
@@ -105,16 +105,20 @@ export default async function PromoLanding({ params }) {
       </div>
 
       <div style={{ marginTop: "1.4rem" }}>
-        <a href={ev.promotion?.siteUrl || ev.sourceUrl} target="_blank" rel="noopener noreferrer" style={btnPrimary}>
-          Visitar sitio oficial / Visit official site ↗
-        </a>
+        {(ev.promotion?.siteUrl || ev.sourceUrl) && (
+          <a href={ev.promotion?.siteUrl || ev.sourceUrl} target="_blank" rel="noopener noreferrer" style={btnPrimary}>
+            Visitar sitio oficial / Visit official site ↗
+          </a>
+        )}
         <a href="/eventos" style={btnGhost}>← Todos los eventos / All events</a>
       </div>
 
-      <p style={{ marginTop: "2.5rem", fontSize: "0.85rem", color: "var(--charcoal-soft)" }}>
-        Promoción pagada verificada contra su fuente:{" "}
-        <a href={ev.sourceUrl} target="_blank" rel="noopener noreferrer">fuente / source ↗</a>
-      </p>
+      {ev.sourceUrl && (
+        <p style={{ marginTop: "2.5rem", fontSize: "0.85rem", color: "var(--charcoal-soft)" }}>
+          Promoción pagada verificada contra su fuente:{" "}
+          <a href={ev.sourceUrl} target="_blank" rel="noopener noreferrer">fuente / source ↗</a>
+        </p>
+      )}
     </main>
   );
 }

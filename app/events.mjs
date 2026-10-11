@@ -16,9 +16,14 @@
 //   contactNote INTERNAL ONLY — operational note for the editors; must never
 //               be rendered anywhere user-facing.
 //
-// PROMOTED TIER: at most 3 events may be promoted at any time (banner in the
-// attract band + card, linking to the client's subdomain microsite). The build
-// FAILS if a fourth is promoted — that guard is intentional.
+// PROMOTED TIER (two levels, `promoted: true`):
+//   BASE    — appears in the homepage promoted-events strip and gets a landing
+//             page at /promo/<id>. No media block.
+//   PREMIUM — additionally carries a `promotion` media block (mediaUrl/cardUrl)
+//             and renders the big homepage banner + sponsor card via
+//             FeaturedPartners. The banner is an upsell, never automatic.
+//   At most 3 events may be promoted at any time. The build FAILS if a fourth
+//   is promoted — that guard is intentional.
 // ============================================================================
 
 export const MAX_PROMOTED = 3;
@@ -90,15 +95,10 @@ const events = [
     lastUpdated: "2026-10-06",
   },
   {
+    // Demoted from the promoted tier on 2026-10-11: the MAX_PROMOTED=3 cap
+    // counts ALL promoted entries, and test-2 took the third slot as the
+    // BASE-tier demo. Kept as an ordinary (unpromoted) record.
     id: "test-partner-dos",
-    promoted: true,
-    promotion: {
-      mediaType: "image",
-      mediaUrl: "/promo/promotion2_1680_487.webp",
-      cardUrl: "/promo/promotion2_1280_720.webp",
-      siteUrl: "https://example.com/2",
-      tagline: { es: "Prueba dos / Test two", en: "Test two" },
-    },
     title: { es: "Socio de Prueba Dos", en: "Test Partner Two" },
     description: { es: "Entrada de prueba para ver el diseño.", en: "Test entry to preview the layout." },
     startAt: "2026-10-06T09:00:00-05:00",
@@ -113,13 +113,25 @@ const events = [
     lastUpdated: "2026-10-06",
   },
   {
+    // BASE tier (promoted: true, no media block): appears in the homepage
+    // promoted-events strip and gets a landing page at /promo/test-2. The
+    // FeaturedPartners banner requires the PREMIUM promotion media block.
     // Submitted through the event suggestion form on 2026-10-11. Test data:
     // ES mirrors EN — real submissions need proper translation before publishing.
+    // endAt extended from the submitted 11:25 to a week out so the demo
+    // survives the data-hygiene test; the submitted window stays in contactNote.
     id: "test-2",
+    promoted: true,
     title: { es: "Test 2", en: "Test 2" },
     description: { es: "Test test", en: "Test test" },
+    landing: {
+      details: {
+        es: "Evento de prueba enviado a través del formulario de sugerencias.",
+        en: "Test event submitted through the suggestion form.",
+      },
+    },
     startAt: "2026-10-11T10:25:00-05:00",
-    endAt: "2026-10-11T11:25:00-05:00",
+    endAt: "2026-10-18T11:25:00-05:00",
     venue: {
       placeId: "mercado-felipe-carrillo-puerto",
       name: {

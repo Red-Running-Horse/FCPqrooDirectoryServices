@@ -1,0 +1,1289 @@
+diff --git a/app/event-utils.mjs b/app/event-utils.mjs
+new file mode 100644
+index 0000000..4501411
+--- /dev/null
++++ b/app/event-utils.mjs
+@@ -0,0 +1,175 @@
++// Pure helpers for the events feature: America/Cancun date math, upcoming/past
++// filtering, venue resolution, bilingual formatting and schema.org/Event JSON-LD.
++// This module is environment-agnostic (no DOM, no React) so node --test can
++// exercise it directly, mirroring app/place-index.mjs and app/place-portal.mjs.
++//
++// Timezone model: America/Cancun is UTC-5 year-round (no DST since 2015). Event
++// datetimes are stored as ISO 8601; an explicit offset is always honored, while
++// an offset-less datetime is interpreted as Cancun wall time. Comparing instants
++// is timezone-independent, so "now" is simply an absolute millisecond value.
++
++import { localize } from "./i18n.mjs";
++
++export const CANCUN_TIME_ZONE = "America/Cancun";
++export const CANCUN_UTC_OFFSET = "-05:00";
++
++const EXPLICIT_ZONE = /(?:Z|[+-]\d{2}:?\d{2})$/;
++const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
++const DAY_MS = 86_400_000;
++
++// Parses an ISO date or datetime as an absolute instant. "2026-10-15" means the
++// start of that day in Cancun; "2026-10-15T18:00" means 18:00 in Cancun.
++export function parseCancunDateTime(value) {
++  if (typeof value !== "string" || value.trim() === "") return null;
++  const text = value.trim();
++  const stamped = EXPLICIT_ZONE.test(text)
++    ? text
++    : DATE_ONLY.test(text)
++      ? `${text}T00:00:00${CANCUN_UTC_OFFSET}`
++      : `${text}${CANCUN_UTC_OFFSET}`;
++  const ms = Date.parse(stamped);
++  return Number.isFinite(ms) ? ms : null;
++}
++
++export function eventStartMs(event) {
++  return parseCancunDateTime(event?.startAt ?? event?.dateStart);
++}
++
++export function eventEndMs(event) {
++  const explicit = parseCancunDateTime(event?.endAt);
++  if (explicit !== null) return explicit;
++  // Legacy whole-day end date: the last moment of that day in Cancun.
++  const legacyDay = parseCancunDateTime(event?.dateEnd);
++  if (legacyDay !== null) return legacyDay + DAY_MS - 1;
++  const start = eventStartMs(event);
++  return start === null ? null : start;
++}
++
++// An event stays listed until its end instant has passed in Cancun.
++export function isUpcomingEvent(event, nowMs) {
++  const end = eventEndMs(event);
++  return end !== null && end >= nowMs;
++}
++
++// Events whose window has not closed, soonest first. Deliberately pure: callers
++// pass Date.now() so listings self-clean at runtime without a rebuild.
++export function upcomingEvents(events, nowMs) {
++  return events
++    .filter((event) => isUpcomingEvent(event, nowMs))
++    .sort((a, b) => (eventStartMs(a) ?? 0) - (eventStartMs(b) ?? 0));
++}
++
++// ---- Venue -----------------------------------------------------------------
++// A venue is either a linked directory place (venue.placeId) or a free-text
++// venue name with optional coordinates for the map marker.
++
++function placesLookup(placesOrMap) {
++  return placesOrMap instanceof Map
++    ? placesOrMap
++    : new Map((placesOrMap ?? []).map((place) => [place.id, place]));
++}
++
++export function eventVenuePlace(event, places) {
++  const placeId = event?.venue?.placeId ?? event?.placeId ?? null;
++  if (!placeId) return null;
++  return placesLookup(places).get(placeId) ?? null;
++}
++
++// Marker position: the linked place's coordinates win; a free-text venue only
++// gets a marker when it carries its own coordinates; otherwise null.
++export function eventMarkerPosition(event, places) {
++  const place = eventVenuePlace(event, places);
++  if (place && Number.isFinite(place.latitude) && Number.isFinite(place.longitude)) {
++    return [place.latitude, place.longitude];
++  }
++  const { latitude, longitude } = event?.venue ?? {};
++  if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
++    return [latitude, longitude];
++  }
++  return null;
++}
++
++// Display + link view. Matched places link back into the directory via the
++// existing /?lugar=<id> deep link.
++export function eventVenueView(event, language, places) {
++  const place = eventVenuePlace(event, places);
++  if (place) {
++    const name = localize(place.name, language);
++    return { name: name ?? null, placeId: place.id, href: `/?lugar=${encodeURIComponent(place.id)}` };
++  }
++  const name = localize(event?.venue?.name, language);
++  return { name: name ?? null, placeId: null, href: null };
++}
++
++// ---- Bilingual formatting ---------------------------------------------------
++
++const formatters = new Map();
++
++function dateTimeFormatters(language) {
++  const locale = language === "en" ? "en-US" : "es-MX";
++  if (!formatters.has(locale)) {
++    formatters.set(locale, {
++      date: new Intl.DateTimeFormat(locale, {
++        timeZone: CANCUN_TIME_ZONE,
++        day: "numeric",
++        month: "short",
++        year: "numeric",
++      }),
++      time: new Intl.DateTimeFormat(locale, {
++        timeZone: CANCUN_TIME_ZONE,
++        hour: "numeric",
++        minute: "2-digit",
++      }),
++    });
++  }
++  return formatters.get(locale);
++}
++
++// Human range in the requested language, always in Cancun wall time:
++// "15 oct 2026, 18:00" (start only), "15 oct 2026, 18:00–22:00" (same day),
++// "15 oct – 20 dic 2026" (spanning days). Falls back to the raw value when the
++// event carries no parseable start.
++export function formatEventRange(event, language) {
++  const startMs = eventStartMs(event);
++  if (startMs === null) return event?.startAt ?? "";
++  const { date, time } = dateTimeFormatters(language);
++  const endExplicit = parseCancunDateTime(event?.endAt);
++  if (endExplicit === null) {
++    return `${date.format(startMs)}, ${time.format(startMs)}`;
++  }
++  if (date.format(startMs) === date.format(endExplicit)) {
++    return `${date.format(startMs)}, ${time.format(startMs)}–${time.format(endExplicit)}`;
++  }
++  return `${date.format(startMs)} – ${date.format(endExplicit)}`;
++}
++
++// ---- schema.org/Event JSON-LD ------------------------------------------------
++
++export function eventJsonLd(event, places) {
++  const venue = eventVenueView(event, "es", places);
++  const data = {
++    "@context": "https://schema.org",
++    "@type": "Event",
++    name: event.title?.es ?? event.title?.en ?? event.id,
++    startDate: event.startAt,
++    description: event.description?.es ?? event.description?.en ?? undefined,
++    location: {
++      "@type": "Place",
++      name: venue.name ?? "Por confirmar / To be confirmed",
++    },
++  };
++  const endMs = eventEndMs(event);
++  if (event.endAt && endMs !== null) data.endDate = event.endAt;
++  return data;
++}
++
++// Quick view for the in-map event popup; DOM assembly lives in highway-map.js.
++export function eventPopupView(event, language, places) {
++  return {
++    id: event.id,
++    name: localize(event.title, language),
++    when: formatEventRange(event, language),
++    venue: eventVenueView(event, language, places),
++    cost: localize(event.cost, language) ?? null,
++  };
++}
+diff --git a/app/eventos/page.js b/app/eventos/page.js
+index ea37ff6..addaecb 100644
+--- a/app/eventos/page.js
++++ b/app/eventos/page.js
+@@ -4,19 +4,21 @@ import { useEffect, useState } from "react";
+ import GrecaBand from "../greca";
+ import events from "../events.mjs";
+ import FeaturedPartners from "../featured-partners";
++import placesIndex from "../../public/data/places-index.json";
++import {
++  eventJsonLd,
++  eventVenueView,
++  formatEventRange,
++  upcomingEvents,
++} from "../event-utils.mjs";
+ 
+ // /eventos — FeaturedPartners (attract band + max-3 sponsor cards) on top,
+-// then a chronological list of everything else. Dates sort on the CLIENT so
+-// the page self-cleans past events even between weekly deploys.
++// then a chronological list of everything else. Upcoming/past is decided at
++// RUNTIME in the browser on America/Cancun time, so expired events vanish
++// without a rebuild. Until "now" is known the listing renders a placeholder:
++// a past event must never appear, not even in the prerendered HTML.
+ 
+-const MONTHS = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+-
+-function fmtRange(ev) {
+-  const s = new Date(ev.dateStart + "T00:00:00");
+-  const e = new Date(ev.dateEnd + "T00:00:00");
+-  const f = (d) => `${d.getDate()} ${MONTHS[d.getMonth()]}`;
+-  return s.getTime() === e.getTime() ? f(s) : `${f(s)} – ${f(e)}`;
+-}
++const placesById = new Map(placesIndex.map((place) => [place.id, place]));
+ 
+ const card = {
+   background: "var(--cream)",
+@@ -25,14 +27,71 @@ const card = {
+   padding: "0.9rem 1rem",
+ };
+ 
++const meta = { margin: "0.3rem 0", fontSize: "0.88rem", color: "var(--charcoal-soft)" };
++
++function EventEntry({ event }) {
++  const venue = eventVenueView(event, "es", placesById);
++  const jsonLd = JSON.stringify(eventJsonLd(event, placesById)).replace(/</g, "\\u003c");
++  return (
++    <li style={card}>
++      <details>
++        <summary style={{ cursor: "pointer" }}>
++          <time style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--terracotta)", whiteSpace: "nowrap" }}>
++            {formatEventRange(event, "es")}
++          </time>{" "}
++          <strong style={{ fontFamily: "var(--font-heading)" }}>{event.title.es}</strong>
++          {event.title.en && event.title.en !== event.title.es && (
++            <span style={{ color: "var(--charcoal-soft)" }}> / {event.title.en}</span>
++          )}
++        </summary>
++        <div style={{ marginTop: "0.6rem", fontSize: "0.92rem" }}>
++          <p style={{ margin: "0.3rem 0" }}>{event.description.es}</p>
++          {event.description.en && event.description.en !== event.description.es && (
++            <p style={meta}>{event.description.en}</p>
++          )}
++          <p style={meta}>
++            📅 {formatEventRange(event, "es")} / {formatEventRange(event, "en")}
++          </p>
++          {venue.name && (
++            <p style={meta}>
++              📍 {venue.name}
++              {venue.href && (
++                <>
++                  {" — "}
++                  <a href={venue.href}>ver en el directorio / view in directory</a>
++                </>
++              )}
++            </p>
++          )}
++          {event.cost && (
++            <p style={meta}>
++              💲 {event.cost.es}
++              {event.cost.en && event.cost.en !== event.cost.es && <> / {event.cost.en}</>}
++            </p>
++          )}
++          {event.sourceUrl && (
++            <p style={meta}>
++              <a href={event.sourceUrl} target="_blank" rel="noopener noreferrer">
++                fuente / source ↗
++              </a>
++            </p>
++          )}
++        </div>
++      </details>
++      <script
++        type="application/ld+json"
++        dangerouslySetInnerHTML={{ __html: jsonLd }}
++      />
++    </li>
++  );
++}
++
+ export default function Eventos() {
+   const [now, setNow] = useState(null);
+   useEffect(() => setNow(new Date()), []);
+ 
+-  const upcoming = events.filter((ev) => !now || new Date(ev.dateEnd + "T23:59:59") >= now);
+-  const organic = upcoming
+-    .filter((ev) => !ev.promoted)
+-    .sort((a, b) => a.dateStart.localeCompare(b.dateStart));
++  const upcoming = now ? upcomingEvents(events, now.getTime()) : [];
++  const organic = upcoming.filter((ev) => !ev.promoted);
+ 
+   return (
+     <main style={{ maxWidth: "46rem", margin: "0 auto", padding: "0 1rem 4rem", lineHeight: 1.6 }}>
+@@ -54,7 +113,11 @@ export default function Eventos() {
+         <h2 style={{ fontSize: "1.05rem", margin: "0 0 0.6rem" }}>
+           Próximos eventos / Upcoming
+         </h2>
+-        {organic.length === 0 ? (
++        {!now ? (
++          <p style={{ ...card, color: "var(--charcoal-soft)" }}>
++            Cargando eventos… / Loading events…
++          </p>
++        ) : organic.length === 0 ? (
+           <p style={{ ...card, color: "var(--charcoal-soft)" }}>
+             Próximamente / Coming soon —{" "}
+             <a href="mailto:eventos@fcpqroo.mx">¿tienes un evento? / submit an event</a>
+@@ -62,20 +125,7 @@ export default function Eventos() {
+         ) : (
+           <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "0.6rem" }}>
+             {organic.map((ev) => (
+-              <li key={ev.id} style={card}>
+-                <div style={{ display: "flex", gap: "0.75rem", alignItems: "baseline", flexWrap: "wrap" }}>
+-                  <time style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--terracotta)", whiteSpace: "nowrap" }}>
+-                    {now ? fmtRange(ev) : ev.dateStart}
+-                  </time>
+-                  <strong style={{ fontFamily: "var(--font-heading)" }}>{ev.title.es}</strong>
+-                </div>
+-                <p style={{ margin: "0.3rem 0 0", fontSize: "0.88rem", color: "var(--charcoal-soft)" }}>
+-                  {ev.locationText.es} · {ev.cost.es} ·{" "}
+-                  <a href={ev.sourceUrl} target="_blank" rel="noopener noreferrer">
+-                    fuente / source ↗
+-                  </a>
+-                </p>
+-              </li>
++              <EventEntry key={ev.id} event={ev} />
+             ))}
+           </ul>
+         )}
+diff --git a/app/events.mjs b/app/events.mjs
+index 904e633..a88f1a0 100644
+--- a/app/events.mjs
++++ b/app/events.mjs
+@@ -3,6 +3,19 @@
+ // app/attractions.mjs: every event keeps a sourceUrl (usually the Facebook
+ // post) and a status. Payment buys placement, never verification.
+ //
++// Schema (per event):
++//   id          unique slug.
++//   title / description / cost   bilingual { es, en } objects (cost optional).
++//   startAt     ISO 8601 datetime, required. Offset-less values read as
++//               America/Cancun wall time (UTC-5, no DST).
++//   endAt       ISO 8601 datetime, optional (defaults to the start instant).
++//   venue       { placeId? } links a directory place; otherwise a free-text
++//               bilingual { name } with optional latitude/longitude for the
++//               map marker (no coordinates → no marker).
++//   category    one of the directory categories (app/place-index.mjs, not "all").
++//   contactNote INTERNAL ONLY — operational note for the editors; must never
++//               be rendered anywhere user-facing.
++//
+ // PROMOTED TIER: at most 3 events may be promoted at any time (banner in the
+ // attract band + card, linking to the client's subdomain microsite). The build
+ // FAILS if a fourth is promoted — that guard is intentional.
+@@ -17,7 +30,7 @@ const events = [
+     promotion: {
+       mediaType: "image",
+       mediaUrl: "/promo/promotion0_1680_487.webp",   // band (69:20 wide banner)
+-      cardUrl: "/promo/promotion0_1280_720.webp",     
++      cardUrl: "/promo/promotion0_1280_720.webp",
+       siteUrl: "https://balamnah.fcpqroo.mx",
+       tagline: {
+         es: "Bed & Breakfast MXN850, a 10 minutos en la naturaleza.",
+@@ -40,11 +53,15 @@ const events = [
+         { es: "Eventos y presentaciones culturales", en: "Cultural events and performances" },
+       ],
+     },
+-    dateStart: "2026-10-06",
+-    dateEnd: "2026-12-31",
+-    placeId: "balam-nah-felipe-carrillo-puerto",
+-    locationText: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
++    startAt: "2026-10-06T09:00:00-05:00",
++    endAt: "2026-12-31T18:00:00-05:00",
++    venue: {
++      placeId: "balam-nah-felipe-carrillo-puerto",
++      name: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
++    },
++    category: "culture",
+     cost: { es: "Consultar", en: "See site" },
++    contactNote: "Operado por el equipo de Balam-Nah; confirmar horarios de talleres por teléfono antes de publicar cambios.",
+     sourceUrl: "https://balamnah.fcpqroo.mx",
+     status: "unverified",
+     lastUpdated: "2026-10-06",
+@@ -61,9 +78,12 @@ const events = [
+     },
+     title: { es: "Socio de Prueba Uno", en: "Test Partner One" },
+     description: { es: "Entrada de prueba para ver el diseño.", en: "Test entry to preview the layout." },
+-    dateStart: "2026-10-06",
+-    dateEnd: "2026-12-31",
+-    locationText: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
++    startAt: "2026-10-06T09:00:00-05:00",
++    endAt: "2026-12-31T18:00:00-05:00",
++    venue: {
++      name: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
++    },
++    category: "culture",
+     cost: { es: "Consultar", en: "See site" },
+     sourceUrl: "https://example.com/1",
+     status: "unverified",
+@@ -81,9 +101,12 @@ const events = [
+     },
+     title: { es: "Socio de Prueba Dos", en: "Test Partner Two" },
+     description: { es: "Entrada de prueba para ver el diseño.", en: "Test entry to preview the layout." },
+-    dateStart: "2026-10-06",
+-    dateEnd: "2026-12-31",
+-    locationText: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
++    startAt: "2026-10-06T09:00:00-05:00",
++    endAt: "2026-12-31T18:00:00-05:00",
++    venue: {
++      name: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
++    },
++    category: "culture",
+     cost: { es: "Consultar", en: "See site" },
+     sourceUrl: "https://example.com/2",
+     status: "unverified",
+@@ -96,7 +119,7 @@ const events = [
+ const promotedCount = events.filter((e) => e.promoted).length;
+ if (promotedCount > MAX_PROMOTED) {
+   throw new Error(
+-    `[events] ${promotedCount} events are promoted but MAX_ PROMOTED is ${MAX_PROMOTED}. ` +
++    `[events] ${promotedCount} events are promoted but MAX_PROMOTED is ${MAX_PROMOTED}. ` +
+       `Demote one before building — the sponsored slots are capped at 3 by design.`
+   );
+ }
+diff --git a/app/highway-map.js b/app/highway-map.js
+index 4bbfab3..a3859b8 100644
+--- a/app/highway-map.js
++++ b/app/highway-map.js
+@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
+ import { isMultiCategory, placeCategoryBackground, placeCategoryStyle } from "./category-colors.mjs";
+ import { categoryIconSvg } from "./category-icons.mjs";
+ import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
++import { eventMarkerPosition, eventPopupView, upcomingEvents } from "./event-utils.mjs";
+ import { syncMarkerSelection } from "./marker-selection.mjs";
+ import { loadPlaceDetail } from "./place-data.mjs";
+ import { CATEGORIES, categorySummary, filterPlaces, isVerified, listingReferences } from "./place-index.mjs";
+@@ -44,6 +45,39 @@ function showPortal() {
+   portal?.focus({ preventScroll: true });
+ }
+ 
++// Calendar glyph shared by the events layer toggle and the event map markers.
++const EVENT_MARKER_ICON =
++  '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
++
++// Lightweight event popup: name, when/where, and a jump to the directory place
++// when the venue matches one. Full details live on /eventos.
++function eventPopupContent(event, placesById, language, onVenueClick) {
++  const view = eventPopupView(event, language, placesById);
++  const ui = uiText(language);
++  const root = document.createElement("div");
++  root.className = "place-popup";
++  root.lang = language;
++  const name = document.createElement("p");
++  name.className = "place-popup__name";
++  name.textContent = view.name;
++  const when = document.createElement("p");
++  when.className = "place-popup__meta";
++  when.textContent = `${ui.eventPopupWhen}: ${view.when}`;
++  const venue = document.createElement("p");
++  venue.className = "place-popup__meta";
++  venue.textContent = `${ui.eventPopupVenue}: ${view.venue.name ?? "—"}`;
++  root.append(name, when, venue);
++  if (view.venue.href) {
++    const place = document.createElement("button");
++    place.type = "button";
++    place.className = "place-popup__details";
++    place.textContent = ui.eventPopupPlace;
++    place.addEventListener("click", () => onVenueClick(view.venue.placeId));
++    root.append(place);
++  }
++  return root;
++}
++
+ // Lightweight marker popup: name, category chip and status only; full details live in the portal.
+ function popupContent(attraction, language) {
+   const view = placePopup(attraction, language);
+@@ -85,9 +119,10 @@ function popupContent(attraction, language) {
+   return root;
+ }
+ 
+-export default function HighwayMap({ placesIndex }) {
++export default function HighwayMap({ placesIndex, events = [] }) {
+   const container = useRef(null);
+   const attractionLayer = useRef(null);
++  const eventLayer = useRef(null);
+   const resetButton = useRef(null);
+   const selectedCategory = useRef("all");
+   const selectedSearch = useRef("");
+@@ -111,6 +146,8 @@ export default function HighwayMap({ placesIndex }) {
+   const [savedPlaceIds, setSavedPlaceIds] = useState([]);
+   const [isOnline, setIsOnline] = useState(true);
+   const [mapActive, setMapActive] = useState(false);
++  const [showEvents, setShowEvents] = useState(true);
++  const showEventsRef = useRef(true);
+   const text = uiText(language);
+   const references = listingReferences(placesIndex);
+   const filteredReferences =
+@@ -271,6 +308,16 @@ export default function HighwayMap({ placesIndex }) {
+       marker.getElement()?.setAttribute("aria-label", title);
+       if (marker.isPopupOpen()) marker.getPopup().update();
+     }
++    const layer = eventLayer.current;
++    if (layer) {
++      for (const { event, marker } of layer.entries) {
++        const title = localize(event.title, language);
++        marker.options.title = title;
++        marker.getElement()?.setAttribute("title", title);
++        marker.getElement()?.setAttribute("aria-label", title);
++        if (marker.isPopupOpen()) marker.getPopup().update();
++      }
++    }
+   }, [language, places]);
+ 
+   useEffect(() => {
+@@ -335,6 +382,21 @@ export default function HighwayMap({ placesIndex }) {
+     }
+   }, [mapActive]);
+ 
++  // Events layer toggle: a separate layer group, so the category filter and
++  // the mobile scroll-trap guard are untouched by it.
++  useEffect(() => {
++    showEventsRef.current = showEvents;
++    const layer = eventLayer.current;
++    if (!layer) return;
++    if (showEvents && !layer.visible) {
++      layer.group.addTo(layer.map);
++      layer.visible = true;
++    } else if (!showEvents && layer.visible) {
++      layer.map.removeLayer(layer.group);
++      layer.visible = false;
++    }
++  }, [showEvents]);
++
+   useEffect(() => {
+     let map;
+     let disposed = false;
+@@ -433,6 +495,41 @@ export default function HighwayMap({ placesIndex }) {
+         setSelectedId(lugar);
+         focusMarker({ map, markers, group }, lugar);
+       }
++
++      // Events layer: markers for upcoming events only (filtered at runtime in
++      // America/Cancun). A linked-venue event sits on its place's coordinates;
++      // a free-text venue only gets a marker when it carries coordinates.
++      const placesById = new Map(placesIndex.map((place) => [place.id, place]));
++      const eventGroup = L.layerGroup();
++      const eventEntries = [];
++      for (const event of upcomingEvents(events, Date.now())) {
++        const position = eventMarkerPosition(event, placesById);
++        if (!position) continue;
++        const icon = L.divIcon({
++          className: "event-marker",
++          html: EVENT_MARKER_ICON,
++          iconSize: [28, 28],
++          iconAnchor: [14, 14],
++          popupAnchor: [0, -14],
++        });
++        const title = localize(event.title, selectedLanguage.current);
++        const marker = L.marker(position, { icon, title, keyboard: true });
++        marker.bindPopup(
++          () => eventPopupContent(event, placesById, selectedLanguage.current, focusListing),
++          {
++            className: "place-popup-container",
++            maxWidth: 240,
++            autoPanPadding: [16, 16],
++          }
++        );
++        eventGroup.addLayer(marker);
++        eventEntries.push({ event, marker });
++      }
++      eventLayer.current = { group: eventGroup, map, entries: eventEntries, visible: false };
++      if (showEventsRef.current) {
++        eventGroup.addTo(map);
++        eventLayer.current.visible = true;
++      }
+       const response = await fetch("/regional-highways.geojson", {
+         signal: controller.signal,
+       });
+@@ -540,6 +637,7 @@ export default function HighwayMap({ placesIndex }) {
+       disposed = true;
+       controller.abort();
+       attractionLayer.current = null;
++      eventLayer.current = null;
+       resetButton.current = null;
+       map?.remove();
+     };
+@@ -659,6 +757,19 @@ export default function HighwayMap({ placesIndex }) {
+             {localize(label, language)}
+           </button>
+         ))}
++        <button
++          type="button"
++          className="category-filters__events"
++          aria-pressed={showEvents}
++          onClick={() => setShowEvents((value) => !value)}
++        >
++          <span
++            className="category-filters__icon"
++            aria-hidden="true"
++            dangerouslySetInnerHTML={{ __html: EVENT_MARKER_ICON }}
++          />
++          {text.eventsLayer}
++        </button>
+       </nav>
+       <ul className="legend" aria-label={text.legendCategories}>
+         <li>
+diff --git a/app/i18n.mjs b/app/i18n.mjs
+index 3deb2b4..d493aaa 100644
+--- a/app/i18n.mjs
++++ b/app/i18n.mjs
+@@ -14,6 +14,10 @@ export const UI_TEXT = {
+       "Mapa turístico de Felipe Carrillo Puerto, corazón de Maya Ka'an. Descubre naturaleza, cultura, comida y experiencias locales; toca un ícono para ver los detalles y acércate para leer los nombres de las calles.",
+     legendRoad: "Carretera regional",
+     legendCategories: "Categorías",
++    eventsLayer: "Eventos",
++    eventPopupWhen: "Cuándo",
++    eventPopupVenue: "Dónde",
++    eventPopupPlace: "Ver lugar",
+     languageLabel: "Idioma",
+     filtersLabel: "Filtrar puntos del mapa",
+     mapLabel: "Mapa turístico de Felipe Carrillo Puerto",
+@@ -102,6 +106,10 @@ export const UI_TEXT = {
+       "Tourist map of Felipe Carrillo Puerto, the heart of Maya Ka'an. Discover nature, culture, food and local experiences; tap an icon for details and zoom in to read the street names.",
+     legendRoad: "Regional road",
+     legendCategories: "Categories",
++    eventsLayer: "Events",
++    eventPopupWhen: "When",
++    eventPopupVenue: "Where",
++    eventPopupPlace: "View place",
+     languageLabel: "Language",
+     filtersLabel: "Filter map points",
+     mapLabel: "Tourist map of Felipe Carrillo Puerto",
+diff --git a/app/page.js b/app/page.js
+index d5695b4..f65ec01 100644
+--- a/app/page.js
++++ b/app/page.js
+@@ -1,5 +1,6 @@
+ import HighwayMap from "./highway-map";
+ import FeaturedPartners from "./featured-partners";
++import events from "./events.mjs";
+ import placesIndex from "../public/data/places-index.json";
+ 
+ const structuredData = {
+@@ -26,7 +27,7 @@ export default function Home() {
+       <div style={{ maxWidth: "60rem", margin: "0 auto", padding: "0 1rem" }}>
+         <FeaturedPartners />
+       </div>
+-      <HighwayMap placesIndex={placesIndex} />
++      <HighwayMap placesIndex={placesIndex} events={events} />
+     </main>
+   );
+ }
+\ No newline at end of file
+diff --git a/app/promo/[id]/page.js b/app/promo/[id]/page.js
+index c0b4909..de978cc 100644
+--- a/app/promo/[id]/page.js
++++ b/app/promo/[id]/page.js
+@@ -1,6 +1,10 @@
+ import { notFound } from "next/navigation";
+ import events from "../../events.mjs";
+ import GrecaBand from "../../greca";
++import placesIndex from "../../../public/data/places-index.json";
++import { eventVenueView, formatEventRange } from "../../event-utils.mjs";
++
++const placesById = new Map(placesIndex.map((place) => [place.id, place]));
+ 
+ // /promo/<id> — promotional landing pages for featured partners. Statically
+ // generated from the promoted entries in app/events.mjs; links from the
+@@ -51,6 +55,7 @@ export default async function PromoLanding({ params }) {
+   if (!ev) notFound();
+   const L = ev.landing ?? {};
+   const highlights = L.highlights ?? [];
++  const venue = eventVenueView(ev, "es", placesById);
+ 
+   return (
+     <main style={{ maxWidth: "46rem", margin: "0 auto", padding: "0 1rem 4rem", lineHeight: 1.65 }}>
+@@ -88,15 +93,15 @@ export default async function PromoLanding({ params }) {
+ 
+       <div style={infoBox}>
+         <p style={{ margin: "0.2rem 0" }}>
+-          <strong>📅</strong> {ev.dateStart === ev.dateEnd
+-            ? ev.dateStart
+-            : `${ev.dateStart} – ${ev.dateEnd}`}
+-        </p>
+-        <p style={{ margin: "0.2rem 0" }}><strong>📍</strong> {ev.locationText.es}</p>
+-        <p style={{ margin: "0.2rem 0" }}><strong>💲</strong> {ev.cost.es}</p>
+-        <p style={{ margin: "0.6rem 0 0" }}>
+-          <a href={`/?lugar=${ev.placeId}`} style={btnGhost}>Ver en el mapa / View on map</a>
++          <strong>📅</strong> {formatEventRange(ev, "es")}
+         </p>
++        <p style={{ margin: "0.2rem 0" }}><strong>📍</strong> {venue.name ?? "Por confirmar / To be confirmed"}</p>
++        {ev.cost?.es && <p style={{ margin: "0.2rem 0" }}><strong>💲</strong> {ev.cost.es}</p>}
++        {venue.href && (
++          <p style={{ margin: "0.6rem 0 0" }}>
++            <a href={venue.href} style={btnGhost}>Ver en el mapa / View on map</a>
++          </p>
++        )}
+       </div>
+ 
+       <div style={{ marginTop: "1.4rem" }}>
+diff --git a/app/style.css b/app/style.css
+index ef4c40a..ac53f86 100644
+--- a/app/style.css
++++ b/app/style.css
+@@ -119,6 +119,17 @@ p {
+   color: white;
+ }
+ 
++.category-filters__events {
++  border-color: var(--turquoise);
++  color: var(--turquoise);
++}
++
++.category-filters__events[aria-pressed="true"] {
++  background: var(--turquoise);
++  border-color: var(--turquoise);
++  color: #fff;
++}
++
+ .category-filters button:hover:not([aria-pressed="true"]),
+ .language-toggle button:hover:not([aria-pressed="true"]),
+ .place-portal__clear:hover,
+@@ -249,6 +260,20 @@ p {
+   box-shadow: 0 0 0 4px var(--sand-line), 0 1px 4px var(--charcoal);
+ }
+ 
++.event-marker {
++  display: grid;
++  place-items: center;
++  border: 2px solid var(--cream);
++  border-radius: 50%;
++  background: var(--terracotta);
++  color: var(--cream);
++  box-shadow: 0 1px 4px var(--charcoal);
++}
++
++.event-marker svg {
++  display: block;
++}
++
+ .place-portal {
+   border: 1px solid var(--turquoise);
+   border-radius: var(--radius-card);
+diff --git a/app/sugerir-evento/page.js b/app/sugerir-evento/page.js
+new file mode 100644
+index 0000000..e7cb364
+--- /dev/null
++++ b/app/sugerir-evento/page.js
+@@ -0,0 +1,33 @@
++import GrecaBand from "../greca";
++import placesIndex from "../../public/data/places-index.json";
++import SuggestEventForm from "./suggest-event-form";
++
++// /sugerir-evento — UNLISTED submission page. Linked from no public page,
++// navigation or sitemap; excluded from indexing via robots metadata below.
++// Share the URL directly (whatsapp, flyers, word of mouth).
++
++export const metadata = {
++  title: "Sugerir un evento / Suggest an event",
++  description:
++    "Envía un evento para el directorio de Felipe Carrillo Puerto. / Submit an event for the Felipe Carrillo Puerto directory.",
++  robots: { index: false, follow: false },
++};
++
++export default function SugerirEvento() {
++  return (
++    <main style={{ maxWidth: "46rem", margin: "0 auto", padding: "0 1rem 4rem", lineHeight: 1.6 }}>
++      <GrecaBand />
++      <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.7rem", margin: "1rem 0 0.25rem" }}>
++        Sugerir un evento{" "}
++        <span style={{ fontSize: "1rem", fontWeight: 400 }}>— send us your event / envía tu evento</span>
++      </h1>
++      <p style={{ color: "var(--charcoal-soft)" }}>
++        Cuéntanos sobre tu evento en Felipe Carrillo Puerto o las comunidades de la Zona Maya. Cada
++        propuesta se revisa antes de publicarse: los eventos aparecen solo después de la revisión. / Tell
++        us about your event in Felipe Carrillo Puerto or the Zona Maya communities. Every suggestion is
++        reviewed before publication: events appear only after review.
++      </p>
++      <SuggestEventForm places={placesIndex} />
++    </main>
++  );
++}
+diff --git a/app/sugerir-evento/suggest-event-form.js b/app/sugerir-evento/suggest-event-form.js
+new file mode 100644
+index 0000000..2bcf2ce
+--- /dev/null
++++ b/app/sugerir-evento/suggest-event-form.js
+@@ -0,0 +1,263 @@
++"use client";
++
++import { useState } from "react";
++import { CATEGORIES } from "../place-index.mjs";
++
++// Submission form for /sugerir-evento. POSTs to the relay configured via
++// NEXT_PUBLIC_EVENT_FORM_ENDPOINT (inlined at build time). When the variable
++// is unset the form never crashes: the submit button is replaced by a
++// graceful mailto fallback.
++
++const FORM_ENDPOINT = process.env.NEXT_PUBLIC_EVENT_FORM_ENDPOINT;
++const CONTACT_EMAIL = "eventos@fcpqroo.mx";
++
++const field = {
++  display: "block",
++  width: "100%",
++  boxSizing: "border-box",
++  marginTop: "0.25rem",
++  padding: "0.55rem 0.7rem",
++  border: "1px solid var(--sand-line)",
++  borderRadius: "8px",
++  background: "#fff",
++  color: "var(--obsidian)",
++  font: "inherit",
++};
++
++const label = { display: "block", fontWeight: 600, fontSize: "0.92rem", marginTop: "0.9rem" };
++const hint = { fontWeight: 400, fontSize: "0.82rem", color: "var(--charcoal-soft)" };
++
++const notice = {
++  background: "var(--cream)",
++  border: "1px solid var(--sand-line)",
++  borderRadius: "10px",
++  padding: "0.9rem 1rem",
++  marginTop: "1.2rem",
++};
++
++const submitButton = {
++  marginTop: "1.2rem",
++  padding: "0.65rem 1.3rem",
++  border: "none",
++  borderRadius: "8px",
++  background: "var(--jungle)",
++  color: "#fff",
++  fontWeight: 600,
++  font: "inherit",
++  cursor: "pointer",
++};
++
++const initial = { name: "", start: "", end: "", venue: "", category: "", cost: "", description: "", contact: "" };
++
++export default function SuggestEventForm({ places }) {
++  const [form, setForm] = useState(initial);
++  const [submitting, setSubmitting] = useState(false);
++  const [submitted, setSubmitted] = useState(false);
++  const [failed, setFailed] = useState(false);
++
++  const venueOptions = (places ?? [])
++    .map((place) => {
++      const es = place.name?.es ?? "";
++      const en = place.name?.en;
++      return en && en !== es ? `${es} / ${en}` : es;
++    })
++    .filter(Boolean);
++
++  function update(key) {
++    return (event) => setForm((current) => ({ ...current, [key]: event.target.value }));
++  }
++
++  async function handleSubmit(event) {
++    event.preventDefault();
++    if (!FORM_ENDPOINT || submitting) return;
++    setSubmitting(true);
++    setFailed(false);
++    try {
++      const body = new URLSearchParams({
++        "form-name": "event-suggestion",
++        ...form,
++      });
++      const response = await fetch(FORM_ENDPOINT, {
++        method: "POST",
++        headers: { "Content-Type": "application/x-www-form-urlencoded" },
++        body,
++      });
++      if (!response.ok) throw new Error(`Form relay responded ${response.status}`);
++      setSubmitted(true);
++    } catch (cause) {
++      console.warn("Event suggestion failed:", cause);
++      setFailed(true);
++    } finally {
++      setSubmitting(false);
++    }
++  }
++
++  const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
++    "Sugerencia de evento / Event suggestion"
++  )}&body=${encodeURIComponent(
++    [
++      `Evento / Event: ${form.name}`,
++      `Inicio / Start: ${form.start}`,
++      `Fin / End: ${form.end || "—"}`,
++      `Lugar / Venue: ${form.venue}`,
++      `Categoría / Category: ${form.category}`,
++      `Costo / Cost: ${form.cost || "—"}`,
++      "",
++      form.description,
++      "",
++      `Contacto / Contact: ${form.contact}`,
++    ].join("\n")
++  )}`;
++
++  if (submitted) {
++    return (
++      <div style={notice} role="status">
++        <p style={{ margin: 0, fontWeight: 700 }}>
++          ¡Gracias! / Thank you!
++        </p>
++        <p style={{ margin: "0.4rem 0 0" }}>
++          Recibimos tu propuesta. Tu evento aparecerá en el directorio solo después de la revisión. /
++          We received your suggestion. Your event will appear in the directory only after review.
++        </p>
++      </div>
++    );
++  }
++
++  return (
++    <form onSubmit={handleSubmit} style={{ marginTop: "0.6rem" }}>
++      <label style={label}>
++        Nombre del evento / Event name *
++        <input
++          style={field}
++          name="name"
++          type="text"
++          required
++          autoComplete="off"
++          value={form.name}
++          onChange={update("name")}
++        />
++      </label>
++
++      <label style={label}>
++        Fecha y hora de inicio / Start date and time *
++        <input
++          style={field}
++          name="start"
++          type="datetime-local"
++          required
++          value={form.start}
++          onChange={update("start")}
++        />
++      </label>
++
++      <label style={label}>
++        Fecha y hora de fin (opcional) / End date and time (optional)
++        <input
++          style={field}
++          name="end"
++          type="datetime-local"
++          value={form.end}
++          onChange={update("end")}
++        />
++      </label>
++
++      <label style={label}>
++        Lugar / Venue *
++        <span style={hint}>
++          {" "}
++          — ¿está en el directorio? Escríbelo y aparecerá en la lista. / Is it in the directory?
++          Start typing and it will show up in the list.
++        </span>
++        <input
++          style={field}
++          name="venue"
++          type="text"
++          required
++          list="directory-venues"
++          autoComplete="off"
++          value={form.venue}
++          onChange={update("venue")}
++        />
++        <datalist id="directory-venues">
++          {venueOptions.map((name) => (
++            <option key={name} value={name} />
++          ))}
++        </datalist>
++      </label>
++
++      <label style={label}>
++        Categoría / Category *
++        <select style={field} name="category" required value={form.category} onChange={update("category")}>
++          <option value="" disabled>
++            —
++          </option>
++          {CATEGORIES.filter(({ id }) => id !== "all").map(({ id, label: categoryLabel }) => (
++            <option key={id} value={id}>
++              {categoryLabel.es} / {categoryLabel.en}
++            </option>
++          ))}
++        </select>
++      </label>
++
++      <label style={label}>
++        Costo (opcional) / Cost (optional)
++        <input
++          style={field}
++          name="cost"
++          type="text"
++          autoComplete="off"
++          value={form.cost}
++          onChange={update("cost")}
++        />
++      </label>
++
++      <label style={label}>
++        Descripción / Description *
++        <textarea
++          style={{ ...field, minHeight: "6rem", resize: "vertical" }}
++          name="description"
++          required
++          value={form.description}
++          onChange={update("description")}
++        />
++      </label>
++
++      <label style={label}>
++        Tu correo o teléfono / Your email or phone *
++        <span style={hint}> Solo para dudas sobre tu propuesta. / Only for questions about your suggestion.</span>
++        <input
++          style={field}
++          name="contact"
++          type="text"
++          required
++          autoComplete="off"
++          value={form.contact}
++          onChange={update("contact")}
++        />
++      </label>
++
++      {FORM_ENDPOINT ? (
++        <button type="submit" style={submitButton} disabled={submitting}>
++          {submitting ? "Enviando… / Sending…" : "Enviar propuesta / Submit suggestion"}
++        </button>
++      ) : (
++        <div style={notice} role="status">
++          <p style={{ margin: 0 }}>
++            El formulario en línea no está configurado por el momento. / The online form is not set up
++            at the moment.
++          </p>
++          <p style={{ margin: "0.4rem 0 0" }}>
++            <a href={mailto}>Envía tu evento por correo / Send your event by email</a>
++          </p>
++        </div>
++      )}
++
++      {failed && (
++        <p style={{ ...notice, borderColor: "var(--terracotta)" }} role="alert">
++          No se pudo enviar la propuesta. Inténtalo de nuevo, o{" "}
++          <a href={mailto}>envíala por correo / send it by email</a>.
++        </p>
++      )}
++    </form>
++  );
++}
+diff --git a/test/events.test.mjs b/test/events.test.mjs
+new file mode 100644
+index 0000000..37dbcd6
+--- /dev/null
++++ b/test/events.test.mjs
+@@ -0,0 +1,234 @@
++import assert from "node:assert/strict";
++import { readFileSync, readdirSync } from "node:fs";
++import { join, sep } from "node:path";
++import test from "node:test";
++import events from "../app/events.mjs";
++import { UI_TEXT } from "../app/i18n.mjs";
++import {
++  eventJsonLd,
++  eventMarkerPosition,
++  eventStartMs,
++  eventVenueView,
++  formatEventRange,
++  isUpcomingEvent,
++  parseCancunDateTime,
++  upcomingEvents,
++} from "../app/event-utils.mjs";
++import { CATEGORIES } from "../app/place-index.mjs";
++
++const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
++const readApp = (root, relative) => readFileSync(join(root, relative), "utf8");
++const places = JSON.parse(read("../public/data/places-index.json"));
++const placesById = new Map(places.map((place) => [place.id, place]));
++
++function collectSources(dir, root, acc = []) {
++  for (const entry of readdirSync(join(root, dir), { withFileTypes: true })) {
++    const relative = join(dir, entry.name);
++    if (entry.isDirectory()) {
++      if (entry.name === "node_modules" || entry.name.startsWith(".")) continue;
++      collectSources(relative, root, acc);
++    } else if (/\.(js|mjs)$/.test(entry.name)) {
++      acc.push(relative);
++    }
++  }
++  return acc;
++}
++
++test("events data validates: required bilingual fields, venue references, categories", () => {
++  const categoryIds = new Set(CATEGORIES.map(({ id }) => id));
++  const seen = new Set();
++  for (const event of events) {
++    assert.match(event.id, /^[a-z0-9][a-z0-9-]*$/, `${event.id}: id must be a safe slug`);
++    assert.ok(!seen.has(event.id), `${event.id}: duplicate id`);
++    seen.add(event.id);
++
++    for (const language of ["es", "en"]) {
++      assert.ok(
++        typeof event.title?.[language] === "string" && event.title[language].trim() !== "",
++        `${event.id}: title.${language} required`,
++      );
++      assert.ok(
++        typeof event.description?.[language] === "string" && event.description[language].trim() !== "",
++        `${event.id}: description.${language} required`,
++      );
++    }
++
++    assert.ok(eventStartMs(event) !== null, `${event.id}: startAt must parse`);
++    if (event.endAt) {
++      assert.ok(parseCancunDateTime(event.endAt) !== null, `${event.id}: endAt must parse`);
++      assert.ok(parseCancunDateTime(event.endAt) >= eventStartMs(event), `${event.id}: endAt must not precede startAt`);
++    }
++
++    assert.ok(event.venue && typeof event.venue === "object", `${event.id}: venue required`);
++    if (event.venue.placeId) {
++      assert.ok(placesById.has(event.venue.placeId), `${event.id}: venue.placeId must exist in the directory`);
++      assert.ok(event.venue.latitude === undefined, `${event.id}: coordinates belong on free-text venues`);
++    } else {
++      for (const language of ["es", "en"]) {
++        assert.ok(
++          typeof event.venue.name?.[language] === "string" && event.venue.name[language].trim() !== "",
++          `${event.id}: free-text venue needs name.${language}`,
++        );
++      }
++      if (event.venue.latitude !== undefined || event.venue.longitude !== undefined) {
++        assert.ok(
++          Number.isFinite(event.venue.latitude) && Number.isFinite(event.venue.longitude),
++          `${event.id}: venue coordinates must be finite numbers`,
++        );
++      }
++    }
++
++    assert.ok(categoryIds.has(event.category) && event.category !== "all", `${event.id}: category must be a directory category`);
++    if (event.cost) {
++      assert.ok(typeof event.cost.es === "string" && event.cost.es.trim() !== "", `${event.id}: cost.es`);
++    }
++  }
++});
++
++test("committed events are all still upcoming (no stale records in the data)", () => {
++  assert.ok(
++    upcomingEvents(events, Date.now()).length === events.length,
++    "an event in app/events.mjs has already ended; remove or extend it",
++  );
++});
++
++test("upcoming/past is decided at runtime on America/Cancun time (UTC-5, no DST)", () => {
++  // Offset-less endAt is read as Cancun wall time: 2026-10-11T23:59:59 in Cancun
++  // equals 2026-10-12T04:59:59Z. If it were read as UTC it would end hours earlier.
++  const event = { id: "x", startAt: "2026-10-10T20:00:00", endAt: "2026-10-11T23:59:59" };
++  assert.ok(isUpcomingEvent(event, Date.parse("2026-10-12T04:59:58Z")), "still open a second before close");
++  assert.ok(!isUpcomingEvent(event, Date.parse("2026-10-12T05:00:00Z")), "closed once Cancun passes midnight");
++
++  // A legacy whole-day end date means the END of that day in Cancun.
++  const legacy = { id: "y", startAt: "2026-10-01T00:00:00-05:00", dateEnd: "2026-10-11" };
++  assert.ok(isUpcomingEvent(legacy, Date.parse("2026-10-12T04:59:59Z")));
++  assert.ok(!isUpcomingEvent(legacy, Date.parse("2026-10-12T05:00:00Z")));
++
++  // Past events never appear, and sorting follows startAt regardless of input order.
++  const sorted = upcomingEvents(
++    [
++      { id: "later", startAt: "2026-11-01T10:00:00-05:00" },
++      { id: "past", startAt: "2025-01-01T09:00:00-05:00", endAt: "2025-01-01T12:00:00-05:00" },
++      { id: "sooner", startAt: "2026-10-20T10:00:00-05:00" },
++    ],
++    Date.parse("2026-10-11T12:00:00Z"),
++  );
++  assert.deepEqual(sorted.map((event) => event.id), ["sooner", "later"]);
++});
++
++test("venue resolution: linked places win; free-text venues only get markers with coordinates", () => {
++  const linked = events.find((event) => event.venue?.placeId);
++  assert.ok(linked, "fixture: expected a linked-venue event");
++  const place = placesById.get(linked.venue.placeId);
++  assert.deepEqual(eventMarkerPosition(linked, placesById), [place.latitude, place.longitude]);
++
++  const view = eventVenueView(linked, "es", placesById);
++  assert.equal(view.placeId, place.id);
++  assert.equal(view.href, `/?lugar=${encodeURIComponent(place.id)}`);
++
++  const freeText = { id: "z", venue: { name: { es: "Un parque", en: "A park" } } };
++  assert.equal(eventMarkerPosition(freeText, placesById), null, "no coordinates → no marker");
++  assert.equal(eventVenueView(freeText, "en", placesById).href, null);
++  assert.equal(eventVenueView(freeText, "en", placesById).name, "A park");
++
++  const withCoords = { id: "w", venue: { name: { es: "Un parque", en: "A park" }, latitude: 19.5, longitude: -88.05 } };
++  assert.deepEqual(eventMarkerPosition(withCoords, placesById), [19.5, -88.05]);
++});
++
++test("schema.org/Event JSON-LD: name, startDate, endDate, location, description; internal notes never leak", () => {
++  const linked = events.find((event) => event.venue?.placeId);
++  const data = eventJsonLd(linked, placesById);
++  assert.equal(data["@type"], "Event");
++  assert.equal(data.name, linked.title.es);
++  assert.equal(data.startDate, linked.startAt);
++  assert.equal(data.endDate, linked.endAt);
++  assert.equal(data.location["@type"], "Place");
++  assert.equal(data.location.name, placesById.get(linked.venue.placeId).name.es);
++  assert.ok(typeof data.description === "string" && data.description.length > 0);
++
++  const serialized = JSON.stringify(data);
++  assert.ok(!serialized.includes("contactNote"), "internal field must not reach JSON-LD");
++  for (const event of events) {
++    if (event.contactNote) {
++      assert.ok(!serialized.includes(event.contactNote), "contactNote must never be rendered");
++    }
++  }
++
++  const openEnded = eventJsonLd({ id: "open", title: { es: "X" }, startAt: "2026-11-01T10:00:00-05:00", venue: { name: { es: "Y", en: "Y" } } }, placesById);
++  assert.ok(!("endDate" in openEnded), "endDate omitted when the event has no endAt");
++});
++
++test("event date ranges are formatted bilingually in Cancun wall time", () => {
++  const sameDay = { id: "d", startAt: "2026-10-15T18:00:00-05:00", endAt: "2026-10-15T22:00:00-05:00" };
++  const es = formatEventRange(sameDay, "es");
++  const en = formatEventRange(sameDay, "en");
++  assert.match(es, /oct/);
++  assert.match(en, /Oct/);
++  assert.ok(es.includes("–") && en.includes("–"), "same-day range shows a time span");
++
++  const span = { id: "m", startAt: "2026-10-15T18:00:00-05:00", endAt: "2026-12-31T18:00:00-05:00" };
++  assert.ok(formatEventRange(span, "es").includes("–"), "multi-day range shows both dates");
++
++  const startOnly = { id: "s", startAt: "2026-10-15T18:00:00-05:00" };
++  assert.ok(!formatEventRange(startOnly, "en").includes("–"), "no endAt → single date and time");
++});
++
++test("/eventos filters at runtime and renders expandable entries with JSON-LD", () => {
++  const page = read("../app/eventos/page.js");
++  assert.match(page, /useEffect\(\(\) => setNow\(new Date\(\)\), \[\]\)/);
++  assert.match(page, /upcomingEvents\(events, now\.getTime\(\)\)/, "runtime filtering, not build time");
++  assert.match(page, /!now \? \(/, "nothing renders until the browser clock is known");
++  assert.match(page, /<details>/, "expandable entries");
++  assert.match(page, /application\/ld\+json/);
++  assert.match(page, /eventJsonLd\(event, placesById\)/);
++  assert.match(page, /Próximamente \/ Coming soon/, "bilingual empty state");
++  assert.match(page, /Cargando eventos… \/ Loading events…/);
++  assert.ok(!page.includes("contactNote"), "internal note must never render");
++});
++
++test("the map events layer reuses the layer-group pattern without touching the scroll-trap markup", () => {
++  const map = read("../app/highway-map.js");
++  assert.match(map, /const eventLayer = useRef\(null\);/);
++  assert.match(map, /upcomingEvents\(events, Date\.now\(\)\)/, "markers are filtered at runtime");
++  assert.match(map, /eventMarkerPosition\(event, placesById\)/);
++  assert.match(map, /aria-pressed=\{showEvents\}/);
++  assert.match(map, /className="category-filters__events"/);
++
++  // The category filter still owns its own group untouched…
++  assert.match(map, /current\.group\.clearLayers\(\);/);
++  // …and the mobile scroll-trap structure is byte-identical in shape.
++  const initialMarkup = map.slice(map.indexOf('      <div className="map-container map-workspace">'));
++  assert.match(initialMarkup, /<div className="map-workspace__map">\s*<div className="map-wrapper">\s*<div ref=\{container\} className="map"/);
++  assert.match(initialMarkup, /map-mobile-overlay/);
++});
++
++test("events UI strings exist in both languages", () => {
++  for (const key of ["eventsLayer", "eventPopupWhen", "eventPopupVenue", "eventPopupPlace"]) {
++    assert.ok(typeof UI_TEXT.es[key] === "string" && UI_TEXT.es[key].length > 0, `es.${key}`);
++    assert.ok(typeof UI_TEXT.en[key] === "string" && UI_TEXT.en[key].length > 0, `en.${key}`);
++  }
++});
++
++test("/sugerir-evento is unlisted: noindex, no public links, no sitemap entry", () => {
++  const page = read("../app/sugerir-evento/page.js");
++  assert.match(page, /robots:\s*\{[^}]*index:\s*false[^}]*follow:\s*false/s, "robots metadata must noindex");
++
++  const root = new URL("../app/", import.meta.url).pathname;
++  for (const relative of collectSources(".", root)) {
++    if (relative.startsWith(`sugerir-evento${sep}`)) continue;
++    assert.ok(!readApp(root, relative).includes("/sugerir-evento"), `${relative} must not link /sugerir-evento`);
++  }
++  assert.ok(!read("../app/sitemap.js").includes("sugerir"), "sitemap must not list the page");
++});
++
++test("the submission form posts to the relay or falls back to mailto gracefully", () => {
++  const form = read("../app/sugerir-evento/suggest-event-form.js");
++  assert.match(form, /process\.env\.NEXT_PUBLIC_EVENT_FORM_ENDPOINT/);
++  assert.match(form, /method:\s*"POST"/);
++  assert.match(form, /mailto:/);
++  assert.match(form, /no está configurado por el momento/, "graceful fallback when the endpoint is unset");
++  assert.match(form, /solo después de la revis/i, "thank-you states the review gate");
++  for (const name of ["name", "start", "venue", "category", "contact"]) {
++    assert.ok(form.includes(`"${name}"`) || form.includes(`name="${name}"`), `form field ${name}`);
++  }
++});

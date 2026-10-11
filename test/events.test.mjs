@@ -12,6 +12,8 @@ import {
   formatEventRange,
   isUpcomingEvent,
   parseCancunDateTime,
+  premiumPromotions,
+  promotedEvents,
   upcomingEvents,
 } from "../app/event-utils.mjs";
 import { CATEGORIES } from "../app/place-index.mjs";
@@ -203,7 +205,16 @@ test("the map events layer reuses the layer-group pattern without touching the s
 });
 
 test("events UI strings exist in both languages", () => {
-  for (const key of ["eventsLayer", "eventPopupWhen", "eventPopupVenue", "eventPopupPlace"]) {
+  for (const key of [
+    "eventsLayer",
+    "eventPopupWhen",
+    "eventPopupVenue",
+    "eventPopupPlace",
+    "promotedHeading",
+    "promotedBadge",
+    "promotedView",
+    "promotedScrollHint",
+  ]) {
     assert.ok(typeof UI_TEXT.es[key] === "string" && UI_TEXT.es[key].length > 0, `es.${key}`);
     assert.ok(typeof UI_TEXT.en[key] === "string" && UI_TEXT.en[key].length > 0, `en.${key}`);
   }
@@ -231,4 +242,55 @@ test("the submission form posts to the relay or falls back to mailto gracefully"
   for (const name of ["name", "start", "venue", "category", "contact"]) {
     assert.ok(form.includes(`"${name}"`) || form.includes(`name="${name}"`), `form field ${name}`);
   }
+});
+
+test("two-tier promotion: BASE entries join the strip but never the premium banner", () => {
+  const promoted = promotedEvents(events);
+  const premium = premiumPromotions(events);
+
+  assert.deepEqual(
+    promoted.map((event) => event.id).sort(),
+    ["promo-balam-nah", "test-2", "test-partner-uno"],
+    "BASE tier: every promoted event, capped by MAX_PROMOTED",
+  );
+  assert.ok(
+    promoted.length <= 3,
+    "MAX_PROMOTED caps the TOTAL promoted tier (base + premium)",
+  );
+
+  const premiumIds = premium.map((event) => event.id);
+  assert.ok(premiumIds.includes("promo-balam-nah") && premiumIds.includes("test-partner-uno"));
+  assert.ok(
+    !premiumIds.includes("test-2"),
+    "test-2 is BASE tier: promoted but carries no promotion media block",
+  );
+  for (const event of premium) {
+    assert.equal(event.promoted, true);
+    assert.equal(event.promotion?.mediaType, "image");
+    assert.ok(typeof event.promotion.cardUrl === "string" || typeof event.promotion.mediaUrl === "string");
+  }
+});
+
+test("the FeaturedPartners banner renders only premium entries", () => {
+  const source = read("../app/featured-partners.js");
+  assert.match(source, /premiumPromotions\(events\)/, "banner filters to the premium tier");
+  assert.doesNotMatch(source, /events\.filter\(\(e\) => e\.promoted\)/, "base tier must not leak into the banner");
+});
+
+test("the homepage strip hides when nothing is promoted and links every card to /promo/<id>", () => {
+  const source = read("../app/promoted-events.js");
+  assert.match(source, /promotedEvents\(events\)/);
+  assert.match(source, /if \(promoted\.length === 0\) return null;/, "no empty section");
+  assert.match(source, /href=\{`\/promo\/\$\{event\.id\}`\}/);
+  assert.match(source, /formatEventRange\(event, language\)/);
+  assert.match(source, /uiText\(language\)/, "bilingual via the existing uiText pattern");
+  assert.match(source, /event\.promotion\?\.mediaType === "image"/, "media only when the premium block exists");
+  assert.doesNotMatch(source, /<img(?!\s+className="promoted-card__media")/, "no unconditional images (text-only cards)");
+  assert.match(read("../app/style.css"), /scroll-snap-type:\s*x mandatory/, "native scroll-snap, no carousel JS");
+
+  const page = read("../app/page.js");
+  assert.ok(
+    page.indexOf("<HighwayMap") < page.indexOf("<PromotedEvents"),
+    "the strip sits between the map and the end of the page",
+  );
 });

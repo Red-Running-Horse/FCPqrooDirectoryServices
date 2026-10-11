@@ -2,13 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import events from "./events.mjs";
+import { premiumPromotions } from "./event-utils.mjs";
 
-// FeaturedPartners — the paid tier, max 3 (enforced at build in events.mjs).
+// FeaturedPartners — the PREMIUM tier only (enforced in events.mjs: promoted
+// plus a promotion media block, capped at MAX_PROMOTED total). BASE-tier
+// promoted entries (no media block) never reach this component — they show in
+// the homepage promoted-events strip and get a /promo/<id> landing instead.
 //   ATTRACT BAND: one composed image splits into vertical slices that cascade
 //   out, and the next partner's image reassembles slice-by-slice. Pure CSS
 //   transform transitions on <img>-lightweight JPGs (no GIFs). Pauses on
 //   hover/focus; respects prefers-reduced-motion (static first frame).
-//   CARDS ROW: all three partners always visible below the band — rotation
+//   CARDS ROW: all premium partners always visible below the band — rotation
 //   never hides a paying client.
 const SLICES = 5;
 const SLICE_MS = 70; // stagger between slices
@@ -91,7 +95,7 @@ function AttractBand({ partners }) {
 }
 
 export default function FeaturedPartners() {
-  const partners = events.filter((e) => e.promoted);
+  const partners = premiumPromotions(events);
   if (partners.length === 0) return null;
 
   return (
