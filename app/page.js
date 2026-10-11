@@ -1,5 +1,6 @@
 import HighwayMap from "./highway-map";
 import FeaturedPartners from "./featured-partners";
+import UpcomingEvents from "./upcoming-events";
 import PromotedEvents from "./promoted-events";
 import events from "./events.mjs";
 import placesIndex from "../public/data/places-index.json";
@@ -27,6 +28,7 @@ export default function Home() {
       />
       <div style={{ maxWidth: "60rem", margin: "0 auto", padding: "0 1rem" }}>
         <FeaturedPartners />
+        <UpcomingEvents />
       </div>
       <HighwayMap placesIndex={placesIndex} events={events} />
       <div style={{ maxWidth: "60rem", margin: "0 auto", padding: "0 1rem" }}>

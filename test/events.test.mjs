@@ -214,6 +214,10 @@ test("events UI strings exist in both languages", () => {
     "promotedBadge",
     "promotedView",
     "promotedScrollHint",
+    "upcomingHeading",
+    "upcomingView",
+    "upcomingScrollHint",
+    "upcomingAllEvents",
   ]) {
     assert.ok(typeof UI_TEXT.es[key] === "string" && UI_TEXT.es[key].length > 0, `es.${key}`);
     assert.ok(typeof UI_TEXT.en[key] === "string" && UI_TEXT.en[key].length > 0, `en.${key}`);
@@ -292,5 +296,57 @@ test("the homepage strip hides when nothing is promoted and links every card to 
   assert.ok(
     page.indexOf("<HighwayMap") < page.indexOf("<PromotedEvents"),
     "the strip sits between the map and the end of the page",
+  );
+});
+
+test("useSiteLanguage lives in one shared module and both homepage strips follow <html lang>", () => {
+  const hook = read("../app/site-language.js");
+  assert.match(hook, /export function useSiteLanguage\(\)/);
+  assert.match(hook, /MutationObserver/, "follows the <html lang> attribute the map hero publishes");
+
+  const promoted = read("../app/promoted-events.js");
+  assert.match(promoted, /import \{ useSiteLanguage \} from "\.\/site-language";/);
+  assert.doesNotMatch(promoted, /function useSiteLanguage/, "no second copy of the hook");
+
+  const upcoming = read("../app/upcoming-events.js");
+  assert.match(upcoming, /import \{ useSiteLanguage \} from "\.\/site-language";/);
+});
+
+test("the community strip lists ALL upcoming events at runtime; promoted cards link to /promo/<id> and stay labeled", () => {
+  const source = read("../app/upcoming-events.js");
+  assert.match(
+    source,
+    /const upcoming = now\s*\?\s*upcomingEvents\(events, now\.getTime\(\)\)\s*: \[\]/,
+    "runtime filtering in Cancun time, promotion status ignored",
+  );
+  assert.match(source, /if \(upcoming\.length === 0\) return null;/, "no empty section");
+  assert.match(
+    source,
+    /href=\{event\.promoted \? `\/promo\/\$\{event\.id\}` : `\/eventos#\$\{event\.id\}`\}/,
+    "promoted → /promo landing, organic → /eventos anchor",
+  );
+  assert.match(source, /text\.promotedBadge/, "paid entries keep the sponsored badge");
+  assert.match(source, /formatEventRange\(event, language\)/);
+  assert.match(source, /uiText\(language\)/, "bilingual via the existing uiText pattern");
+  assert.match(read("../app/style.css"), /\.upcoming-strip__scroller/, "strip styles exist");
+});
+
+test("/eventos entries carry anchor ids that the homepage strip targets", () => {
+  const page = read("../app/eventos/page.js");
+  assert.match(page, /<li style=\{card\} id=\{event\.id\}>/, "every upcoming entry is a jump target");
+  const upcoming = read("../app/upcoming-events.js");
+  assert.match(upcoming, /`\/eventos#\$\{event\.id\}`/);
+});
+
+test("the homepage mounts the upcoming strip between the premium banner and the map", () => {
+  const page = read("../app/page.js");
+  assert.match(page, /import UpcomingEvents from "\.\/upcoming-events";/);
+  assert.ok(
+    page.indexOf("<FeaturedPartners />") < page.indexOf("<UpcomingEvents />"),
+    "immediately after the FeaturedPartners banner",
+  );
+  assert.ok(
+    page.indexOf("<UpcomingEvents />") < page.indexOf("<HighwayMap"),
+    "before the map",
   );
 });

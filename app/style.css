@@ -375,6 +375,126 @@ p {
   text-decoration: underline;
 }
 
+/* Upcoming events strip (community strip): every upcoming event, promoted
+   or not. Cards jump to /eventos#<id> (organic) or /promo/<id> (promoted,
+   badged with the terracotta accent — paid placement is always labeled).
+   Same scroll-snap mechanics as the promoted strip. */
+.upcoming-strip {
+  margin: 1.25rem 0 0;
+}
+
+.upcoming-strip__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.upcoming-strip__header h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+}
+
+.upcoming-strip__header-actions {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+}
+
+.upcoming-strip__hint {
+  font-size: 0.8rem;
+  color: var(--charcoal-soft);
+  white-space: nowrap;
+}
+
+.upcoming-strip__all {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--turquoise);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.upcoming-strip__all:hover {
+  text-decoration: underline;
+}
+
+.upcoming-strip__scroller {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0.25rem 0.75rem;
+}
+
+.upcoming-strip__scroller > li {
+  flex: 0 0 clamp(14rem, 72vw, 18rem);
+  scroll-snap-align: start;
+}
+
+.upcoming-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  height: 100%;
+  background: var(--cream);
+  border: 1px solid var(--sand-line);
+  border-left: 4px solid var(--turquoise);
+  border-radius: var(--radius-card);
+  padding: 0.8rem 0.95rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.upcoming-card--promoted {
+  border-left-color: var(--terracotta);
+}
+
+.upcoming-card__badge {
+  align-self: flex-start;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--marigold);
+  color: var(--obsidian);
+  border-radius: 4px;
+  padding: 0.12rem 0.45rem;
+}
+
+.upcoming-card__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+}
+
+.upcoming-card__title-alt {
+  font-weight: 400;
+  color: var(--charcoal-soft);
+}
+
+.upcoming-card__meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--charcoal-soft);
+}
+
+.upcoming-card__cta {
+  margin-top: auto;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--turquoise);
+  text-decoration: none;
+}
+
+.upcoming-card__cta:hover {
+  text-decoration: underline;
+}
+
 .place-portal {
   border: 1px solid var(--turquoise);
   border-radius: var(--radius-card);

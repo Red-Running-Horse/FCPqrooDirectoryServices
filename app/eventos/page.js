@@ -33,7 +33,8 @@ function EventEntry({ event }) {
   const venue = eventVenueView(event, "es", placesById);
   const jsonLd = JSON.stringify(eventJsonLd(event, placesById)).replace(/</g, "\\u003c");
   return (
-    <li style={card}>
+    // id anchors the homepage upcoming-events strip links (/eventos#<id>).
+    <li style={card} id={event.id}>
       <details>
         <summary style={{ cursor: "pointer" }}>
           <time style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--terracotta)", whiteSpace: "nowrap" }}>

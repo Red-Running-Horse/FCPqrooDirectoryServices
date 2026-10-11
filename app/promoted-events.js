@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import events from "./events.mjs";
-import { DEFAULT_LANGUAGE, localize, uiText } from "./i18n.mjs";
+import { localize, uiText } from "./i18n.mjs";
 import { formatEventRange, promotedEvents } from "./event-utils.mjs";
+import { useSiteLanguage } from "./site-language";
 
 // PromotedEvents — the BASE promotion tier on the homepage: every promoted
 // event (with or without the premium media block) as a horizontally
@@ -15,21 +15,8 @@ import { formatEventRange, promotedEvents } from "./event-utils.mjs";
 // the page and both promotional surfaces bracket the core product (premium
 // banner on top, base strip at the bottom).
 //
-// Language: the map hero owns the ES/EN state and publishes it on
-// <html lang>; this component follows that attribute so the whole page
-// switches together (same uiText pattern, no second toggle).
-
-function useSiteLanguage() {
-  const [language, setLanguage] = useState(DEFAULT_LANGUAGE);
-  useEffect(() => {
-    const read = () => setLanguage(document.documentElement.lang === "en" ? "en" : DEFAULT_LANGUAGE);
-    read();
-    const observer = new MutationObserver(read);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
-    return () => observer.disconnect();
-  }, []);
-  return language;
-}
+// Language: useSiteLanguage (site-language.js) follows the <html lang> state
+// the map hero publishes, so the whole page switches together.
 
 export default function PromotedEvents() {
   const language = useSiteLanguage();
