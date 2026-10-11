@@ -6,6 +6,7 @@ import events from "../events.mjs";
 import FeaturedPartners from "../featured-partners";
 import placesIndex from "../../public/data/places-index.json";
 import {
+  entryKind,
   eventJsonLd,
   eventVenueView,
   formatEventRange,
@@ -13,10 +14,13 @@ import {
 } from "../event-utils.mjs";
 
 // /eventos — FeaturedPartners (attract band + max-3 sponsor cards) on top,
-// then a chronological list of everything else. Upcoming/past is decided at
-// RUNTIME in the browser on America/Cancun time, so expired events vanish
-// without a rebuild. Until "now" is known the listing renders a placeholder:
-// a past event must never appear, not even in the prerendered HTML.
+// then a chronological list of ALL upcoming EVENTS: promoted events (test-2)
+// belong here too — a promoted event is still an event. kind: "offer" records
+// (a B&B rental, placeholder partners) never appear here. Upcoming/past is
+// decided at RUNTIME in the browser on America/Cancun time, so expired
+// events vanish without a rebuild. Until "now" is known the listing renders
+// a placeholder: a past event must never appear, not even in the prerendered
+// HTML.
 
 const placesById = new Map(placesIndex.map((place) => [place.id, place]));
 
@@ -92,7 +96,7 @@ export default function Eventos() {
   useEffect(() => setNow(new Date()), []);
 
   const upcoming = now ? upcomingEvents(events, now.getTime()) : [];
-  const organic = upcoming.filter((ev) => !ev.promoted);
+  const listed = upcoming.filter((ev) => entryKind(ev) === "event");
 
   return (
     <main style={{ maxWidth: "46rem", margin: "0 auto", padding: "0 1rem 4rem", lineHeight: 1.6 }}>
@@ -118,14 +122,14 @@ export default function Eventos() {
           <p style={{ ...card, color: "var(--charcoal-soft)" }}>
             Cargando eventos… / Loading events…
           </p>
-        ) : organic.length === 0 ? (
+        ) : listed.length === 0 ? (
           <p style={{ ...card, color: "var(--charcoal-soft)" }}>
             Próximamente / Coming soon —{" "}
             <a href="mailto:eventos@fcpqroo.mx">¿tienes un evento? / submit an event</a>
           </p>
         ) : (
           <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "0.6rem" }}>
-            {organic.map((ev) => (
+            {listed.map((ev) => (
               <EventEntry key={ev.id} event={ev} />
             ))}
           </ul>

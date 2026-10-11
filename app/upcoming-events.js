@@ -3,15 +3,17 @@
 import { useEffect, useState } from "react";
 import events from "./events.mjs";
 import { localize, uiText } from "./i18n.mjs";
-import { formatEventRange, upcomingEvents } from "./event-utils.mjs";
+import { entryKind, formatEventRange, upcomingEvents } from "./event-utils.mjs";
 import { useSiteLanguage } from "./site-language";
 
-// UpcomingEvents — the community strip: EVERY upcoming event, promoted or
+// UpcomingEvents — the community strip: EVERY upcoming EVENT, promoted or
 // not, as a horizontally scrollable strip of cards between the premium
-// banner and the map. Organic events link straight to their entry on
-// /eventos (#<id> anchor); promoted events link to their /promo/<id> landing
-// (the convention every other surface follows) and keep the sponsored badge
-// + terracotta accent — paid placement is always labeled.
+// banner and the map. kind: "offer" records (a B&B rental, placeholder
+// partners) never appear here — they are not events. Organic events link
+// straight to their entry on /eventos (#<id> anchor); promoted events link
+// to their /promo/<id> landing (the convention every other surface follows)
+// and keep the sponsored badge + terracotta accent — paid placement is
+// always labeled.
 //
 // Placement: immediately after the FeaturedPartners banner and before the
 // map, so the page opens with the promotional surface, teases what's on,
@@ -27,7 +29,9 @@ export default function UpcomingEvents() {
   const [now, setNow] = useState(null);
   useEffect(() => setNow(new Date()), []);
 
-  const upcoming = now ? upcomingEvents(events, now.getTime()) : [];
+  const upcoming = now
+    ? upcomingEvents(events, now.getTime()).filter((event) => entryKind(event) === "event")
+    : [];
   if (upcoming.length === 0) return null;
 
   return (

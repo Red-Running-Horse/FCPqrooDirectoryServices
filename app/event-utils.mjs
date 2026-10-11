@@ -186,3 +186,14 @@ export function promotedEvents(events) {
 export function premiumPromotions(events) {
   return promotedEvents(events).filter((event) => event.promotion?.mediaType === "image");
 }
+
+// ---- Kind: event vs offer ---------------------------------------------------
+// Independent of the promotion tier: a promoted event is still an event
+// (test-2), while an offer — a rental, a placeholder partner — may be
+// promoted but never appears on event surfaces (/eventos, the map events
+// layer, the community strip, schema.org/Event JSON-LD). Records written
+// before kind existed default to "event".
+
+export function entryKind(event) {
+  return event?.kind === "offer" ? "offer" : "event";
+}

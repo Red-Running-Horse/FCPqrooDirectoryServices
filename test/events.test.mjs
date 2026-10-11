@@ -5,6 +5,7 @@ import test from "node:test";
 import events from "../app/events.mjs";
 import { UI_TEXT } from "../app/i18n.mjs";
 import {
+  entryKind,
   eventJsonLd,
   eventMarkerPosition,
   eventStartMs,
@@ -43,6 +44,11 @@ test("events data validates: required bilingual fields, venue references, catego
     assert.match(event.id, /^[a-z0-9][a-z0-9-]*$/, `${event.id}: id must be a safe slug`);
     assert.ok(!seen.has(event.id), `${event.id}: duplicate id`);
     seen.add(event.id);
+
+    assert.ok(
+      ["event", "offer"].includes(event.kind ?? "event"),
+      `${event.id}: kind must be "event" or "offer" (absent kind validates as "event")`,
+    );
 
     for (const language of ["es", "en"]) {
       assert.ok(
@@ -87,11 +93,30 @@ test("events data validates: required bilingual fields, venue references, catego
   }
 });
 
-test("committed events are all still upcoming (no stale records in the data)", () => {
+test("kind separates events from offers; missing kind validates as event", () => {
+  assert.equal(entryKind({ id: "x" }), "event", "absent kind defaults to event");
+  assert.equal(entryKind({ id: "x", kind: "offer" }), "offer");
+  assert.equal(entryKind({ id: "x", kind: "event" }), "event");
+
+  const byId = new Map(events.map((event) => [event.id, event]));
+  for (const id of ["promo-balam-nah", "test-partner-uno", "test-partner-dos"]) {
+    assert.equal(byId.get(id).kind, "offer", `${id} is an offer, not an event`);
+  }
+  assert.equal(byId.get("test-2").promoted, true);
+  assert.equal(entryKind(byId.get("test-2")), "event", "test-2 is the promoted-EVENT case (default kind)");
+});
+
+test("committed EVENTS are all still upcoming (offers have campaign windows and are exempt)", () => {
+  const eventRecords = events.filter((event) => entryKind(event) === "event");
   assert.ok(
-    upcomingEvents(events, Date.now()).length === events.length,
+    upcomingEvents(eventRecords, Date.now()).length === eventRecords.length,
     "an event in app/events.mjs has already ended; remove or extend it",
   );
+  // Offers only need a parseable startAt (their campaign window start);
+  // their window may already have ended without tripping the event hygiene.
+  for (const offer of events.filter((event) => entryKind(event) === "offer")) {
+    assert.ok(eventStartMs(offer) !== null, `${offer.id}: offers still need startAt to parse`);
+  }
 });
 
 test("upcoming/past is decided at runtime on America/Cancun time (UTC-5, no DST)", () => {
@@ -138,7 +163,11 @@ test("venue resolution: linked places win; free-text venues only get markers wit
 });
 
 test("schema.org/Event JSON-LD: name, startDate, endDate, location, description; internal notes never leak", () => {
-  const linked = events.find((event) => event.venue?.placeId);
+  // JSON-LD is emitted for kind === "event" only — fixture must be an event.
+  const linked = events.find(
+    (event) => event.venue?.placeId && entryKind(event) === "event",
+  );
+  assert.ok(linked, "fixture: expected a linked-venue EVENT");
   const data = eventJsonLd(linked, placesById);
   assert.equal(data["@type"], "Event");
   assert.equal(data.name, linked.title.es);
@@ -175,14 +204,16 @@ test("event date ranges are formatted bilingually in Cancun wall time", () => {
   assert.ok(!formatEventRange(startOnly, "en").includes("–"), "no endAt → single date and time");
 });
 
-test("/eventos filters at runtime and renders expandable entries with JSON-LD", () => {
+test("/eventos filters at runtime, includes PROMOTED events and never offers, with JSON-LD for events only", () => {
   const page = read("../app/eventos/page.js");
   assert.match(page, /useEffect\(\(\) => setNow\(new Date\(\)\), \[\]\)/);
   assert.match(page, /upcomingEvents\(events, now\.getTime\(\)\)/, "runtime filtering, not build time");
   assert.match(page, /!now \? \(/, "nothing renders until the browser clock is known");
+  assert.match(page, /entryKind\(ev\) === "event"/, "listing is events only — offers never appear");
+  assert.doesNotMatch(page, /!ev\.promoted/, "promoted EVENTS belong in the listing");
   assert.match(page, /<details>/, "expandable entries");
   assert.match(page, /application\/ld\+json/);
-  assert.match(page, /eventJsonLd\(event, placesById\)/);
+  assert.match(page, /eventJsonLd\(event, placesById\)/, "JSON-LD rides on the event-filtered entry");
   assert.match(page, /Próximamente \/ Coming soon/, "bilingual empty state");
   assert.match(page, /Cargando eventos… \/ Loading events…/);
   assert.ok(!page.includes("contactNote"), "internal note must never render");
@@ -192,6 +223,7 @@ test("the map events layer reuses the layer-group pattern without touching the s
   const map = read("../app/highway-map.js");
   assert.match(map, /const eventLayer = useRef\(null\);/);
   assert.match(map, /upcomingEvents\(events, Date\.now\(\)\)/, "markers are filtered at runtime");
+  assert.match(map, /entryKind\(event\) === "event"/, "offers never get an event marker");
   assert.match(map, /eventMarkerPosition\(event, placesById\)/);
   assert.match(map, /aria-pressed=\{showEvents\}/);
   assert.match(map, /className="category-filters__events"/);
@@ -281,6 +313,15 @@ test("the FeaturedPartners banner renders only premium entries", () => {
   assert.doesNotMatch(source, /events\.filter\(\(e\) => e\.promoted\)/, "base tier must not leak into the banner");
 });
 
+test("/promo/<id> landings stay kind-agnostic: every promoted record gets one, offers included", () => {
+  const source = read("../app/promo/[id]/page.js");
+  assert.match(
+    source,
+    /promotedEvents\(events\)\.map\(\(e\) => \(\{ id: e\.id \}\)\)/,
+    "generateStaticParams covers promoted offers and promoted events alike",
+  );
+});
+
 test("the homepage strip hides when nothing is promoted and links every card to /promo/<id>", () => {
   const source = read("../app/promoted-events.js");
   assert.match(source, /promotedEvents\(events\)/);
@@ -312,18 +353,18 @@ test("useSiteLanguage lives in one shared module and both homepage strips follow
   assert.match(upcoming, /import \{ useSiteLanguage \} from "\.\/site-language";/);
 });
 
-test("the community strip lists ALL upcoming events at runtime; promoted cards link to /promo/<id> and stay labeled", () => {
+test("the community strip lists ALL upcoming EVENTS at runtime; offers never appear; promoted events keep their badge and /promo/<id> href", () => {
   const source = read("../app/upcoming-events.js");
   assert.match(
     source,
-    /const upcoming = now\s*\?\s*upcomingEvents\(events, now\.getTime\(\)\)\s*: \[\]/,
-    "runtime filtering in Cancun time, promotion status ignored",
+    /const upcoming = now\s*\?\s*upcomingEvents\(events, now\.getTime\(\)\)\.filter\(\(event\) => entryKind\(event\) === "event"\)\s*: \[\]/,
+    "runtime filtering in Cancun time, events only — promotion status and kind both orthogonal",
   );
   assert.match(source, /if \(upcoming\.length === 0\) return null;/, "no empty section");
   assert.match(
     source,
     /href=\{event\.promoted \? `\/promo\/\$\{event\.id\}` : `\/eventos#\$\{event\.id\}`\}/,
-    "promoted → /promo landing, organic → /eventos anchor",
+    "promoted event → /promo landing, organic event → /eventos anchor",
   );
   assert.match(source, /text\.promotedBadge/, "paid entries keep the sponsored badge");
   assert.match(source, /formatEventRange\(event, language\)/);

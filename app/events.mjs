@@ -1,13 +1,23 @@
 // ============================================================================
-// app/events.mjs — curated events for the Zona Maya. Same honesty rules as
-// app/attractions.mjs: every event keeps a sourceUrl (usually the Facebook
-// post) and a status. Payment buys placement, never verification.
+// app/events.mjs — curated events AND promoted offers for the Zona Maya. Same
+// honesty rules as app/attractions.mjs: every record keeps a sourceUrl
+// (usually the Facebook post) and a status. Payment buys placement, never
+// verification.
 //
-// Schema (per event):
+// Schema (per record):
 //   id          unique slug.
+//   kind        "event" | "offer" — what the record IS, independent of the
+//               promotion tier. Events happen on a date and belong on event
+//               surfaces (/eventos, the map events layer, the community
+//               strip, schema.org/Event JSON-LD). Offers are paid placements
+//               that are not events (a B&B rental, a placeholder partner):
+//               they may still be promoted, but never appear on event
+//               surfaces. Records without kind validate as "event".
 //   title / description / cost   bilingual { es, en } objects (cost optional).
-//   startAt     ISO 8601 datetime, required. Offset-less values read as
-//               America/Cancun wall time (UTC-5, no DST).
+//   startAt     ISO 8601 datetime, required. For events: when it starts. For
+//               offers: the campaign window start (same parsing rules).
+//               Offset-less values read as America/Cancun wall time (UTC-5,
+//               no DST).
 //   endAt       ISO 8601 datetime, optional (defaults to the start instant).
 //   venue       { placeId? } links a directory place; otherwise a free-text
 //               bilingual { name } with optional latitude/longitude for the
@@ -16,14 +26,15 @@
 //   contactNote INTERNAL ONLY — operational note for the editors; must never
 //               be rendered anywhere user-facing.
 //
-// PROMOTED TIER (two levels, `promoted: true`):
+// PROMOTED TIER (two levels, `promoted: true`) — orthogonal to kind; both
+// events and offers can be promoted:
 //   BASE    — appears in the homepage promoted-events strip and gets a landing
 //             page at /promo/<id>. No media block.
 //   PREMIUM — additionally carries a `promotion` media block (mediaUrl/cardUrl)
 //             and renders the big homepage banner + sponsor card via
 //             FeaturedPartners. The banner is an upsell, never automatic.
-//   At most 3 events may be promoted at any time. The build FAILS if a fourth
-//   is promoted — that guard is intentional.
+//   At most 3 records may be promoted at any time. The build FAILS if a
+//   fourth is promoted — that guard is intentional.
 // ============================================================================
 
 export const MAX_PROMOTED = 3;
@@ -31,6 +42,7 @@ export const MAX_PROMOTED = 3;
 const events = [
   {
     id: "promo-balam-nah",
+    kind: "offer",   // B&B rental offer, not an event — promoted placement only
     promoted: true,
     promotion: {
       mediaType: "image",
@@ -73,6 +85,7 @@ const events = [
   },
     {
     id: "test-partner-uno",
+    kind: "offer",   // placeholder offer, not an event
     promoted: true,
     promotion: {
       mediaType: "image",
@@ -99,6 +112,7 @@ const events = [
     // counts ALL promoted entries, and test-2 took the third slot as the
     // BASE-tier demo. Kept as an ordinary (unpromoted) record.
     id: "test-partner-dos",
+    kind: "offer",   // placeholder offer, not an event
     title: { es: "Socio de Prueba Dos", en: "Test Partner Two" },
     description: { es: "Entrada de prueba para ver el diseño.", en: "Test entry to preview the layout." },
     startAt: "2026-10-06T09:00:00-05:00",

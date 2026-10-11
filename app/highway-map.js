@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { isMultiCategory, placeCategoryBackground, placeCategoryStyle } from "./category-colors.mjs";
 import { categoryIconSvg } from "./category-icons.mjs";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
-import { eventMarkerPosition, eventPopupView, upcomingEvents } from "./event-utils.mjs";
+import { entryKind, eventMarkerPosition, eventPopupView, upcomingEvents } from "./event-utils.mjs";
 import { syncMarkerSelection } from "./marker-selection.mjs";
 import { loadPlaceDetail } from "./place-data.mjs";
 import { CATEGORIES, categorySummary, filterPlaces, isVerified, listingReferences } from "./place-index.mjs";
@@ -496,13 +496,18 @@ export default function HighwayMap({ placesIndex, events = [] }) {
         focusMarker({ map, markers, group }, lugar);
       }
 
-      // Events layer: markers for upcoming events only (filtered at runtime in
-      // America/Cancun). A linked-venue event sits on its place's coordinates;
-      // a free-text venue only gets a marker when it carries coordinates.
+      // Events layer: markers for upcoming EVENTS only — kind: "offer"
+      // records (a B&B rental, placeholder partners) never get a marker —
+      // filtered at runtime in America/Cancun. A linked-venue event sits on
+      // its place's coordinates; a free-text venue only gets a marker when
+      // it carries coordinates.
       const placesById = new Map(placesIndex.map((place) => [place.id, place]));
       const eventGroup = L.layerGroup();
       const eventEntries = [];
-      for (const event of upcomingEvents(events, Date.now())) {
+      const mappable = upcomingEvents(events, Date.now()).filter(
+        (event) => entryKind(event) === "event",
+      );
+      for (const event of mappable) {
         const position = eventMarkerPosition(event, placesById);
         if (!position) continue;
         const icon = L.divIcon({
