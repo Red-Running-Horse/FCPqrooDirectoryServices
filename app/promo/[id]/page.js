@@ -1,6 +1,10 @@
 import { notFound } from "next/navigation";
 import events from "../../events.mjs";
 import GrecaBand from "../../greca";
+import placesIndex from "../../../public/data/places-index.json";
+import { eventVenueView, formatEventRange } from "../../event-utils.mjs";
+
+const placesById = new Map(placesIndex.map((place) => [place.id, place]));
 
 // /promo/<id> — promotional landing pages for featured partners. Statically
 // generated from the promoted entries in app/events.mjs; links from the
@@ -51,6 +55,7 @@ export default async function PromoLanding({ params }) {
   if (!ev) notFound();
   const L = ev.landing ?? {};
   const highlights = L.highlights ?? [];
+  const venue = eventVenueView(ev, "es", placesById);
 
   return (
     <main style={{ maxWidth: "46rem", margin: "0 auto", padding: "0 1rem 4rem", lineHeight: 1.65 }}>
@@ -88,15 +93,15 @@ export default async function PromoLanding({ params }) {
 
       <div style={infoBox}>
         <p style={{ margin: "0.2rem 0" }}>
-          <strong>📅</strong> {ev.dateStart === ev.dateEnd
-            ? ev.dateStart
-            : `${ev.dateStart} – ${ev.dateEnd}`}
+          <strong>📅</strong> {formatEventRange(ev, "es")}
         </p>
-        <p style={{ margin: "0.2rem 0" }}><strong>📍</strong> {ev.locationText.es}</p>
-        <p style={{ margin: "0.2rem 0" }}><strong>💲</strong> {ev.cost.es}</p>
-        <p style={{ margin: "0.6rem 0 0" }}>
-          <a href={`/?lugar=${ev.placeId}`} style={btnGhost}>Ver en el mapa / View on map</a>
-        </p>
+        <p style={{ margin: "0.2rem 0" }}><strong>📍</strong> {venue.name ?? "Por confirmar / To be confirmed"}</p>
+        {ev.cost?.es && <p style={{ margin: "0.2rem 0" }}><strong>💲</strong> {ev.cost.es}</p>}
+        {venue.href && (
+          <p style={{ margin: "0.6rem 0 0" }}>
+            <a href={venue.href} style={btnGhost}>Ver en el mapa / View on map</a>
+          </p>
+        )}
       </div>
 
       <div style={{ marginTop: "1.4rem" }}>

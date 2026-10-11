@@ -1,5 +1,6 @@
 import HighwayMap from "./highway-map";
 import FeaturedPartners from "./featured-partners";
+import events from "./events.mjs";
 import placesIndex from "../public/data/places-index.json";
 
 const structuredData = {
@@ -26,7 +27,7 @@ export default function Home() {
       <div style={{ maxWidth: "60rem", margin: "0 auto", padding: "0 1rem" }}>
         <FeaturedPartners />
       </div>
-      <HighwayMap placesIndex={placesIndex} />
+      <HighwayMap placesIndex={placesIndex} events={events} />
     </main>
   );
 }

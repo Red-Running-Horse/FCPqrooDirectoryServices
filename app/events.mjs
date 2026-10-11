@@ -3,6 +3,19 @@
 // app/attractions.mjs: every event keeps a sourceUrl (usually the Facebook
 // post) and a status. Payment buys placement, never verification.
 //
+// Schema (per event):
+//   id          unique slug.
+//   title / description / cost   bilingual { es, en } objects (cost optional).
+//   startAt     ISO 8601 datetime, required. Offset-less values read as
+//               America/Cancun wall time (UTC-5, no DST).
+//   endAt       ISO 8601 datetime, optional (defaults to the start instant).
+//   venue       { placeId? } links a directory place; otherwise a free-text
+//               bilingual { name } with optional latitude/longitude for the
+//               map marker (no coordinates → no marker).
+//   category    one of the directory categories (app/place-index.mjs, not "all").
+//   contactNote INTERNAL ONLY — operational note for the editors; must never
+//               be rendered anywhere user-facing.
+//
 // PROMOTED TIER: at most 3 events may be promoted at any time (banner in the
 // attract band + card, linking to the client's subdomain microsite). The build
 // FAILS if a fourth is promoted — that guard is intentional.
@@ -17,7 +30,7 @@ const events = [
     promotion: {
       mediaType: "image",
       mediaUrl: "/promo/promotion0_1680_487.webp",   // band (69:20 wide banner)
-      cardUrl: "/promo/promotion0_1280_720.webp",     
+      cardUrl: "/promo/promotion0_1280_720.webp",
       siteUrl: "https://balamnah.fcpqroo.mx",
       tagline: {
         es: "Bed & Breakfast MXN850, a 10 minutos en la naturaleza.",
@@ -40,11 +53,15 @@ const events = [
         { es: "Eventos y presentaciones culturales", en: "Cultural events and performances" },
       ],
     },
-    dateStart: "2026-10-06",
-    dateEnd: "2026-12-31",
-    placeId: "balam-nah-felipe-carrillo-puerto",
-    locationText: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
+    startAt: "2026-10-06T09:00:00-05:00",
+    endAt: "2026-12-31T18:00:00-05:00",
+    venue: {
+      placeId: "balam-nah-felipe-carrillo-puerto",
+      name: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
+    },
+    category: "culture",
     cost: { es: "Consultar", en: "See site" },
+    contactNote: "Operado por el equipo de Balam-Nah; confirmar horarios de talleres por teléfono antes de publicar cambios.",
     sourceUrl: "https://balamnah.fcpqroo.mx",
     status: "unverified",
     lastUpdated: "2026-10-06",
@@ -61,9 +78,12 @@ const events = [
     },
     title: { es: "Socio de Prueba Uno", en: "Test Partner One" },
     description: { es: "Entrada de prueba para ver el diseño.", en: "Test entry to preview the layout." },
-    dateStart: "2026-10-06",
-    dateEnd: "2026-12-31",
-    locationText: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
+    startAt: "2026-10-06T09:00:00-05:00",
+    endAt: "2026-12-31T18:00:00-05:00",
+    venue: {
+      name: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
+    },
+    category: "culture",
     cost: { es: "Consultar", en: "See site" },
     sourceUrl: "https://example.com/1",
     status: "unverified",
@@ -81,9 +101,12 @@ const events = [
     },
     title: { es: "Socio de Prueba Dos", en: "Test Partner Two" },
     description: { es: "Entrada de prueba para ver el diseño.", en: "Test entry to preview the layout." },
-    dateStart: "2026-10-06",
-    dateEnd: "2026-12-31",
-    locationText: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
+    startAt: "2026-10-06T09:00:00-05:00",
+    endAt: "2026-12-31T18:00:00-05:00",
+    venue: {
+      name: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
+    },
+    category: "culture",
     cost: { es: "Consultar", en: "See site" },
     sourceUrl: "https://example.com/2",
     status: "unverified",
@@ -96,7 +119,7 @@ const events = [
 const promotedCount = events.filter((e) => e.promoted).length;
 if (promotedCount > MAX_PROMOTED) {
   throw new Error(
-    `[events] ${promotedCount} events are promoted but MAX_ PROMOTED is ${MAX_PROMOTED}. ` +
+    `[events] ${promotedCount} events are promoted but MAX_PROMOTED is ${MAX_PROMOTED}. ` +
       `Demote one before building — the sponsored slots are capped at 3 by design.`
   );
 }

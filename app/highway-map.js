@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { isMultiCategory, placeCategoryBackground, placeCategoryStyle } from "./category-colors.mjs";
 import { categoryIconSvg } from "./category-icons.mjs";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
+import { eventMarkerPosition, eventPopupView, upcomingEvents } from "./event-utils.mjs";
 import { syncMarkerSelection } from "./marker-selection.mjs";
 import { loadPlaceDetail } from "./place-data.mjs";
 import { CATEGORIES, categorySummary, filterPlaces, isVerified, listingReferences } from "./place-index.mjs";
@@ -42,6 +43,39 @@ function showPortal() {
   const portal = document.getElementById("place-portal");
   portal?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   portal?.focus({ preventScroll: true });
+}
+
+// Calendar glyph shared by the events layer toggle and the event map markers.
+const EVENT_MARKER_ICON =
+  '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>';
+
+// Lightweight event popup: name, when/where, and a jump to the directory place
+// when the venue matches one. Full details live on /eventos.
+function eventPopupContent(event, placesById, language, onVenueClick) {
+  const view = eventPopupView(event, language, placesById);
+  const ui = uiText(language);
+  const root = document.createElement("div");
+  root.className = "place-popup";
+  root.lang = language;
+  const name = document.createElement("p");
+  name.className = "place-popup__name";
+  name.textContent = view.name;
+  const when = document.createElement("p");
+  when.className = "place-popup__meta";
+  when.textContent = `${ui.eventPopupWhen}: ${view.when}`;
+  const venue = document.createElement("p");
+  venue.className = "place-popup__meta";
+  venue.textContent = `${ui.eventPopupVenue}: ${view.venue.name ?? "—"}`;
+  root.append(name, when, venue);
+  if (view.venue.href) {
+    const place = document.createElement("button");
+    place.type = "button";
+    place.className = "place-popup__details";
+    place.textContent = ui.eventPopupPlace;
+    place.addEventListener("click", () => onVenueClick(view.venue.placeId));
+    root.append(place);
+  }
+  return root;
 }
 
 // Lightweight marker popup: name, category chip and status only; full details live in the portal.
@@ -85,9 +119,10 @@ function popupContent(attraction, language) {
   return root;
 }
 
-export default function HighwayMap({ placesIndex }) {
+export default function HighwayMap({ placesIndex, events = [] }) {
   const container = useRef(null);
   const attractionLayer = useRef(null);
+  const eventLayer = useRef(null);
   const resetButton = useRef(null);
   const selectedCategory = useRef("all");
   const selectedSearch = useRef("");
@@ -111,6 +146,8 @@ export default function HighwayMap({ placesIndex }) {
   const [savedPlaceIds, setSavedPlaceIds] = useState([]);
   const [isOnline, setIsOnline] = useState(true);
   const [mapActive, setMapActive] = useState(false);
+  const [showEvents, setShowEvents] = useState(true);
+  const showEventsRef = useRef(true);
   const text = uiText(language);
   const references = listingReferences(placesIndex);
   const filteredReferences =
@@ -271,6 +308,16 @@ export default function HighwayMap({ placesIndex }) {
       marker.getElement()?.setAttribute("aria-label", title);
       if (marker.isPopupOpen()) marker.getPopup().update();
     }
+    const layer = eventLayer.current;
+    if (layer) {
+      for (const { event, marker } of layer.entries) {
+        const title = localize(event.title, language);
+        marker.options.title = title;
+        marker.getElement()?.setAttribute("title", title);
+        marker.getElement()?.setAttribute("aria-label", title);
+        if (marker.isPopupOpen()) marker.getPopup().update();
+      }
+    }
   }, [language, places]);
 
   useEffect(() => {
@@ -334,6 +381,21 @@ export default function HighwayMap({ placesIndex }) {
       current.map.touchZoom.disable();
     }
   }, [mapActive]);
+
+  // Events layer toggle: a separate layer group, so the category filter and
+  // the mobile scroll-trap guard are untouched by it.
+  useEffect(() => {
+    showEventsRef.current = showEvents;
+    const layer = eventLayer.current;
+    if (!layer) return;
+    if (showEvents && !layer.visible) {
+      layer.group.addTo(layer.map);
+      layer.visible = true;
+    } else if (!showEvents && layer.visible) {
+      layer.map.removeLayer(layer.group);
+      layer.visible = false;
+    }
+  }, [showEvents]);
 
   useEffect(() => {
     let map;
@@ -432,6 +494,41 @@ export default function HighwayMap({ placesIndex }) {
       if (lugar && markers.has(lugar)) {
         setSelectedId(lugar);
         focusMarker({ map, markers, group }, lugar);
+      }
+
+      // Events layer: markers for upcoming events only (filtered at runtime in
+      // America/Cancun). A linked-venue event sits on its place's coordinates;
+      // a free-text venue only gets a marker when it carries coordinates.
+      const placesById = new Map(placesIndex.map((place) => [place.id, place]));
+      const eventGroup = L.layerGroup();
+      const eventEntries = [];
+      for (const event of upcomingEvents(events, Date.now())) {
+        const position = eventMarkerPosition(event, placesById);
+        if (!position) continue;
+        const icon = L.divIcon({
+          className: "event-marker",
+          html: EVENT_MARKER_ICON,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14],
+          popupAnchor: [0, -14],
+        });
+        const title = localize(event.title, selectedLanguage.current);
+        const marker = L.marker(position, { icon, title, keyboard: true });
+        marker.bindPopup(
+          () => eventPopupContent(event, placesById, selectedLanguage.current, focusListing),
+          {
+            className: "place-popup-container",
+            maxWidth: 240,
+            autoPanPadding: [16, 16],
+          }
+        );
+        eventGroup.addLayer(marker);
+        eventEntries.push({ event, marker });
+      }
+      eventLayer.current = { group: eventGroup, map, entries: eventEntries, visible: false };
+      if (showEventsRef.current) {
+        eventGroup.addTo(map);
+        eventLayer.current.visible = true;
       }
       const response = await fetch("/regional-highways.geojson", {
         signal: controller.signal,
@@ -540,6 +637,7 @@ export default function HighwayMap({ placesIndex }) {
       disposed = true;
       controller.abort();
       attractionLayer.current = null;
+      eventLayer.current = null;
       resetButton.current = null;
       map?.remove();
     };
@@ -659,6 +757,19 @@ export default function HighwayMap({ placesIndex }) {
             {localize(label, language)}
           </button>
         ))}
+        <button
+          type="button"
+          className="category-filters__events"
+          aria-pressed={showEvents}
+          onClick={() => setShowEvents((value) => !value)}
+        >
+          <span
+            className="category-filters__icon"
+            aria-hidden="true"
+            dangerouslySetInnerHTML={{ __html: EVENT_MARKER_ICON }}
+          />
+          {text.eventsLayer}
+        </button>
       </nav>
       <ul className="legend" aria-label={text.legendCategories}>
         <li>

@@ -119,6 +119,17 @@ p {
   color: white;
 }
 
+.category-filters__events {
+  border-color: var(--turquoise);
+  color: var(--turquoise);
+}
+
+.category-filters__events[aria-pressed="true"] {
+  background: var(--turquoise);
+  border-color: var(--turquoise);
+  color: #fff;
+}
+
 .category-filters button:hover:not([aria-pressed="true"]),
 .language-toggle button:hover:not([aria-pressed="true"]),
 .place-portal__clear:hover,
@@ -247,6 +258,20 @@ p {
 
 .attraction-marker:hover {
   box-shadow: 0 0 0 4px var(--sand-line), 0 1px 4px var(--charcoal);
+}
+
+.event-marker {
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--cream);
+  border-radius: 50%;
+  background: var(--terracotta);
+  color: var(--cream);
+  box-shadow: 0 1px 4px var(--charcoal);
+}
+
+.event-marker svg {
+  display: block;
 }
 
 .place-portal {
