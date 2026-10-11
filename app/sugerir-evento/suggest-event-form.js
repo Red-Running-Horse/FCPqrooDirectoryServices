@@ -79,7 +79,10 @@ export default function SuggestEventForm({ places }) {
       });
       const response = await fetch(FORM_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
+        },
         body,
       });
       if (!response.ok) throw new Error(`Form relay responded ${response.status}`);
@@ -91,7 +94,6 @@ export default function SuggestEventForm({ places }) {
       setSubmitting(false);
     }
   }
-
   const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
     "Sugerencia de evento / Event suggestion"
   )}&body=${encodeURIComponent(
