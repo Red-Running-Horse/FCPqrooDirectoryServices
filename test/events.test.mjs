@@ -102,8 +102,8 @@ test("kind separates events from offers; missing kind validates as event", () =>
   for (const id of ["promo-balam-nah", "test-partner-uno", "test-partner-dos"]) {
     assert.equal(byId.get(id).kind, "offer", `${id} is an offer, not an event`);
   }
-  assert.equal(byId.get("test-2").promoted, true);
-  assert.equal(entryKind(byId.get("test-2")), "event", "test-2 is the promoted-EVENT case (default kind)");
+  assert.equal(byId.get("test-2").promoted, undefined, "test-2 is un-promoted: a normal upcoming event");
+  assert.equal(entryKind(byId.get("test-2")), "event", "test-2 stays a plain EVENT (default kind)");
 });
 
 test("committed EVENTS are all still upcoming (offers have campaign windows and are exempt)", () => {
@@ -279,37 +279,52 @@ test("the submission form posts to the relay or falls back to mailto gracefully"
   }
 });
 
-test("promotion tiers: MAX_PROMOTED caps every promoted record; premium requires a media block", () => {
+test("promotion tiers: MAX_PROMOTED caps every promoted record; the banner rotates exactly those three premium promos", () => {
   const promoted = promotedEvents(events);
   const premium = premiumPromotions(events);
 
   assert.deepEqual(
     promoted.map((event) => event.id).sort(),
-    ["promo-balam-nah", "test-2", "test-partner-uno"],
+    ["promo-balam-nah", "test-partner-dos", "test-partner-uno"],
     "promoted tier: every promoted record, capped by MAX_PROMOTED",
   );
+  assert.equal(promoted.length, 3, "exactly MAX_PROMOTED records are promoted");
+  assert.deepEqual(
+    premium.map((event) => event.id).sort(),
+    ["promo-balam-nah", "test-partner-dos", "test-partner-uno"],
+    "banner rotation covers all three premium promotions",
+  );
   assert.ok(
-    promoted.length <= 3,
-    "MAX_PROMOTED caps the TOTAL promoted tier (base + premium)",
+    premium.length === promoted.length,
+    "the promoted tier is entirely premium — the old base tier no longer exists",
   );
 
-  const premiumIds = premium.map((event) => event.id);
-  assert.ok(premiumIds.includes("promo-balam-nah") && premiumIds.includes("test-partner-uno"));
-  assert.ok(
-    !premiumIds.includes("test-2"),
-    "test-2 is BASE tier: promoted but carries no promotion media block",
-  );
+  const byId = new Map(events.map((event) => [event.id, event]));
+  assert.ok(!byId.get("test-2").promoted, "test-2 reverted to a normal upcoming event");
   for (const event of premium) {
     assert.equal(event.promoted, true);
     assert.equal(event.promotion?.mediaType, "image");
-    assert.ok(typeof event.promotion.cardUrl === "string" || typeof event.promotion.mediaUrl === "string");
+    assert.ok(typeof event.promotion.mediaUrl === "string", "the banner slices need a media image");
   }
 });
 
 test("the FeaturedPartners banner renders only premium entries", () => {
   const source = read("../app/featured-partners.js");
   assert.match(source, /premiumPromotions\(events\)/, "banner filters to the premium tier");
-  assert.doesNotMatch(source, /events\.filter\(\(e\) => e\.promoted\)/, "base tier must not leak into the banner");
+  assert.doesNotMatch(source, /events\.filter\(\(e\) => e\.promoted\)/, "only the premium filter may feed the banner");
+});
+
+test("the partners-row card grid below the banner is gone; zero premium promotions render nothing", () => {
+  const source = read("../app/featured-partners.js");
+  assert.doesNotMatch(source, /partners-row/, "no card grid markup");
+  assert.doesNotMatch(source, /partner-card/, "no card grid markup");
+  assert.match(
+    source,
+    /if \(partners\.length === 0\) return null;/,
+    "an empty promoted tier renders nothing — no empty grid",
+  );
+  const css = read("../app/featured-partners.css");
+  assert.doesNotMatch(css, /partners-row|partner-card/, "card grid styles removed");
 });
 
 test("the premium banner is a rotating ad space: N promos cycle, one renders static, reduced-motion disables auto-rotation only", () => {

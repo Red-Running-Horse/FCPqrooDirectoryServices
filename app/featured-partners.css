@@ -1,6 +1,6 @@
 /* ==========================================================================
    featured-partners.css — rotating premium ad band (sliced-image cascade,
-   dots + arrows) + partner cards
+   dots + arrows)
    ========================================================================== */
 
 /* ---------- Attract band ---------- */
@@ -162,69 +162,7 @@
   border-color: var(--marigold);
 }
 
-/* ---------- Partner cards ---------- */
-.partners-row {
-  display: grid;
-  gap: 0.9rem;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-}
-
-.partner-card {
-  display: block;
-  background: var(--cream);
-  border: 1px solid var(--sand-line);
-  border-radius: 10px;
-  overflow: hidden;
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.15s ease, transform 0.15s ease;
-}
-
-.partner-card:hover {
-  border-color: var(--marigold);
-  transform: translateY(-2px);
-}
-
-.partner-card img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-}
-
-.partner-card__body { padding: 0.7rem 0.9rem 0.9rem; }
-
-.partner-card__badge {
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--maize);
-}
-
-.partner-card h3 {
-  font-family: var(--font-heading);
-  font-size: 1.05rem;
-  margin: 0.25rem 0 0.15rem;
-}
-
-.partner-card p {
-  margin: 0;
-  font-size: 0.88rem;
-  color: var(--charcoal-soft);
-}
-
-.partner-card__cta {
-  display: inline-block;
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--turquoise);
-}
-
 @media (max-width: 47.99rem) {
-  /* mobile: rotating banner only — no card row */
-  .partners-row { display: none; }
   .attract { aspect-ratio: 69 / 20; }
   .attract__name { font-size: 0.95rem; }
   .attract__badge { font-size: 0.62rem; }

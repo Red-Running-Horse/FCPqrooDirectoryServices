@@ -26,13 +26,12 @@
 //   contactNote INTERNAL ONLY — operational note for the editors; must never
 //               be rendered anywhere user-facing.
 //
-// PROMOTED TIER (two levels, `promoted: true`) — orthogonal to kind; both
-// events and offers can be promoted:
-//   BASE    — gets a landing page at /promo/<id>. No media block.
-//   PREMIUM — additionally carries a `promotion` media block (mediaUrl/cardUrl)
-//             and rotates through the homepage banner ad space + sponsor
-//             cards via FeaturedPartners. The banner is an upsell, never
-//             automatic.
+// PROMOTED TIER (`promoted: true`) — orthogonal to kind; both events and
+// offers can be promoted:
+//   A promoted record carries a `promotion` media block (mediaUrl) and
+//   rotates through the homepage banner ad space via FeaturedPartners, with
+//   a landing page at /promo/<id>. The banner is the only paid surface and
+//   an upsell, never automatic.
 //   At most 3 records may be promoted at any time. The build FAILS if a
 //   fourth is promoted — that guard is intentional.
 // ============================================================================
@@ -108,11 +107,18 @@ const events = [
     lastUpdated: "2026-10-06",
   },
   {
-    // Demoted from the promoted tier on 2026-10-11: the MAX_PROMOTED=3 cap
-    // counts ALL promoted entries, and test-2 took the third slot as the
-    // BASE-tier demo. Kept as an ordinary (unpromoted) record.
+    // Re-promoted on 2026-10-12 as the third banner slot: the MAX_PROMOTED=3
+    // cap rotates three premium promotions again. test-2's BASE-tier demo was
+    // un-promoted to make room — that tier no longer exists.
     id: "test-partner-dos",
     kind: "offer",   // placeholder offer, not an event
+    promoted: true,
+    promotion: {
+      mediaType: "image",
+      mediaUrl: "/promo/promotion2_1680_487.webp",
+      siteUrl: "https://example.com/2",
+      tagline: { es: "Prueba dos / Test two", en: "Test two" },
+    },
     title: { es: "Socio de Prueba Dos", en: "Test Partner Two" },
     description: { es: "Entrada de prueba para ver el diseño.", en: "Test entry to preview the layout." },
     startAt: "2026-10-06T09:00:00-05:00",
@@ -127,16 +133,15 @@ const events = [
     lastUpdated: "2026-10-06",
   },
   {
-    // BASE tier (promoted: true, no media block): gets a landing page at
-    // /promo/test-2 and appears in the homepage community strip as a promoted
-    // EVENT (kind defaults to "event") with the sponsored badge. The
-    // FeaturedPartners banner requires the PREMIUM promotion media block.
+    // Un-promoted on 2026-10-12: its promotion was a demo of the old BASE
+    // tier (promoted without a media block), which no longer exists. It
+    // stays a normal upcoming EVENT — community ribbon + /eventos; the
+    // /promo/test-2 landing retired with the tier.
     // Submitted through the event suggestion form on 2026-10-11. Test data:
     // ES mirrors EN — real submissions need proper translation before publishing.
     // endAt extended from the submitted 11:25 to a week out so the demo
     // survives the data-hygiene test; the submitted window stays in contactNote.
     id: "test-2",
-    promoted: true,
     title: { es: "Test 2", en: "Test 2" },
     description: { es: "Test test", en: "Test test" },
     landing: {

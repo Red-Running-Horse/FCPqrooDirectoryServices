@@ -174,10 +174,10 @@ export function eventPopupView(event, language, places) {
   };
 }
 
-// ---- Promotion tiers --------------------------------------------------------
-// BASE: promoted: true — homepage strip + /promo/<id> landing.
-// PREMIUM: additionally carries a promotion media block — FeaturedPartners
-// banner + sponsor card. The banner is an upsell, never automatic.
+// ---- Promotion tier ---------------------------------------------------------
+// `promoted: true` — a paid placement: landing page at /promo/<id> plus the
+// FeaturedPartners banner, which additionally requires the `promotion` media
+// block. MAX_PROMOTED caps the tier (build guard in app/events.mjs).
 
 export function promotedEvents(events) {
   return events.filter((event) => event.promoted === true);
@@ -188,11 +188,11 @@ export function premiumPromotions(events) {
 }
 
 // ---- Kind: event vs offer ---------------------------------------------------
-// Independent of the promotion tier: a promoted event is still an event
-// (test-2), while an offer — a rental, a placeholder partner — may be
-// promoted but never appears on event surfaces (/eventos, the map events
-// layer, the community strip, schema.org/Event JSON-LD). Records written
-// before kind existed default to "event".
+// Independent of the promotion tier: a promoted event is still an event,
+// while an offer — a rental, a placeholder partner — may be promoted but
+// never appears on event surfaces (/eventos, the map events layer, the
+// community strip, schema.org/Event JSON-LD). Records written before kind
+// existed default to "event".
 
 export function entryKind(event) {
   return event?.kind === "offer" ? "offer" : "event";

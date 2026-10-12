@@ -7,10 +7,8 @@ import { premiumPromotions } from "./event-utils.mjs";
 import { useSiteLanguage } from "./site-language";
 
 // FeaturedPartners — the PREMIUM promotion surface (enforced in events.mjs:
-// promoted plus a promotion media block, capped at MAX_PROMOTED total).
-// BASE-tier promoted entries (no media block, e.g. test-2) never reach this
-// component — they keep their /promo/<id> landing and, when kind: "event",
-// their community-strip card.
+// promoted plus a promotion media block, capped at MAX_PROMOTED total). It is
+// the only paid surface: when zero premium promotions exist, nothing renders.
 //   ROTATING AD SPACE: the band cycles every premium promotion with the
 //   slice-cascade transition: auto-advance every HOLD_MS, dot indicators and
 //   prev/next arrows, pause on hover/focus, ←/→ arrow keys while focus is
@@ -18,8 +16,6 @@ import { useSiteLanguage } from "./site-language";
 //   the arrows and dots still work (slice transition falls back to an
 //   instant swap via CSS). Exactly ONE premium promo renders a static frame
 //   with no rotation UI.
-//   CARDS ROW: all premium partners always visible below the band — rotation
-//   never hides a paying client.
 const SLICES = 5;
 const SLICE_MS = 70; // stagger between slices
 const HOLD_MS = 6000; // time each promotion holds the frame
@@ -153,30 +149,6 @@ export default function FeaturedPartners() {
   return (
     <section aria-label="Patrocinadores / Featured partners">
       <RotatingBand partners={partners} text={text} />
-      <div className="partners-row">
-        {partners.map((p) => (
-            <a
-            key={p.id}
-            className="partner-card"
-            href={`/promo/${p.id}`}               // card — drop target="_blank" rel="noopener noreferrer"
-          >
-            {p.promotion?.mediaType === "image" && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={p.promotion.cardUrl || p.promotion.mediaUrl} alt={p.title.es} loading="lazy" />
-            )}
-            <div className="partner-card__body">
-              <span className="partner-card__badge">
-                Promocionado / Sponsored
-              </span>
-              <h3>{p.title.es}</h3>
-              {p.promotion?.tagline && <p>{p.promotion.tagline.es}</p>}
-              <span className="partner-card__cta">
-                Visitar sitio / Visit site ↗
-              </span>
-            </div>
-          </a>
-        ))}
-      </div>
     </section>
   );
 }
