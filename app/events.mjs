@@ -28,11 +28,11 @@
 //
 // PROMOTED TIER (two levels, `promoted: true`) — orthogonal to kind; both
 // events and offers can be promoted:
-//   BASE    — appears in the homepage promoted-events strip and gets a landing
-//             page at /promo/<id>. No media block.
+//   BASE    — gets a landing page at /promo/<id>. No media block.
 //   PREMIUM — additionally carries a `promotion` media block (mediaUrl/cardUrl)
-//             and renders the big homepage banner + sponsor card via
-//             FeaturedPartners. The banner is an upsell, never automatic.
+//             and rotates through the homepage banner ad space + sponsor
+//             cards via FeaturedPartners. The banner is an upsell, never
+//             automatic.
 //   At most 3 records may be promoted at any time. The build FAILS if a
 //   fourth is promoted — that guard is intentional.
 // ============================================================================
@@ -127,8 +127,9 @@ const events = [
     lastUpdated: "2026-10-06",
   },
   {
-    // BASE tier (promoted: true, no media block): appears in the homepage
-    // promoted-events strip and gets a landing page at /promo/test-2. The
+    // BASE tier (promoted: true, no media block): gets a landing page at
+    // /promo/test-2 and appears in the homepage community strip as a promoted
+    // EVENT (kind defaults to "event") with the sponsored badge. The
     // FeaturedPartners banner requires the PREMIUM promotion media block.
     // Submitted through the event suggestion form on 2026-10-11. Test data:
     // ES mirrors EN — real submissions need proper translation before publishing.

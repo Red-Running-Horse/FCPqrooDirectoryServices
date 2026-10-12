@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, sep } from "node:path";
 import test from "node:test";
 import events from "../app/events.mjs";
@@ -242,10 +242,10 @@ test("events UI strings exist in both languages", () => {
     "eventPopupWhen",
     "eventPopupVenue",
     "eventPopupPlace",
-    "promotedHeading",
     "promotedBadge",
-    "promotedView",
-    "promotedScrollHint",
+    "promoPrevious",
+    "promoNext",
+    "promoSlide",
     "upcomingHeading",
     "upcomingView",
     "upcomingScrollHint",
@@ -280,14 +280,14 @@ test("the submission form posts to the relay or falls back to mailto gracefully"
   }
 });
 
-test("two-tier promotion: BASE entries join the strip but never the premium banner", () => {
+test("promotion tiers: MAX_PROMOTED caps every promoted record; premium requires a media block", () => {
   const promoted = promotedEvents(events);
   const premium = premiumPromotions(events);
 
   assert.deepEqual(
     promoted.map((event) => event.id).sort(),
     ["promo-balam-nah", "test-2", "test-partner-uno"],
-    "BASE tier: every promoted event, capped by MAX_PROMOTED",
+    "promoted tier: every promoted record, capped by MAX_PROMOTED",
   );
   assert.ok(
     promoted.length <= 3,
@@ -313,6 +313,29 @@ test("the FeaturedPartners banner renders only premium entries", () => {
   assert.doesNotMatch(source, /events\.filter\(\(e\) => e\.promoted\)/, "base tier must not leak into the banner");
 });
 
+test("the premium banner is a rotating ad space: N promos cycle, one renders static, reduced-motion disables auto-rotation only", () => {
+  const source = read("../app/featured-partners.js");
+  assert.match(source, /HOLD_MS = 6000/, "auto-advance about every 6 seconds");
+  assert.match(source, /setInterval/);
+  assert.match(source, /partners\.length >= 2/, "one promo → static frame, no rotation UI");
+  assert.match(source, /rotating && \(/, "controls only when rotation exists");
+  assert.match(source, /onMouseEnter=\{\(\) => setPaused\(true\)\}/, "pause on hover");
+  assert.match(source, /onFocus=\{\(\) => setPaused\(true\)\}/, "pause on focus");
+  assert.match(source, /prefers-reduced-motion: reduce/);
+  assert.match(source, /reduceMotion\.current\)/, "auto-rotation disabled under reduced motion; manual controls stay");
+  assert.match(source, /onKeyDown=/, "keyboard accessible");
+  assert.match(source, /ArrowLeft/);
+  assert.match(source, /ArrowRight/);
+  assert.match(source, /aria-label=\{text\.promoPrevious\}/);
+  assert.match(source, /aria-label=\{text\.promoNext\}/);
+  assert.match(source, /aria-label=\{`\$\{text\.promoSlide\} \$\{i \+ 1\}`\}/);
+  assert.match(source, /aria-current=/, "dots expose the active promotion");
+  const css = read("../app/featured-partners.css");
+  assert.match(css, /\.attract__controls/);
+  assert.match(css, /\.attract__dot/);
+  assert.match(css, /prefers-reduced-motion/, "slice transition falls back to an instant swap");
+});
+
 test("/promo/<id> landings stay kind-agnostic: every promoted record gets one, offers included", () => {
   const source = read("../app/promo/[id]/page.js");
   assert.match(
@@ -322,32 +345,22 @@ test("/promo/<id> landings stay kind-agnostic: every promoted record gets one, o
   );
 });
 
-test("the homepage strip hides when nothing is promoted and links every card to /promo/<id>", () => {
-  const source = read("../app/promoted-events.js");
-  assert.match(source, /promotedEvents\(events\)/);
-  assert.match(source, /if \(promoted\.length === 0\) return null;/, "no empty section");
-  assert.match(source, /href=\{`\/promo\/\$\{event\.id\}`\}/);
-  assert.match(source, /formatEventRange\(event, language\)/);
-  assert.match(source, /uiText\(language\)/, "bilingual via the existing uiText pattern");
-  assert.match(source, /event\.promotion\?\.mediaType === "image"/, "media only when the premium block exists");
-  assert.doesNotMatch(source, /<img(?!\s+className="promoted-card__media")/, "no unconditional images (text-only cards)");
-  assert.match(read("../app/style.css"), /scroll-snap-type:\s*x mandatory/, "native scroll-snap, no carousel JS");
-
+test("the card-based promoted strip is fully gone from the homepage", () => {
+  assert.ok(!existsSync(new URL("../app/promoted-events.js", import.meta.url)), "component deleted");
   const page = read("../app/page.js");
-  assert.ok(
-    page.indexOf("<HighwayMap") < page.indexOf("<PromotedEvents"),
-    "the strip sits between the map and the end of the page",
-  );
+  assert.doesNotMatch(page, /PromotedEvents/, "no import, no mount");
+  const css = read("../app/style.css");
+  assert.doesNotMatch(css, /promoted-strip|promoted-card/, "strip styles removed");
 });
 
-test("useSiteLanguage lives in one shared module and both homepage strips follow <html lang>", () => {
+test("useSiteLanguage lives in one shared module and both the banner and the community strip follow <html lang>", () => {
   const hook = read("../app/site-language.js");
   assert.match(hook, /export function useSiteLanguage\(\)/);
   assert.match(hook, /MutationObserver/, "follows the <html lang> attribute the map hero publishes");
 
-  const promoted = read("../app/promoted-events.js");
-  assert.match(promoted, /import \{ useSiteLanguage \} from "\.\/site-language";/);
-  assert.doesNotMatch(promoted, /function useSiteLanguage/, "no second copy of the hook");
+  const banner = read("../app/featured-partners.js");
+  assert.match(banner, /import \{ useSiteLanguage \} from "\.\/site-language";/);
+  assert.doesNotMatch(banner, /function useSiteLanguage/, "no second copy of the hook");
 
   const upcoming = read("../app/upcoming-events.js");
   assert.match(upcoming, /import \{ useSiteLanguage \} from "\.\/site-language";/);
@@ -379,15 +392,15 @@ test("/eventos entries carry anchor ids that the homepage strip targets", () => 
   assert.match(upcoming, /`\/eventos#\$\{event\.id\}`/);
 });
 
-test("the homepage mounts the upcoming strip between the premium banner and the map", () => {
+test("the homepage mounts the sections in order: banner, community strip, then map", () => {
   const page = read("../app/page.js");
-  assert.match(page, /import UpcomingEvents from "\.\/upcoming-events";/);
+  assert.doesNotMatch(page, /PromotedEvents/, "promoted card strip is gone");
   assert.ok(
     page.indexOf("<FeaturedPartners />") < page.indexOf("<UpcomingEvents />"),
-    "immediately after the FeaturedPartners banner",
+    "rotating banner before the community strip",
   );
   assert.ok(
     page.indexOf("<UpcomingEvents />") < page.indexOf("<HighwayMap"),
-    "before the map",
+    "community strip before the map",
   );
 });

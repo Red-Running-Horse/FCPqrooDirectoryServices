@@ -1,5 +1,6 @@
 /* ==========================================================================
-   featured-partners.css — attract band (sliced-image cascade) + partner cards
+   featured-partners.css — rotating premium ad band (sliced-image cascade,
+   dots + arrows) + partner cards
    ========================================================================== */
 
 /* ---------- Attract band ---------- */
@@ -103,6 +104,62 @@
   font-weight: 600;
   color: var(--cream);
   text-shadow: 0 1px 3px rgba(36, 28, 21, 0.6);
+}
+
+/* ---------- Rotation controls (only rendered with 2+ premium promos) ---------- */
+.attract__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  padding: 0.4rem 0.6rem;
+  background: var(--obsidian);
+  border-top: 1px solid rgba(244, 234, 217, 0.18);
+}
+
+.attract__arrow {
+  border: 1px solid rgba(244, 234, 217, 0.4);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sand);
+  font-size: 0.95rem;
+  line-height: 1;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+}
+
+.attract__arrow:hover,
+.attract__arrow:focus-visible {
+  background: rgba(244, 234, 217, 0.15);
+  outline: none;
+}
+
+.attract__dots {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.attract__dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 234, 217, 0.55);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.attract__dot:hover,
+.attract__dot:focus-visible {
+  outline: none;
+  border-color: var(--marigold);
+}
+
+.attract__dot[data-active="true"] {
+  background: var(--marigold);
+  border-color: var(--marigold);
 }
 
 /* ---------- Partner cards ---------- */
