@@ -1,0 +1,49 @@
+name: Discover events
+
+# Daily scan of the registered public sources for new event candidates in
+# Felipe Carrillo Puerto. 13:00 UTC = 08:00 hora de Cancún (UTC-5, sin DST).
+#
+# Contract:
+#   - New candidates  → ONE issue (label eventos-candidato) listing them all,
+#                       and seen.json updated on the discovery-data branch.
+#   - Zero candidates → green run, no issue, no commit. Silent by design.
+#   - Any failure     → red run AND one failure issue (label eventos-fallo);
+#                       while it stays open, later failures comment on it.
+#
+# The workflow needs exactly two write scopes and never touches the default
+# branch: seen.json lives on discovery-data, created as an orphan branch.
+on:
+  schedule:
+    - cron: "0 13 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: event-discovery
+  cancel-in-progress: false
+
+env:
+  GITHUB_TOKEN: ${{ github.token }}
+
+jobs:
+  discover:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # The pipeline uses only Node built-ins (global fetch, node:crypto) —
+      # no npm install step is needed.
+      - name: Scan sources and file candidate issues
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node scripts/event-discovery/discover.mjs
