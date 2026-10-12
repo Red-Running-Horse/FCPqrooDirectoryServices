@@ -247,12 +247,15 @@ test("events UI strings exist in both languages", () => {
     "promoNext",
     "promoSlide",
     "upcomingHeading",
-    "upcomingScrollHint",
     "upcomingAllEvents",
   ]) {
     assert.ok(typeof UI_TEXT.es[key] === "string" && UI_TEXT.es[key].length > 0, `es.${key}`);
     assert.ok(typeof UI_TEXT.en[key] === "string" && UI_TEXT.en[key].length > 0, `en.${key}`);
   }
+  // The strip heading is one inline-bilingual string in both languages
+  // (es primary, en secondary) — it promises no specific day.
+  assert.equal(UI_TEXT.es.upcomingHeading, "Eventos / Events");
+  assert.equal(UI_TEXT.en.upcomingHeading, "Eventos / Events");
 });
 
 test("/sugerir-evento is unlisted: noindex, no public links, no sitemap entry", () => {
@@ -400,7 +403,24 @@ test("the community strip lists ALL upcoming EVENTS at runtime as title-only row
   assert.match(source, /style=\{\{ background: categoryColor\(event\.category\) \}\}/);
   // Promoted entries keep the (minimal) sponsored marker.
   assert.match(source, /text\.promotedBadge/, "paid entries stay labeled");
-  assert.match(read("../app/style.css"), /\.upcoming-row/, "compact row styles exist");
+  const css = read("../app/style.css");
+  assert.match(css, /\.upcoming-row/, "compact row styles exist");
+  // Slim single-line header: the scroll hint is gone entirely, and heading +
+  // "all events" link share one row barely taller than the text.
+  assert.doesNotMatch(source, /upcoming-strip__hint|upcomingScrollHint/, "hint span removed");
+  assert.doesNotMatch(source, /upcoming-strip__header-actions/, "no actions wrapper — link sits in the header row");
+  assert.match(
+    source,
+    /<h2 id="upcoming-strip-heading">\{text\.upcomingHeading\}<\/h2>\s*<a className="upcoming-strip__all"/,
+    "heading and /eventos link are siblings on one line",
+  );
+  assert.doesNotMatch(css, /upcoming-strip__hint|upcoming-strip__header-actions/, "hint styles removed");
+  assert.match(
+    css,
+    /\.upcoming-strip__header\s*\{[^}]*justify-content:\s*space-between/s,
+    "one flex row: heading left, link right",
+  );
+  assert.match(css, /\.upcoming-strip__all\s*\{[^}]*padding:\s*0\.25rem 0/s, "link padded to the touch minimum");
 });
 
 test("/eventos entries carry anchor ids that the homepage strip targets", () => {

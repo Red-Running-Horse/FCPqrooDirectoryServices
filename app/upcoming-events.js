@@ -34,14 +34,9 @@ export default function UpcomingEvents() {
     <section className="upcoming-strip" aria-labelledby="upcoming-strip-heading">
       <div className="upcoming-strip__header">
         <h2 id="upcoming-strip-heading">{text.upcomingHeading}</h2>
-        <div className="upcoming-strip__header-actions">
-          <span className="upcoming-strip__hint" aria-hidden="true">
-            {text.upcomingScrollHint}
-          </span>
-          <a className="upcoming-strip__all" href="/eventos">
-            {text.upcomingAllEvents} →
-          </a>
-        </div>
+        <a className="upcoming-strip__all" href="/eventos">
+          {text.upcomingAllEvents} →
+        </a>
       </div>
       <ul className="upcoming-strip__scroller">
         {upcoming.map((event) => (
