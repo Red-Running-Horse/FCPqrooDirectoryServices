@@ -247,7 +247,6 @@ test("events UI strings exist in both languages", () => {
     "promoNext",
     "promoSlide",
     "upcomingHeading",
-    "upcomingView",
     "upcomingScrollHint",
     "upcomingAllEvents",
   ]) {
@@ -366,7 +365,7 @@ test("useSiteLanguage lives in one shared module and both the banner and the com
   assert.match(upcoming, /import \{ useSiteLanguage \} from "\.\/site-language";/);
 });
 
-test("the community strip lists ALL upcoming EVENTS at runtime; offers never appear; promoted events keep their badge and /promo/<id> href", () => {
+test("the community strip lists ALL upcoming EVENTS at runtime as title-only rows linking uniformly to /eventos#<id>", () => {
   const source = read("../app/upcoming-events.js");
   assert.match(
     source,
@@ -374,15 +373,19 @@ test("the community strip lists ALL upcoming EVENTS at runtime; offers never app
     "runtime filtering in Cancun time, events only — promotion status and kind both orthogonal",
   );
   assert.match(source, /if \(upcoming\.length === 0\) return null;/, "no empty section");
-  assert.match(
-    source,
-    /href=\{event\.promoted \? `\/promo\/\$\{event\.id\}` : `\/eventos#\$\{event\.id\}`\}/,
-    "promoted event → /promo landing, organic event → /eventos anchor",
-  );
-  assert.match(source, /text\.promotedBadge/, "paid entries keep the sponsored badge");
-  assert.match(source, /formatEventRange\(event, language\)/);
-  assert.match(source, /uiText\(language\)/, "bilingual via the existing uiText pattern");
-  assert.match(read("../app/style.css"), /\.upcoming-strip__scroller/, "strip styles exist");
+  // Title-only minimal entries: no dates, venues, costs or descriptions.
+  assert.doesNotMatch(source, /formatEventRange/, "no date ranges");
+  assert.doesNotMatch(source, /event\.venue/, "no venues");
+  assert.doesNotMatch(source, /event\.cost/, "no costs");
+  // Uniform /eventos#<id> hrefs — the tiered promoted → /promo/<id> logic is gone.
+  assert.match(source, /href=\{`\/eventos#\$\{event\.id\}`\}/, "every row jumps to its /eventos entry");
+  assert.doesNotMatch(source, /\/promo\/\$\{event\.id\}/, "promoted events use the same /eventos anchor");
+  // Category color bar via the existing palette helpers.
+  assert.match(source, /import \{ categoryColor \} from "\.\/category-colors\.mjs";/);
+  assert.match(source, /style=\{\{ background: categoryColor\(event\.category\) \}\}/);
+  // Promoted entries keep the (minimal) sponsored marker.
+  assert.match(source, /text\.promotedBadge/, "paid entries stay labeled");
+  assert.match(read("../app/style.css"), /\.upcoming-row/, "compact row styles exist");
 });
 
 test("/eventos entries carry anchor ids that the homepage strip targets", () => {

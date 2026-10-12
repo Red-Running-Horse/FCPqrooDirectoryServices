@@ -274,10 +274,11 @@ p {
   display: block;
 }
 
-/* Upcoming events strip (community strip): every upcoming event, promoted
-   or not. Cards jump to /eventos#<id> (organic) or /promo/<id> (promoted,
-   badged with the terracotta accent — paid placement is always labeled).
-   Same scroll-snap mechanics as the promoted strip. */
+/* Upcoming events strip (community strip): every upcoming EVENT as a compact
+   single-line row — title only, a small bar in the event's category color,
+   and a minimal sponsored marker on promoted entries (paid placement is
+   always labeled). Every row links uniformly to /eventos#<id>. Native
+   scroll-snap; no carousel JS. */
 .upcoming-strip {
   margin: 1.25rem 0 0;
 }
@@ -332,66 +333,54 @@ p {
 }
 
 .upcoming-strip__scroller > li {
-  flex: 0 0 clamp(14rem, 72vw, 18rem);
+  flex: 0 0 clamp(11rem, 56vw, 15rem);
   scroll-snap-align: start;
 }
 
-.upcoming-card {
+.upcoming-row {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  align-items: center;
+  gap: 0.55rem;
   height: 100%;
+  min-height: 2.4rem;
+  padding: 0.35rem 0.7rem;
   background: var(--cream);
   border: 1px solid var(--sand-line);
-  border-left: 4px solid var(--turquoise);
   border-radius: var(--radius-card);
-  padding: 0.8rem 0.95rem;
   box-shadow: var(--shadow-soft);
-}
-
-.upcoming-card--promoted {
-  border-left-color: var(--terracotta);
-}
-
-.upcoming-card__badge {
-  align-self: flex-start;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  background: var(--marigold);
-  color: var(--obsidian);
-  border-radius: 4px;
-  padding: 0.12rem 0.45rem;
-}
-
-.upcoming-card__title {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: 1rem;
-}
-
-.upcoming-card__title-alt {
-  font-weight: 400;
-  color: var(--charcoal-soft);
-}
-
-.upcoming-card__meta {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--charcoal-soft);
-}
-
-.upcoming-card__cta {
-  margin-top: auto;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--turquoise);
   text-decoration: none;
+  color: inherit;
 }
 
-.upcoming-card__cta:hover {
-  text-decoration: underline;
+.upcoming-row:hover {
+  border-color: var(--turquoise);
+}
+
+/* 4px bar; the event's category color is set inline from categoryColor() */
+.upcoming-row__bar {
+  flex: 0 0 4px;
+  align-self: stretch;
+  border-radius: 2px;
+  background: var(--charcoal-soft);
+}
+
+.upcoming-row__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.upcoming-row__sponsored {
+  flex: 0 0 auto;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--terracotta);
 }
 
 .place-portal {
