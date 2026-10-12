@@ -329,13 +329,17 @@ p {
   scroll-snap-align: start;
 }
 
+/* Exactly 25px tall — the WCAG 2.5.8 touch-target minimum, no more. An
+   exact height (never min-height) so future content can't inflate the row;
+   box-sizing makes the 25px include the 1px border, leaving a 23px box that
+   the single-line title must fit (hence its pinned line-height). */
 .upcoming-row {
   display: flex;
   align-items: center;
   gap: 0.55rem;
-  height: 100%;
-  min-height: 2.4rem;
-  padding: 0.35rem 0.7rem;
+  height: 25px;
+  box-sizing: border-box;
+  padding: 0 0.7rem;
   background: var(--cream);
   border: 1px solid var(--sand-line);
   border-radius: var(--radius-card);
@@ -361,6 +365,7 @@ p {
   min-width: 0;
   font-family: var(--font-heading);
   font-size: 0.95rem;
+  line-height: 1.2; /* 18px — must stay inside the row's 23px content box */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -400,11 +400,20 @@ test("the community strip lists ALL upcoming EVENTS at runtime as title-only row
   assert.doesNotMatch(source, /\/promo\/\$\{event\.id\}/, "promoted events use the same /eventos anchor");
   // Category color bar via the existing palette helpers.
   assert.match(source, /import \{ categoryColor \} from "\.\/category-colors\.mjs";/);
+  assert.match(source, /className="upcoming-row__bar"/, "category color bar stays on the row");
+  assert.match(source, /className="upcoming-row__title"/, "row title still renders");
   assert.match(source, /style=\{\{ background: categoryColor\(event\.category\) \}\}/);
   // Promoted entries keep the (minimal) sponsored marker.
   assert.match(source, /text\.promotedBadge/, "paid entries stay labeled");
   const css = read("../app/style.css");
   assert.match(css, /\.upcoming-row/, "compact row styles exist");
+  // Row height is locked to exactly 25px — the WCAG 2.5.8 touch minimum. An
+  // exact border-box height (never min-height) so content can't inflate it.
+  assert.match(css, /\.upcoming-row\s*\{[^}]*height:\s*25px;/s, "row height is exactly 25px");
+  assert.match(css, /\.upcoming-row\s*\{[^}]*box-sizing:\s*border-box;/s, "25px total includes the 1px border");
+  assert.doesNotMatch(css, /\.upcoming-row\s*\{[^}]*min-height/s, "exact height, not min-height");
+  assert.match(css, /\.upcoming-row__title\s*\{[^}]*text-overflow:\s*ellipsis/s, "long titles still ellipsize");
+  assert.match(css, /\.upcoming-row:hover\s*\{[^}]*border-color/s, "hover border stays");
   // Slim single-line header: the scroll hint is gone entirely, and heading +
   // "all events" link share one row barely taller than the text.
   assert.doesNotMatch(source, /upcoming-strip__hint|upcomingScrollHint/, "hint span removed");
