@@ -14,7 +14,8 @@
 //                        open failure issue exists, later failures comment
 //                        on it instead of opening duplicates.
 //
-// Delivery is GitHub Issues — never Formspree, never main.
+// Delivery is GitHub Issues only, and the only ref ever written is
+// discovery-data — never the default branch.
 // ============================================================================
 
 import { pathToFileURL } from "node:url";
