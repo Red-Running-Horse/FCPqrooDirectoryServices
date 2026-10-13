@@ -45,7 +45,11 @@ const events = [
     promoted: true,
     promotion: {
       mediaType: "image",
-      mediaUrl: "/promo/balamnah_1911_300.webp",   // band scene (1911x300 ~6.37:1, matches the desktop 69:11 crop)
+      // Band scenes, one file per breakpoint — swap files, not code. The wide
+      // scene fits the desktop 69:11 crop; the 69:20 scene is native to the
+      // mobile band (promotions without a mobile asset reuse mediaUrl).
+      mediaUrl: "/promo/balamnah_1911_300.webp",        // desktop band scene (1911x300 ~6.37:1)
+      mobileMediaUrl: "/promo/promotion0_1680_487.webp", // mobile band scene (1680x487 = 69:20)
       cardUrl: "/promo/promotion0_1280_720.webp",
       siteUrl: "https://balamnah.fcpqroo.mx",
       tagline: {
@@ -88,7 +92,8 @@ const events = [
     promoted: true,
     promotion: {
       mediaType: "image",
-      mediaUrl: "/promo/promotion1_1911_300.webp",
+      mediaUrl: "/promo/promotion1_1911_300.webp",        // desktop band scene
+      mobileMediaUrl: "/promo/promotion1_1680_487.webp", // mobile band scene
       cardUrl: "/promo/promotion1_1280_720.webp",
       siteUrl: "https://example.com/1",
       tagline: { es: "Prueba uno / Test one", en: "Test one" },
@@ -115,7 +120,8 @@ const events = [
     promoted: true,
     promotion: {
       mediaType: "image",
-      mediaUrl: "/promo/promotion2_1911_300.webp",
+      mediaUrl: "/promo/promotion2_1911_300.webp",        // desktop band scene
+      mobileMediaUrl: "/promo/promotion2_1680_487.webp", // mobile band scene
       siteUrl: "https://example.com/2",
       tagline: { es: "Prueba dos / Test two", en: "Test two" },
     },

@@ -24,9 +24,9 @@
 }
 
 /* One absolutely-positioned scene per promotion; the active one fades in over
-   the outgoing one. `background-size: cover` center-crops whatever the band
-   ratio needs — the 1911x300 (~6.37:1) scenes lose ~1.5% of their width on
-   the desktop 69:11 crop and center-crop harder on the mobile 69:20 band. */
+   the outgoing one. Each scene carries two sources (custom properties set in
+   JS): the mobile-ratio image at base, the wide desktop image from 48rem up —
+   `background-size: cover` center-crops whatever slack each band ratio has. */
 .attract__scene {
   position: absolute;
   top: 0;
@@ -34,6 +34,7 @@
   width: 100%;
   aspect-ratio: 69 / 20;
   overflow: hidden;
+  background-image: var(--scene-mobile);
   background-size: cover;
   background-position: center;
   opacity: 0;
@@ -166,6 +167,7 @@
   .attract::before,
   .attract__scene,
   .attract__image-link { aspect-ratio: 69 / 11; }
+  .attract__scene { background-image: var(--scene-desktop); }
 }
 
 @media (max-width: 47.99rem) {

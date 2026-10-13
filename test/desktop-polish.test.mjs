@@ -40,13 +40,16 @@ test("banner auto-rotation stays live in the desktop styles", () => {
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{\s*\.attract__scene\s*\{\s*transition:\s*none/s);
 
   // Auto-advance still interval-driven and reduced-motion gated in JS, and
-  // each scene carries its own full image (cover-cropped by CSS, never the
-  // fragile per-slice background mosaic).
+  // each scene carries both breakpoint sources as custom properties that the
+  // CSS consumes per breakpoint (mobile falls back to the desktop file).
   assert.match(js, /setInterval/);
   assert.match(js, /HOLD_MS = 6000/);
   assert.match(js, /prefers-reduced-motion: reduce/);
   assert.match(js, /reduceMotion\.current\)/);
-  assert.match(js, /backgroundImage:\s*`url\(\$\{p\.promotion\?\.mediaUrl\}\)`/, "whole-scene image per promotion");
+  assert.match(js, /\["--scene-desktop"\]:\s*`url\(\$\{p\.promotion\?\.mediaUrl\}\)`/, "desktop scene source per promotion");
+  assert.match(js, /\["--scene-mobile"\]:\s*`url\(\$\{p\.promotion\?\.mobileMediaUrl \?\? p\.promotion\?\.mediaUrl\}\)`/, "mobile scene source with desktop fallback");
+  assert.match(css, /\.attract__scene\s*\{[^}]*background-image:\s*var\(--scene-mobile\)/s, "base styles consume the mobile scene source");
+  assert.match(desktop, /background-image:\s*var\(--scene-desktop\)/, "desktop styles consume the desktop scene source");
   assert.doesNotMatch(js, /attract__slice|--exit-y|SLICES/, "slice cascade fully removed");
 });
 
@@ -76,16 +79,20 @@ test("band controls and promo link live in one slim bar below the image — zero
   assert.match(overlay, /position:\s*absolute/, "only the invisible click surface covers the image");
 });
 
-test("premium band scenes point at the 1911x300 assets in public/promo", () => {
+test("premium band scenes point at per-breakpoint assets in public/promo", () => {
   const events = read("../app/events.mjs");
-  for (const [id, file] of [
-    ["promo-balam-nah", "/promo/balamnah_1911_300.webp"],
-    ["test-partner-uno", "/promo/promotion1_1911_300.webp"],
-    ["test-partner-dos", "/promo/promotion2_1911_300.webp"],
+  for (const [id, desktopFile, mobileFile] of [
+    ["promo-balam-nah", "/promo/balamnah_1911_300.webp", "/promo/promotion0_1680_487.webp"],
+    ["test-partner-uno", "/promo/promotion1_1911_300.webp", "/promo/promotion1_1680_487.webp"],
+    ["test-partner-dos", "/promo/promotion2_1911_300.webp", "/promo/promotion2_1680_487.webp"],
   ]) {
-    const mediaUrl = events.match(new RegExp(`id: "${id}"[\\s\\S]*?mediaUrl: "([^"]+)"`))?.[1];
-    assert.equal(mediaUrl, file, `${id} band scene`);
-    assert.ok(existsSync(new URL(`../public${file}`, import.meta.url)), `${file} exists on disk`);
+    const afterId = new RegExp(`id: "${id}"[\\s\\S]*$`);
+    const mediaUrl = events.match(afterId)?.[0].match(/mediaUrl: "([^"]+)"/)?.[1];
+    const mobileMediaUrl = events.match(afterId)?.[0].match(/mobileMediaUrl: "([^"]+)"/)?.[1];
+    assert.equal(mediaUrl, desktopFile, `${id} desktop scene`);
+    assert.equal(mobileMediaUrl, mobileFile, `${id} mobile scene`);
+    assert.ok(existsSync(new URL(`../public${desktopFile}`, import.meta.url)), `${desktopFile} exists on disk`);
+    assert.ok(existsSync(new URL(`../public${mobileFile}`, import.meta.url)), `${mobileFile} exists on disk`);
   }
 });
 
@@ -111,6 +118,7 @@ test("hero mark is capped on desktop and stays proportional on mobile", () => {
   const mq = theme.match(/@media\s*\(min-width:\s*48rem\)\s*\{\s*\.hero__mark\s*\{([^}]*)\}/)?.[1];
   assert.ok(mq, "desktop cap exists");
   assert.match(mq, /max-width:\s*34rem/, "~544px wide → ~85px tall at the 1911:300 ratio");
+  assert.match(mq, /margin-inline:\s*auto/, "centered on desktop");
 });
 
 test("desktop map is draggable from the start — the tap-to-activate guard is mobile-only", () => {

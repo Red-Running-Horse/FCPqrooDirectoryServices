@@ -134,7 +134,7 @@
 @media (min-width: 48rem) {
   .hero__mark {
     max-width: 34rem;       /* ~544px wide → ~85px tall at the 1911:300 ratio */
-    margin-left: 0;         /* left-align with the hero text on desktop */
+    margin-inline: auto;    /* centered in the hero on desktop */
   }
 }
 

@@ -68,7 +68,13 @@ function RotatingBand({ partners, text }) {
           className="attract__scene"
           data-active={sceneIndex === active}
           aria-hidden={sceneIndex !== active}
-          style={{ backgroundImage: `url(${p.promotion?.mediaUrl})` }}
+          style={{
+            // Per-breakpoint scene sources consumed by the CSS at each
+            // breakpoint — swapping image files in public/promo/ (and these
+            // two URLs) is all an asset refresh needs.
+            ["--scene-desktop"]: `url(${p.promotion?.mediaUrl})`,
+            ["--scene-mobile"]: `url(${p.promotion?.mobileMediaUrl ?? p.promotion?.mediaUrl})`,
+          }}
         />
       ))}
       <a
