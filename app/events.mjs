@@ -45,7 +45,7 @@ const events = [
     promoted: true,
     promotion: {
       mediaType: "image",
-      mediaUrl: "/promo/promotion0_1680_487.webp",   // band (69:20 wide banner)
+      mediaUrl: "/promo/balamnah_1911_300.webp",   // band scene (1911x300 ~6.37:1, matches the desktop 69:11 crop)
       cardUrl: "/promo/promotion0_1280_720.webp",
       siteUrl: "https://balamnah.fcpqroo.mx",
       tagline: {
@@ -88,7 +88,7 @@ const events = [
     promoted: true,
     promotion: {
       mediaType: "image",
-      mediaUrl: "/promo/promotion1_1680_487.webp",
+      mediaUrl: "/promo/promotion1_1911_300.webp",
       cardUrl: "/promo/promotion1_1280_720.webp",
       siteUrl: "https://example.com/1",
       tagline: { es: "Prueba uno / Test one", en: "Test one" },
@@ -115,7 +115,7 @@ const events = [
     promoted: true,
     promotion: {
       mediaType: "image",
-      mediaUrl: "/promo/promotion2_1680_487.webp",
+      mediaUrl: "/promo/promotion2_1911_300.webp",
       siteUrl: "https://example.com/2",
       tagline: { es: "Prueba dos / Test two", en: "Test two" },
     },

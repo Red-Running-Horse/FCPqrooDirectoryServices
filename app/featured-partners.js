@@ -9,15 +9,13 @@ import { useSiteLanguage } from "./site-language";
 // FeaturedPartners — the PREMIUM promotion surface (enforced in events.mjs:
 // promoted plus a promotion media block, capped at MAX_PROMOTED total). It is
 // the only paid surface: when zero premium promotions exist, nothing renders.
-//   ROTATING AD SPACE: the band cycles every premium promotion with the
-//   slice-cascade transition: auto-advance every HOLD_MS, dot indicators and
-//   prev/next arrows, pause on hover/focus, ←/→ arrow keys while focus is
-//   inside the band. Auto-rotation is DISABLED under prefers-reduced-motion —
-//   the arrows and dots still work (slice transition falls back to an
-//   instant swap via CSS). Exactly ONE premium promo renders a static frame
-//   with no rotation UI.
-const SLICES = 5;
-const SLICE_MS = 70; // stagger between slices
+//   ROTATING AD SPACE: the band cycles every premium promotion with a
+//   whole-scene crossfade: auto-advance every HOLD_MS, dot indicators and
+//   prev/next arrows in the bar below the image, pause on hover/focus, ←/→
+//   arrow keys while focus is inside the band. Auto-rotation is DISABLED under
+//   prefers-reduced-motion — the arrows and dots still work (the crossfade
+//   falls back to an instant swap via CSS). Exactly ONE premium promo renders
+//   a static frame with no rotation UI.
 const HOLD_MS = 6000; // time each promotion holds the frame
 
 function RotatingBand({ partners, text }) {
@@ -70,26 +68,8 @@ function RotatingBand({ partners, text }) {
           className="attract__scene"
           data-active={sceneIndex === active}
           aria-hidden={sceneIndex !== active}
-        >
-          {Array.from({ length: SLICES }, (_, i) => (
-            <div
-              key={i}
-              className="attract__slice"
-              style={{
-                backgroundImage: `url(${p.promotion?.mediaUrl})`,
-                // each slice shows its vertical band of the shared image;
-                // vertical `auto` = exact fit at the native 69:20 band ratio
-                // and center-crops (never stretches) on shorter desktop bands
-                backgroundSize: `${SLICES * 100}% auto`,
-                backgroundPosition: `${(i / (SLICES - 1)) * 100}% 50%`,
-                transitionDelay: `${i * SLICE_MS}ms`,
-                // alternate exit direction by scene for the split/reform feel
-                ["--exit-y"]:
-                  sceneIndex % 2 === 0 ? "-102%" : "102%",
-              }}
-            />
-          ))}
-        </div>
+          style={{ backgroundImage: `url(${p.promotion?.mediaUrl})` }}
+        />
       ))}
       <a
         className="attract__image-link"
@@ -97,47 +77,49 @@ function RotatingBand({ partners, text }) {
         tabIndex={-1}
         aria-hidden="true"
       />
-      <a
-        className="attract__link"
-        href={`/promo/${current.id}`}          // band — drop target="_blank" rel="noopener noreferrer"
-        aria-label={`${current.title.es} (ver promoción / view promotion)`}
-      >
-        <span className="attract__badge">Promocionado / Sponsored</span>
-        <span className="attract__name">{current.title.es}</span>
-      </a>
-      {rotating && (
-        <div className="attract__controls">
-          <button
-            type="button"
-            className="attract__arrow"
-            onClick={() => step(-1)}
-            aria-label={text.promoPrevious}
-          >
-            ←
-          </button>
-          <div className="attract__dots">
-            {partners.map((p, i) => (
-              <button
-                key={p.id}
-                type="button"
-                className="attract__dot"
-                data-active={i === active}
-                aria-current={i === active}
-                aria-label={`${text.promoSlide} ${i + 1}`}
-                onClick={() => setActive(i)}
-              />
-            ))}
+      <div className="attract__bar">
+        <a
+          className="attract__link"
+          href={`/promo/${current.id}`}          // band — drop target="_blank" rel="noopener noreferrer"
+          aria-label={`${current.title.es} (ver promoción / view promotion)`}
+        >
+          <span className="attract__badge">Promocionado / Sponsored</span>
+          <span className="attract__name">{current.title.es}</span>
+        </a>
+        {rotating && (
+          <div className="attract__controls">
+            <button
+              type="button"
+              className="attract__arrow"
+              onClick={() => step(-1)}
+              aria-label={text.promoPrevious}
+            >
+              ←
+            </button>
+            <div className="attract__dots">
+              {partners.map((p, i) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  className="attract__dot"
+                  data-active={i === active}
+                  aria-current={i === active}
+                  aria-label={`${text.promoSlide} ${i + 1}`}
+                  onClick={() => setActive(i)}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              className="attract__arrow"
+              onClick={() => step(1)}
+              aria-label={text.promoNext}
+            >
+              →
+            </button>
           </div>
-          <button
-            type="button"
-            className="attract__arrow"
-            onClick={() => step(1)}
-            aria-label={text.promoNext}
-          >
-            →
-          </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

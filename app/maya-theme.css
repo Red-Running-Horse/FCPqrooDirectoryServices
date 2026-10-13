@@ -119,13 +119,13 @@
 }
 
 /* City sign banner — full width across the hero; capped on desktop so the
-   sign sits at a comfortable badge size (~156px tall) instead of spanning
-   the whole content column. Mobile keeps the full-width proportional look. */
+   sign sits at a comfortable badge size instead of spanning the whole
+   content column. Mobile keeps the full-width proportional look. */
 .hero__mark {
   display: block;
   width: 100%;
   max-width: 1200px;        /* never upscale past the source */
-  aspect-ratio: 1200 / 345; /* exact image ratio: no crop at any size */
+  aspect-ratio: 1911 / 300; /* exact image ratio: no crop at any size */
   height: auto;
   object-fit: cover;
   margin: 0 auto 0.75rem;   /* centers it with cream margins on wide screens */
@@ -133,7 +133,7 @@
 
 @media (min-width: 48rem) {
   .hero__mark {
-    max-width: 34rem;       /* ~544px wide → ~156px tall at the 1200:345 ratio */
+    max-width: 34rem;       /* ~544px wide → ~85px tall at the 1911:300 ratio */
     margin-left: 0;         /* left-align with the hero text on desktop */
   }
 }

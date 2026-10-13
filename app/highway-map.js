@@ -149,6 +149,17 @@ export default function HighwayMap({ placesIndex, events = [] }) {
   const [savedPlaceIds, setSavedPlaceIds] = useState([]);
   const [isOnline, setIsOnline] = useState(true);
   const [mapActive, setMapActive] = useState(false);
+  // The tap-to-activate scroll-trap guard only exists under 48rem; on desktop
+  // the map is interactive from the start (dragging was never re-enabled there
+  // because the overlay that flips mapActive is display:none ≥48rem).
+  const [desktopMap, setDesktopMap] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 48rem)");
+    const sync = () => setDesktopMap(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
   const [showEvents, setShowEvents] = useState(true);
   const showEventsRef = useRef(true);
   const text = uiText(language);
@@ -376,14 +387,14 @@ export default function HighwayMap({ placesIndex, events = [] }) {
     mapActiveRef.current = mapActive;
     const current = attractionLayer.current;
     if (!current) return;
-    if (mapActive) {
+    if (mapActive || desktopMap) {
       current.map.dragging.enable();
       current.map.touchZoom.enable();
     } else {
       current.map.dragging.disable();
       current.map.touchZoom.disable();
     }
-  }, [mapActive]);
+  }, [mapActive, desktopMap]);
 
   // Events layer toggle: a separate layer group, so the category filter and
   // the mobile scroll-trap guard are untouched by it.
@@ -417,7 +428,7 @@ export default function HighwayMap({ placesIndex, events = [] }) {
         maxBounds: FCP_MAX_BOUNDS,
         maxBoundsViscosity: 0.8,
       });
-      if (!mapActiveRef.current) {
+      if (!mapActiveRef.current && !window.matchMedia("(min-width: 48rem)").matches) {
         map.dragging.disable();
         map.touchZoom.disable();
       }
@@ -656,9 +667,9 @@ export default function HighwayMap({ placesIndex, events = [] }) {
       <section className="hero" aria-label={text.heading}>
         <img
           className="hero__mark"
-          src="/img/fcp-sign.webp"
-          width={1200}
-          height={345}
+          src="/img/fcp_sign_1191_300.webp"
+          width={1911}
+          height={300}
           alt={language === "en"
             ? "Felipe Carrillo Puerto city sign"
             : "Letrero de la ciudad de Felipe Carrillo Puerto"}

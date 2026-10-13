@@ -1,0 +1,6 @@
+1. I'll have created new images for the 956 x 152 resolution scroll banner
+2. div.attract_controls is 45.8px and the a.attract_link is 37.5px, this is covering almost 25% of the banner promotions, Those items should not cover 1px of the promotion img, that defets the point. 
+3. The banner is still not rotating 
+4. I have created a new img.hero_mark image at 1191 x 300 px /home/mc/FCPqrooDirectoryServices/public/img/
+5. The map still cant be dragged to other point on the map
+6. 
