@@ -108,11 +108,11 @@ test("div.hero_bar is fully gone — markup and both CSS layers", () => {
 test("hero mark is capped on desktop and stays proportional on mobile", () => {
   const theme = read("../app/maya-theme.css");
   const map = read("../app/highway-map.js");
-  assert.match(map, /src="\/img\/fcp_sign_1191_300\.webp"/, "new wide sign image wired");
-  assert.match(map, /width=\{1911\}[\s\S]*?height=\{300\}/, "intrinsic dimensions match the source");
+  assert.match(map, /src="\/img\/fcp_sign_1100_170\.webp"/, "new wide sign image wired");
+  assert.match(map, /width=\{1100\}[\s\S]*?height=\{170\}/, "intrinsic dimensions match the source");
   assert.match(
     theme,
-    /\.hero__mark\s*\{[^}]*aspect-ratio:\s*1911\s*\/\s*300/s,
+    /\.hero__mark\s*\{[^}]*max-width:\s*1100px/s,
     "exact source ratio preserved — no distortion at any width",
   );
   const mq = theme.match(/@media\s*\(min-width:\s*48rem\)\s*\{\s*\.hero__mark\s*\{([^}]*)\}/)?.[1];
