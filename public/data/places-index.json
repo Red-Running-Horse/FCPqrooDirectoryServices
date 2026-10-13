@@ -143,8 +143,8 @@
   {
     "id": "terminal-ado-felipe-carrillo-puerto",
     "category": "tours",
-    "latitude": 19.5776,
-    "longitude": -88.0448,
+    "latitude": 19.578314560261095,
+    "longitude": -88.0464839591432,
     "status": "unverified",
     "locationAccuracy": "approximate",
     "name": {
@@ -173,8 +173,8 @@
     "secondaryCategories": [
       "tours"
     ],
-    "latitude": 19.771,
-    "longitude": -87.724,
+    "latitude": 20.075430216446623,
+    "longitude": -87.5991864150835,
     "status": "unverified",
     "locationAccuracy": "approximate",
     "name": {
@@ -189,8 +189,8 @@
       "lodging",
       "tours"
     ],
-    "latitude": 19.5108,
-    "longitude": -88.0803,
+    "latitude": 19.47736416825571,
+    "longitude": -88.05465239979497,
     "status": "unverified",
     "locationAccuracy": "approximate",
     "name": {
@@ -201,8 +201,8 @@
   {
     "id": "museo-de-la-guerra-de-castas-tihosuco",
     "category": "culture",
-    "latitude": 19.8628,
-    "longitude": -88.3717,
+    "latitude": 20.196817110269997,
+    "longitude": -88.37493767627636,
     "status": "unverified",
     "locationAccuracy": "approximate",
     "name": {
@@ -216,29 +216,13 @@
     "secondaryCategories": [
       "tours"
     ],
-    "latitude": 19.9167,
-    "longitude": -88.8667,
+    "latitude": 19.930927203434074,
+    "longitude": -88.80595612150825,
     "status": "unverified",
     "locationAccuracy": "approximate",
     "name": {
       "es": "Cueva de las Serpientes Colgantes (Kantemó)",
       "en": "Cave of the Hanging Snakes (Kantemó)"
-    }
-  },
-  {
-    "id": "chunhuhub-secretos-de-la-cocina-maya",
-    "category": "tours",
-    "secondaryCategories": [
-      "food",
-      "culture"
-    ],
-    "latitude": 19.6139,
-    "longitude": -88.5997,
-    "status": "unverified",
-    "locationAccuracy": "approximate",
-    "name": {
-      "es": "Chunhuhub — Secretos de la Cocina Maya (tour comunitario)",
-      "en": "Chunhuhub — Secrets of Maya Cooking (community tour)"
     }
   }
 ]

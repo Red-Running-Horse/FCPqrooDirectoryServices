@@ -1,8 +1,8 @@
 {
   "id": "reserva-much-kanan-kaax-siijil-noh-ha",
   "description": {
-    "es": "Reserva comunitaria de ~1,230 hectáreas administrada por familias mayas, a unos 10 km de FCP (comunidad de Tres Reyes). Cabañas rústicas con alimentos incluidos, kayak en la laguna, ciclismo de montaña, baños de temazcal y comida yucateca casera. Reservar con anticipación por WhatsApp; se agradece algo de español.",
-    "en": "~1,230-hectare community reserve run by Maya families, ~10 km from FCP (Tres Reyes community). Rustic cabins with meals included, lagoon kayaking, mountain biking, temazcal baths and home-cooked Yucatecan food. Book ahead via WhatsApp; a little Spanish goes a long way."
+    "es": "Reserva ejidal de ~1,230 hectáreas administrada por familias mayas, a unos 10 km de Felipe Carrillo Puerto (comunidad de Tres Reyes). Las actividades incluyen kayak por la laguna Siijil Noh Ha, natación en un cenote a cielo abierto, ciclismo de montaña por senderos, caminatas bajo la selva y observación de aves de las especies que habitan la laguna. También se ofrecen cabañas rústicas con alimentos incluidos, baños de temazcal y comida yucateca casera. Conviene reservar con anticipación; se agradece algo de español.",
+    "en": "~1,230-hectare ejidal reserve run by Maya families, about 10 km from Felipe Carrillo Puerto (Tres Reyes community). Activities include kayaking on the Siijil Noh Ha lagoon, swimming in an open-air cenote, mountain biking on trails, walking under the jungle canopy, and birdwatching for the species that inhabit the lagoon. Rustic cabins with meals included, temazcal baths and home-cooked Yucatecan food are also offered. Book ahead; a little Spanish goes a long way."
   },
   "directionsUrl": null,
   "address": {
@@ -10,15 +10,16 @@
     "en": "Tres Reyes community, Felipe Carrillo Puerto, Quintana Roo (approximate location)"
   },
   "hoursDisplay": {
-    "es": "Reservaciones previas (WhatsApp); kayak y actividades según disponibilidad",
-    "en": "Advance reservations (WhatsApp); kayaking and activities per availability"
+    "es": "Reservaciones previas (teléfono/WhatsApp); kayak y actividades según disponibilidad",
+    "en": "Advance reservations (phone/WhatsApp); kayaking and activities per availability"
   },
-  "phone": null,
-  "whatsapp": null,
+  "phone": "+52 983 112 9991",
+  "whatsapp": "+52 983 112 9991",
+  "email": "siijilnohhamkt@gmail.com",
   "website": null,
   "verificationNote": {
-    "es": "Reserva documentada en el circuito de turismo comunitario Maya Ka'an como 'Kayak en la laguna Siijil Noh Ha'; las coordenadas son un punto aproximado en el área de Tres Reyes y requieren verificación GPS. Agregar teléfono/WhatsApp local cuando se confirme en campo.",
-    "en": "Reserve documented in the Maya Ka'an community tourism circuit as 'Kayak en la laguna Siijil Noh Ha'; coordinates are an approximate point in the Tres Reyes area and require GPS verification. Add local phone/WhatsApp once confirmed in the field."
+    "es": "Reserva documentada en el circuito de turismo comunitario Maya Ka'an como 'Kayak en la laguna Siijil Noh Ha'; las coordenadas corresponden al pin de Google Maps proporcionado por el usuario (área de Tres Reyes) y requieren verificación GPS en campo. Teléfono, WhatsApp y correo principales proporcionados por la reserva; contactos adicionales que ella misma publicita: celular (+52) 983 211 3346, oficina (983) 834 0525, correo ejidofcp@gmail.com.",
+    "en": "Reserve documented in the Maya Ka'an community tourism circuit as 'Kayak en la laguna Siijil Noh Ha'; coordinates are the user-provided Google Maps pin (Tres Reyes area) and require GPS field verification. Primary phone, WhatsApp and email provided by the reserve; additional contacts it advertises: cell (+52) 983 211 3346, office (983) 834 0525, email ejidofcp@gmail.com."
   },
-  "lastUpdated": "2026-10-03"
+  "lastUpdated": "2026-10-13"
 }

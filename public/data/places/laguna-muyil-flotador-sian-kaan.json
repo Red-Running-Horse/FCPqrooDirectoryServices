@@ -1,8 +1,8 @@
 {
   "id": "laguna-muyil-flotador-sian-kaan",
   "description": {
-    "es": "El famoso 'río lento' de Sian Ka'an: camino de maderas a través de la selva, lancha comunitaria cruzando la laguna y flotación con chaleco por un canal maya de ~500 m entre manglares. Operado por guías de la comunidad de Muyil (2–3 h en total). Llevar efectivo, repelente biodegradable y calzado acuático; salidas tempranas para aves y agua calmada.",
-    "en": "The famous Sian Ka'an 'lazy river': boardwalk through the forest, a community boat across the lagoon, and a life-vest float down a ~500 m ancient Maya canal through mangroves. Run by Muyil community guides (2–3 h total). Bring cash, biodegradable repellent and water shoes; early departures for birds and calm water."
+    "es": "El famoso 'río lento' de Sian Ka'an: camino de maderas a través de la selva, lancha comunitaria cruzando la laguna y flotación con chaleco por un canal maya de ~500 m entre manglares. Operado por guías de la comunidad de Muyil (2–3 h en total); apto para niños, con estacionamiento de pago. Llevar efectivo, repelente biodegradable y calzado acuático; salidas tempranas para aves y agua calmada. Precios indicativos de tours en listados de guías 2026: MXN 1,370–9,041 por persona según el proveedor.",
+    "en": "The famous Sian Ka'an 'lazy river': boardwalk through the forest, a community boat across the lagoon, and a life-vest float down a ~500 m ancient Maya canal through mangroves. Run by Muyil community guides (2–3 h total); suitable for children, with paid parking. Bring cash, biodegradable repellent and water shoes; early departures for birds and calm water. Indicative tour prices from 2026 guide listings: MXN 1,370–9,041 per person depending on the provider."
   },
   "directionsUrl": null,
   "address": {
@@ -16,9 +16,12 @@
   "phone": null,
   "whatsapp": null,
   "website": null,
+  "verificationSourceUrls": [
+    "https://www.getyourguide.com/laguna-de-muyil-l191907/"
+  ],
   "verificationNote": {
-    "es": "La experiencia está documentada por fuentes turísticas regionales y la comunidad de Muyil como operador; las coordenadas son aproximadas (área del embarcadero) y los precios comunitarios cambian — confirmar con los guías locales.",
-    "en": "The experience is documented by regional tourism sources with Muyil community as operator; coordinates are approximate (boat-launch area) and community fees change — confirm with local guides."
+    "es": "La experiencia está documentada por fuentes turísticas regionales y la comunidad de Muyil como operador; las coordenadas corresponden al pin de Google Maps proporcionado por el usuario y los precios son indicativos de listados de guías 2026 (getyourguide.com) — confirmar tarifas comunitarias vigentes, horarios y estacionamiento con los guías locales.",
+    "en": "The experience is documented by regional tourism sources with Muyil community as operator; coordinates are the user-provided Google Maps pin and prices are indicative from 2026 guide listings (getyourguide.com) — confirm current community fees, schedules and parking with local guides."
   },
-  "lastUpdated": "2026-10-03"
+  "lastUpdated": "2026-10-13"
 }

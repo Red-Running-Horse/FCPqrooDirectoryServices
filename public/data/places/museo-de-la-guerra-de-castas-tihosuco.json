@@ -6,19 +6,35 @@
   },
   "directionsUrl": null,
   "address": {
-    "es": "Tihosuco, Municipio de Felipe Carrillo Puerto, Quintana Roo",
-    "en": "Tihosuco, Municipality of Felipe Carrillo Puerto, Quintana Roo"
+    "es": "Calle 17 esq. Calle 26, Centro, C.P. 77121, Tihosuco, Felipe Carrillo Puerto, Quintana Roo",
+    "en": "17 Street corner 26 Street, Centro, ZIP 77121, Tihosuco, Felipe Carrillo Puerto, Quintana Roo"
   },
   "hoursDisplay": {
-    "es": "Martes - Domingo aprox. 09:00 - 17:00 (confirmar horario actual)",
-    "en": "Tue - Sun approx. 09:00 - 17:00 (confirm current hours)"
+    "es": "Mar - Dom: 10:00 - 18:00 (lunes cerrado)",
+    "en": "Tue - Sun: 10:00 - 18:00 (closed Mondays)"
   },
-  "phone": null,
+  "phone": "+52 983 208 9203",
   "whatsapp": null,
+  "email": "museogcastas@hotmail.com",
   "website": null,
-  "verificationNote": {
-    "es": "Museo publicado por el programa Maya Ka'an y fuentes estatales de turismo como parte del circuito de Tihosuco; coordenadas aproximadas del centro de Tihosuco — verificar el punto exacto y el horario en campo.",
-    "en": "Museum published by the Maya Ka'an program and state tourism sources as part of the Tihosuco circuit; approximate coordinates of Tihosuco center — verify exact point and hours in the field."
+  "socialLinks": {
+    "facebook": null,
+    "instagram": null,
+    "tiktok": null
   },
-  "lastUpdated": "2026-10-03"
+  "accessibility": {
+    "wheelchairAccess": true,
+    "parking": true,
+    "notesEs": "Ficha oficial: estacionamiento y entrada accesibles para sillas de ruedas; sanitarios disponibles; sin restaurante. Pendiente de confirmación en campo.",
+    "notesEn": "Official listing: wheelchair-accessible parking and entrance; toilets available; no restaurant. Pending field confirmation."
+  },
+  "verificationSourceUrls": [
+    "https://lugares.inah.gob.mx/en/node/4844",
+    "https://sic.cultura.gob.mx/ficha.php?table=museo&table_id=311"
+  ],
+  "verificationNote": {
+    "es": "Museo publicado por INAH (lugares.inah.gob.mx) y en la ficha oficial del SIC de la Secretaría de Cultura; dirección, horario, teléfono, correo y accesibilidad tomados de esas fichas oficiales. Las coordenadas corresponden al pin de Google Maps proporcionado por el usuario y requieren verificación GPS en campo — no son verificación física del sitio.",
+    "en": "Museum published by INAH (lugares.inah.gob.mx) and in the official SIC listing of the Ministry of Culture; address, hours, phone, email and accessibility taken from those official records. Coordinates are the user-provided Google Maps pin and require GPS field verification — they are not a physical verification of the site."
+  },
+  "lastUpdated": "2026-10-13"
 }

@@ -17,8 +17,8 @@
   "whatsapp": null,
   "website": "https://www.ado.com.mx/",
   "verificationNote": {
-    "es": "La terminal ADO opera en el centro de FCP según la red nacional ADO; las coordenadas son aproximadas y deben verificarse en campo. Horarios y tarifas varían — confirmar siempre en la app ADO.",
-    "en": "The ADO terminal operates in downtown FCP per the national ADO network; coordinates are approximate and must be field-verified. Schedules and fares vary — always confirm in the ADO app."
+    "es": "La terminal ADO opera en el centro de FCP según la red nacional ADO; las coordenadas corresponden al pin de Google Maps proporcionado por el usuario y deben verificarse con GPS en campo. Horarios y tarifas varían — confirmar siempre en la app ADO.",
+    "en": "The ADO terminal operates in downtown FCP per the national ADO network; coordinates are the user-provided Google Maps pin and must be GPS-verified in the field. Schedules and fares vary — always confirm in the ADO app."
   },
-  "lastUpdated": "2026-10-03"
+  "lastUpdated": "2026-10-13"
 }
