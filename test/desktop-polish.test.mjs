@@ -82,9 +82,9 @@ test("band controls and promo link live in one slim bar below the image — zero
 test("premium band scenes point at per-breakpoint assets in public/promo", () => {
   const events = read("../app/events.mjs");
   for (const [id, desktopFile, mobileFile] of [
-    ["promo-balam-nah", "/promo/balamnah_1911_300.webp", "/promo/promotion0_1680_487.webp"],
-    ["test-partner-uno", "/promo/promotion1_1911_300.webp", "/promo/promotion1_1680_487.webp"],
-    ["test-partner-dos", "/promo/promotion2_1911_300.webp", "/promo/promotion2_1680_487.webp"],
+    ["promo-balam-nah", "/promo/balamnah_1920_306.webp", "/promo/promotion0_1680_487.webp"],
+    ["test-partner-uno", "/promo/promotion1_1920_306.webp", "/promo/promotion1_1680_487.webp"],
+    ["test-partner-dos", "/promo/promotion2_1920_306.webp", "/promo/promotion2_1680_487.webp"],
   ]) {
     const afterId = new RegExp(`id: "${id}"[\\s\\S]*$`);
     const mediaUrl = events.match(afterId)?.[0].match(/mediaUrl: "([^"]+)"/)?.[1];
@@ -109,10 +109,10 @@ test("hero mark is capped on desktop and stays proportional on mobile", () => {
   const theme = read("../app/maya-theme.css");
   const map = read("../app/highway-map.js");
   assert.match(map, /src="\/img\/fcp_sign_1100_170\.webp"/, "new wide sign image wired");
-  assert.match(map, /width=\{1100\}[\s\S]*?height=\{170\}/, "intrinsic dimensions match the source");
+  assert.match(map, /width=\{1060\}[\s\S]*?height=\{100\}/, "intrinsic dimensions match the source");
   assert.match(
     theme,
-    /\.hero__mark\s*\{[^}]*max-width:\s*1100px/s,
+    /\.hero__mark\s*\{[^}]*max-width:\s*1060px/s,
     "exact source ratio preserved — no distortion at any width",
   );
   const mq = theme.match(/@media\s*\(min-width:\s*48rem\)\s*\{\s*\.hero__mark\s*\{([^}]*)\}/)?.[1];
