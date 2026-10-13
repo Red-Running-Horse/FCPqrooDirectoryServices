@@ -40,6 +40,29 @@ export const MAX_PROMOTED = 3;
 
 const events = [
   {
+  id: "cafeteando-xtaabay-2026-10-16",
+  title: {
+    es: "Cafeteando con la Xtáabay — 15° Festival de la Xtáabay",
+    en: "Coffee with the Xtáabay — 15th Xtáabay Festival",
+  },
+  description: {
+    es: "Disfruta un café orgánico y artesanal mientras te adentras en las historias y vivencias de encuentros cercanos con la Xtáabay, dentro del 15° Festival de la Xtáabay.",
+    en: "Enjoy organic, artisanal coffee while you immerse yourself in stories and firsthand accounts of close encounters with the Xtáabay, within the 15th Xtáabay Festival.",
+  },
+  startAt: "2026-10-16T22:30:00-05:00",
+  venue: {
+    name: {
+      es: "Callejón Cultural (Calle 44 entre 67 y 69, Col. Lázaro Cárdenas)",
+      en: "Callejón Cultural (44th St. between 67 & 69, Lázaro Cárdenas)",
+    },
+  },
+  category: "culture",
+  cost: { es: "Participación libre y gratuita", en: "Free admission" },
+  contactNote: "Verified from organizer's flyer, received 2026-10-12. Flyer credits: Festival de la Xtáabay, Kó'moal, Ts'uku'um, Noj Tunch, Cantera, Nahil Kanbal.",
+  status: "published",
+  lastUpdated: "2026-10-12",
+},
+  {
     id: "promo-balam-nah",
     kind: "offer",   // B&B rental offer, not an event — promoted placement only
     promoted: true,
