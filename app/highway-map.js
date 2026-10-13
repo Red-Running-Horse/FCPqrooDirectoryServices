@@ -667,9 +667,9 @@ export default function HighwayMap({ placesIndex, events = [] }) {
       <section className="hero" aria-label={text.heading}>
         <img
           className="hero__mark"
-          src="/img/fcp_sign_1191_300.webp"
-          width={1911}
-          height={300}
+          src="/img/fcp_sign_1100_170.webp"
+          width={1100}
+          height={170}
           alt={language === "en"
             ? "Felipe Carrillo Puerto city sign"
             : "Letrero de la ciudad de Felipe Carrillo Puerto"}

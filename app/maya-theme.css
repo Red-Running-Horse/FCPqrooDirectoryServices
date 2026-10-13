@@ -124,10 +124,8 @@
 .hero__mark {
   display: block;
   width: 100%;
-  max-width: 1200px;        /* never upscale past the source */
-  aspect-ratio: 1911 / 300; /* exact image ratio: no crop at any size */
+  max-width: 1100px;        /* never upscale past the source */
   height: auto;
-  object-fit: cover;
   margin: 0 auto 0.75rem;   /* centers it with cream margins on wide screens */
 }
 
