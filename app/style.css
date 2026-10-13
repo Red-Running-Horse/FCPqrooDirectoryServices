@@ -146,20 +146,6 @@ p {
   box-shadow: var(--shadow-soft);
 }
 
-.hero__bar {
-  height: 5px;
-  margin: 0 0 0.7rem;
-  border-radius: var(--radius-chip);
-  background: repeating-linear-gradient(
-    90deg,
-    var(--terracotta-light) 0 16px,
-    var(--maize) 16px 32px,
-    var(--turquoise) 32px 48px,
-    var(--jungle) 48px 64px
-  );
-  opacity: 0.55;
-}
-
 .hero__title-block {
   min-width: 0;
   flex: 1 1 20rem;
@@ -1088,13 +1074,46 @@ p {
   border-top: 4px solid var(--jungle);
   border-radius: var(--radius-card);
   background: var(--cream);
-  padding: 1rem 1.25rem;
   box-shadow: var(--shadow-soft);
 }
 
-.offline-management__header h2 {
-  margin: 0 0 0.35rem;
-  font: 600 1.3rem/1.2 var(--font-heading);
+/* Collapsed disclosure: the summary row is the compact trigger (status dot +
+   short label + chevron); the full management panel expands below it. */
+.offline-management__summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  font: 600 1.05rem/1.2 var(--font-heading);
+  color: var(--charcoal);
+  cursor: pointer;
+  list-style: none;
+}
+
+.offline-management__summary::-webkit-details-marker {
+  display: none;
+}
+
+.offline-management__summary:focus-visible {
+  outline: 2px solid var(--charcoal);
+  outline-offset: -2px;
+}
+
+.offline-management__summary-label {
+  flex: 1 1 auto;
+}
+
+.offline-management__chevron {
+  color: var(--terracotta);
+  transition: transform 0.2s;
+}
+
+.offline-management[open] .offline-management__chevron {
+  transform: rotate(180deg);
+}
+
+.offline-management__header {
+  padding: 0 1.25rem;
 }
 
 .offline-management__header p {
@@ -1109,6 +1128,7 @@ p {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
   gap: 1rem;
   margin-bottom: 1rem;
+  padding: 0 1.25rem;
 }
 
 .offline-card {
@@ -1267,7 +1287,8 @@ p {
 
 .offline-management__notices {
   border-top: 1px solid var(--sand-line);
-  padding-top: 0.75rem;
+  margin: 0 1.25rem;
+  padding: 0.75rem 0 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;

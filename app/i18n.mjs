@@ -59,10 +59,6 @@ export const UI_TEXT = {
     listingsHeading: "Lugares en el mapa",
     listingsContext: "Explora Felipe Carrillo Puerto y comunidades de la región. Elige un lugar para verlo en el mapa.",
     listingsAction: "Ver {name} en el mapa",
-    radioHeading: "XEPET — Radio Maya",
-    radioDescription: "Escucha la transmisión de la radio maya del INPI.",
-    radioListen: "Escuchar en vivo (abre otra pestaña)",
-    radioUnavailable: "Si la transmisión no está disponible, inténtalo más tarde.",
     ctaHeading: "¿Tienes un negocio local?",
     ctaDescription:
       "Ayuda a los visitantes a descubrir tu negocio en Felipe Carrillo Puerto. Podemos ayudarte con tu ficha, sitio web y presencia en redes sociales.",
@@ -157,10 +153,6 @@ export const UI_TEXT = {
     listingsHeading: "Places on the map",
     listingsContext: "Explore Felipe Carrillo Puerto and nearby communities. Choose a place to find it on the map.",
     listingsAction: "Find {name} on the map",
-    radioHeading: "XEPET — Maya Radio",
-    radioDescription: "Listen to the INPI Maya radio stream.",
-    radioListen: "Listen live (opens a new tab)",
-    radioUnavailable: "If the stream is unavailable, please try again later.",
     ctaHeading: "Do you run a local business?",
     ctaDescription:
       "Help visitors discover your business in Felipe Carrillo Puerto. We can help with your listing, website, and social media presence.",

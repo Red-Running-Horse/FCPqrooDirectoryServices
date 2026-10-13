@@ -130,6 +130,9 @@ export default function HighwayMap({ placesIndex, events = [] }) {
   const selectedPlace = useRef(null);
   const pendingFocus = useRef(null);
   const mapActiveRef = useRef(false);
+  // The offline management panel is a collapsed disclosure by default; the
+  // quickbar "manage" link opens it after the anchor jump.
+  const offlineDetailsRef = useRef(null);
   const [category, setCategory] = useState("all");
   const [search, setSearch] = useState("");
   const [ctaMessage, setCtaMessage] = useState(null);
@@ -651,17 +654,16 @@ export default function HighwayMap({ placesIndex, events = [] }) {
   return (
     <>
       <section className="hero" aria-label={text.heading}>
-        <div className="hero__bar" aria-hidden="true" />
-          <img
-            className="hero__mark"
-            src="/img/fcp-sign.webp"
-            width={1200}
-            height={345}
-            alt={language === "en"
+        <img
+          className="hero__mark"
+          src="/img/fcp-sign.webp"
+          width={1200}
+          height={345}
+          alt={language === "en"
             ? "Felipe Carrillo Puerto city sign"
             : "Letrero de la ciudad de Felipe Carrillo Puerto"}
-          />
-  <div className="map-header">
+        />
+        <div className="map-header">
           <div className="hero__title-block">
             <p className="hero__eyebrow">{text.heroEyebrow}</p>
             <h1>{text.heading}</h1>
@@ -722,7 +724,13 @@ export default function HighwayMap({ placesIndex, events = [] }) {
                 </button>
               </>
             ) : null}
-            <a href="#offline-management" className="offline-quickbar__link">
+            <a
+              href="#offline-management"
+              className="offline-quickbar__link"
+              onClick={() => {
+                if (offlineDetailsRef.current) offlineDetailsRef.current.open = true;
+              }}
+            >
               {text.offlineManage}
             </a>
           </div>
@@ -875,13 +883,23 @@ export default function HighwayMap({ placesIndex, events = [] }) {
           </ul>
         </section>
       </details>
-      <section
+      <details
         id="offline-management"
+        ref={offlineDetailsRef}
         className="offline-management"
-        aria-labelledby="offline-management-heading"
       >
+        <summary className="offline-management__summary">
+          <span
+            className={`offline-quickbar__dot offline-quickbar__dot--${offlineStatus}`}
+            aria-hidden="true"
+          />
+          <span className="offline-management__summary-label">{text.offlineHeading}</span>
+          <span className="offline-management__chevron" aria-hidden="true">▾</span>
+        </summary>
         <div className="offline-management__header">
-          <h2 id="offline-management-heading">{text.offlineHeading}</h2>
+          <h2 id="offline-management-heading" className="visually-hidden">
+            {text.offlineHeading}
+          </h2>
           <p>{text.offlineDescription}</p>
         </div>
         <div className="offline-management__grid">
@@ -969,17 +987,7 @@ export default function HighwayMap({ placesIndex, events = [] }) {
           <p className="offline-notice">{text.offlineStorageNotice}</p>
           <p className="offline-notice">{text.offlineConnectivityNotice}</p>
         </div>
-      </section>
-      <section className="business-cta" aria-labelledby="radio-heading">
-        <h2 id="radio-heading">{text.radioHeading}</h2>
-        <p>{text.radioDescription}</p>
-        <div className="business-cta__actions">
-          <a href="https://radios.inpi.gob.mx:8080/xepet" target="_blank" rel="noopener noreferrer">
-            {text.radioListen}
-          </a>
-        </div>
-        <p className="business-cta__helper">{text.radioUnavailable}</p>
-      </section>
+      </details>
       <section className="business-cta" aria-labelledby="business-cta-heading">
         <h2 id="business-cta-heading">{text.ctaHeading}</h2>
         <p>{text.ctaDescription}</p>

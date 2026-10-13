@@ -40,7 +40,7 @@
   width: calc(100% / 5 + 1px);
   background-repeat: no-repeat;
   /* hidden below or above depending on scene parity; JS sets --exit-y */
-  transform: translateY(102%);
+  transform: translateY(var(--exit-y, 102%));
   transition: transform 0.55s cubic-bezier(0.7, 0, 0.3, 1);
   will-change: transform;
 }
@@ -160,6 +160,17 @@
 .attract__dot[data-active="true"] {
   background: var(--marigold);
   border-color: var(--marigold);
+}
+
+/* Desktop: the 69:20 image area towers over the 60rem content column (~270px
+   tall) and the hover-pause freeze covers it almost whenever the cursor is
+   parked. Crop the band to ~45% shorter — slices cover-crop the image (JS
+   backgrounds size vertically to `auto`), so nothing distorts. Rotation
+   rules are untouched: auto-cycling stays live at every width. */
+@media (min-width: 48rem) {
+  .attract::before,
+  .attract__scene,
+  .attract__image-link { aspect-ratio: 69 / 11; }
 }
 
 @media (max-width: 47.99rem) {

@@ -77,8 +77,10 @@ function RotatingBand({ partners, text }) {
               className="attract__slice"
               style={{
                 backgroundImage: `url(${p.promotion?.mediaUrl})`,
-                // each slice shows its vertical band of the shared image
-                backgroundSize: `${SLICES * 100}% 100%`,
+                // each slice shows its vertical band of the shared image;
+                // vertical `auto` = exact fit at the native 69:20 band ratio
+                // and center-crops (never stretches) on shorter desktop bands
+                backgroundSize: `${SLICES * 100}% auto`,
                 backgroundPosition: `${(i / (SLICES - 1)) * 100}% 50%`,
                 transitionDelay: `${i * SLICE_MS}ms`,
                 // alternate exit direction by scene for the split/reform feel
