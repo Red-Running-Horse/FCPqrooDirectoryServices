@@ -35,6 +35,7 @@ test("banner auto-rotation stays live in the desktop styles", () => {
   assert.ok(mobile, "a mobile media query exists for the band");
   assert.doesNotMatch(mobile, /aspect-ratio/, "mobile container grows with the bar");
   assert.match(css, /\.attract::before\s*\{[^}]*aspect-ratio:\s*69\s*\/\s*20/s, "mobile image area keeps its ratio");
+  assert.match(mobile, /\.attract__badge\s*\{\s*display:\s*none/s, "badge yields to the partner name on narrow screens");
   assert.doesNotMatch(css, /\.attract\s*\{[^}]*aspect-ratio/s, "container never carries a fixed ratio");
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{\s*\.attract__scene\s*\{\s*transition:\s*none/s);
 

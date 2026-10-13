@@ -172,6 +172,6 @@
   /* No fixed ratio on the container: a fixed-ratio flex container clips the
      in-flow bar under overflow:hidden — the ratio lives on ::before and the
      scenes, and the container grows with the bar. */
+  .attract__badge { display: none; } /* narrow screens keep the partner name + controls in one row */
   .attract__name { font-size: 0.95rem; }
-  .attract__badge { font-size: 0.62rem; }
 }
