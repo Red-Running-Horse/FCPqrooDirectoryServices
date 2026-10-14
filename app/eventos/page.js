@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import GrecaBand from "../greca";
 import events from "../events.mjs";
+import annualHighlights from "../annual-highlights.mjs";
 import FeaturedPartners from "../featured-partners";
 import placesIndex from "../../public/data/places-index.json";
 import {
@@ -12,6 +13,7 @@ import {
   formatEventRange,
   upcomingEvents,
 } from "../event-utils.mjs";
+import { UI_TEXT } from "../i18n.mjs";
 
 // /eventos — FeaturedPartners (attract band + max-3 sponsor cards) on top,
 // then a chronological list of ALL upcoming EVENTS: promoted events (test-2)
@@ -134,6 +136,45 @@ export default function Eventos() {
             ))}
           </ul>
         )}
+      </section>
+
+      {/* Annual highlights: recurrences with no fixed dates, so they render
+          statically — outside the runtime "now" gate above, which exists to
+          keep PAST events out of the prerender. A highlight can never be
+          past, and gating it would only flash a loading state and hide the
+          section from the prerendered HTML. */}
+      <section aria-label={UI_TEXT.es.annualHighlightsHeading} style={{ marginTop: "1.8rem" }}>
+        <h2 style={{ fontSize: "1.05rem", margin: "0 0 0.6rem" }}>
+          {UI_TEXT.es.annualHighlightsHeading}
+        </h2>
+        <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "0.6rem" }}>
+          {annualHighlights.map((item) => (
+            <li key={item.id} style={card}>
+              {/* Window styling mirrors the upcoming list's <time>: terracotta,
+                  bold, 0.85rem. No whiteSpace:nowrap — windows are phrases that
+                  must wrap at 360px. */}
+              <p style={{ margin: 0, fontSize: "0.85rem", fontWeight: 700, color: "var(--terracotta)" }}>
+                {item.window.es} / {item.window.en}
+              </p>
+              <p style={{ margin: "0.25rem 0 0" }}>
+                <strong style={{ fontFamily: "var(--font-heading)" }}>{item.title.es}</strong>
+                {item.title.en && item.title.en !== item.title.es && (
+                  <span style={{ color: "var(--charcoal-soft)" }}> / {item.title.en}</span>
+                )}
+              </p>
+              <p style={{ ...meta, margin: "0.3rem 0 0" }}>
+                {item.description.es} / {item.description.en}
+              </p>
+              {item.sourceUrl && (
+                <p style={meta}>
+                  <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer">
+                    fuente / source ↗
+                  </a>
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
       </section>
     </main>
   );
