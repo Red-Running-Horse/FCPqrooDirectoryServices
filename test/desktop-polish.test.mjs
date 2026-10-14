@@ -3,12 +3,13 @@ import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 // Desktop polish pass (1366-1600px): the banner rotates via a whole-scene
-// crossfade with its chrome in one slim bar below the image, the striped hero
-// bar is gone, the city sign is capped, the map is draggable on desktop, the
-// offline panel is a collapsed disclosure, and the radio section left no
-// orphans. Mobile keeps its band ratio on the reserver/scenes — the only
-// mobile rule removed is the container's fixed aspect-ratio, which clipped
-// the bar under overflow:hidden.
+// crossfade with its chrome in one slim bar below the image, the hero is
+// text-forward (turquoise kicker, terracotta wordmark accent, greca fret —
+// no sign image), the map is draggable on desktop, the offline panel is a
+// collapsed disclosure, and the radio section left no orphans. Mobile keeps
+// its band ratio on the reserver/scenes — the only mobile rule removed is
+// the container's fixed aspect-ratio, which clipped the bar under
+// overflow:hidden.
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 
 test("banner auto-rotation stays live in the desktop styles", () => {
@@ -105,20 +106,90 @@ test("div.hero_bar is fully gone — markup and both CSS layers", () => {
   assert.doesNotMatch(theme, /hero__bar/, "no theme override");
 });
 
-test("hero mark is capped on desktop and stays proportional on mobile", () => {
-  const theme = read("../app/maya-theme.css");
+test("hero is text-forward: sign image gone from markup, CSS, and disk", () => {
   const map = read("../app/highway-map.js");
-  assert.match(map, /src="\/img\/fcp_sign_1060_100\.webp"/, "new wide sign image wired");
-  assert.match(map, /width=\{1060\}[\s\S]*?height=\{100\}/, "intrinsic dimensions match the source");
-  assert.match(
-    theme,
-    /\.hero__mark\s*\{[^}]*max-width:\s*1060px/s,
-    "exact source ratio preserved — no distortion at any width",
+  const style = read("../app/style.css");
+  const theme = read("../app/maya-theme.css");
+
+  assert.doesNotMatch(map, /hero__mark/, "markup removed");
+  assert.doesNotMatch(map, /<img/, "no image asset anywhere in the map/hero markup");
+  assert.doesNotMatch(style, /hero__mark/, "no base rule");
+  assert.doesNotMatch(theme, /hero__mark/, "no theme rule");
+  assert.ok(
+    !existsSync(new URL("../public/img/fcp_sign_1060_100.webp", import.meta.url)),
+    "sign file removed from public/img",
   );
-  const mq = theme.match(/@media\s*\(min-width:\s*48rem\)\s*\{\s*\.hero__mark\s*\{([^}]*)\}/)?.[1];
-  assert.ok(mq, "desktop cap exists");
-  assert.match(mq, /max-width:\s*34rem/, "~544px wide → ~85px tall at the 1911:300 ratio");
-  assert.match(mq, /margin-inline:\s*auto/, "centered on desktop");
+  assert.ok(
+    !existsSync(new URL("../public/img/fcp-sign.webp", import.meta.url)),
+    "legacy sign file removed from public/img",
+  );
+});
+
+test("hero wordmark carries the identity: kicker, one terracotta accent, fret", () => {
+  const map = read("../app/highway-map.js");
+  const style = read("../app/style.css");
+
+  // The accent splits at a word boundary, so it reads cleanly in both
+  // "Explora Felipe Carrillo Puerto" and "Explore Felipe Carrillo Puerto" —
+  // lead verb in charcoal, untranslated city name in the accent span.
+  assert.match(map, /text\.heading\.split\(" "\)/, "heading split at word boundaries");
+  assert.match(
+    map,
+    /<span className="hero__accent">\{headingAccent\}<\/span>/,
+    "city name wrapped in the accent span",
+  );
+  assert.match(map, /import GrecaBand from "\.\/greca";/, "fret motif component imported");
+
+  // Title-block order: kicker → wordmark → fret → quiet subheading.
+  const eyebrow = map.indexOf('className="hero__eyebrow"');
+  const h1 = map.indexOf("<h1>");
+  const fret = map.indexOf("<GrecaBand />");
+  const sub = map.indexOf('className="hero__subheading"');
+  assert.ok(
+    eyebrow > -1 && eyebrow < h1 && h1 < fret && fret < sub,
+    "kicker, wordmark, fret, subheading render in that order",
+  );
+
+  // Kicker contract: small, uppercase, letter-spaced, turquoise — the only
+  // turquoise in the block, so the terracotta accent stays the ONE accent.
+  const kicker = style.match(/\.hero__eyebrow\s*\{([^}]*)\}/)?.[1];
+  assert.match(kicker, /color:\s*var\(--turquoise\)/, "kicker in turquoise");
+  assert.match(kicker, /text-transform:\s*uppercase/, "kicker uppercase");
+  assert.match(kicker, /letter-spacing:\s*0\.12em/, "kicker letter-spaced");
+  assert.match(kicker, /font-size:\s*0\.72rem/, "kicker small");
+
+  const accent = style.match(/\.hero__accent\s*\{([^}]*)\}/)?.[1];
+  assert.match(accent, /color:\s*var\(--terracotta\)/, "single terracotta accent on the city name");
+
+  // Wordmark out-scales the base h1 (clamp 1.5–2rem) and tracks tighter
+  // than its -0.025em, in the heading font; sized for 360px first.
+  const h1rule = style.match(/\.hero__title-block h1\s*\{([^}]*)\}/)?.[1];
+  assert.match(h1rule, /font-family:\s*var\(--font-heading\)/, "identity in the heading font");
+  assert.match(h1rule, /font-size:\s*clamp\(1\.85rem/, "mobile-first minimum");
+  assert.match(h1rule, /letter-spacing:\s*-0\.03em/, "tighter tracking than the base heading");
+
+  // Desktop scale-up lives in the 48rem query, never a fixed height.
+  const desktop = style.match(/@media\s*\(min-width:\s*48rem\)\s*\{([\s\S]*?)\n\}/)?.[1];
+  assert.match(
+    desktop,
+    /\.hero__title-block h1\s*\{[^}]*font-size:\s*clamp\([^)]*3\.2rem/s,
+    "wordmark scales up on desktop",
+  );
+});
+
+test("hero composition never fixes a pixel height", () => {
+  for (const path of ["../app/style.css", "../app/maya-theme.css"]) {
+    const css = read(path);
+    const heroRules = css.match(/\.hero[^{]*\{[^}]*\}/g) ?? [];
+    assert.ok(heroRules.length > 0, `${path} has hero-scoped rules`);
+    for (const rule of heroRules) {
+      assert.doesNotMatch(
+        rule,
+        /(^|\s)height:\s*\d+(\.\d+)?px/,
+        `no fixed pixel height in ${rule.split("{")[0].trim()}`,
+      );
+    }
+  }
 });
 
 test("desktop map is draggable from the start — the tap-to-activate guard is mobile-only", () => {

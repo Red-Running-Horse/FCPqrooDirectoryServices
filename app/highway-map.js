@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { isMultiCategory, placeCategoryBackground, placeCategoryStyle } from "./category-colors.mjs";
 import { categoryIconSvg } from "./category-icons.mjs";
+import GrecaBand from "./greca";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
 import { entryKind, eventMarkerPosition, eventPopupView, upcomingEvents } from "./event-utils.mjs";
 import { syncMarkerSelection } from "./marker-selection.mjs";
@@ -163,6 +164,12 @@ export default function HighwayMap({ placesIndex, events = [] }) {
   const [showEvents, setShowEvents] = useState(true);
   const showEventsRef = useRef(true);
   const text = uiText(language);
+  // Text-forward hero: the verb stays charcoal, the city name carries the
+  // terracotta accent. The city name is the same proper-noun phrase in both
+  // languages, so everything after the first word accents without touching
+  // the i18n strings.
+  const [headingLead, ...headingAccentWords] = text.heading.split(" ");
+  const headingAccent = headingAccentWords.join(" ");
   const references = listingReferences(placesIndex);
   const filteredReferences =
     category === "all"
@@ -665,19 +672,14 @@ export default function HighwayMap({ placesIndex, events = [] }) {
   return (
     <>
       <section className="hero" aria-label={text.heading}>
-        <img
-          className="hero__mark"
-          src="/img/fcp_sign_1060_100.webp"
-          width={1060}
-          height={100}
-          alt={language === "en"
-            ? "Felipe Carrillo Puerto city sign"
-            : "Letrero de la ciudad de Felipe Carrillo Puerto"}
-        />
         <div className="map-header">
           <div className="hero__title-block">
             <p className="hero__eyebrow">{text.heroEyebrow}</p>
-            <h1>{text.heading}</h1>
+            <h1>
+              {headingLead}{" "}
+              <span className="hero__accent">{headingAccent}</span>
+            </h1>
+            <GrecaBand />
             <p className="hero__subheading">{text.heroSubheading}</p>
           </div>
           <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>

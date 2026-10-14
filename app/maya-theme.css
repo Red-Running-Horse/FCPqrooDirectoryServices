@@ -118,24 +118,6 @@
   background: var(--cream);
 }
 
-/* City sign banner — full width across the hero; capped on desktop so the
-   sign sits at a comfortable badge size instead of spanning the whole
-   content column. Mobile keeps the full-width proportional look. */
-.hero__mark {
-  display: block;
-  width: 100%;
-  max-width: 1060px;        /* never upscale past the source */
-  height: auto;
-  margin: 0 auto 0.75rem;   /* centers it with cream margins on wide screens */
-}
-
-@media (min-width: 48rem) {
-  .hero__mark {
-    max-width: 34rem;       /* ~544px wide → ~85px tall at the 1911:300 ratio */
-    margin-inline: auto;    /* centered in the hero on desktop */
-  }
-}
-
 /* Let the hero text actually fill its column */
 .hero__title-block {
   flex: 1 1 auto;
