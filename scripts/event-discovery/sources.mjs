@@ -2,10 +2,13 @@
 // scripts/event-discovery/sources.mjs — registry of the public pages the
 // discovery pipeline scans for event candidates.
 //
-// A source is a plain HTML page expected to advertise events with
+// A source is a plain HTML page expected to advertise events either as
 // schema.org/Event JSON-LD (the same markup /eventos emits for its own
-// entries). Pages without JSON-LD simply yield no candidates — silence beats
-// guesses, because every candidate becomes editor work downstream.
+// entries) or as listing cards in the SITUR shape extract.mjs documents.
+// extract.mjs tries JSON-LD first, then the card markup; cards outside the
+// Zona Maya service region are dropped with a count. Pages with neither
+// simply yield no candidates — silence beats guesses, because every
+// candidate becomes editor work downstream.
 //
 // Keep URLs official and anonymously fetchable: Facebook and other
 // login-walled pages are listed with `enabled: false` so the pipeline never

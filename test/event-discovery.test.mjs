@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 import { run } from "../scripts/event-discovery/discover.mjs";
 import { fingerprint, emptySeen, parseSeen, partitionCandidates, updateSeen } from "../scripts/event-discovery/dedupe.mjs";
-import { collectCandidates, extractEventsFromHtml, fetchHtml, guessCategory } from "../scripts/event-discovery/extract.mjs";
+import { collectCandidates, extractEventsFromHtml, fetchHtml, guessCategory, isInServiceRegion, parseCardDate } from "../scripts/event-discovery/extract.mjs";
 import { discoveryIssueTitle, formatDiscoveryIssue, formatFailureIssueBody, failureIssueTitle, suggestId } from "../scripts/event-discovery/format.mjs";
 import { createIssue, ensureFailureIssue, ensureLabel, CANDIDATE_LABEL, FAILURE_LABEL } from "../scripts/event-discovery/report.mjs";
 import { readSeen, writeSeen, ensureBranch, serializeSeen, BRANCH } from "../scripts/event-discovery/seen-store.mjs";
@@ -89,6 +89,188 @@ test("extract: fetchHtml rejects non-2xx and passes an HTML accept header", asyn
   assert.equal(ok, "<html></html>");
   assert.match(seenAccept, /text\/html/);
   await assert.rejects(() => fetchHtml("https://example.mx", async () => new Response("x", { status: 503 })), /503/);
+});
+
+// ------------------------------------------------- card fallback (SITUR shape)
+
+// Representative markup copied from https://siturq.gob.mx/eventos (2026-10):
+// <div class="card" data-municipality="…"> with h3.card-title, p.card-text,
+// span.date ("30 octubre 2026") and a "Ver más" a.card-link detail link.
+const SITUR_SOURCE = { id: "siturq-eventos", url: "https://siturq.gob.mx/eventos" };
+const SITUR_CARD = (
+  municipality,
+  {
+    date = "30 octubre 2026",
+    description = "Una descripción del evento.",
+    link = "https://siturq.gob.mx/evento/abc-123",
+    title = "Carnaval Felipe Carrillo Puerto",
+  } = {},
+) =>
+  `<div class="card" data-id="0" ${municipality ? `data-municipality="${municipality}" ` : ""}data-aos="fade-up">` +
+  `<div class="image-container"><img src="x.jpg" class="card-img-top" alt="${title}"></div>` +
+  `<div class="card-body"><a href="${link ?? "#"}"><h3 class="card-title mb-2 text-body-primary">${title}</h3></a>` +
+  (description ? `<p class="card-text fw-medium fixed-height">${description}</p>` : "") +
+  `</div><div class="card-footer d-flex justify-content-between py-4 btn-bottom">` +
+  (date ? `<span class="date fw-medium">${date}</span>` : `<span class="date fw-medium"></span>`) +
+  (link ? `<a href="${link}" class="card-link fw-medium">Ver más</a>` : "") +
+  `</div></div>`;
+
+test("extract: JSON-LD wins when a page carries both JSON-LD and cards", () => {
+  const found = extractEventsFromHtml(
+    `${EVENT_BLOCK}${SITUR_CARD("Felipe Carrillo Puerto")}`,
+    SITUR_SOURCE,
+  );
+  assert.equal(found.length, 1);
+  assert.equal(found[0].title.es, "Feria del Queso");
+  assert.equal(found[0].startAt, "2026-11-02T12:00:00-05:00");
+});
+
+test("extract: card fallback maps the SITUR card shape into a candidate", () => {
+  const found = extractEventsFromHtml(SITUR_CARD("Felipe Carrillo Puerto"), SITUR_SOURCE);
+  assert.equal(found.length, 1);
+  const [candidate] = found;
+  assert.equal(candidate.sourceId, "siturq-eventos");
+  assert.equal(candidate.title.es, "Carnaval Felipe Carrillo Puerto");
+  assert.equal(candidate.title.en, candidate.title.es, "EN placeholder pending translation");
+  assert.equal(candidate.startAt, "2026-10-30");
+  assert.equal(candidate.endAt, null);
+  assert.equal(candidate.description, "Una descripción del evento.");
+  assert.equal(candidate.sourceUrl, "https://siturq.gob.mx/evento/abc-123", "the Ver más link wins");
+  assert.deepEqual(
+    candidate.venue,
+    { name: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" } },
+    "data-municipality pre-fills the venue",
+  );
+  assert.equal(candidate.categoryGuess, "culture");
+});
+
+test("extract: parseCardDate handles the observed format and stays null on the rest", () => {
+  assert.equal(parseCardDate("30 octubre 2026"), "2026-10-30");
+  assert.equal(parseCardDate("07 octubre 2026"), "2026-10-07", "zero-padded day");
+  assert.equal(parseCardDate("6 de marzo de 2026"), "2026-03-06", "unpadded day, optional 'de'");
+  assert.equal(parseCardDate("6 al 8 de marzo de 2026"), null, "ranges stay dateless for the checklist");
+  assert.equal(parseCardDate("próximamente"), null);
+  assert.equal(parseCardDate(""), null);
+});
+
+test("extract: undated/undescribed cards still extract; internal detail/municipality flags ride along", () => {
+  const found = extractEventsFromHtml(
+    SITUR_CARD("Felipe Carrillo Puerto", { date: "garbage sin fecha", description: "" }),
+    SITUR_SOURCE,
+  );
+  assert.equal(found.length, 1);
+  assert.equal(found[0].startAt, null, "no parseable date → null, still a candidate");
+  assert.equal(found[0].description, "");
+  assert.equal(found[0].__detailUrl, "https://siturq.gob.mx/evento/abc-123", "flagged for its detail link");
+  assert.equal(found[0].__municipality, "Felipe Carrillo Puerto");
+});
+
+test("collect: detail links are followed only for incomplete cards, one level, filling missing fields", async () => {
+  const detail =
+    '<script type="application/ld+json">' +
+    '{"@type":"Event","name":"Carnaval Felipe Carrillo Puerto","startDate":"2026-03-06T16:00:00-05:00","description":"Comparsas y carros alegóricos."}' +
+    "</script>";
+  const calls = [];
+  const fetchImpl = async (url) => {
+    calls.push(url);
+    if (url === SITUR_SOURCE.url) {
+      return new Response(
+        SITUR_CARD("Felipe Carrillo Puerto", { date: null, description: "", link: "https://siturq.gob.mx/evento/carnaval" }) +
+          SITUR_CARD("Felipe Carrillo Puerto", {
+            date: "15 octubre 2026",
+            description: "Festival de la Xtáabay.",
+            link: "https://siturq.gob.mx/evento/xtaabay",
+            title: "Festival de la Xtáabay",
+          }) +
+          SITUR_CARD("Felipe Carrillo Puerto", { date: null, description: "", link: null, title: "Evento sin enlace" }),
+        { status: 200 },
+      );
+    }
+    if (url === "https://siturq.gob.mx/evento/carnaval") return new Response(detail, { status: 200 });
+    throw new Error(`unmocked: ${url}`);
+  };
+  const { candidates, regionDropped, detailFetches } = await collectCandidates([SITUR_SOURCE], fetchImpl);
+  assert.equal(regionDropped, 0);
+  assert.equal(detailFetches, 1, "only the card missing date AND description fetched its detail");
+  assert.ok(!calls.includes("https://siturq.gob.mx/evento/xtaabay"), "a complete card never fetches");
+  const [carnaval, xtaabay, sinEnlace] = candidates;
+  assert.equal(carnaval.startAt, "2026-03-06T16:00:00-05:00", "detail JSON-LD filled the date");
+  assert.equal(carnaval.description, "Comparsas y carros alegóricos.", "detail filled the description");
+  assert.equal(carnaval.sourceUrl, "https://siturq.gob.mx/evento/carnaval");
+  assert.equal(xtaabay.startAt, "2026-10-15", "complete card keeps its listing data untouched");
+  assert.equal(sinEnlace.startAt, null, "dateless card without a link is still reported");
+  assert.equal(sinEnlace.sourceUrl, SITUR_SOURCE.url, "no link → the page URL");
+  for (const candidate of candidates) {
+    assert.ok(!("__detailUrl" in candidate) && !("__municipality" in candidate), "internal bookkeeping stripped");
+  }
+});
+
+test("collect: a failing detail page keeps the listing-level candidate instead of dropping it", async () => {
+  const fetchImpl = async (url) => {
+    if (url === SITUR_SOURCE.url) {
+      return new Response(
+        SITUR_CARD("Felipe Carrillo Puerto", { date: null, description: "", link: "https://siturq.gob.mx/evento/caido" }),
+        { status: 200 },
+      );
+    }
+    return new Response("down", { status: 503 });
+  };
+  const { candidates, detailFetches } = await collectCandidates([SITUR_SOURCE], fetchImpl);
+  assert.equal(detailFetches, 0, "failed detail fetches do not consume successful ones");
+  assert.equal(candidates.length, 1);
+  assert.equal(candidates[0].startAt, null);
+});
+
+test("collect: the detail-fetch cap bounds total fetches per run", async () => {
+  const cards = [1, 2, 3, 4]
+    .map((i) =>
+      SITUR_CARD("Felipe Carrillo Puerto", {
+        date: null,
+        description: "",
+        link: `https://siturq.gob.mx/evento/e${i}`,
+        title: `Evento ${i}`,
+      }),
+    )
+    .join("");
+  const fetches = [];
+  const fetchImpl = async (url) => {
+    fetches.push(url);
+    if (url === SITUR_SOURCE.url) return new Response(cards, { status: 200 });
+    return new Response(
+      SITUR_CARD("Felipe Carrillo Puerto", { date: "01 noviembre 2026", description: "Detalle." }),
+      { status: 200 },
+    );
+  };
+  const { candidates, detailFetches } = await collectCandidates([SITUR_SOURCE], fetchImpl, { maxDetailFetches: 2 });
+  assert.equal(detailFetches, 2);
+  assert.equal(fetches.length, 3, "1 listing + 2 detail fetches — the cap holds");
+  assert.equal(candidates.filter((c) => c.startAt === "2026-11-01").length, 2, "first two cards enriched in order");
+  assert.equal(candidates.filter((c) => c.startAt === null).length, 2, "capped cards stay dateless, still reported");
+});
+
+test("collect: cards outside the Zona Maya are dropped with a count; unknown regions are kept", async () => {
+  assert.equal(isInServiceRegion("Benito Juárez"), false);
+  assert.equal(isInServiceRegion("COZUMEL"), false);
+  assert.equal(isInServiceRegion("Bacalar"), false);
+  assert.equal(isInServiceRegion("FELIPE CARRILLO PUERTO"), true, "case-insensitive");
+  assert.equal(isInServiceRegion("José María Morelos"), true, "accent-insensitive");
+  assert.equal(isInServiceRegion(null), true, "unknown region → kept, silence beats guesses");
+
+  const html =
+    SITUR_CARD("Benito Juárez", { title: "Maratón Cancún" }) +
+    SITUR_CARD("COZUMEL", { title: "Fiesta Cozumel" }) +
+    SITUR_CARD("FELIPE CARRILLO PUERTO", { title: "Feria FCP" }) +
+    SITUR_CARD("José María Morelos", { title: "Feria JMM" }) +
+    `<div class="card" data-aos="fade-up"><div class="card-body"><a href="https://siturq.gob.mx/evento/xyz"><h3 class="card-title">Evento sin municipio</h3></a><p class="card-text">Sin atributo.</p></div><div class="card-footer"><span class="date">05 noviembre 2026</span></div></div>`;
+  const { candidates, regionDropped } = await collectCandidates([SITUR_SOURCE], async (url) =>
+    url === SITUR_SOURCE.url ? new Response(html, { status: 200 }) : new Response("?", { status: 404 }),
+  );
+  assert.equal(regionDropped, 2, "Benito Juárez + Cozumel dropped");
+  assert.deepEqual(
+    candidates.map((c) => c.title.es),
+    ["Feria FCP", "Feria JMM", "Evento sin municipio"],
+  );
+  assert.ok(candidates.every((c) => !("__municipality" in c)), "bookkeeping stripped from survivors");
 });
 
 // ---------------------------------------------------------------- dedupe
