@@ -100,11 +100,11 @@ test("kind separates events from offers; missing kind validates as event", () =>
   assert.equal(entryKind({ id: "x", kind: "event" }), "event");
 
   const byId = new Map(events.map((event) => [event.id, event]));
-  for (const id of ["promo-balam-nah", "test-partner-uno", "test-partner-dos"]) {
+  for (const id of ["promo-balam-nah", "selva-morena"]) {
     assert.equal(byId.get(id).kind, "offer", `${id} is an offer, not an event`);
   }
-  assert.equal(byId.get("test-2").promoted, undefined, "test-2 is un-promoted: a normal upcoming event");
-  assert.equal(entryKind(byId.get("test-2")), "event", "test-2 stays a plain EVENT (default kind)");
+  assert.equal(byId.get("noche-biocultural-tsikbal-2026").promoted, undefined, "a normal event is un-promoted");
+  assert.equal(entryKind(byId.get("noche-biocultural-tsikbal-2026")), "event", "normal records stay plain EVENTS (default kind)");
 });
 
 test("committed EVENTS are all still upcoming (offers have campaign windows and are exempt)", () => {
@@ -165,10 +165,14 @@ test("venue resolution: linked places win; free-text venues only get markers wit
 
 test("schema.org/Event JSON-LD: name, startDate, endDate, location, description; internal notes never leak", () => {
   // JSON-LD is emitted for kind === "event" only — fixture must be an event.
-  const linked = events.find(
-    (event) => event.venue?.placeId && entryKind(event) === "event",
-  );
-  assert.ok(linked, "fixture: expected a linked-venue EVENT");
+  const linked = {
+    id: "fixture-linked",
+    title: { es: "Feria de prueba", en: "Fixture fair" },
+    description: { es: "Evento de prueba con sede enlazada.", en: "Fixture event with a linked venue." },
+    startAt: "2026-11-01T10:00:00-05:00",
+    endAt: "2026-11-01T14:00:00-05:00",
+    venue: { placeId: "mercado-felipe-carrillo-puerto" },
+  };
   const data = eventJsonLd(linked, placesById);
   assert.equal(data["@type"], "Event");
   assert.equal(data.name, linked.title.es);
@@ -291,13 +295,13 @@ test("promotion tiers: MAX_PROMOTED caps every promoted record; the banner rotat
 
   assert.deepEqual(
     promoted.map((event) => event.id).sort(),
-    ["promo-balam-nah", "test-partner-dos", "test-partner-uno"],
+    ["promo-balam-nah", "selva-morena"],
     "promoted tier: every promoted record, capped by MAX_PROMOTED",
   );
-  assert.equal(promoted.length, 3, "exactly MAX_PROMOTED records are promoted");
+  assert.equal(promoted.length, 2, "exactly MAX_PROMOTED records are promoted");
   assert.deepEqual(
     premium.map((event) => event.id).sort(),
-    ["promo-balam-nah", "test-partner-dos", "test-partner-uno"],
+    ["promo-balam-nah", "selva-morena"],
     "banner rotation covers all three premium promotions",
   );
   assert.ok(
@@ -306,7 +310,7 @@ test("promotion tiers: MAX_PROMOTED caps every promoted record; the banner rotat
   );
 
   const byId = new Map(events.map((event) => [event.id, event]));
-  assert.ok(!byId.get("test-2").promoted, "test-2 reverted to a normal upcoming event");
+  assert.ok(!byId.get("noche-biocultural-tsikbal-2026").promoted, "a normal event stays un-promoted");
   for (const event of premium) {
     assert.equal(event.promoted, true);
     assert.equal(event.promotion?.mediaType, "image");

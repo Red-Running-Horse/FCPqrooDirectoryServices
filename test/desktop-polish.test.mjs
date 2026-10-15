@@ -84,8 +84,7 @@ test("premium band scenes point at per-breakpoint assets in public/promo", () =>
   const events = read("../app/events.mjs");
   for (const [id, desktopFile, mobileFile] of [
     ["promo-balam-nah", "/promo/balamnah_1920_306.webp", "/promo/promotion0_1680_487.webp"],
-    ["test-partner-uno", "/promo/promotion1_1920_306.webp", "/promo/promotion1_1680_487.webp"],
-    ["test-partner-dos", "/promo/promotion2_1920_306.webp", "/promo/promotion2_1680_487.webp"],
+    ["selva-morena", "/promo/selvamorena_1920_306.webp", "/promo/selvamorena_1680_487.webp"],
   ]) {
     const afterId = new RegExp(`id: "${id}"[\\s\\S]*$`);
     const mediaUrl = events.match(afterId)?.[0].match(/mediaUrl: "([^"]+)"/)?.[1];

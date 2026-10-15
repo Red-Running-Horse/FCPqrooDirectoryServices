@@ -86,91 +86,7 @@ const events = [
     status: "unverified",
     lastUpdated: "2026-10-06",
   },
-    {
-    id: "test-partner-uno",
-    kind: "offer",   // placeholder offer, not an event
-    promoted: true,
-    promotion: {
-      mediaType: "image",
-      mediaUrl: "/promo/promotion1_1920_306.webp",        // desktop band scene
-      mobileMediaUrl: "/promo/promotion1_1680_487.webp", // mobile band scene
-      cardUrl: "/promo/promotion1_1280_720.webp",
-      siteUrl: "https://example.com/1",
-      tagline: { es: "Prueba uno / Test one", en: "Test one" },
-    },
-    title: { es: "Socio de Prueba Uno", en: "Test Partner One" },
-    description: { es: "Entrada de prueba para ver el diseño.", en: "Test entry to preview the layout." },
-    startAt: "2026-10-06T09:00:00-05:00",
-    endAt: "2026-12-31T18:00:00-05:00",
-    venue: {
-      name: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
-    },
-    category: "culture",
-    cost: { es: "Consultar", en: "See site" },
-    sourceUrl: "https://example.com/1",
-    status: "unverified",
-    lastUpdated: "2026-10-06",
-  },
-  {
-    // Re-promoted on 2026-10-12 as the third banner slot: the MAX_PROMOTED=3
-    // cap rotates three premium promotions again. test-2's BASE-tier demo was
-    // un-promoted to make room — that tier no longer exists.
-    id: "test-partner-dos",
-    kind: "offer",   // placeholder offer, not an event
-    promoted: true,
-    promotion: {
-      mediaType: "image",
-      mediaUrl: "/promo/promotion2_1920_306.webp",        // desktop band scene
-      mobileMediaUrl: "/promo/promotion2_1680_487.webp", // mobile band scene
-      siteUrl: "https://example.com/2",
-      tagline: { es: "Prueba dos / Test two", en: "Test two" },
-    },
-    title: { es: "Socio de Prueba Dos", en: "Test Partner Two" },
-    description: { es: "Entrada de prueba para ver el diseño.", en: "Test entry to preview the layout." },
-    startAt: "2026-10-06T09:00:00-05:00",
-    endAt: "2026-12-31T18:00:00-05:00",
-    venue: {
-      name: { es: "Felipe Carrillo Puerto", en: "Felipe Carrillo Puerto" },
-    },
-    category: "culture",
-    cost: { es: "Consultar", en: "See site" },
-    sourceUrl: "https://example.com/2",
-    status: "unverified",
-    lastUpdated: "2026-10-06",
-  },
-  {
-    // Un-promoted on 2026-10-12: its promotion was a demo of the old BASE
-    // tier (promoted without a media block), which no longer exists. It
-    // stays a normal upcoming EVENT — community ribbon + /eventos; the
-    // /promo/test-2 landing retired with the tier.
-    // Submitted through the event suggestion form on 2026-10-11. Test data:
-    // ES mirrors EN — real submissions need proper translation before publishing.
-    // endAt extended from the submitted 11:25 to a week out so the demo
-    // survives the data-hygiene test; the submitted window stays in contactNote.
-    id: "test-2",
-    title: { es: "Test 2", en: "Test 2" },
-    description: { es: "Test test", en: "Test test" },
-    landing: {
-      details: {
-        es: "Evento de prueba enviado a través del formulario de sugerencias.",
-        en: "Test event submitted through the suggestion form.",
-      },
-    },
-    startAt: "2026-10-11T10:25:00-05:00",
-    endAt: "2026-10-18T11:25:00-05:00",
-    venue: {
-      placeId: "mercado-felipe-carrillo-puerto",
-      name: {
-        es: "Mercado Público Municipal de Felipe Carrillo Puerto",
-        en: "Felipe Carrillo Puerto Municipal Public Market",
-      },
-    },
-    category: "culture",
-    contactNote: "Enviado por marcsir@tutanota.com el 2026-10-11 a las 15:26 (hora Cancún).",
-    status: "unverified",
-    lastUpdated: "2026-10-11",
-  },
-  {
+   {
   id: "cafeteando-xtaabay-2026-10-16",
   title: {
     es: "Cafeteando con la Xtáabay — 15° Festival de la Xtáabay",
@@ -262,6 +178,62 @@ const events = [
     category: "culture",
     contactNote: "Verified from Facebook event listing, 2026-10-15. No venue, schedule, or contact published yet — update when announced.",
     sourceUrl: "https://www.facebook.com/events/930745553313771/",
+    status: "published",
+    lastUpdated: "2026-10-15",
+  },
+  {
+    id: "selva-morena",
+    promoted: true,
+    kind: "offer",
+    title: {
+      es: "Selva Morena — Bienestar en la selva",
+      en: "Selva Morena — Wellness in the Jungle",
+    },
+    description: {
+      es: "Cabañas de estilo maya contemporáneo en la selva (Junior y Master con jacuzzi), restaurante orgánico y un centro de bienestar con temazcal, ceremonia de cacao, ritual de luna llena, yoga y terapias de sanación. Senderos, avistamiento de aves, jardín botánico y meliponario. Tours a sitios sagrados mayas, zonas arqueológicas, cenotes y lagunas. LGBTQ+ friendly.",
+      en: "Contemporary Maya-style jungle cabins (Junior and Master with jacuzzi), an organic restaurant, and a wellness center offering temazcal, cacao ceremony, full-moon ritual, yoga and healing therapies. Trails, birdwatching, botanical garden and a native stingless-bee apiary (meliponario). Tours to sacred Maya sites, ruins, cenotes and lagoons. LGBTQ+ friendly.",
+    },
+    startAt: "2026-10-15",
+    endAt: "2026-12-31",
+    venue: {
+      name: { es: "Selva Morena, Felipe Carrillo Puerto", en: "Selva Morena, Felipe Carrillo Puerto" },
+      latitude: 19.62743084397342,
+      longitude: -87.95014240683298,
+    },
+    category: "lodging",
+    cost: {
+      es: "Experiencias de bienestar desde $500 MXN; cabañas desde $1,000 MXN",
+      en: "Wellness experiences from MX$500; cabins from MX$1,000",
+    },
+    promotion: {
+      mediaType: "image",
+      mediaUrl: "/promo/selvamorena_1920_306.webp",
+      mobileMediaUrl: "/promo/selvamorena_1680_487.webp",
+      cardUrl: "/promo/selvamorena_1280_720.webp",
+      siteUrl: "https://linktr.ee/selvamorena.oficial",
+      tagline: {
+        es: "Temazcal, cacao y cabañas en la selva — a 20 min del centro",
+        en: "Temazcal, cacao and jungle cabins — 20 min from downtown",
+      },
+    },
+    landing: {
+      media: "/promo/selvamorena_1280_720.webp",
+      highlights: [
+        { es: "Temazcal, ceremonia de cacao y ritual de luna llena", en: "Temazcal, cacao ceremony and full-moon ritual" },
+        { es: "Tours a sitios sagrados mayas, cenotes y lagunas (desde $800 MXN)", en: "Tours to sacred Maya sites, cenotes and lagoons (from MX$800)" },
+        { es: "Cabañas Junior y Master con jacuzzi (desde $1,000 MXN)", en: "Junior and Master cabins with jacuzzi (from MX$1,000)" },
+        { es: "Meliponario, jardín botánico y senderos con avistamiento de aves", en: "Meliponario, botanical garden and birdwatching trails" },
+      ],
+      links: [
+        { label: "Booking.com", url: "https://www.booking.com/hotel/mx/selva-morena-felipe-carrillo-puerto.html" },
+        { label: "Airbnb", url: "https://www.airbnb.mx/users/profile/1613248725142954351" },
+        { label: "Linktree oficial", url: "https://linktr.ee/selvamorena.oficial" },
+        { label: "Sitio web", url: "https://selvamorenareserva.wixsite.com/selva-morena" },
+        { label: "YouTube", url: "https://www.youtube.com/@selva-morena" },
+      ],
+    },
+    contactNote: "Verified with the operator, 2026-10-15. Prices indicative per their site (wellness $500, tours $800, cabins $1,000–1,200 MXN). Links: Linktree (official hub), Booking, Airbnb, Wix site, YouTube. Images provided by client.",
+    sourceUrl: "https://selvamorenareserva.wixsite.com/selva-morena",
     status: "published",
     lastUpdated: "2026-10-15",
   },
