@@ -1407,3 +1407,21 @@ p {
   color: var(--charcoal-soft);
 }
 
+
+@media (min-width: 48rem) {
+  .upcoming-strip__scroller {
+    scrollbar-width: thin;
+    scrollbar-color: var(--terracotta) var(--sand-line);
+    padding-bottom: 4px;
+  }
+  .upcoming-strip__scroller::-webkit-scrollbar {
+    height: 8px;
+  }
+  .upcoming-strip__scroller::-webkit-scrollbar-thumb {
+    background: var(--terracotta);
+    border-radius: 4px;
+  }
+  .upcoming-strip__scroller::-webkit-scrollbar-track {
+    background: var(--sand-line);
+  }
+}
