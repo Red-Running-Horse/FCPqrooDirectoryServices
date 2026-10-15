@@ -1,0 +1,72 @@
+  {
+    id: "noche-biocultural-tsikbal-2026",
+    title: {
+      es: "Noche Biocultural de Sian Ka'an — Tsíikbal: voces, leyendas y memoria de nuestros pixanes",
+      en: "Sian Ka'an Biocultural Night — Tsíikbal: voices, legends and memory of our pixanes",
+    },
+    description: {
+      es: "Velada de diálogo y conversación (tsíikbal) dedicada a las leyendas mayas —la Xtabay, los aluxes, el Huay Chivo—, los relatos tradicionales y las costumbres de la época de los pixanes y las ánimas, con personas conocedoras de la memoria cultural del pueblo. Organiza el Consejo Juvenil de Sian Ka'an.",
+      en: "An evening of dialogue (tsíikbal) dedicated to Maya legends — the Xtabay, the aluxes, the Huay Chivo — traditional tales and the customs of the season of the pixanes and ánimas, with keepers of the town's cultural memory. Organized by the Sian Ka'an Youth Council.",
+    },
+    startAt: "2026-10-30T19:00:00-05:00",
+    endAt: "2026-10-30T21:00:00-05:00",
+    venue: {
+      name: {
+        es: "Concha Acústica de Radio XHNKA",
+        en: "Radio XHNKA Acoustic Shell",
+      },
+    },
+    category: "culture",
+    contactNote: "Verified from Consejo Juvenil de Sian Ka'an Facebook post, 2026-10-15. Inscriptions at Casa de la Crónica FCP; contact Tadeo Colli Estrella, 983 182 9942.",
+    sourceUrl: "https://www.facebook.com/share/p/1EtcJ9Ch4h/",
+    status: "published",
+    lastUpdated: "2026-10-15",
+  },
+  {
+    id: "noche-biocultural-concursos-2026",
+    title: {
+      es: "Noche Biocultural — Concurso de disfraces 'Entre mitos y leyendas' y calaveritas literarias",
+      en: "Biocultural Night — 'Among Myths and Legends' costume contest and literary calaveritas",
+    },
+    description: {
+      es: "Concurso de disfraces inspirados en las leyendas mayas (materiales reciclados bienvenidos) y concurso de calaveritas literarias sobre la gastronomía, fauna y fiestas del pueblo. Premios a los tres primeros lugares de cada concurso. Inscripciones en La Casa de la Crónica FCP.",
+      en: "Costume contest inspired by Maya legends (recycled materials welcome) and a literary calaveritas contest about the town's food, fauna and festivities. Prizes for the top three of each. Registration at La Casa de la Crónica FCP.",
+    },
+    startAt: "2026-10-31T19:00:00-05:00",
+    endAt: "2026-10-31T21:00:00-05:00",
+    venue: {
+      name: {
+        es: "Concha Acústica de Radio XHNKA",
+        en: "Radio XHNKA Acoustic Shell",
+      },
+    },
+    category: "culture",
+    contactNote: "Verified from Consejo Juvenil de Sian Ka'an Facebook post, 2026-10-15. Contact: Tadeo Colli Estrella, 983 182 9942. Prizes for 1st–3rd in each contest.",
+    sourceUrl: "https://www.facebook.com/share/p/1EtcJ9Ch4h/",
+    status: "published",
+    lastUpdated: "2026-10-15",
+  },
+  {
+    id: "congreso-avivamiento-llamas-de-fuego-2026",
+    title: {
+      es: "Congreso de Avivamiento 'Llamas de Fuego'",
+      en: "'Flames of Fire' Revival Congress",
+    },
+    description: {
+      es: "Congreso de avivamiento cristiano de dos días con el tema Llamas de Fuego. Evento público organizado por Congreso de Avivamiento en Felipe Carrillo Puerto; sede específica por confirmar.",
+      en: "Two-day Christian revival congress themed 'Flames of Fire.' Public event organized by Congreso de Avivamiento in Felipe Carrillo Puerto; specific venue to be confirmed.",
+    },
+    startAt: "2026-12-18",
+    endAt: "2026-12-19",
+    venue: {
+      name: {
+        es: "Felipe Carrillo Puerto (sede por confirmar)",
+        en: "Felipe Carrillo Puerto (venue to be confirmed)",
+      },
+    },
+    category: "culture",
+    contactNote: "Verified from Facebook event listing, 2026-10-15. No venue, schedule, or contact published yet — update when announced.",
+    sourceUrl: "https://www.facebook.com/events/930745553313771/",
+    status: "published",
+    lastUpdated: "2026-10-15",
+  },
