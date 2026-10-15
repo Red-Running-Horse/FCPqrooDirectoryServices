@@ -281,11 +281,11 @@ p {
   display: block;
 }
 
-/* Upcoming events strip (community strip): every upcoming EVENT as a compact
-   single-line row — title only, a small bar in the event's category color,
-   and a minimal sponsored marker on promoted entries (paid placement is
-   always labeled). Every row links uniformly to /eventos#<id>. Native
-   scroll-snap; no carousel JS. */
+/* Upcoming events strip (community strip): every upcoming EVENT as a
+   compact date-first row — a category-colored chip (day over month), the
+   full title wrapping to two lines max, and a minimal sponsored marker on
+   promoted entries (paid placement is always labeled). Every row links
+   uniformly to /eventos#<id>. Native scroll-snap; no carousel JS. */
 .upcoming-strip {
   margin: 0.75rem 0 0;
 }
@@ -332,21 +332,21 @@ p {
 }
 
 .upcoming-strip__scroller > li {
-  flex: 0 0 clamp(11rem, 56vw, 15rem);
+  flex: 0 0 clamp(12rem, 60vw, 15rem);
   scroll-snap-align: start;
 }
 
-/* Exactly 25px tall — the WCAG 2.5.8 touch-target minimum, no more. An
-   exact height (never min-height) so future content can't inflate the row;
-   box-sizing makes the 25px include the 1px border, leaving a 23px box that
-   the single-line title must fit (hence its pinned line-height). */
+/* Date-first agenda rows: a 52px-tall card with a category-colored date
+   chip (day over month) and the full title wrapping to two lines max —
+   never ellipsized. An exact height (never min-height) so content can't
+   inflate the row; box-sizing makes the 52px include the 1px border. */
 .upcoming-row {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  height: 25px;
+  gap: 0.5rem;
+  height: 52px;
   box-sizing: border-box;
-  padding: 0 0.7rem;
+  padding: 0.2rem 0.55rem 0.2rem 0.2rem;
   background: var(--cream);
   border: 1px solid var(--sand-line);
   border-radius: var(--radius-card);
@@ -359,27 +359,63 @@ p {
   border-color: var(--turquoise);
 }
 
-/* 4px bar; the event's category color is set inline from categoryColor() */
-.upcoming-row__bar {
-  flex: 0 0 4px;
+/* Date chip — the event's category color is set inline from
+   categoryColor(); white text on a soft shadow stays legible across the
+   whole palette. Absorbs the old 4px category bar. */
+.upcoming-row__date {
+  flex: 0 0 auto;
   align-self: stretch;
-  border-radius: 2px;
-  background: var(--charcoal-soft);
+  width: 2.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  border-radius: 4px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  line-height: 1;
+}
+
+.upcoming-row__day {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.upcoming-row__month {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Title block: the full title (two lines max) with the sponsored marker
+   riding under it on promoted entries. */
+.upcoming-row__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.1rem;
 }
 
 .upcoming-row__title {
-  flex: 1 1 auto;
-  min-width: 0;
-  font-family: var(--font-heading);
-  font-size: 0.95rem;
-  line-height: 1.2; /* 18px — must stay inside the row's 23px content box */
-  white-space: nowrap;
+  /* Two lines max, clipped — deliberately not webkit line-clamping: Chromium
+     appends an ellipsis to -webkit-line-clamped boxes and this contract
+     forbids one. max-height = 2 × line-height; the padding extends the
+     visible box so the second line's descenders survive the clip. */
+  max-height: 2.24em;
   overflow: hidden;
-  text-overflow: ellipsis;
+  padding-bottom: 0.15em;
+  margin-bottom: -0.15em;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  line-height: 1.12;
 }
 
 .upcoming-row__sponsored {
-  flex: 0 0 auto;
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -1423,5 +1459,44 @@ p {
   }
   .upcoming-strip__scroller::-webkit-scrollbar-track {
     background: var(--sand-line);
+  }
+
+  /* Ribbon input: chevrons at the right edge, rendered only by JS on desktop
+     (≥48rem). They page by ~80% of the ribbon per click and hide at the ends
+     via the hidden attribute. */
+  .upcoming-strip__ribbon {
+    position: relative;
+  }
+  .upcoming-strip__nav {
+    position: absolute;
+    top: 50%;
+    right: 0.25rem;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.15rem;
+    background: linear-gradient(to right, transparent, var(--sand) 35%);
+  }
+  .upcoming-strip__nav-btn {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 1px solid var(--sand-line);
+    border-radius: 50%;
+    background: var(--cream);
+    color: var(--charcoal);
+    font-size: 0.8rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .upcoming-strip__nav-btn:hover {
+    border-color: var(--terracotta);
+    color: var(--terracotta);
+  }
+  /* The hidden attribute must win over the button display above. */
+  .upcoming-strip__nav-btn[hidden] {
+    display: none;
   }
 }

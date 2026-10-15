@@ -143,6 +143,23 @@ export function formatEventRange(event, language) {
   return `${date.format(startMs)} – ${date.format(endExplicit)}`;
 }
 
+// Compact chip date for the community strip: the day number and a short
+// month in Cancun wall time, year omitted — the strip is a near-term agenda
+// and /eventos keeps the full ranges (formatEventRange). Returns
+// { day, month } or null when the start doesn't parse.
+export function eventChipDate(event, language) {
+  const startMs = eventStartMs(event);
+  if (startMs === null) return null;
+  const locale = language === "en" ? "en-US" : "es-MX";
+  const parts = new Intl.DateTimeFormat(locale, {
+    timeZone: CANCUN_TIME_ZONE,
+    day: "numeric",
+    month: "short",
+  }).formatToParts(startMs);
+  const pick = (type) => parts.find((part) => part.type === type)?.value ?? "";
+  return { day: pick("day"), month: pick("month").replace(/\.$/, "") };
+}
+
 // ---- schema.org/Event JSON-LD ------------------------------------------------
 
 export function eventJsonLd(event, places) {

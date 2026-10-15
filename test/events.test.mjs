@@ -6,6 +6,7 @@ import events from "../app/events.mjs";
 import { UI_TEXT } from "../app/i18n.mjs";
 import {
   entryKind,
+  eventChipDate,
   eventJsonLd,
   eventMarkerPosition,
   eventStartMs,
@@ -248,6 +249,8 @@ test("events UI strings exist in both languages", () => {
     "promoSlide",
     "upcomingHeading",
     "upcomingAllEvents",
+    "upcomingPrevious",
+    "upcomingNext",
   ]) {
     assert.ok(typeof UI_TEXT.es[key] === "string" && UI_TEXT.es[key].length > 0, `es.${key}`);
     assert.ok(typeof UI_TEXT.en[key] === "string" && UI_TEXT.en[key].length > 0, `en.${key}`);
@@ -383,7 +386,7 @@ test("useSiteLanguage lives in one shared module and both the banner and the com
   assert.match(upcoming, /import \{ useSiteLanguage \} from "\.\/site-language";/);
 });
 
-test("the community strip lists ALL upcoming EVENTS at runtime as title-only rows linking uniformly to /eventos#<id>", () => {
+test("the community strip lists ALL upcoming EVENTS at runtime as date-first rows linking uniformly to /eventos#<id>", () => {
   const source = read("../app/upcoming-events.js");
   assert.match(
     source,
@@ -391,29 +394,60 @@ test("the community strip lists ALL upcoming EVENTS at runtime as title-only row
     "runtime filtering in Cancun time, events only — promotion status and kind both orthogonal",
   );
   assert.match(source, /if \(upcoming\.length === 0\) return null;/, "no empty section");
-  // Title-only minimal entries: no dates, venues, costs or descriptions.
-  assert.doesNotMatch(source, /formatEventRange/, "no date ranges");
+  // Date-first agenda rows: chip + full title — still no venues or costs.
   assert.doesNotMatch(source, /event\.venue/, "no venues");
   assert.doesNotMatch(source, /event\.cost/, "no costs");
   // Uniform /eventos#<id> hrefs — the tiered promoted → /promo/<id> logic is gone.
   assert.match(source, /href=\{`\/eventos#\$\{event\.id\}`\}/, "every row jumps to its /eventos entry");
   assert.doesNotMatch(source, /\/promo\/\$\{event\.id\}/, "promoted events use the same /eventos anchor");
-  // Category color bar via the existing palette helpers.
+  // Category color now paints the DATE CHIP (it absorbed the old 4px bar).
   assert.match(source, /import \{ categoryColor \} from "\.\/category-colors\.mjs";/);
-  assert.match(source, /className="upcoming-row__bar"/, "category color bar stays on the row");
+  assert.match(source, /className="upcoming-row__date"/, "date chip renders on the row");
+  assert.match(source, /className="upcoming-row__day"/, "day number renders");
+  assert.match(source, /className="upcoming-row__month"/, "month renders");
+  assert.match(source, /eventChipDate\(event, language\)/, "chip date comes from the shared Cancun-time formatter");
+  assert.match(source, /style=\{\{ background: categoryColor\(event\.category\) \}\}/, "chip background is the category color");
+  assert.doesNotMatch(source, /upcoming-row__bar/, "the 4px bar is gone — the chip absorbed it");
   assert.match(source, /className="upcoming-row__title"/, "row title still renders");
-  assert.match(source, /style=\{\{ background: categoryColor\(event\.category\) \}\}/);
   // Promoted entries keep the (minimal) sponsored marker.
   assert.match(source, /text\.promotedBadge/, "paid entries stay labeled");
   const css = read("../app/style.css");
   assert.match(css, /\.upcoming-row/, "compact row styles exist");
-  // Row height is locked to exactly 25px — the WCAG 2.5.8 touch minimum. An
-  // exact border-box height (never min-height) so content can't inflate it.
-  assert.match(css, /\.upcoming-row\s*\{[^}]*height:\s*25px;/s, "row height is exactly 25px");
-  assert.match(css, /\.upcoming-row\s*\{[^}]*box-sizing:\s*border-box;/s, "25px total includes the 1px border");
-  assert.doesNotMatch(css, /\.upcoming-row\s*\{[^}]*min-height/s, "exact height, not min-height");
-  assert.match(css, /\.upcoming-row__title\s*\{[^}]*text-overflow:\s*ellipsis/s, "long titles still ellipsize");
+  // Row height sits inside the 48–56px date-first band. An exact border-box
+  // height (never min-height) so content can't inflate the row.
+  const rowRule = css.match(/\.upcoming-row\s*\{([^}]*)\}/s)?.[1];
+  assert.ok(rowRule, "row rule exists");
+  const rowHeight = Number(rowRule.match(/height:\s*(\d+(?:\.\d+)?)px/)?.[1]);
+  assert.ok(rowHeight >= 48 && rowHeight <= 56, `row height ${rowHeight}px inside the 48–56px band`);
+  assert.match(rowRule, /box-sizing:\s*border-box;/, "height includes the 1px border");
+  assert.doesNotMatch(rowRule, /min-height/, "exact height, not min-height");
+  // Titles wrap to two lines max and are NEVER ellipsized: -webkit-line-clamp
+  // is banned here — Chromium appends an ellipsis on its own — so the clamp
+  // is a plain max-height of two line-heights.
+  const titleRule = css.match(/\.upcoming-row__title\s*\{([^}]*)\}/s)?.[1];
+  assert.ok(titleRule, "title rule exists");
+  assert.doesNotMatch(titleRule, /text-overflow:\s*ellipsis/, "no ellipsis on titles");
+  assert.doesNotMatch(titleRule, /white-space:\s*nowrap/, "titles wrap");
+  assert.doesNotMatch(titleRule, /\bline-clamp\s*:/, "no line-clamp declaration — Chromium would render its own ellipsis");
+  const titleLineHeight = Number(titleRule.match(/line-height:\s*([\d.]+)/)?.[1]);
+  const titleMaxHeight = Number(titleRule.match(/max-height:\s*([\d.]+)em/)?.[1]);
+  assert.ok(
+    Math.abs(titleMaxHeight - 2 * titleLineHeight) < 0.01,
+    "max-height clamps the title to exactly two lines",
+  );
+  // The chip stacks day over month on the category color.
+  const chipRule = css.match(/\.upcoming-row__date\s*\{([^}]*)\}/s)?.[1];
+  assert.match(chipRule, /flex-direction:\s*column/, "chip is a day-over-month column");
+  assert.match(chipRule, /color:\s*#fff/, "chip text is white on the category color");
+  const dayRule = css.match(/\.upcoming-row__day\s*\{([^}]*)\}/s)?.[1];
+  const monthRule = css.match(/\.upcoming-row__month\s*\{([^}]*)\}/s)?.[1];
+  assert.ok(
+    Number(dayRule.match(/font-size:\s*([\d.]+)rem/)?.[1]) > Number(monthRule.match(/font-size:\s*([\d.]+)rem/)?.[1]),
+    "day is prominent, month is small",
+  );
   assert.match(css, /\.upcoming-row:hover\s*\{[^}]*border-color/s, "hover border stays");
+  // Mobile-first: rows keep a readable card width at 360px.
+  assert.match(css, /\.upcoming-strip__scroller > li\s*\{[^}]*flex:\s*0 0 clamp\([^)]*\)/s, "fixed-flex cards");
   // Slim single-line header: the scroll hint is gone entirely, and heading +
   // "all events" link share one row barely taller than the text.
   assert.doesNotMatch(source, /upcoming-strip__hint|upcomingScrollHint/, "hint span removed");
@@ -430,6 +464,66 @@ test("the community strip lists ALL upcoming EVENTS at runtime as title-only row
     "one flex row: heading left, link right",
   );
   assert.match(css, /\.upcoming-strip__all\s*\{[^}]*padding:\s*0\.25rem 0/s, "link padded to the touch minimum");
+});
+
+test("eventChipDate: day + month in Cancun wall time, bilingual, year omitted, null on garbage", () => {
+  // Fixed instant: 2026-11-02T12:00 in Cancun.
+  const stamped = { startAt: "2026-11-02T12:00:00-05:00" };
+  assert.deepEqual(eventChipDate(stamped, "es"), { day: "2", month: "nov" });
+  assert.deepEqual(eventChipDate(stamped, "en"), { day: "2", month: "Nov" });
+  // Offset-less datetime = Cancun wall time, even where UTC already flipped
+  // the calendar day (23:30 Cancun = 04:30 UTC the NEXT day).
+  assert.deepEqual(eventChipDate({ startAt: "2026-11-02T23:30:00" }, "es"), { day: "2", month: "nov" });
+  // Whole-day legacy start date.
+  assert.deepEqual(eventChipDate({ startAt: "2026-12-18" }, "es"), { day: "18", month: "dic" });
+  assert.deepEqual(eventChipDate({ startAt: "2026-12-18" }, "en"), { day: "18", month: "Dec" });
+  // No parseable start → null (the chip renders its neutral placeholder).
+  assert.equal(eventChipDate({ startAt: "próximamente" }, "es"), null);
+  assert.equal(eventChipDate({}, "en"), null);
+});
+
+test("the community strip gives mouse users a first-class input: wheel translation without scroll-trap, plus edge chevrons", () => {
+  const source = read("../app/upcoming-events.js");
+
+  // The wheel is translated by hand: React's synthetic onWheel attaches a
+  // passive listener, so preventDefault() inside it is ignored.
+  assert.match(source, /addEventListener\("wheel", onWheel, \{ passive: false \}\)/, "non-passive wheel listener via ref");
+  assert.match(source, /return \(\) => scroller\.removeEventListener\("wheel", onWheel\)/, "listener cleaned up on unmount");
+  assert.doesNotMatch(source, /onWheel=/, "no React synthetic wheel handler anywhere");
+
+  // No scroll-trap: the handler returns BEFORE preventDefault when the strip
+  // can't move further in the wheel's direction — at either end (or with no
+  // overflow at all) the page scrolls normally.
+  assert.match(
+    source,
+    /if \(goingForward \? max - scroller\.scrollLeft <= 1 : scroller\.scrollLeft <= 1\) return;[\s\S]*?event\.preventDefault\(\)/,
+    "pass-through is decided before any preventDefault",
+  );
+
+  // Touch keeps the native pan — no touch handlers on the strip.
+  assert.doesNotMatch(source, /onTouch|touchstart|touchmove/, "touch behavior untouched");
+
+  // Edge chevrons: desktop only, one ~80% page per click, hidden at the ends,
+  // bilingual aria-labels through the shared uiText pattern.
+  assert.match(source, /window\.matchMedia\("\(min-width: 48rem\)"\)/, "desktop = the 48rem breakpoint used by the styles");
+  assert.match(source, /\{desktop && \(/, "chevrons render on desktop only");
+  assert.match(source, /scrollBy\(\{ left: direction \* scroller\.clientWidth \* 0\.8, behavior: "smooth" \}\)/, "one ~80% page per click");
+  assert.match(source, /aria-label=\{text\.upcomingPrevious\}/);
+  assert.match(source, /aria-label=\{text\.upcomingNext\}/);
+  assert.match(source, /hidden=\{atStart\}/, "previous chevron hides at the start");
+  assert.match(source, /hidden=\{atEnd\}/, "next chevron hides at the end");
+
+  // The chevron chrome lives in the desktop query that already styles the
+  // ribbon scroller, and the hidden attribute must beat the button's display
+  // rule at both ends.
+  const css = read("../app/style.css");
+  const ribbonBlock = [...css.matchAll(/@media\s*\(min-width:\s*48rem\)\s*\{([\s\S]*?)\n\}/g)]
+    .map((match) => match[1])
+    .find((body) => body.includes(".upcoming-strip__scroller"));
+  assert.ok(ribbonBlock, "the ribbon desktop rules live in a 48rem query");
+  assert.match(ribbonBlock, /\.upcoming-strip__ribbon\s*\{[^}]*position:\s*relative/s, "the ribbon anchors the nav overlay");
+  assert.match(ribbonBlock, /\.upcoming-strip__nav\s*\{[^}]*position:\s*absolute/s, "chevrons sit at the ribbon's right edge");
+  assert.match(ribbonBlock, /\.upcoming-strip__nav-btn\[hidden\]\s*\{\s*display:\s*none/s, "hidden wins over the button display");
 });
 
 test("/eventos entries carry anchor ids that the homepage strip targets", () => {
