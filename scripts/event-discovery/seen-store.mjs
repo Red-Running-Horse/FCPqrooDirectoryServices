@@ -1,10 +1,14 @@
 // ============================================================================
 // scripts/event-discovery/seen-store.mjs — persist seen.json on the
 // `discovery-data` branch via the GitHub API. MAIN IS NEVER WRITTEN: when
-// the branch does not exist yet it is created as an ORPHAN commit containing
-// only seen.json, so no main history or tree is copied over.
+// the branch does not exist yet it is created as an ORPHAN commit with an
+// EMPTY tree, so no main history or tree is copied over.
 //
-// Layout on the branch:
+// The branch is deliberately created WITHOUT seen.json: the contents API
+// rejects a sha-less PUT when the file already exists (422), so writeSeen()
+// must be the file's sole creator and its first call is always a create.
+//
+// Layout on the branch (once written):
 //   seen.json   { "version": 1, "updated": "YYYY-MM-DD", "fingerprints": [] }
 //
 // Pure I/O boundary: like report.mjs, fetch is injected for tests.
@@ -43,9 +47,12 @@ export async function readSeen({ repo, token }, fetchImpl) {
   return { seen: parseSeen(text), sha: data.sha };
 }
 
-// Create refs/heads/discovery-data pointing at an orphan commit whose tree
-// holds only seen.json. 409/422 means the branch already exists — fine.
-export async function ensureBranch({ repo, token, initialSeen }, fetchImpl) {
+// Create refs/heads/discovery-data pointing at an orphan commit with an EMPTY
+// tree: no main history is copied and no file is seeded. Seeding seen.json
+// here would break the first writeSeen() — its create path PUTs without a
+// sha, which GitHub 422s when the file already exists. 409/422 means the
+// branch already exists — fine.
+export async function ensureBranch({ repo, token }, fetchImpl) {
   const post = async (path, body) => {
     const response = await fetchImpl(`${API}/repos/${repo}${path}`, {
       method: "POST",
@@ -58,12 +65,9 @@ export async function ensureBranch({ repo, token, initialSeen }, fetchImpl) {
     return response.json();
   };
 
-  const blob = await post("/git/blobs", { content: serializeSeen(initialSeen ?? emptySeen()), encoding: "utf-8" });
-  const tree = await post("/git/trees", {
-    tree: [{ path: SEEN_PATH, mode: "100644", type: "blob", sha: blob.sha }],
-  });
+  const tree = await post("/git/trees", { tree: [] });
   const commit = await post("/git/commits", {
-    message: "eventos: inicializa discovery-data con seen.json",
+    message: "eventos: inicializa la rama discovery-data",
     tree: tree.sha,
     parents: [],
   });

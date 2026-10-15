@@ -428,22 +428,20 @@ test("seen-store: readSeen maps 404 to an empty store and decodes base64 content
   assert.deepEqual(present.seen, payload);
 });
 
-test("seen-store: ensureBranch builds an ORPHAN commit with only seen.json (main never copied)", async () => {
+test("seen-store: ensureBranch builds an ORPHAN branch with an EMPTY tree — seen.json is never seeded", async () => {
   const posts = [];
   const fetchImpl = async (url, opts = {}) => {
     const body = JSON.parse(opts.body);
     posts.push([url.replace("https://api.github.com/repos/o/r", ""), body]);
-    if (url.endsWith("/git/blobs")) return jsonResponse({ sha: "blobSha" }, 201);
     if (url.endsWith("/git/trees")) return jsonResponse({ sha: "treeSha" }, 201);
     if (url.endsWith("/git/commits")) return jsonResponse({ sha: "commitSha" }, 201);
     if (url.endsWith("/git/refs")) return jsonResponse({}, 201);
     throw new Error(url);
   };
-  await ensureBranch({ repo: "o/r", token: "t", initialSeen: emptySeen() }, fetchImpl);
-  const [blobs, trees, commits, refs] = posts;
+  await ensureBranch({ repo: "o/r", token: "t" }, fetchImpl);
+  const [trees, commits, refs] = posts;
   assert.deepEqual(commits[1].parents, [], "orphan commit: no parent, so no main history");
-  assert.equal(trees[1].tree.length, 1);
-  assert.equal(trees[1].tree[0].path, "seen.json");
+  assert.deepEqual(trees[1].tree, [], "empty tree — seeding seen.json here would 422 the first writeSeen");
   assert.equal(refs[1].ref, `refs/heads/${BRANCH}`);
 });
 
@@ -502,6 +500,83 @@ test("discover: fresh candidates → green, ONE issue, seen.json committed to di
   assert.equal(put[2].branch, BRANCH);
   const saved = JSON.parse(Buffer.from(put[2].content, "base64").toString("utf8"));
   assert.equal(saved.fingerprints.length, 2, "both enabled sources found the same event once each");
+});
+
+test("discover: fresh repo → full run → first seen.json write succeeds (no 422)", async () => {
+  // Stateful mini-GitHub modeling the rule the bug violated: a contents PUT
+  // without sha 422s when the file already exists, and whatever tree
+  // ensureBranch commits really becomes the branch content. Seeding seen.json
+  // in the orphan commit (old behavior) makes this test red.
+  const blobs = new Map(); // blobSha -> utf8 content
+  const trees = new Map(); // treeSha -> [{ path, sha }]
+  const commits = new Map(); // commitSha -> treeSha
+  let headTree = null; // tree the discovery-data branch points at
+  let seq = 0;
+  const sha = () => `sha${++seq}`;
+  const files = new Map(); // path -> { text, sha } as the contents API sees it
+  const calls = [];
+  const fetchImpl = async (url, opts = {}) => {
+    const method = opts.method ?? "GET";
+    calls.push([method, url, opts.body ? JSON.parse(opts.body) : undefined]);
+    if (url === "https://siturq.gob.mx/eventos" || url === "https://balamnah.fcpqroo.mx") {
+      return new Response(EVENT_BLOCK, { status: 200 });
+    }
+    if (url.includes("/contents/seen.json") && method === "GET") {
+      const record = files.get("seen.json");
+      if (!record) return jsonResponse({ message: "Not Found" }, 404);
+      return jsonResponse({ content: Buffer.from(record.text).toString("base64"), sha: record.sha });
+    }
+    if (url.includes("/contents/seen.json") && method === "PUT") {
+      const body = JSON.parse(opts.body);
+      const existing = files.get("seen.json");
+      if (existing && body.sha !== existing.sha) {
+        return jsonResponse({ message: 'Invalid request. "sha" wasn\'t supplied.' }, 422);
+      }
+      files.set("seen.json", { text: Buffer.from(body.content, "base64").toString("utf8"), sha: sha() });
+      const treeSha = sha();
+      trees.set(treeSha, [...(headTree ? trees.get(headTree) : []), { path: "seen.json", sha: files.get("seen.json").sha }]);
+      headTree = treeSha;
+      return jsonResponse({ commit: { sha: sha() } }, existing ? 200 : 201);
+    }
+    if (url.endsWith("/git/blobs")) {
+      const body = JSON.parse(opts.body);
+      const blobSha = sha();
+      blobs.set(blobSha, body.content);
+      return jsonResponse({ sha: blobSha }, 201);
+    }
+    if (url.endsWith("/git/trees")) {
+      const body = JSON.parse(opts.body);
+      const treeSha = sha();
+      trees.set(treeSha, body.tree);
+      return jsonResponse({ sha: treeSha }, 201);
+    }
+    if (url.endsWith("/git/commits")) {
+      const body = JSON.parse(opts.body);
+      const commitSha = sha();
+      commits.set(commitSha, body.tree);
+      return jsonResponse({ sha: commitSha }, 201);
+    }
+    if (url.endsWith("/git/refs")) {
+      const body = JSON.parse(opts.body);
+      headTree = commits.get(body.sha);
+      for (const entry of trees.get(headTree)) {
+        files.set(entry.path, { text: blobs.get(entry.sha) ?? "", sha: entry.sha });
+      }
+      return jsonResponse({}, 201);
+    }
+    if (url.endsWith(`/labels/${CANDIDATE_LABEL}`) || url.endsWith(`/labels/${FAILURE_LABEL}`)) return jsonResponse({});
+    if (url.endsWith("/issues") && method === "POST") return jsonResponse({ number: 7 }, 201);
+    if (url.includes("/issues?state=open")) return jsonResponse([]);
+    throw new Error(`unmocked: ${method} ${url}`);
+  };
+  const code = await run({ repo: "o/r", token: "t", fetchImpl, log: () => {} });
+  assert.equal(code, 0, "green run — the sha-less create did not hit a 422");
+  const put = calls.find(([m, u]) => m === "PUT" && u.includes("/contents/seen.json"));
+  assert.ok(put, "seen.json was committed");
+  assert.ok(!("sha" in put[2]), "first write on a fresh branch is a create without sha");
+  const saved = JSON.parse(Buffer.from(put[2].content, "base64").toString("utf8"));
+  assert.equal(saved.fingerprints.length, 2, "both enabled sources found the same event once each");
+  assert.ok(!calls.some(([m, u, b]) => m === "POST" && u.endsWith("/issues") && b?.labels?.includes(FAILURE_LABEL)), "no failure issue");
 });
 
 test("discover: zero candidates → green, silent — no issue, no commit", async () => {

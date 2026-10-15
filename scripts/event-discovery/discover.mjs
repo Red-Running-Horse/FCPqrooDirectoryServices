@@ -51,7 +51,7 @@ export async function run({ repo, token, fetchImpl = fetch, log = console.log })
     const { title, body } = formatDiscoveryIssue({ candidates: fresh, runDate });
     const issue = await createIssue({ repo, token, title, body, labels: [CANDIDATE_LABEL] }, fetchImpl);
 
-    if (sha === null) await ensureBranch({ repo, token, initialSeen: seen }, fetchImpl);
+    if (sha === null) await ensureBranch({ repo, token }, fetchImpl);
     await writeSeen(
       { repo, token, seen: updateSeen(seen, fresh, runDate), sha, message: `eventos: registra ${fresh.length} candidato(s) visto(s) el ${runDate}` },
       fetchImpl,
