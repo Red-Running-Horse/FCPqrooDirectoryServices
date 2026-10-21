@@ -26,7 +26,7 @@ test("annual highlights data validates: bilingual fields, slug ids, valid catego
   const categoryIds = new Set(CATEGORIES.map(({ id }) => id));
   const seen = new Set();
   const allowedKeys = new Set(["id", "title", "window", "description", "category", "sourceUrl"]);
-  assert.equal(annualHighlights.length, 3, "v1 seeds exactly the three documented recurrences");
+  assert.equal(annualHighlights.length, 7, "three v1 seeds plus four curated additions");
 
   for (const item of annualHighlights) {
     assert.match(item.id, /^[a-z0-9][a-z0-9-]*$/, `${item.id}: id must be a safe slug`);
@@ -73,10 +73,10 @@ test("annual highlights carry NO parseable dates — no startAt/endAt anywhere",
 });
 
 test("the three seeded recurrences are present with the documented sources", () => {
-  assert.deepEqual(
-    annualHighlights.map((item) => item.id).sort(),
-    ["carnaval-fcp", "dia-de-muertos", "festival-xtaabay"],
-  );
+  const ids = annualHighlights.map((item) => item.id);
+  for (const id of ["carnaval-fcp", "dia-de-muertos", "festival-xtaabay"]) {
+    assert.ok(ids.includes(id), `${id} is present among the recurrences`);
+  }
   const carnaval = annualHighlights.find((item) => item.id === "carnaval-fcp");
   assert.equal(carnaval.sourceUrl, "https://siturq.gob.mx/eventos");
 });

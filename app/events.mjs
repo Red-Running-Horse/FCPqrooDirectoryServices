@@ -87,29 +87,6 @@ const events = [
     lastUpdated: "2026-10-06",
   },
    {
-  id: "cafeteando-xtaabay-2026-10-16",
-  title: {
-    es: "Cafeteando con la Xtáabay — 15° Festival de la Xtáabay",
-    en: "Coffee with the Xtáabay — 15th Xtáabay Festival",
-  },
-  description: {
-    es: "Disfruta un café orgánico y artesanal mientras te adentras en las historias y vivencias de encuentros cercanos con la Xtáabay, dentro del 15° Festival de la Xtáabay.",
-    en: "Enjoy organic, artisanal coffee while you immerse yourself in stories and firsthand accounts of close encounters with the Xtáabay, within the 15th Xtáabay Festival.",
-  },
-  startAt: "2026-10-16T22:30:00-05:00",
-  venue: {
-    name: {
-      es: "Callejón Cultural (Calle 44 entre 67 y 69, Col. Lázaro Cárdenas)",
-      en: "Callejón Cultural (44th St. between 67 & 69, Lázaro Cárdenas)",
-    },
-  },
-  category: "culture",
-  cost: { es: "Participación libre y gratuita", en: "Free admission" },
-  contactNote: "Verified from organizer's flyer, received 2026-10-12. Flyer credits: Festival de la Xtáabay, Kó'moal, Ts'uku'um, Noj Tunch, Cantera, Nahil Kanbal.",
-  status: "published",
-  lastUpdated: "2026-10-12",
-},
-  {
     id: "noche-biocultural-tsikbal-2026",
     title: {
       es: "Noche Biocultural de Sian Ka'an — Tsíikbal: voces, leyendas y memoria de nuestros pixanes",
@@ -236,6 +213,67 @@ const events = [
     sourceUrl: "https://selvamorenareserva.wixsite.com/selva-morena",
     status: "published",
     lastUpdated: "2026-10-15",
+  },
+  {
+    id: "entre-animas-y-leyendas-2026",
+    title: {
+      es: "Entre Ánimas y Leyendas: Identidad e Historia de Nuestro Pueblo",
+      en: "Among Souls and Legends: Identity and History of Our Town",
+    },
+    description: {
+      es: "Tres veladas de Día de Muertos en los pasillos del Museo Histórico de FCP: exposición de altares y música prehispánica (27 oct), noche de mitos y leyendas junto a la fogata (28 oct), y arte, danza folklórica y conferencia (29 oct). Organiza el H. Ayuntamiento, Coordinación de Asuntos Indígenas. Entrada libre.",
+      en: "Three Día de Muertos evenings in the halls of the FCP Historical Museum: altar exhibition and prehispanic music (Oct 27), a night of myths and legends by the bonfire (Oct 28), and art, folkloric dance and a keynote lecture (Oct 29). Organized by the Municipal Government's Indigenous Affairs Coordination. Free admission.",
+    },
+    startAt: "2026-10-27T18:00:00-05:00",
+    endAt: "2026-10-29T20:00:00-05:00",
+    venue: { placeId: "museo-de-la-ciudad-felipe-carrillo-puerto" },
+    category: "culture",
+    cost: { es: "Entrada libre", en: "Free admission" },
+    contactNote: "Verified from Ayuntamiento FCP event posts, Oct 2026. Program: altars+prehispanic music Oct 27; legends bonfire Oct 28; art+ballet+lecture Oct 29, 6 PM daily.",
+    sourceUrl: "https://www.facebook.com/share/p/19Sgjq5dJT/",
+    status: "published",
+    lastUpdated: "2026-10-21",
+  },
+  {
+    id: "festival-cultura-del-caribe-2026",
+    title: {
+      es: "Festival de Cultura del Caribe 2026 — Belice país invitado",
+      en: "Caribbean Culture Festival 2026 — Belize Guest Country",
+    },
+    description: {
+      es: "Cuatro días de música, arte y tradiciones caribeñas que unen a los pueblos de la región, con Belice como país invitado. Programación de Felipe Carrillo Puerto por anunciarse.",
+      en: "Four days of Caribbean music, art and traditions uniting the region's peoples, with Belize as guest country. FCP programming to be announced.",
+    },
+    startAt: "2026-11-19",
+    endAt: "2026-11-22",
+    venue: {
+      name: { es: "Quintana Roo (sede FCP por anunciarse)", en: "Quintana Roo (FCP venue TBA)" },
+    },
+    category: "culture",
+    contactNote: "Verified Oct 2026. Statewide festival; FCP-specific programming not yet published — update when announced.",
+    sourceUrl: "https://www.facebook.com/share/p/1F7XkMNN4b/",
+    status: "published",
+    lastUpdated: "2026-10-21",
+  },
+  {
+    id: "festival-animas-y-las-estrellas-2026",
+    title: {
+      es: "Festival de las Ánimas y las Estrellas — Hanal Pixán y astronomía maya",
+      en: "Festival of Souls and Stars — Hanal Pixán and Maya Astronomy",
+    },
+    description: {
+      es: "Una velada que une el Hanal Pixán —la comida de las ánimas— con la astronomía y cosmovisión maya: rituales, música en vivo y observación guiada del cielo nocturno. Horario y sede por anunciarse.",
+      en: "An evening blending Hanal Pixán — the food of the souls — with Maya astronomy and cosmology: rituals, live music and guided stargazing. Time and venue to be announced.",
+    },
+    startAt: "2026-11-02",
+    venue: {
+      name: { es: "Felipe Carrillo Puerto (sede por anunciarse)", en: "Felipe Carrillo Puerto (venue TBA)" },
+    },
+    category: "culture",
+    contactNote: "Verified Oct 2026. Evening event Nov 2; exact time/venue pending announcement.",
+    sourceUrl: "https://www.facebook.com/share/p/19wm5vi8bw/",
+    status: "published",
+    lastUpdated: "2026-10-21",
   },
 ];
 

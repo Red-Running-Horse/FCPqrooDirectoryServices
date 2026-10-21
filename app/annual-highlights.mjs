@@ -81,6 +81,34 @@ const annualHighlights = [
     },
     category: "culture",
   },
+  {
+    id: "carrera-ruta-del-jaguar",
+    title: { es: "Carrera por la Ruta del Jaguar", en: "Route of the Jaguar Race" },
+    window: { es: "Anual — fecha por anunciarse", en: "Annual — date announced each year" },
+    description: { es: "La carrera insignia de la ciudad por el corazón del territorio del jaguar: más de 750 corredores en su última edición.", en: "The city's signature race through jaguar country — 750+ runners at the last edition." },
+    category: "culture",
+  },
+  {
+    id: "fiesta-patronal-santa-cruz",
+    title: { es: "Fiesta Patronal de la Santa Cruz", en: "Feast of the Holy Cross" },
+    window: { es: "23 de abril al 3 de mayo", en: "April 23 – May 3" },
+    description: { es: "La feria anual más importante de la ciudad, en honor a su santa patrona.", en: "The city's biggest annual fair, honoring its patron saint." },
+    category: "culture",
+  },
+  {
+    id: "la-diosa-del-mar",
+    title: { es: "La Diosa del Mar", en: "La Diosa del Mar" },
+    window: { es: "Julio", en: "July" },
+    description: { es: "Festival cultural de verano dedicado al mar y a los temas culturales locales.", en: "A summer cultural festival celebrating the sea and local culture." },
+    category: "culture",
+  },
+  {
+    id: "aniversario-guerra-de-castas",
+    title: { es: "Aniversario de la Guerra de Castas", en: "Caste War Anniversary" },
+    window: { es: "Finales de julio", en: "Late July" },
+    description: { es: "Conmemoración anual de un capítulo definitorio de la historia maya y regional.", en: "Annual commemoration of a defining chapter in Maya and regional history." },
+    category: "culture",
+  },
 ];
 
 export default annualHighlights;

@@ -1,0 +1,13 @@
+{
+  "id": "restaurante-epico",
+  "description": {
+    "es": "Restaurante acogedor y con estilo en la colonia Francisco May: platillos para compartir, servicio a mesa y terraza al aire libre. Bueno para grupos, turistas y familias.",
+    "en": "A cozy, trendy restaurant in the Francisco May neighborhood: small plates, table service and outdoor seating. Good for groups, tourists and families."
+  },
+  "directionsUrl": null,
+  "phone": "+52 983 106 3139",
+  "verificationSourceUrls": [
+    "https://maps.app.goo.gl/VLT9uzQSqzgDYiZD7"
+  ],
+  "lastUpdated": "2026-10-21"
+}

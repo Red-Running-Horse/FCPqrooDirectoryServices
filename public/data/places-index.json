@@ -224,5 +224,41 @@
       "es": "Cueva de las Serpientes Colgantes (Kantemó)",
       "en": "Cave of the Hanging Snakes (Kantemó)"
     }
+  },
+  {
+    "id": "casa-saastal",
+    "category": "nature",
+    "latitude": 19.57336,
+    "longitude": -88.03433,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Casa Sáastal",
+      "en": "Casa Sáastal"
+    }
+  },
+  {
+    "id": "restaurante-epico",
+    "category": "food",
+    "latitude": 19.57417,
+    "longitude": -88.0415,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Restaurante Épico",
+      "en": "Restaurante Épico"
+    }
+  },
+  {
+    "id": "hotel-tihosuco-colonial",
+    "category": "lodging",
+    "latitude": 20.1968,
+    "longitude": -88.3749,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Hotel Tihosuco Colonial",
+      "en": "Hotel Tihosuco Colonial"
+    }
   }
 ]

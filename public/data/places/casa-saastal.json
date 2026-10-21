@@ -1,0 +1,22 @@
+{
+  "id": "casa-saastal",
+  "description": {
+    "es": "Espacio educativo y sustentable con apoyo de CONANP, dedicado a la protección de las abejas nativas sin aguijón: pláticas, recorridos guiados y prácticas ambientales para todas las edades. Ideal para familias.",
+    "en": "A sustainable educational space supported by CONANP, dedicated to protecting native stingless bees: talks, guided tours and hands-on environmental learning for all ages. Great for families."
+  },
+  "directionsUrl": null,
+  "phone": "+52 983 181 0050",
+  "whatsapp": "+52 983 181 0050",
+  "email": "saastal2020@gmail.com",
+  "socialLinks": {
+    "facebook": "https://www.facebook.com/viverosaastal"
+  },
+  "verificationSourceUrls": [
+    "https://maps.app.goo.gl/q4aPnqsKzpWtQXWN7"
+  ],
+  "hoursDisplay": {
+    "es": "Cita previa — contacta para agendar tu visita",
+    "en": "By appointment — contact to schedule your visit"
+  },
+  "lastUpdated": "2026-10-21"
+}
