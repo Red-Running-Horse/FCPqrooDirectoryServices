@@ -275,6 +275,88 @@ const events = [
     status: "published",
     lastUpdated: "2026-10-21",
   },
+  {
+    id: "desfile-de-animas-2026",
+    title: {
+      es: "Desfile de Ánimas — Janal Pixan",
+      en: "Parade of Souls — Janal Pixan",
+    },
+    description: {
+      es: "Las ánimas recorrerán las calles del centro en el Desfile de Ánimas, parte de las actividades del Janal Pixan que honran la memoria de quienes viven por siempre en nuestros corazones. Consulta la ruta oficial en la publicación del Ayuntamiento.",
+      en: "The souls walk the downtown streets in the Parade of Souls, part of the Janal Pixan activities honoring those who live forever in our hearts. See the official route in the City Hall post.",
+    },
+    startAt: "2026-10-31",
+    venue: {
+      name: { es: "Calles del centro histórico, FCP", en: "Downtown streets, FCP" },
+    },
+    category: "culture",
+    contactNote: "Verified Oct 2026. Route published by the Ayuntamiento — check the source post for the derrotero before attending.",
+    sourceUrl: "https://www.facebook.com/share/p/1E25jnzfv9/",
+    status: "published",
+    lastUpdated: "2026-10-26",
+  },
+  {
+    id: "janal-pixan-noche-musical-2026",
+    title: {
+      es: "Janal Pixan — Noche de música: Chan Santa Roots y Cheetos y su Grupo Tenaz",
+      en: "Janal Pixan — Music night: Chan Santa Roots and Cheetos y su Grupo Tenaz",
+    },
+    description: {
+      es: "El 1 de noviembre, noche de ritmo y ambiente con Chan Santa Roots y Cheetos y su Grupo Tenaz, dentro de la cartelera del Janal Pixan — entre aromas, colores y recuerdos. Consulta la cartelera completa en la publicación del Ayuntamiento.",
+      en: "On November 1, a night of rhythm with Chan Santa Roots and Cheetos y su Grupo Tenaz, part of the Janal Pixan program — among aromas, colors and memories. See the full schedule in the City Hall post.",
+    },
+    startAt: "2026-11-01",
+    venue: {
+      name: { es: "Felipe Carrillo Puerto (sede por confirmar en cartelera)", en: "Felipe Carrillo Puerto (venue per official schedule)" },
+    },
+    category: "culture",
+    contactNote: "Verified Oct 2026. Time and venue per the Ayuntamiento cartelera; two posts cover the same Nov 1 celebration.",
+    sourceUrl: "https://www.facebook.com/share/p/1d3F4pECSA/",
+    status: "published",
+    lastUpdated: "2026-10-26",
+  },
+  {
+    id: "uqroo-tsikbal-jaanal-pixan-2026",
+    title: {
+      es: "Tsikbal — Raíces que dialogan: cambios y continuidades del Jaanal Pixan (UQROO)",
+      en: "Tsikbal — Roots in Dialogue: change and continuity in Jaanal Pixan (UQROO)",
+    },
+    description: {
+      es: "Conversatorio entre personas mayas mayores portadoras de la tradición, académicos y jóvenes universitarios sobre cómo ha cambiado el Jaanal Pixan frente a la migración, la escolarización, la religión, el turismo y la vida urbana — con proyección de un video documental. Organizan la División de Ciencias Sociales y Humanidades y Fundación Mundo Sustentable.",
+      en: "A dialogue between elder Maya tradition-bearers, academics and young university students on how Jaanal Pixan has changed with migration, schooling, religion, tourism and urban life — including a documentary screening. Organized by the Division of Social Sciences and Humanities and Fundación Mundo Sustentable.",
+    },
+    startAt: "2026-11-09T16:00:00-05:00",
+    endAt: "2026-11-09T18:00:00-05:00",
+    venue: {
+      name: { es: "Aula Popol Naj 2, UQROO Campus FCP", en: "Popol Naj Hall 2, UQROO FCP Campus" },
+    },
+    category: "culture",
+    contactNote: "Verified from UQROO Campus FCP post, Oct 2026. University-community event; open attendance presumed — confirm with the Division if promoting widely.",
+    sourceUrl: "https://www.facebook.com/share/p/19ctTkP1jS/",
+    status: "published",
+    lastUpdated: "2026-10-29",
+  },
+  {
+    id: "uqroo-memorial-universitario-2026",
+    title: {
+      es: "Memorial Universitario — Jaanal Pixan (UQROO)",
+      en: "University Memorial — Jaanal Pixan (UQROO)",
+    },
+    description: {
+      es: "Un espacio de escucha, reciprocidad y aprendizaje entre saber académico y saber comunitario: mesa de memoria colectiva, degustación de alimentos de la temporada, exposición de altares, muestra de calaveritas literarias y música maya pax y mesoamericana.",
+      en: "A space of listening, reciprocity and learning between academic and community knowledge: a collective memory table, seasonal food tasting, altar exhibition, literary calaveritas showcase, and Maya pax and Mesoamerican music.",
+    },
+    startAt: "2026-11-10T18:00:00-05:00",
+    endAt: "2026-11-10T20:00:00-05:00",
+    venue: {
+      name: { es: "Instalaciones de la UQROO, Campus FCP", en: "UQROO FCP Campus grounds" },
+    },
+    category: "culture",
+    contactNote: "Verified from UQROO Campus FCP post, Oct 2026. Organized with Fundación Mundo Sustentable.",
+    sourceUrl: "https://www.facebook.com/share/p/19ctTkP1jS/",
+    status: "published",
+    lastUpdated: "2026-10-29",
+  },
 ];
 
 // ---- Build-time guard: never more than MAX_PROMOTED sponsored events ----
