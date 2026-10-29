@@ -979,6 +979,26 @@ export const attractions = [
     verificationSourceUrls: ["https://www.booking.com/hotel/mx/tihosuco-colonial.html"],
     lastUpdated: "2026-10-21",
   },
+  {
+    id: "el-tekaxeno-mercado-fcp",
+    name: { es: "El Tekaxeño", en: "El Tekaxeño" },
+    description: {
+      es: "Cocina yucateca casera en el interior del Mercado Público: queso relleno, relleno negro, escabeche, cochinita pibil, lechón al horno, pozole, salbutes, panuchos y más — por orden o media orden. Con dos órdenes incluyen tortillas y agua del día. Dos mesas en el área de comidas; hasta las 4:00 pm.",
+      en: "Home-style Yucatecan cooking inside the Public Market: queso relleno, relleno negro, escabeche, cochinita pibil, roast pork, pozole, salbutes, panuchos and more — full or half portions. Two orders include free tortillas and the day's agua. Two tables in the food court; open until 4 PM.",
+    },
+    latitude: 19.581076,
+    longitude: -88.044159,
+    category: "food",
+    status: "unverified",
+    locationAccuracy: "approximate",
+    directionsUrl: null,
+    phone: "+52 983 105 6062",
+    whatsapp: "+52 983 105 6062",
+    socialLinks: { facebook: "https://www.facebook.com/profile.php?id=61562438241881" },
+    hoursDisplay: { es: "Todos los días hasta las 4:00 pm", en: "Daily until 4:00 PM" },
+    contactNote: "Editor visited Oct 2026 — food and service confirmed. Inside the Mercado Público food court (~10 seats at two tables); pin dropped at the stall.",
+    lastUpdated: "2026-10-29",
+  },
 ];
 
 export function filterAttractions(category, query = "") {

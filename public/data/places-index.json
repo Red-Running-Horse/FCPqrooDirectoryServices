@@ -260,5 +260,17 @@
       "es": "Hotel Tihosuco Colonial",
       "en": "Hotel Tihosuco Colonial"
     }
+  },
+  {
+    "id": "el-tekaxeno-mercado-fcp",
+    "category": "food",
+    "latitude": 19.581076,
+    "longitude": -88.044159,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "El Tekaxeño",
+      "en": "El Tekaxeño"
+    }
   }
 ]
