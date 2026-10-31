@@ -87,30 +87,6 @@ const events = [
     lastUpdated: "2026-10-06",
   },
    {
-    id: "noche-biocultural-tsikbal-2026",
-    title: {
-      es: "Noche Biocultural de Sian Ka'an — Tsíikbal: voces, leyendas y memoria de nuestros pixanes",
-      en: "Sian Ka'an Biocultural Night — Tsíikbal: voices, legends and memory of our pixanes",
-    },
-    description: {
-      es: "Velada de diálogo y conversación (tsíikbal) dedicada a las leyendas mayas —la Xtabay, los aluxes, el Huay Chivo—, los relatos tradicionales y las costumbres de la época de los pixanes y las ánimas, con personas conocedoras de la memoria cultural del pueblo. Organiza el Consejo Juvenil de Sian Ka'an.",
-      en: "An evening of dialogue (tsíikbal) dedicated to Maya legends — the Xtabay, the aluxes, the Huay Chivo — traditional tales and the customs of the season of the pixanes and ánimas, with keepers of the town's cultural memory. Organized by the Sian Ka'an Youth Council.",
-    },
-    startAt: "2026-10-30T19:00:00-05:00",
-    endAt: "2026-10-30T21:00:00-05:00",
-    venue: {
-      name: {
-        es: "Concha Acústica de Radio XHNKA",
-        en: "Radio XHNKA Acoustic Shell",
-      },
-    },
-    category: "culture",
-    contactNote: "Verified from Consejo Juvenil de Sian Ka'an Facebook post, 2026-10-15. Inscriptions at Casa de la Crónica FCP; contact Tadeo Colli Estrella, 983 182 9942.",
-    sourceUrl: "https://www.facebook.com/share/p/1EtcJ9Ch4h/",
-    status: "published",
-    lastUpdated: "2026-10-15",
-  },
-  {
     id: "noche-biocultural-concursos-2026",
     title: {
       es: "Noche Biocultural — Concurso de disfraces 'Entre mitos y leyendas' y calaveritas literarias",
@@ -145,7 +121,7 @@ const events = [
       en: "Two-day Christian revival congress themed 'Flames of Fire.' Public event organized by Congreso de Avivamiento in Felipe Carrillo Puerto; specific venue to be confirmed.",
     },
     startAt: "2026-12-18",
-    endAt: "2026-12-19",
+    endAt: "2026-12-19T23:59:59-05:00",
     venue: {
       name: {
         es: "Felipe Carrillo Puerto (sede por confirmar)",
@@ -225,7 +201,7 @@ const events = [
       en: "Four days of Caribbean music, art and traditions uniting the region's peoples, with Belize as guest country. FCP programming to be announced.",
     },
     startAt: "2026-11-19",
-    endAt: "2026-11-22",
+    endAt: "2026-11-22T23:59:59-05:00",
     venue: {
       name: { es: "Quintana Roo (sede FCP por anunciarse)", en: "Quintana Roo (FCP venue TBA)" },
     },
@@ -246,6 +222,7 @@ const events = [
       en: "An evening blending Hanal Pixán — the food of the souls — with Maya astronomy and cosmology: rituals, live music and guided stargazing. Time and venue to be announced.",
     },
     startAt: "2026-11-02",
+    endAt: "2026-11-02T23:59:59-05:00",
     venue: {
       name: { es: "Felipe Carrillo Puerto (sede por anunciarse)", en: "Felipe Carrillo Puerto (venue TBA)" },
     },
@@ -266,6 +243,7 @@ const events = [
       en: "The souls walk the downtown streets in the Parade of Souls, part of the Janal Pixan activities honoring those who live forever in our hearts. See the official route in the City Hall post.",
     },
     startAt: "2026-10-31",
+    endAt: "2026-10-31T23:59:59-05:00",
     venue: {
       name: { es: "Calles del centro histórico, FCP", en: "Downtown streets, FCP" },
     },
@@ -286,6 +264,7 @@ const events = [
       en: "On November 1, a night of rhythm with Chan Santa Roots and Cheetos y su Grupo Tenaz, part of the Janal Pixan program — among aromas, colors and memories. See the full schedule in the City Hall post.",
     },
     startAt: "2026-11-01",
+    endAt: "2026-11-01T23:59:59-05:00",
     venue: {
       name: { es: "Felipe Carrillo Puerto (sede por confirmar en cartelera)", en: "Felipe Carrillo Puerto (venue per official schedule)" },
     },
