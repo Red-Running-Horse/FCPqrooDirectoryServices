@@ -215,26 +215,6 @@ const events = [
     lastUpdated: "2026-10-15",
   },
   {
-    id: "entre-animas-y-leyendas-2026",
-    title: {
-      es: "Entre Ánimas y Leyendas: Identidad e Historia de Nuestro Pueblo",
-      en: "Among Souls and Legends: Identity and History of Our Town",
-    },
-    description: {
-      es: "Tres veladas de Día de Muertos en los pasillos del Museo Histórico de FCP: exposición de altares y música prehispánica (27 oct), noche de mitos y leyendas junto a la fogata (28 oct), y arte, danza folklórica y conferencia (29 oct). Organiza el H. Ayuntamiento, Coordinación de Asuntos Indígenas. Entrada libre.",
-      en: "Three Día de Muertos evenings in the halls of the FCP Historical Museum: altar exhibition and prehispanic music (Oct 27), a night of myths and legends by the bonfire (Oct 28), and art, folkloric dance and a keynote lecture (Oct 29). Organized by the Municipal Government's Indigenous Affairs Coordination. Free admission.",
-    },
-    startAt: "2026-10-27T18:00:00-05:00",
-    endAt: "2026-10-29T20:00:00-05:00",
-    venue: { placeId: "museo-de-la-ciudad-felipe-carrillo-puerto" },
-    category: "culture",
-    cost: { es: "Entrada libre", en: "Free admission" },
-    contactNote: "Verified from Ayuntamiento FCP event posts, Oct 2026. Program: altars+prehispanic music Oct 27; legends bonfire Oct 28; art+ballet+lecture Oct 29, 6 PM daily.",
-    sourceUrl: "https://www.facebook.com/share/p/19Sgjq5dJT/",
-    status: "published",
-    lastUpdated: "2026-10-21",
-  },
-  {
     id: "festival-cultura-del-caribe-2026",
     title: {
       es: "Festival de Cultura del Caribe 2026 — Belice país invitado",
