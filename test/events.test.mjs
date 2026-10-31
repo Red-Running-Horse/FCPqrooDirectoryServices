@@ -103,8 +103,10 @@ test("kind separates events from offers; missing kind validates as event", () =>
   for (const id of ["promo-balam-nah", "selva-morena"]) {
     assert.equal(byId.get(id).kind, "offer", `${id} is an offer, not an event`);
   }
-  assert.equal(byId.get("noche-biocultural-tsikbal-2026").promoted, undefined, "a normal event is un-promoted");
-  assert.equal(entryKind(byId.get("noche-biocultural-tsikbal-2026")), "event", "normal records stay plain EVENTS (default kind)");
+  const someEvent = events.find((e) => entryKind(e) === "event");
+  assert.ok(someEvent, "the data holds at least one event");
+  assert.equal(someEvent.promoted, undefined, "a normal event is un-promoted");
+  assert.equal(entryKind(someEvent), "event", "normal records stay plain EVENTS (default kind)");
 });
 
 test("committed EVENTS are all still upcoming (offers have campaign windows and are exempt)", () => {
@@ -310,7 +312,8 @@ test("promotion tiers: MAX_PROMOTED caps every promoted record; the banner rotat
   );
 
   const byId = new Map(events.map((event) => [event.id, event]));
-  assert.ok(!byId.get("noche-biocultural-tsikbal-2026").promoted, "a normal event stays un-promoted");
+  const anyPlainEvent = events.find((event) => entryKind(event) === "event" && !event.promoted);
+  assert.ok(anyPlainEvent, "at least one normal, un-promoted event exists");
   for (const event of premium) {
     assert.equal(event.promoted, true);
     assert.equal(event.promotion?.mediaType, "image");
