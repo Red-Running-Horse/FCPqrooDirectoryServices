@@ -87,30 +87,6 @@ const events = [
     lastUpdated: "2026-10-06",
   },
    {
-    id: "noche-biocultural-concursos-2026",
-    title: {
-      es: "Noche Biocultural — Concurso de disfraces 'Entre mitos y leyendas' y calaveritas literarias",
-      en: "Biocultural Night — 'Among Myths and Legends' costume contest and literary calaveritas",
-    },
-    description: {
-      es: "Concurso de disfraces inspirados en las leyendas mayas (materiales reciclados bienvenidos) y concurso de calaveritas literarias sobre la gastronomía, fauna y fiestas del pueblo. Premios a los tres primeros lugares de cada concurso. Inscripciones en La Casa de la Crónica FCP.",
-      en: "Costume contest inspired by Maya legends (recycled materials welcome) and a literary calaveritas contest about the town's food, fauna and festivities. Prizes for the top three of each. Registration at La Casa de la Crónica FCP.",
-    },
-    startAt: "2026-10-31T19:00:00-05:00",
-    endAt: "2026-10-31T21:00:00-05:00",
-    venue: {
-      name: {
-        es: "Concha Acústica de Radio XHNKA",
-        en: "Radio XHNKA Acoustic Shell",
-      },
-    },
-    category: "culture",
-    contactNote: "Verified from Consejo Juvenil de Sian Ka'an Facebook post, 2026-10-15. Contact: Tadeo Colli Estrella, 983 182 9942. Prizes for 1st–3rd in each contest.",
-    sourceUrl: "https://www.facebook.com/share/p/1EtcJ9Ch4h/",
-    status: "published",
-    lastUpdated: "2026-10-15",
-  },
-  {
     id: "congreso-avivamiento-llamas-de-fuego-2026",
     title: {
       es: "Congreso de Avivamiento 'Llamas de Fuego'",
@@ -210,69 +186,6 @@ const events = [
     sourceUrl: "https://www.facebook.com/share/p/1F7XkMNN4b/",
     status: "published",
     lastUpdated: "2026-10-21",
-  },
-  {
-    id: "festival-animas-y-las-estrellas-2026",
-    title: {
-      es: "Festival de las Ánimas y las Estrellas — Hanal Pixán y astronomía maya",
-      en: "Festival of Souls and Stars — Hanal Pixán and Maya Astronomy",
-    },
-    description: {
-      es: "Una velada que une el Hanal Pixán —la comida de las ánimas— con la astronomía y cosmovisión maya: rituales, música en vivo y observación guiada del cielo nocturno. Horario y sede por anunciarse.",
-      en: "An evening blending Hanal Pixán — the food of the souls — with Maya astronomy and cosmology: rituals, live music and guided stargazing. Time and venue to be announced.",
-    },
-    startAt: "2026-11-02",
-    endAt: "2026-11-02T23:59:59-05:00",
-    venue: {
-      name: { es: "Felipe Carrillo Puerto (sede por anunciarse)", en: "Felipe Carrillo Puerto (venue TBA)" },
-    },
-    category: "culture",
-    contactNote: "Verified Oct 2026. Evening event Nov 2; exact time/venue pending announcement.",
-    sourceUrl: "https://www.facebook.com/share/p/19wm5vi8bw/",
-    status: "published",
-    lastUpdated: "2026-10-21",
-  },
-  {
-    id: "desfile-de-animas-2026",
-    title: {
-      es: "Desfile de Ánimas — Janal Pixan",
-      en: "Parade of Souls — Janal Pixan",
-    },
-    description: {
-      es: "Las ánimas recorrerán las calles del centro en el Desfile de Ánimas, parte de las actividades del Janal Pixan que honran la memoria de quienes viven por siempre en nuestros corazones. Consulta la ruta oficial en la publicación del Ayuntamiento.",
-      en: "The souls walk the downtown streets in the Parade of Souls, part of the Janal Pixan activities honoring those who live forever in our hearts. See the official route in the City Hall post.",
-    },
-    startAt: "2026-10-31",
-    endAt: "2026-10-31T23:59:59-05:00",
-    venue: {
-      name: { es: "Calles del centro histórico, FCP", en: "Downtown streets, FCP" },
-    },
-    category: "culture",
-    contactNote: "Verified Oct 2026. Route published by the Ayuntamiento — check the source post for the derrotero before attending.",
-    sourceUrl: "https://www.facebook.com/share/p/1E25jnzfv9/",
-    status: "published",
-    lastUpdated: "2026-10-26",
-  },
-  {
-    id: "janal-pixan-noche-musical-2026",
-    title: {
-      es: "Janal Pixan — Noche de música: Chan Santa Roots y Cheetos y su Grupo Tenaz",
-      en: "Janal Pixan — Music night: Chan Santa Roots and Cheetos y su Grupo Tenaz",
-    },
-    description: {
-      es: "El 1 de noviembre, noche de ritmo y ambiente con Chan Santa Roots y Cheetos y su Grupo Tenaz, dentro de la cartelera del Janal Pixan — entre aromas, colores y recuerdos. Consulta la cartelera completa en la publicación del Ayuntamiento.",
-      en: "On November 1, a night of rhythm with Chan Santa Roots and Cheetos y su Grupo Tenaz, part of the Janal Pixan program — among aromas, colors and memories. See the full schedule in the City Hall post.",
-    },
-    startAt: "2026-11-01",
-    endAt: "2026-11-01T23:59:59-05:00",
-    venue: {
-      name: { es: "Felipe Carrillo Puerto (sede por confirmar en cartelera)", en: "Felipe Carrillo Puerto (venue per official schedule)" },
-    },
-    category: "culture",
-    contactNote: "Verified Oct 2026. Time and venue per the Ayuntamiento cartelera; two posts cover the same Nov 1 celebration.",
-    sourceUrl: "https://www.facebook.com/share/p/1d3F4pECSA/",
-    status: "published",
-    lastUpdated: "2026-10-26",
   },
   {
     id: "uqroo-tsikbal-jaanal-pixan-2026",
