@@ -163,14 +163,6 @@ export default function HighwayMap({ placesIndex, events = [] }) {
   const [showEvents, setShowEvents] = useState(true);
   const showEventsRef = useRef(true);
   const text = uiText(language);
-  // Monument hero: the h1 splits the heading at its first space — the lead
-  // verb becomes a small charcoal kicker line and the remaining three words
-  // (the same proper-noun phrase in both languages) become the wordmark,
-  // one word per line, one span per letter. FELIPE sits in terracotta and
-  // PUERTO in turquoise; only CARRILLO sweeps between them. The uppercase
-  // and the extrusion live in CSS, so the source text stays the plain i18n
-  // sentence.
-  const [headingLead, ...wordmarkWords] = text.heading.split(" ");
   const references = listingReferences(placesIndex);
   const filteredReferences =
     category === "all"
@@ -675,20 +667,17 @@ export default function HighwayMap({ placesIndex, events = [] }) {
       <section className="hero" aria-label={text.heading}>
         <p className="hero__eyebrow">{text.heroEyebrow}</p>
         <h1 className="hero__wordmark">
-          <span className="hero__wordmark-lead">{headingLead}</span>{" "}
-          <span className="hero__wordmark-stack" aria-hidden="true">
-            {wordmarkWords.map((word, wordIndex) => (
-              <span className="hero__wordmark-line" key={word} data-word={word}>
-                {wordIndex > 0 ? " " : null}
-                {Array.from(word).map((letter, letterIndex) => (
-                  <span key={`${word}-${letterIndex}`} className="hero__letter">
-                    {letter}
-                  </span>
-                ))}
-              </span>
-            ))}
+          <span className="hero__wordmark-visual" aria-hidden="true">
+            <img
+              className="hero__letters"
+              src="/img/fcp-letters.webp"
+              alt=""
+              width={1920}
+              height={852}
+              decoding="async"
+            />
           </span>
-          <span className="visually-hidden"> {wordmarkWords.join(" ")}</span>
+          <span className="visually-hidden">{text.heading}</span>
         </h1>
         <p className="hero__subheading">{text.heroSubheading}</p>
         <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
