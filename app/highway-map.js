@@ -164,12 +164,15 @@ export default function HighwayMap({ placesIndex, events = [] }) {
   const [showEvents, setShowEvents] = useState(true);
   const showEventsRef = useRef(true);
   const text = uiText(language);
-  // Text-forward hero: the verb stays charcoal, the city name carries the
-  // terracotta accent. The city name is the same proper-noun phrase in both
-  // languages, so everything after the first word accents without touching
-  // the i18n strings.
-  const [headingLead, ...headingAccentWords] = text.heading.split(" ");
-  const headingAccent = headingAccentWords.join(" ");
+  // Monument hero: the h1 splits the heading at its first space — the lead
+  // verb becomes a small charcoal kicker line and the remaining three words
+  // (the same proper-noun phrase in both languages) become the wordmark,
+  // one word per line, one span per letter. The palette sweep, the
+  // uppercase, and the extrusion all live in CSS, so the source text stays
+  // the plain i18n sentence.
+  const [headingLead, ...wordmarkWords] = text.heading.split(" ");
+  const wordmarkLetterTotal = wordmarkWords.reduce((n, word) => n + word.length, 0);
+  let wordmarkLetterIndex = 0;
   const references = listingReferences(placesIndex);
   const filteredReferences =
     category === "all"
@@ -672,33 +675,50 @@ export default function HighwayMap({ placesIndex, events = [] }) {
   return (
     <>
       <section className="hero" aria-label={text.heading}>
-        <div className="map-header">
-          <div className="hero__title-block">
-            <p className="hero__eyebrow">{text.heroEyebrow}</p>
-            <h1>
-              {headingLead}{" "}
-              <span className="hero__accent">{headingAccent}</span>
-            </h1>
-            <GrecaBand />
-            <p className="hero__subheading">{text.heroSubheading}</p>
-          </div>
-          <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
-            {LANGUAGES.map(({ id, label, name }) => (
-              <button
-                key={id}
-                type="button"
-                lang={id}
-                aria-label={name}
-                aria-pressed={language === id}
-                onClick={() => {
-                  selectedLanguage.current = id;
-                  setLanguage(id);
-                }}
-              >
-                {label}
-              </button>
+        <p className="hero__eyebrow">{text.heroEyebrow}</p>
+        <h1 className="hero__wordmark">
+          <span className="hero__wordmark-lead">{headingLead}</span>{" "}
+          <span className="hero__wordmark-stack">
+            {wordmarkWords.map((word, wordIndex) => (
+              <span className="hero__wordmark-line" key={word} data-word={word}>
+                {wordIndex > 0 ? " " : null}
+                {Array.from(word).map((letter, letterIndex) => {
+                  const sweep =
+                    wordmarkLetterTotal > 1
+                      ? (wordmarkLetterIndex++ / (wordmarkLetterTotal - 1)) * 100
+                      : 0;
+                  return (
+                    <span
+                      key={`${word}-${letterIndex}`}
+                      className="hero__letter"
+                      style={{ "--t": `${sweep}%` }}
+                    >
+                      {letter}
+                    </span>
+                  );
+                })}
+              </span>
             ))}
-          </div>
+          </span>
+        </h1>
+        <GrecaBand />
+        <p className="hero__subheading">{text.heroSubheading}</p>
+        <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
+          {LANGUAGES.map(({ id, label, name }) => (
+            <button
+              key={id}
+              type="button"
+              lang={id}
+              aria-label={name}
+              aria-pressed={language === id}
+              onClick={() => {
+                selectedLanguage.current = id;
+                setLanguage(id);
+              }}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </section>
       <div className="offline-quickbar" role="region" aria-label={text.offlineHeading}>
