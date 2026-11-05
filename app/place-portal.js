@@ -130,6 +130,46 @@ export default function PlacePortal({
               ))}
             </dl>
           )}
+          {view.emailAction && (
+            <div className="place-portal__actions">
+              <a href={view.emailAction.href}>{view.emailAction.label}</a>
+            </div>
+          )}
+          {view.socialLinks.length > 0 && (
+            <ul className="place-portal__links">
+              {view.socialLinks.map(({ id, label, href }) => (
+                <li key={id}>
+                  <a href={href} target="_blank" rel="noopener noreferrer">
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+          {view.officialSources && (
+            <div className="place-portal__sources">
+              <h4 className="place-portal__subheading">{view.officialSources.label}</h4>
+              <ul className="place-portal__links">
+                {view.officialSources.links.map(({ href, text }) => (
+                  <li key={href}>
+                    <a href={href} target="_blank" rel="noopener noreferrer">
+                      {text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {view.accessibility && (
+            <div className="place-portal__accessibility">
+              <h4 className="place-portal__subheading">{view.accessibility.label}</h4>
+              <ul className="place-portal__facts">
+                {view.accessibility.lines.map((line, index) => (
+                  <li key={index}>{line}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           {view.verificationNote && (
             <p className="place-portal__verification">
               <strong>{view.verificationLabel}:</strong> {view.verificationNote}

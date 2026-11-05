@@ -645,6 +645,47 @@ p {
   color: #5c4d42;
 }
 
+.place-portal__subheading {
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.place-portal__links {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  margin: 0 0 0.6rem;
+  padding: 0;
+}
+
+.place-portal__links a {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #a75030;
+}
+
+.place-portal__links a:hover {
+  color: var(--charcoal);
+}
+
+.place-portal__links a:focus-visible {
+  outline: 2px solid #3c3028;
+  outline-offset: 2px;
+}
+
+.place-portal__facts {
+  margin: 0 0 0.6rem;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+  color: #5c4d42;
+}
+
+.place-portal__facts li + li {
+  margin-top: 0.15rem;
+}
+
 .place-portal__actions a {
   display: inline-flex;
   align-items: center;
