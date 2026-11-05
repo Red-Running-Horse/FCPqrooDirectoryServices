@@ -551,4 +551,25 @@ test("the homepage mounts the sections in order: banner, community strip, then m
     page.indexOf("<UpcomingEvents />") < page.indexOf("<HighwayMap"),
     "community strip before the map",
   );
+
+  // Full-bleed: the banner renders before <main> — outside both the 90rem
+  // padded page column and the 60rem content wrapper — so it spans the
+  // viewport edge to edge, like the site header above it. The strip and
+  // map stay contained.
+  assert.ok(
+    page.indexOf("<FeaturedPartners />") < page.indexOf("<main>"),
+    "the banner is mounted outside the padded <main> column",
+  );
+  const wrapper = page.indexOf('maxWidth: "60rem"');
+  assert.ok(
+    page.indexOf("<UpcomingEvents />") > wrapper,
+    "the community strip stays inside the padded wrapper",
+  );
+
+  // The band full-bleeds by structure, not by viewport units — so the
+  // vertical scrollbar can never trigger horizontal overflow.
+  const css = read("../app/featured-partners.css");
+  assert.doesNotMatch(css, /100vw/, "no viewport-width unit in the banner styles");
+  assert.doesNotMatch(css, /border-radius:\s*12px/, "full-bleed band drops the card corners");
+  assert.match(css, /border-top:\s*2px solid var\(--marigold\)/, "the marigold top rule survives the bleed");
 });

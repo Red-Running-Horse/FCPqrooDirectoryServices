@@ -9,8 +9,12 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 12px;
-  border: 2px solid var(--marigold);
+  /* Full-bleed: the band lives outside the 60rem padded wrapper, flush to
+     the viewport edges — no rounded corners, no side borders. No width is
+     set anywhere: the block spans its containing <main>, so the classic
+     viewport-width scrollbar trap never applies. */
+  border-top: 2px solid var(--marigold);
+  border-bottom: 2px solid var(--marigold);
   background: var(--sand-deep);
   margin-bottom: 1rem;
 }

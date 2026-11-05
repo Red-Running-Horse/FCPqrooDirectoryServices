@@ -18,18 +18,20 @@ const structuredData = {
 
 export default function Home() {
   return (
-    <main>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
-        }}
-      />
-      <div style={{ maxWidth: "60rem", margin: "0 auto", padding: "0 1rem" }}>
-        <FeaturedPartners />
-        <UpcomingEvents />
-      </div>
-      <HighwayMap placesIndex={placesIndex} events={events} />
-    </main>
+    <>
+      <FeaturedPartners />
+      <main>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+          }}
+        />
+        <div style={{ maxWidth: "60rem", margin: "0 auto", padding: "0 1rem" }}>
+          <UpcomingEvents />
+        </div>
+        <HighwayMap placesIndex={placesIndex} events={events} />
+      </main>
+    </>
   );
 }
