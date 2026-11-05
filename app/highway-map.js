@@ -676,30 +676,19 @@ export default function HighwayMap({ placesIndex, events = [] }) {
         <p className="hero__eyebrow">{text.heroEyebrow}</p>
         <h1 className="hero__wordmark">
           <span className="hero__wordmark-lead">{headingLead}</span>{" "}
-          <span className="hero__wordmark-stack">
+          <span className="hero__wordmark-stack" aria-hidden="true">
             {wordmarkWords.map((word, wordIndex) => (
               <span className="hero__wordmark-line" key={word} data-word={word}>
                 {wordIndex > 0 ? " " : null}
-                {Array.from(word).map((letter, letterIndex) => {
-                  const sweep =
-                    wordIndex === 0
-                      ? 0
-                      : wordIndex === wordmarkWords.length - 1
-                        ? 100
-                        : (letterIndex / Math.max(1, word.length - 1)) * 100;
-                  return (
-                    <span
-                      key={`${word}-${letterIndex}`}
-                      className="hero__letter"
-                      style={{ "--t": `${sweep}%` }}
-                    >
-                      {letter}
-                    </span>
-                  );
-                })}
+                {Array.from(word).map((letter, letterIndex) => (
+                  <span key={`${word}-${letterIndex}`} className="hero__letter">
+                    {letter}
+                  </span>
+                ))}
               </span>
             ))}
           </span>
+          <span className="visually-hidden"> {wordmarkWords.join(" ")}</span>
         </h1>
         <p className="hero__subheading">{text.heroSubheading}</p>
         <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
