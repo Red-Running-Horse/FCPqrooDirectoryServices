@@ -7,11 +7,15 @@ import { UI_TEXT } from "../app/i18n.mjs";
 // Hero monument wordmark contract: the h1 splits text.heading at its first
 // space — word 1 is a small charcoal kicker line in the editorial face, the
 // remaining three words render as a centered per-letter wordmark (FELIPE /
-// CARRILLO / PUERTO) in Baloo 2 weight 800, with a terracotta→turquoise
-// sweep and a 4-step em-based extrusion. The language toggle sits in the
-// hero card's top-right corner. The statue's literal rainbow palette exists
-// behind html[data-theme="statue-faithful"] for review comparison only; the
-// adapted sweep is the default and no UI exposes the toggle.
+// CARRILLO / PUERTO) in Baloo 2 weight 800. FELIPE is terracotta, CARRILLO
+// carries the per-letter terracotta→turquoise sweep, PUERTO is turquoise,
+// over a 4-step em-based extrusion. The turquoise eyebrow kicker sits
+// centered above the wordmark — clearing the corner toggle at narrow
+// widths — and the caption is centered below. The wordmark carries no
+// fret. The language toggle sits in the hero card's top-right corner. The
+// statue's literal rainbow palette exists behind
+// html[data-theme="statue-faithful"] for review comparison only; the
+// adapted palette is the default and no UI exposes the toggle.
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 
 function* walk(dir) {
@@ -59,17 +63,25 @@ test("one h1, a centered wordmark stack derived from the heading split", () => {
   assert.match(map, /className="hero__letter"/, "one span per letter");
   assert.match(map, /style=\{\{ "--t": `\$\{sweep\}%` \}\}/, "each letter carries the sweep position");
 
-  // Source order: kicker eyebrow → wordmark → fret → subheading → toggle.
+  // No fret under the wordmark: the hero markup renders no raw SVG
+  // pattern markup (no inline <svg>/<defs>/<pattern> of any kind).
+  const heroMarkup = map.slice(
+    map.indexOf('<section className="hero"'),
+    map.indexOf("</section>", map.indexOf('<section className="hero"')),
+  );
+  assert.doesNotMatch(heroMarkup, /<svg/, "no svg inlined in the hero markup");
+  assert.doesNotMatch(heroMarkup, /<defs/, "no raw <defs> in the hero markup");
+  assert.doesNotMatch(heroMarkup, /greca-pattern/, "no raw greca-pattern in the hero markup");
+
+  // Source order: kicker → wordmark → subheading → toggle.
   const eyebrow = map.indexOf('className="hero__eyebrow"');
   const h1 = map.indexOf('<h1 className="hero__wordmark">');
-  const fret = map.indexOf("<GrecaBand />");
   const sub = map.indexOf('className="hero__subheading"');
   const toggle = map.indexOf('className="language-toggle"');
   assert.ok(
-    eyebrow > -1 && eyebrow < h1 && h1 < fret && fret < sub && sub < toggle,
-    "eyebrow, wordmark, fret, subheading, toggle render in that order",
+    eyebrow > -1 && eyebrow < h1 && h1 < sub && sub < toggle,
+    "kicker, wordmark, subheading, toggle render in that order",
   );
-  assert.match(map, /import GrecaBand from "\.\/greca";/, "fret motif component imported");
 });
 
 test("hero stays text-forward: sign image gone, no hero__mark anywhere", () => {
@@ -124,8 +136,9 @@ test("Baloo 2 800 font loading: swap, latin + latin-ext, metric-matched fallback
   assert.match(wordmark, /font-size:\s*clamp\(/, "clamp sizing");
 });
 
-test("adapted terracotta→turquoise sweep is the default; statue-faithful is gated and unexposed", () => {
+test("adapted palette: FELIPE terracotta, per-letter sweep across CARRILLO, PUERTO turquoise", () => {
   const theme = read("../app/maya-theme.css");
+  const map = read("../app/highway-map.js");
 
   const letter = theme.match(/\.hero__letter\s*\{([^}]*)\}/)?.[1];
   assert.match(
@@ -139,6 +152,32 @@ test("adapted terracotta→turquoise sweep is the default; statue-faithful is ga
     "extrusion shade ~25% darker than the letter color",
   );
   assert.match(letter, /color:\s*var\(--c\)/, "letters paint with the sweep color");
+
+  // The per-word palette assignment is derived from the split: the first
+  // word is pinned to terracotta (0%), the last to turquoise (100%), and
+  // only the middle word sweeps, letter by letter.
+  assert.match(map, /wordIndex === 0\s*\n\s*\?\s*0/, "FELIPE pinned to terracotta");
+  assert.match(
+    map,
+    /wordIndex === wordmarkWords\.length - 1\s*\n\s*\?\s*100/,
+    "PUERTO pinned to turquoise",
+  );
+  assert.match(
+    map,
+    /letterIndex \/ Math\.max\(1, word\.length - 1\)/,
+    "CARRILLO letters sweep between the two anchors",
+  );
+
+  // Three solid blocks would be wrong: outside the faithful theme, no rule
+  // may paint a whole wordmark line one flat color — the per-word palette is
+  // derived in the markup (FELIPE pinned to 0%, PUERTO to 100%) and only
+  // CARRILLO sweeps, letter by letter.
+  const defaultPalette = theme.replace(/html\[data-theme="statue-faithful"\][^{]*\{[^}]*\}\s*/g, "");
+  assert.doesNotMatch(
+    defaultPalette,
+    /\.hero__wordmark-line:nth-child\(\d\)\s+\.hero__letter\s*\{[^}]*--c:/,
+    "default palette never blocks a whole line to one color",
+  );
 
   // The faithful palette is review-only: scoped to the data-theme selector
   // and applied per statue letter line (FELIPE / CARRILLO / PUERTO).
@@ -213,6 +252,52 @@ test("language toggle parks in the hero card's top-right corner, padding-aware",
   // Behavior and accessibility are unchanged: same group, same buttons.
   assert.match(map, /className="language-toggle" role="group" aria-label=\{`\$\{text\.languageLabel\} \/ Language`\}/);
   assert.match(map, /aria-pressed=\{language === id\}/, "pressed state still drives the active language");
+});
+
+test("hero composition is fully centered — kicker above, caption below", () => {
+  const theme = read("../app/maya-theme.css");
+  const map = read("../app/highway-map.js");
+
+  // The eyebrow opens the centered stack: its top margin clears the corner
+  // toggle at narrow widths, where the centered kicker shares the top band.
+  const eyebrow = theme.match(/\.hero__eyebrow\s*\{([^}]*)\}/)?.[1];
+  assert.match(eyebrow, /text-align:\s*center/, "eyebrow centered");
+  assert.match(eyebrow, /margin:\s*2\.7rem 0 0\.3rem/, "toggle clearance above, air below");
+
+  // Source order inside the section: kicker, then the wordmark, then caption.
+  const kicker = map.indexOf('className="hero__eyebrow"');
+  const h1 = map.indexOf('<h1 className="hero__wordmark">');
+  const caption = map.indexOf('className="hero__subheading"');
+  assert.ok(
+    kicker > -1 && kicker < h1 && h1 < caption,
+    "kicker renders above the wordmark, caption below",
+  );
+
+  // No left-aligned remnants of the old title block.
+  const sub = theme.match(/\.hero__subheading\s*\{([^}]*)\}/)?.[1];
+  assert.match(sub, /text-align:\s*center/, "caption centered");
+  assert.match(sub, /margin-inline:\s*auto/, "caption block centered on desktop");
+});
+
+test("monument scale: desktop clamp raises CARRILLO to ~70–80% of the hero width", () => {
+  const theme = read("../app/maya-theme.css");
+  const desktop = theme.match(/@media\s*\(min-width:\s*48rem\)\s*\{([\s\S]*?)\n\}/)?.[1];
+  assert.ok(desktop, "desktop media query exists");
+
+  const wordmark = desktop.match(/\.hero__wordmark\s*\{([^}]*)\}/)?.[1];
+  assert.match(
+    wordmark,
+    /font-size:\s*clamp\(4\.5rem,\s*15\.2vw,\s*13rem\)/,
+    "desktop wordmark clamp raised to monument scale",
+  );
+
+  const lead = desktop.match(/\.hero__wordmark-lead\s*\{([^}]*)\}/)?.[1];
+  assert.match(lead, /font-size:\s*clamp\(/, "lead keeps a smaller, consistent measure");
+
+  // Above the breakpoint the centered kicker clears the toggle horizontally,
+  // so it needs only a breath of air — not the narrow-width clearance.
+  const eyebrow = desktop.match(/\.hero__eyebrow\s*\{([^}]*)\}/)?.[1];
+  assert.match(eyebrow, /margin-top:\s*0\.4rem/, "desktop kicker sits near the card's top");
 });
 
 test("CARRILLO light-sweep garnish: slow pass, CARRILLO only, frozen under reduced motion", () => {

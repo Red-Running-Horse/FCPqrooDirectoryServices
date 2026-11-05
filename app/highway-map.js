@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { isMultiCategory, placeCategoryBackground, placeCategoryStyle } from "./category-colors.mjs";
 import { categoryIconSvg } from "./category-icons.mjs";
-import GrecaBand from "./greca";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
 import { entryKind, eventMarkerPosition, eventPopupView, upcomingEvents } from "./event-utils.mjs";
 import { syncMarkerSelection } from "./marker-selection.mjs";
@@ -167,12 +166,11 @@ export default function HighwayMap({ placesIndex, events = [] }) {
   // Monument hero: the h1 splits the heading at its first space — the lead
   // verb becomes a small charcoal kicker line and the remaining three words
   // (the same proper-noun phrase in both languages) become the wordmark,
-  // one word per line, one span per letter. The palette sweep, the
-  // uppercase, and the extrusion all live in CSS, so the source text stays
-  // the plain i18n sentence.
+  // one word per line, one span per letter. FELIPE sits in terracotta and
+  // PUERTO in turquoise; only CARRILLO sweeps between them. The uppercase
+  // and the extrusion live in CSS, so the source text stays the plain i18n
+  // sentence.
   const [headingLead, ...wordmarkWords] = text.heading.split(" ");
-  const wordmarkLetterTotal = wordmarkWords.reduce((n, word) => n + word.length, 0);
-  let wordmarkLetterIndex = 0;
   const references = listingReferences(placesIndex);
   const filteredReferences =
     category === "all"
@@ -684,9 +682,11 @@ export default function HighwayMap({ placesIndex, events = [] }) {
                 {wordIndex > 0 ? " " : null}
                 {Array.from(word).map((letter, letterIndex) => {
                   const sweep =
-                    wordmarkLetterTotal > 1
-                      ? (wordmarkLetterIndex++ / (wordmarkLetterTotal - 1)) * 100
-                      : 0;
+                    wordIndex === 0
+                      ? 0
+                      : wordIndex === wordmarkWords.length - 1
+                        ? 100
+                        : (letterIndex / Math.max(1, word.length - 1)) * 100;
                   return (
                     <span
                       key={`${word}-${letterIndex}`}
@@ -701,7 +701,6 @@ export default function HighwayMap({ placesIndex, events = [] }) {
             ))}
           </span>
         </h1>
-        <GrecaBand />
         <p className="hero__subheading">{text.heroSubheading}</p>
         <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
           {LANGUAGES.map(({ id, label, name }) => (

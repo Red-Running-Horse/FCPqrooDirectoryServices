@@ -154,14 +154,22 @@
   position: relative;   /* the language toggle anchors to this card's corner */
 }
 
+/* The eyebrow opens the centered stack: a turquoise kicker line above the
+   wordmark. Its top margin clears the corner toggle at narrow widths,
+   where the centered kicker shares the hero's top band with it. */
+.hero__eyebrow {
+  text-align: center;
+  margin: 2.7rem 0 0.3rem;
+}
+
 /* The h1 is a centered stack: the lead verb sits in the editorial face,
    charcoal; the three-word name below renders in Baloo 2, one word per
-   line. Sizing is clamped so the whole hero stays ~220–260px tall at a
-   360px viewport and the map's top edge stays visible. */
+   line. Sizing is clamped to keep the hero compact at a 360px viewport
+   so the map's top edge stays visible. */
 .hero__wordmark {
   margin: 0;
   font-family: "Baloo 2", "Baloo 2 Fallback", var(--font-body);
-  font-size: clamp(2rem, 9.4vw, 4rem);
+  font-size: clamp(2rem, 9.4vw, 5rem);
   line-height: 1;
   letter-spacing: 0.01em;
   text-align: center;
@@ -194,9 +202,10 @@
 
 /* Per-letter spans carry the sweep position (--t, set inline as a percent)
    and derive the face color plus a ~25%-darker extrusion shade. Default
-   palette: a terracotta→turquoise sweep across the wordmark. The statue's
-   literal rainbow lives behind html[data-theme="statue-faithful"] below —
-   review-only; no UI exposes it. */
+   palette: FELIPE in terracotta, a per-letter terracotta→turquoise sweep
+   across CARRILLO, PUERTO in turquoise. The statue's literal rainbow lives
+   behind html[data-theme="statue-faithful"] below — review-only; no UI
+   exposes it. */
 .hero__letter {
   --c: color-mix(in oklab, var(--turquoise) var(--t, 0%), var(--terracotta));
   --cd: color-mix(in oklab, var(--c) 75%, #140d08);
@@ -280,12 +289,11 @@ html[data-theme="statue-faithful"] .hero__wordmark-line:nth-child(3) .hero__lett
   }
 }
 
-/* Stepped-fret underline for the wordmark: the shared greca band capped to
-   ornament width, sized in rem so it scales with the root font size. */
-.hero > .greca {
-  width: 8.5rem;
-  height: 0.7rem;
-  margin: 0.45rem 0 0.1rem;
+/* Caption centered under the monument. */
+.hero__subheading {
+  text-align: center;
+  margin-inline: auto;
+  margin-top: 0.3rem;
 }
 
 /* Language toggle: parked in the hero card's top-right corner, inset by
@@ -302,6 +310,23 @@ html[data-theme="statue-faithful"] .hero__wordmark-line:nth-child(3) .hero__lett
   .language-toggle {
     top: 0.9rem;
     inset-inline-end: 1rem;
+  }
+
+  /* Monument scale: CARRILLO, the longest line, spans roughly 70–80% of
+     the hero card width at desktop viewports. */
+  .hero__wordmark {
+    font-size: clamp(4.5rem, 15.2vw, 13rem);
+  }
+
+  /* The lead verb keeps a consistent, smaller measure under the monument. */
+  .hero__wordmark-lead {
+    font-size: clamp(1.05rem, 1.6vw, 2rem);
+  }
+
+  /* Above this width the centered kicker clears the toggle horizontally,
+     so it needs only a breath of air above it. */
+  .hero__eyebrow {
+    margin-top: 0.4rem;
   }
 }
 
