@@ -272,5 +272,17 @@
       "es": "El Tekaxeño",
       "en": "El Tekaxeño"
     }
+  },
+  {
+    "id": "selva-morena",
+    "category": "lodging",
+    "latitude": 19.62743084397342,
+    "longitude": -87.95014240683298,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Selva Morena",
+      "en": "Selva Morena"
+    }
   }
 ]

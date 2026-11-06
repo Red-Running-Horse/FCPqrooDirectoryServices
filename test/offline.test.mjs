@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   SHARED_CACHE_NAME,
@@ -16,6 +17,7 @@ import {
 import {
   handleServiceWorkerFetch,
   handleServiceWorkerActivate,
+  handleServiceWorkerInstall,
 } from "../app/sw-handler.mjs";
 import { placePortal } from "../app/place-portal.mjs";
 import { uiText } from "../app/i18n.mjs";
@@ -260,6 +262,41 @@ test("service worker activate cleans stale shared caches but preserves places an
   assert.ok(remaining.includes(SHARED_CACHE_NAME), "current shared cache preserved");
   assert.ok(remaining.includes(PLACES_CACHE_NAME), "places cache preserved");
   assert.ok(remaining.includes("custom-user-cache"), "unrelated cache preserved");
+});
+
+test("new service worker versions take over: skipWaiting on install, clients.claim after cleanup on activate", async () => {
+  // Install: the waiting phase is skipped so a new SW activates immediately.
+  let skipped = 0;
+  assert.equal(await handleServiceWorkerInstall({ skipWaitingFn: () => (skipped += 1) }), true);
+  assert.equal(skipped, 1, "skipWaiting called once");
+  assert.equal(await handleServiceWorkerInstall({}), false, "no-op without a skipWaiting function");
+
+  // Activate: stale caches are pruned BEFORE clients are claimed, so open tabs
+  // never mix fresh code with a stale shared cache.
+  const { mockCaches } = setupMockEnvironment();
+  await mockCaches.open("fcp-shared-v0");
+  const events = [];
+  const clients = { claim: async () => events.push("claim") };
+  const deletingCaches = {
+    keys: async () => ["fcp-shared-v0", SHARED_CACHE_NAME],
+    delete: async (key) => {
+      events.push(`delete:${key}`);
+      return mockCaches.delete(key);
+    },
+  };
+  const deleted = await handleServiceWorkerActivate({ caches: deletingCaches, clients });
+  assert.deepEqual(deleted, ["fcp-shared-v0"]);
+  assert.deepEqual(events, ["delete:fcp-shared-v0", "claim"], "cleanup completes before the takeover");
+});
+
+test("the shipped service worker self-heals: skipWaiting on install, clients.claim on activate", () => {
+  const sw = readFileSync(new URL("../public/sw.js", import.meta.url), "utf8");
+  assert.match(sw, /addEventListener\("install"[^)]*\)\s*=>\s*\{[^}]*self\.skipWaiting\(\)/s, "install skips the waiting phase");
+  assert.match(sw, /self\.clients\.claim\(\)/, "activate claims open clients");
+  assert.ok(
+    sw.indexOf("clients.claim") > sw.indexOf("caches"),
+    "claim runs after cache cleanup in the activate handler",
+  );
 });
 
 test("service worker fetch handles navigation, saved places, and unsaved places offline", async () => {

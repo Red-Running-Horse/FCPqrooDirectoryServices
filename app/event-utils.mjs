@@ -37,7 +37,11 @@ export function eventStartMs(event) {
 
 export function eventEndMs(event) {
   const explicit = parseCancunDateTime(event?.endAt);
-  if (explicit !== null) return explicit;
+  if (explicit !== null) {
+    // A date-only endAt means the event runs through that whole day: the last
+    // moment of the day in Cancun, matching the legacy dateEnd handling below.
+    return DATE_ONLY.test(event.endAt.trim()) ? explicit + DAY_MS - 1 : explicit;
+  }
   // Legacy whole-day end date: the last moment of that day in Cancun.
   const legacyDay = parseCancunDateTime(event?.dateEnd);
   if (legacyDay !== null) return legacyDay + DAY_MS - 1;
@@ -127,16 +131,26 @@ function dateTimeFormatters(language) {
 
 // Human range in the requested language, always in Cancun wall time:
 // "15 oct 2026, 18:00" (start only), "15 oct 2026, 18:00–22:00" (same day),
-// "15 oct – 20 dic 2026" (spanning days). Falls back to the raw value when the
+// "15 oct – 20 dic 2026" (spanning days). A date-only endAt runs through that
+// whole day: same-day shows the start date and time only (no fabricated end
+// time), a later day shows the span. Falls back to the raw value when the
 // event carries no parseable start.
 export function formatEventRange(event, language) {
   const startMs = eventStartMs(event);
   if (startMs === null) return event?.startAt ?? "";
   const { date, time } = dateTimeFormatters(language);
-  const endExplicit = parseCancunDateTime(event?.endAt);
-  if (endExplicit === null) {
+  const endAt = typeof event?.endAt === "string" ? event.endAt.trim() : "";
+  if (endAt === "") {
     return `${date.format(startMs)}, ${time.format(startMs)}`;
   }
+  const endMs = eventEndMs(event);
+  if (DATE_ONLY.test(endAt)) {
+    if (date.format(startMs) === date.format(endMs)) {
+      return `${date.format(startMs)}, ${time.format(startMs)}`;
+    }
+    return `${date.format(startMs)} – ${date.format(endMs)}`;
+  }
+  const endExplicit = parseCancunDateTime(endAt);
   if (date.format(startMs) === date.format(endExplicit)) {
     return `${date.format(startMs)}, ${time.format(startMs)}–${time.format(endExplicit)}`;
   }

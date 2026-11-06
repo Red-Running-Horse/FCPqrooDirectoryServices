@@ -999,6 +999,30 @@ export const attractions = [
     contactNote: "Editor visited Oct 2026 — food and service confirmed. Inside the Mercado Público food court (~10 seats at two tables); pin dropped at the stall.",
     lastUpdated: "2026-10-29",
   },
+  {
+    id: "selva-morena",
+    name: { es: "Selva Morena", en: "Selva Morena" },
+    description: {
+      es: "Cabañas de estilo maya contemporáneo en la selva (Junior y Master con jacuzzi), restaurante orgánico y centro de bienestar: temazcal, ceremonia de cacao, ritual de luna llena, yoga y terapias de sanación. Senderos, avistamiento de aves, jardín botánico y meliponario; tours a sitios sagrados mayas, cenotes y lagunas. LGBTQ+ friendly.",
+      en: "Contemporary Maya-style jungle cabins (Junior and Master with jacuzzi), an organic restaurant and wellness center: temazcal, cacao ceremony, full-moon ritual, yoga and healing therapies. Trails, birdwatching, botanical garden and meliponario; tours to sacred Maya sites, cenotes and lagoons. LGBTQ+ friendly.",
+    },
+    latitude: 19.62743084397342,
+    longitude: -87.95014240683298,
+    category: "lodging",
+    status: "unverified",
+    locationAccuracy: "approximate",
+    directionsUrl: null,
+    email: "selvamorenaoficial@gmail.com",
+    website: "https://selvamorenareserva.wixsite.com/selva-morena",
+    socialLinks: {
+      facebook: "https://www.facebook.com/profile.php?id=61583163982936",
+      instagram: "https://www.instagram.com/selva_morena_oficial",
+      youtube: "https://www.youtube.com/@selva-morena",
+    },
+    verificationSourceUrls: ["https://www.booking.com/hotel/mx/selva-morena-felipe-carrillo-puerto.html"],
+    contactNote: "Verified with the operator Oct 2026 (banner client, kind: offer). Prices: wellness $500, tours $800, cabins $1,000–1,200 MXN. Marker logo pending November feature.",
+    lastUpdated: "2026-11-06",
+  },
 ];
 
 export function filterAttractions(category, query = "") {

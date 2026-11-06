@@ -146,6 +146,23 @@ test("upcoming/past is decided at runtime on America/Cancun time (UTC-5, no DST)
   assert.deepEqual(sorted.map((event) => event.id), ["sooner", "later"]);
 });
 
+test("a date-only endAt runs through the end of that day in Cancun", () => {
+  // Same-day shape (the Desfile / Nov-1 night incidents): a date-only endAt used
+  // to parse as 00:00, expiring the event at the start of its own day.
+  const sameDay = { id: "desfile", startAt: "2026-10-31T21:00:00", endAt: "2026-10-31" };
+  assert.ok(isUpcomingEvent(sameDay, Date.parse("2026-11-01T04:59:59Z")), "open a second before the day ends");
+  assert.ok(!isUpcomingEvent(sameDay, Date.parse("2026-11-01T05:00:00Z")), "closed once Cancun passes midnight");
+
+  // Multi-day span, mirroring the legacy dateEnd handling exactly.
+  const span = { id: "congreso", startAt: "2026-12-18", endAt: "2026-12-19" };
+  assert.ok(isUpcomingEvent(span, Date.parse("2026-12-20T04:59:59Z")));
+  assert.ok(!isUpcomingEvent(span, Date.parse("2026-12-20T05:00:00Z")));
+
+  // An explicit datetime endAt keeps its exact instant — no end-of-day shift.
+  const timed = { id: "timed", startAt: "2026-10-31T20:00:00", endAt: "2026-10-31T22:00:00" };
+  assert.ok(!isUpcomingEvent(timed, Date.parse("2026-11-01T04:00:00Z")), "ended at 22:00 Cancun, hours before midnight");
+});
+
 test("venue resolution: linked places win; free-text venues only get markers with coordinates", () => {
   const linked = events.find((event) => event.venue?.placeId);
   assert.ok(linked, "fixture: expected a linked-venue event");
@@ -209,6 +226,19 @@ test("event date ranges are formatted bilingually in Cancun wall time", () => {
 
   const startOnly = { id: "s", startAt: "2026-10-15T18:00:00-05:00" };
   assert.ok(!formatEventRange(startOnly, "en").includes("–"), "no endAt → single date and time");
+});
+
+test("date-only endAt formats without a fabricated end time", () => {
+  // Same-day whole-day end: shows the start date and time only, never "–00:00".
+  const sameDay = { id: "d", startAt: "2026-10-31T21:00:00", endAt: "2026-10-31" };
+  assert.ok(!formatEventRange(sameDay, "es").includes("–"), "no range marker on a same-day whole-day end");
+  assert.match(formatEventRange(sameDay, "es"), /oct/);
+
+  // Multi-day whole-day end: shows the date span, like an explicit datetime span.
+  const span = { id: "m", startAt: "2026-11-19", endAt: "2026-11-22" };
+  const es = formatEventRange(span, "es");
+  assert.ok(es.includes("–"), "multi-day whole-day end shows both dates");
+  assert.match(es, /nov/);
 });
 
 test("/eventos filters at runtime, includes PROMOTED events and never offers, with JSON-LD for events only", () => {

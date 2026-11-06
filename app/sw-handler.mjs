@@ -81,15 +81,29 @@ export async function handleServiceWorkerFetch({
   return await fetchFn(request);
 }
 
-export async function handleServiceWorkerActivate({ caches }) {
-  if (!caches) return [];
-  const keys = await caches.keys();
-  const deleted = [];
-  for (const key of keys) {
-    if (key.startsWith(SHARED_CACHE_PREFIX) && key !== SHARED_CACHE_NAME) {
-      await caches.delete(key);
-      deleted.push(key);
+// New service worker versions must take over immediately: the install handler
+// skips the waiting phase and the activate handler claims all open clients, so
+// post-deploy visits run fresh code without a manual unregister/reload dance.
+export async function handleServiceWorkerInstall({ skipWaitingFn }) {
+  if (typeof skipWaitingFn !== "function") return false;
+  await skipWaitingFn();
+  return true;
+}
+
+export async function handleServiceWorkerActivate({ caches, clients = null }) {
+  let deleted = [];
+  if (caches) {
+    const keys = await caches.keys();
+    deleted = [];
+    for (const key of keys) {
+      if (key.startsWith(SHARED_CACHE_PREFIX) && key !== SHARED_CACHE_NAME) {
+        await caches.delete(key);
+        deleted.push(key);
+      }
     }
+  }
+  if (clients && typeof clients.claim === "function") {
+    await clients.claim();
   }
   return deleted;
 }

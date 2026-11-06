@@ -19,6 +19,9 @@
 //               Offset-less values read as America/Cancun wall time (UTC-5,
 //               no DST).
 //   endAt       ISO 8601 datetime, optional (defaults to the start instant).
+//               A date-only value ("2026-12-19") runs through that whole day:
+//               the event ends at the last moment of the day in Cancun, so
+//               day-long events stay listed until the day actually ends.
 //   venue       { placeId? } links a directory place; otherwise a free-text
 //               bilingual { name } with optional latitude/longitude for the
 //               map marker (no coordinates → no marker).
@@ -97,7 +100,7 @@ const events = [
       en: "Two-day Christian revival congress themed 'Flames of Fire.' Public event organized by Congreso de Avivamiento in Felipe Carrillo Puerto; specific venue to be confirmed.",
     },
     startAt: "2026-12-18",
-    endAt: "2026-12-19T23:59:59-05:00",
+    endAt: "2026-12-19",
     venue: {
       name: {
         es: "Felipe Carrillo Puerto (sede por confirmar)",
@@ -124,11 +127,7 @@ const events = [
     },
     startAt: "2026-10-15",
     endAt: "2026-12-31",
-    venue: {
-      name: { es: "Selva Morena, Felipe Carrillo Puerto", en: "Selva Morena, Felipe Carrillo Puerto" },
-      latitude: 19.62743084397342,
-      longitude: -87.95014240683298,
-    },
+    venue: { placeId: "selva-morena" },
     category: "lodging",
     cost: {
       es: "Experiencias de bienestar desde $500 MXN; cabañas desde $1,000 MXN",
@@ -177,7 +176,7 @@ const events = [
       en: "Four days of Caribbean music, art and traditions uniting the region's peoples, with Belize as guest country. FCP programming to be announced.",
     },
     startAt: "2026-11-19",
-    endAt: "2026-11-22T23:59:59-05:00",
+    endAt: "2026-11-22",
     venue: {
       name: { es: "Quintana Roo (sede FCP por anunciarse)", en: "Quintana Roo (FCP venue TBA)" },
     },
