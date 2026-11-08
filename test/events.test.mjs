@@ -450,17 +450,19 @@ test("the community strip lists ALL upcoming EVENTS at runtime as date-first row
   assert.match(source, /text\.promotedBadge/, "paid entries stay labeled");
   const css = read("../app/style.css");
   assert.match(css, /\.upcoming-row/, "compact row styles exist");
-  // Row height sits inside the 48–56px date-first band. An exact border-box
-  // height (never min-height) so content can't inflate the row.
+  // Row height sits inside the roomier 64–72px date-first band, pinned to
+  // the three-line title geometry. An exact border-box height (never
+  // min-height) so content can't inflate the row.
   const rowRule = css.match(/\.upcoming-row\s*\{([^}]*)\}/s)?.[1];
   assert.ok(rowRule, "row rule exists");
   const rowHeight = Number(rowRule.match(/height:\s*(\d+(?:\.\d+)?)px/)?.[1]);
-  assert.ok(rowHeight >= 48 && rowHeight <= 56, `row height ${rowHeight}px inside the 48–56px band`);
+  assert.ok(rowHeight >= 64 && rowHeight <= 72, `row height ${rowHeight}px inside the 64–72px band`);
   assert.match(rowRule, /box-sizing:\s*border-box;/, "height includes the 1px border");
   assert.doesNotMatch(rowRule, /min-height/, "exact height, not min-height");
-  // Titles wrap to two lines max and are NEVER ellipsized: -webkit-line-clamp
-  // is banned here — Chromium appends an ellipsis on its own — so the clamp
-  // is a plain max-height of two line-heights.
+  // Titles wrap to THREE lines max and are never ellipsized: -webkit-line-
+  // clamp is banned here — Chromium appends an ellipsis on its own — so the
+  // clamp is a plain max-height of three line-heights (a clip after the
+  // third line, not an ellipsis before it).
   const titleRule = css.match(/\.upcoming-row__title\s*\{([^}]*)\}/s)?.[1];
   assert.ok(titleRule, "title rule exists");
   assert.doesNotMatch(titleRule, /text-overflow:\s*ellipsis/, "no ellipsis on titles");
@@ -469,9 +471,11 @@ test("the community strip lists ALL upcoming EVENTS at runtime as date-first row
   const titleLineHeight = Number(titleRule.match(/line-height:\s*([\d.]+)/)?.[1]);
   const titleMaxHeight = Number(titleRule.match(/max-height:\s*([\d.]+)em/)?.[1]);
   assert.ok(
-    Math.abs(titleMaxHeight - 2 * titleLineHeight) < 0.01,
-    "max-height clamps the title to exactly two lines",
+    Math.abs(titleMaxHeight - 3 * titleLineHeight) < 0.01,
+    "max-height clamps the title to exactly three lines",
   );
+  const titleFontSize = Number(titleRule.match(/font-size:\s*([\d.]+)rem/)?.[1]);
+  assert.ok(titleFontSize >= 1 && titleFontSize <= 1.15, `title is the larger ~1.05rem size (${titleFontSize}rem)`);
   // The chip stacks day over month on the category color.
   const chipRule = css.match(/\.upcoming-row__date\s*\{([^}]*)\}/s)?.[1];
   assert.match(chipRule, /flex-direction:\s*column/, "chip is a day-over-month column");
@@ -482,9 +486,14 @@ test("the community strip lists ALL upcoming EVENTS at runtime as date-first row
     Number(dayRule.match(/font-size:\s*([\d.]+)rem/)?.[1]) > Number(monthRule.match(/font-size:\s*([\d.]+)rem/)?.[1]),
     "day is prominent, month is small",
   );
+  assert.ok(
+    Number(dayRule.match(/font-size:\s*([\d.]+)rem/)?.[1]) >= 1.1,
+    "chip day scaled up with the roomier row",
+  );
   assert.match(css, /\.upcoming-row:hover\s*\{[^}]*border-color/s, "hover border stays");
-  // Mobile-first: rows keep a readable card width at 360px.
-  assert.match(css, /\.upcoming-strip__scroller > li\s*\{[^}]*flex:\s*0 0 clamp\([^)]*\)/s, "fixed-flex cards");
+  // Mobile-first: cards own ~80vw at 360px (a second card peeks); desktop
+  // cards scale up proportionally inside the column.
+  assert.match(css, /\.upcoming-strip__scroller > li\s*\{[^}]*flex:\s*0 0 clamp\([^)]*80vw[^)]*\)/s, "fixed-flex cards sized ~80vw");
   // Slim single-line header: the scroll hint is gone entirely, and heading +
   // "all events" link share one row barely taller than the text.
   assert.doesNotMatch(source, /upcoming-strip__hint|upcomingScrollHint/, "hint span removed");

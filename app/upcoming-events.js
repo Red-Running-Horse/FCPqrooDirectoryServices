@@ -11,8 +11,9 @@ import { useSiteLanguage } from "./site-language";
 // not, as compact date-first rows between the premium banner and the map.
 // The strip is the site's agenda, not an index: each row leads with a date
 // chip (day prominent, month small, chip background in the event's CATEGORY
-// color — it absorbs the old 4px bar), then the FULL title wrapping to two
-// lines max, never ellipsized. Venues and costs still live on /eventos.
+// color — it absorbs the old 4px bar), then the FULL title wrapping to three
+// lines max, clipped only after the third line, never ellipsized before it.
+// Venues and costs still live on /eventos.
 // Every row links uniformly to /eventos#<id>: /eventos lists promoted events
 // too, so the tiered /promo/<id> shortcut is gone. Promoted events keep a
 // minimal sponsored marker — paid placement is always labeled.

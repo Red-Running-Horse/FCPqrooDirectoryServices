@@ -11,8 +11,8 @@ const market = attractions.find(({ id }) => id === "mercado-felipe-carrillo-puer
 test("a place with markerLogo renders its logo in a 36px marker", () => {
   const view = markerIconView(selvaMorena);
   assert.equal(view.kind, "logo");
-  assert.equal(view.logo, "/img/markers/selva-morena-logo.webp");
-  assert.match(view.html, /<img class="attraction-marker__logo" src="\/img\/markers\/selva-morena-logo\.webp"/);
+  assert.equal(view.logo, "/img/markers/selva-morena-logo.svg");
+  assert.match(view.html, /<img class="attraction-marker__logo" src="\/img\/markers\/selva-morena-logo\.svg"/);
   assert.deepEqual(view.size, [LOGO_MARKER_SIZE, LOGO_MARKER_SIZE]);
   assert.deepEqual(view.anchor, [LOGO_MARKER_SIZE / 2, LOGO_MARKER_SIZE / 2]);
 });
@@ -42,9 +42,9 @@ test("the logo marker ring carries the place's primary category color", () => {
 });
 
 test("the Selva Morena logo asset exists in public/ and the record points at it", () => {
-  const asset = new URL("../public/img/markers/selva-morena-logo.webp", import.meta.url);
-  assert.ok(existsSync(asset), "public/img/markers/selva-morena-logo.webp must exist");
-  assert.equal(selvaMorena.markerLogo, "/img/markers/selva-morena-logo.webp");
+  const asset = new URL("../public/img/markers/selva-morena-logo.svg", import.meta.url);
+  assert.ok(existsSync(asset), "public/img/markers/selva-morena-logo.svg must exist");
+  assert.equal(selvaMorena.markerLogo, "/img/markers/selva-morena-logo.svg");
   // Only Selva Morena carries the field so far.
   const carriers = attractions.filter((place) => place.markerLogo);
   assert.deepEqual(carriers.map(({ id }) => id), ["selva-morena"]);
@@ -61,7 +61,7 @@ test("the Selva Morena logo asset exists in public/ and the record points at it"
 test("the committed index carries markerLogo so first paint can render it", () => {
   const index = JSON.parse(readFileSync(new URL("../public/data/places-index.json", import.meta.url), "utf8"));
   const entry = index.find(({ id }) => id === "selva-morena");
-  assert.equal(entry.markerLogo, "/img/markers/selva-morena-logo.webp");
+  assert.equal(entry.markerLogo, "/img/markers/selva-morena-logo.svg");
   assert.ok(
     index.every((place) => Object.hasOwn(place, "markerLogo") === Boolean(place.markerLogo)),
     "markerLogo appears only when set",

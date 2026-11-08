@@ -16,7 +16,9 @@
   border-top: 2px solid var(--marigold);
   border-bottom: 2px solid var(--marigold);
   background: var(--sand-deep);
-  margin-bottom: 1rem;
+  /* The ribbon's slim header label follows the bar tightly; the global
+     main padding plus this 8px carry the separation. */
+  margin-bottom: 0.5rem;
 }
 
 /* Invisible element that reserves the image area's height in the flow */

@@ -116,8 +116,9 @@
 /* ---------- Hero monument letters ---------- */
 
 /* The statue wordmark renders as a single image (public/img/fcp-letters.webp
-   — a Blender render whose backdrop is baked to this card's cream, #fff7e8,
-   so it blends seamlessly). The visual layer is aria-hidden; the h1 keeps
+   — a Blender render whose backdrop was keyed to transparency in the post
+   pass, so the card's cream shows through and the letters' soft shadows read
+   as partial alpha on it). The visual layer is aria-hidden; the h1 keeps
    the full sentence for screen readers in a visually-hidden span. */
 .hero {
   background: var(--cream);

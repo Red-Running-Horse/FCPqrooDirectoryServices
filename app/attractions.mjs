@@ -1012,7 +1012,7 @@ export const attractions = [
     status: "unverified",
     locationAccuracy: "approximate",
     directionsUrl: null,
-    markerLogo: "/img/markers/selva-morena-logo.webp",
+    markerLogo: "/img/markers/selva-morena-logo.svg",
     email: "selvamorenaoficial@gmail.com",
     website: "https://selvamorenareserva.wixsite.com/selva-morena",
     socialLinks: {

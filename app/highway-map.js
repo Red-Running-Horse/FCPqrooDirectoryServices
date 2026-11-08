@@ -678,7 +678,7 @@ export default function HighwayMap({ placesIndex, events = [] }) {
               src="/img/fcp-letters.webp"
               alt=""
               width={1920}
-              height={852}
+              height={728}
               decoding="async"
             />
           </span>

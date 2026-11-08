@@ -41,7 +41,10 @@ body {
 main {
   max-width: 90rem;
   margin: 0 auto;
-  padding: clamp(0.75rem, 2vw, 1.5rem);
+  /* Top is deliberately tighter than the sides: the homepage chain is
+     full-bleed banner bar → ribbon header, which reads best as one tight
+     unit; sides and bottom keep the roomier clamp. */
+  padding: clamp(0.5rem, 1.2vw, 0.9rem) clamp(0.75rem, 2vw, 1.5rem) clamp(0.75rem, 2vw, 1.5rem);
 }
 
 h1 {
@@ -298,13 +301,14 @@ p {
 
 /* Upcoming events strip (community strip): every upcoming EVENT as a
    compact date-first row — a category-colored chip (day over month), the
-   full title wrapping to two lines max, and a minimal sponsored marker on
+   full title wrapping to three lines max, and a minimal sponsored marker on
    promoted entries (paid placement is always labeled). Every row links
    uniformly to /eventos#<id>. Native scroll-snap; no carousel JS. */
 .upcoming-strip {
-  /* A hair below the full-bleed banner — the gap complaint was about the
-     combined banner→main→strip spacing, and this margin is the strip's part. */
-  margin: 0.4rem 0 0;
+  /* Nearly flush below the full-bleed banner — the banner's own margin and
+     main's top padding carry the separation; this is just a sliver so the
+     slim header label never touches the banner's border. */
+  margin: 0.25rem 0 0;
 }
 
 /* Slim single-line header: heading and /eventos link share one row, barely
@@ -322,6 +326,7 @@ p {
   margin: 0;
   font-family: var(--font-heading);
   font-size: 1rem;
+  line-height: 1.25; /* a slim label line, not a display heading */
   white-space: nowrap;
 }
 
@@ -350,7 +355,9 @@ p {
 }
 
 .upcoming-strip__scroller > li {
-  flex: 0 0 clamp(12rem, 60vw, 15rem);
+  /* Mobile cards own ~80vw (a second card peeks past the edge); desktop
+     cards scale up proportionally inside the 60rem column. */
+  flex: 0 0 clamp(17.5rem, 80vw, 21rem);
   scroll-snap-align: start;
 }
 
@@ -377,17 +384,21 @@ p {
   display: none;
 }
 
-/* Date-first agenda rows: a 52px-tall card with a category-colored date
-   chip (day over month) and the full title wrapping to two lines max —
-   never ellipsized. An exact height (never min-height) so content can't
-   inflate the row; box-sizing makes the 52px include the 1px border. */
+/* Date-first agenda rows: a 72px-tall card with a category-colored date
+   chip (day over month) and the full title wrapping to three lines max —
+   clipped only after the third line, never before. The exact height is
+   pinned to that 3-line geometry: title (1.05rem × 1.05 × 3 = 52.9px) +
+   sponsored line (9.9px) + gaps + padding + border ≈ 71px, so the worst
+   case (three-line title + sponsored marker) just fits. An exact height
+   (never min-height) so content can't inflate the row; box-sizing makes
+   the 72px include the 1px border. */
 .upcoming-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  height: 52px;
+  height: 72px;
   box-sizing: border-box;
-  padding: 0.2rem 0.55rem 0.2rem 0.2rem;
+  padding: 0.15rem 0.6rem 0.15rem 0.15rem;
   background: var(--cream);
   border: 1px solid var(--sand-line);
   border-radius: var(--radius-card);
@@ -402,16 +413,17 @@ p {
 
 /* Date chip — the event's category color is set inline from
    categoryColor(); white text on a soft shadow stays legible across the
-   whole palette. Absorbs the old 4px category bar. */
+   whole palette. Absorbs the old 4px category bar. Scaled to the roomier
+   72px row: a little wider, day and month both up a notch. */
 .upcoming-row__date {
   flex: 0 0 auto;
   align-self: stretch;
-  width: 2.6rem;
+  width: 2.9rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1px;
+  gap: 2px;
   border-radius: 4px;
   color: #fff;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
@@ -420,18 +432,18 @@ p {
 
 .upcoming-row__day {
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-weight: 700;
 }
 
 .upcoming-row__month {
-  font-size: 0.58rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
-/* Title block: the full title (two lines max) with the sponsored marker
+/* Title block: the full title (three lines max) with the sponsored marker
    riding under it on promoted entries. */
 .upcoming-row__body {
   flex: 1 1 auto;
@@ -443,22 +455,24 @@ p {
 }
 
 .upcoming-row__title {
-  /* Two lines max, clipped — deliberately not webkit line-clamping: Chromium
-     appends an ellipsis to -webkit-line-clamped boxes and this contract
-     forbids one. max-height = 2 × line-height; the padding extends the
-     visible box so the second line's descenders survive the clip. */
-  max-height: 2.24em;
+  /* Three lines max, clipped after the third — deliberately not
+     webkit line-clamping: Chromium appends an ellipsis to -webkit-line-
+     clamped boxes and this contract forbids one before the third line.
+     max-height = 3 × line-height; the padding extends the visible box so
+     the last line's descenders survive the clip. */
+  max-height: 3.15em;
   overflow: hidden;
   padding-bottom: 0.15em;
   margin-bottom: -0.15em;
   font-family: var(--font-heading);
-  font-size: 0.85rem;
-  line-height: 1.12;
+  font-size: 1.05rem;
+  line-height: 1.05;
 }
 
 .upcoming-row__sponsored {
   font-size: 0.62rem;
   font-weight: 700;
+  line-height: 1; /* the 72px row is pinned to this worst-case line box */
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--terracotta);

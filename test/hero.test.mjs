@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { closeSync, existsSync, openSync, readFileSync, readSync } from "node:fs";
 import test from "node:test";
 import { UI_TEXT } from "../app/i18n.mjs";
 
 // Hero contract — monument letters edition: the hero renders the Blender
-// letter render (public/img/fcp-letters.webp, backdrop baked to the card
-// cream #fff7e8) as one aria-hidden image inside the h1; the h1 keeps the
-// full localized sentence for screen readers in a visually-hidden span.
+// letter render (public/img/fcp-letters.webp, backdrop keyed to transparency
+// in the post pass — the soft shadows survive as partial alpha and read on
+// this card's cream) as one aria-hidden image inside the h1; the h1 keeps
+// the full localized sentence for screen readers in a visually-hidden span.
 // No letter-span machinery survives — no per-letter spans, no paint or
 // extrusion custom properties, no wordmark webfont, no sheen. The eyebrow,
 // caption and corner language toggle are unchanged.
@@ -24,7 +25,7 @@ test("hero renders the monument letters image inside one accessible h1", () => {
   );
   assert.match(
     map,
-    /<img\s+className="hero__letters"\s+src="\/img\/fcp-letters\.webp"\s+alt=""\s+width=\{1920\}\s+height=\{852\}/,
+    /<img\s+className="hero__letters"\s+src="\/img\/fcp-letters\.webp"\s+alt=""\s+width=\{1920\}\s+height=\{728\}/,
     "the letters image ships with intrinsic dimensions for zero CLS",
   );
   assert.match(
@@ -59,6 +60,19 @@ test("the letters asset exists on disk at public/img/fcp-letters.webp", () => {
     existsSync(new URL("../public/img/fcp-letters.webp", import.meta.url)),
     "the Blender render ships with the repo",
   );
+  // The backdrop is keyed to transparency and the soft shadows ride as
+  // partial alpha, so the webp must be a VP8X container with the alpha flag.
+  const fd = openSync(new URL("../public/img/fcp-letters.webp", import.meta.url));
+  try {
+    const head = Buffer.alloc(32);
+    readSync(fd, head, 0, 32, 0);
+    assert.equal(head.toString("latin1", 0, 4), "RIFF", "RIFF container");
+    assert.equal(head.toString("latin1", 8, 12), "WEBP", "WebP payload");
+    assert.equal(head.toString("latin1", 12, 16), "VP8X", "extended webp (holds an alpha flag)");
+    assert.ok(head[20] & 0x10, "VP8X alpha flag set — the backdrop is transparent");
+  } finally {
+    closeSync(fd);
+  }
 });
 
 test("letter-span machinery is fully gone from markup and both CSS layers", () => {
