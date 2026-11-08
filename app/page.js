@@ -27,10 +27,11 @@ export default function Home() {
             __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
           }}
         />
-        <div style={{ maxWidth: "60rem", margin: "0 auto", padding: "0 1rem" }}>
-          <UpcomingEvents />
-        </div>
-        <HighwayMap placesIndex={placesIndex} events={events} />
+        <HighwayMap placesIndex={placesIndex} events={events}>
+          <div style={{ maxWidth: "60rem", margin: "0 auto", padding: "0 1rem" }}>
+            <UpcomingEvents />
+          </div>
+        </HighwayMap>
       </main>
     </>
   );

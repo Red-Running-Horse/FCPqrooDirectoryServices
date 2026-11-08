@@ -120,7 +120,7 @@ function popupContent(attraction, language) {
   return root;
 }
 
-export default function HighwayMap({ placesIndex, events = [] }) {
+export default function HighwayMap({ placesIndex, events = [], children }) {
   const container = useRef(null);
   const attractionLayer = useRef(null);
   const eventLayer = useRef(null);
@@ -669,40 +669,6 @@ export default function HighwayMap({ placesIndex, events = [] }) {
 
   return (
     <>
-      <section className="hero" aria-label={text.heading}>
-        <p className="hero__eyebrow">{text.heroEyebrow}</p>
-        <h1 className="hero__wordmark">
-          <span className="hero__wordmark-visual" aria-hidden="true">
-            <img
-              className="hero__letters"
-              src="/img/fcp-letters.webp"
-              alt=""
-              width={1920}
-              height={728}
-              decoding="async"
-            />
-          </span>
-          <span className="visually-hidden">{text.heading}</span>
-        </h1>
-        <p className="hero__subheading">{text.heroSubheading}</p>
-        <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
-          {LANGUAGES.map(({ id, label, name }) => (
-            <button
-              key={id}
-              type="button"
-              lang={id}
-              aria-label={name}
-              aria-pressed={language === id}
-              onClick={() => {
-                selectedLanguage.current = id;
-                setLanguage(id);
-              }}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      </section>
       <nav className="category-filters" aria-label={text.filtersLabel}>
         {CATEGORIES.map(({ id, label }) => (
           <button
@@ -790,6 +756,41 @@ export default function HighwayMap({ placesIndex, events = [] }) {
           )}
         </div>
       </div>
+      {children}
+      <section className="hero" aria-label={text.heading}>
+        <p className="hero__eyebrow">{text.heroEyebrow}</p>
+        <h1 className="hero__wordmark">
+          <span className="hero__wordmark-visual" aria-hidden="true">
+            <img
+              className="hero__letters"
+              src="/img/fcp-letters.webp"
+              alt=""
+              width={1920}
+              height={728}
+              decoding="async"
+            />
+          </span>
+          <span className="visually-hidden">{text.heading}</span>
+        </h1>
+        <p className="hero__subheading">{text.heroSubheading}</p>
+        <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
+          {LANGUAGES.map(({ id, label, name }) => (
+            <button
+              key={id}
+              type="button"
+              lang={id}
+              aria-label={name}
+              aria-pressed={language === id}
+              onClick={() => {
+                selectedLanguage.current = id;
+                setLanguage(id);
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </section>
       <div className="map-search" role="search">
         <label className="map-search__label" htmlFor="map-search-input">
           {text.searchLabel}

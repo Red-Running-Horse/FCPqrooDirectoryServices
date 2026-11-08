@@ -273,7 +273,7 @@ test("the map events layer reuses the layer-group pattern without touching the s
   assert.match(initialMarkup, /map-mobile-overlay/);
 });
 
-test("homepage section order (user directive): hero → chips → map → search → quickbar → places → offline management → business CTA", () => {
+test("homepage section order (user directive v2): chips → MAP → ribbon → hero → search → quickbar → places → offline management → business CTA", () => {
   const map = read("../app/highway-map.js");
   const at = (needle) => {
     const i = map.indexOf(needle);
@@ -281,11 +281,12 @@ test("homepage section order (user directive): hero → chips → map → search
     return i;
   };
   const order = [
-    ['<section className="hero"', "hero"],
-    ['<nav className="category-filters"', "category filter chips (stay above the map)"],
-    ['<div className="map-container map-workspace">', "map + portal"],
-    ['<div className="map-search" role="search">', "search box (moved below the map)"],
-    ['<div className="offline-quickbar" role="region"', "offline quickbar (moved below the map)"],
+    ['<nav className="category-filters"', "category filter chips (directly above the map — they filter it)"],
+    ['<div className="map-container map-workspace">', "map + portal (the product, first)"],
+    ["{children}", "ribbon slot — page.js passes UpcomingEvents here, below the map"],
+    ['<section className="hero"', "hero (identity below the ribbon; internals unchanged)"],
+    ['<div className="map-search" role="search">', "search box"],
+    ['<div className="offline-quickbar" role="region"', "offline quickbar"],
     ['<details className="places-dropdown"', "places dropdown"],
     ['id="offline-management"', "offline management disclosure"],
     ['<section className="business-cta"', "business CTA"],
@@ -294,7 +295,7 @@ test("homepage section order (user directive): hero → chips → map → search
     assert.ok(order[i] > order[i - 1], `section ${i + 1} must follow section ${i}`);
   }
   // The quickbar's manage link still targets the management disclosure that
-  // now lives below it, and the search box still feeds the shared filter.
+  // lives below it, and the search box still feeds the shared filter.
   assert.match(map, /href="#offline-management"[\s\S]*?offlineDetailsRef\.current\.open = true/);
   assert.match(map, /onChange=\{\(event\) => applyFilters\(category, event\.target\.value\)\}/, "search is state, not position");
 });
@@ -606,30 +607,26 @@ test("/eventos entries carry anchor ids that the homepage strip targets", () => 
   assert.match(upcoming, /`\/eventos#\$\{event\.id\}`/);
 });
 
-test("the homepage mounts the sections in order: banner, community strip, then map", () => {
+test("the homepage mounts the sections in order: banner, then map → ribbon inside it", () => {
   const page = read("../app/page.js");
   assert.doesNotMatch(page, /PromotedEvents/, "promoted card strip is gone");
   assert.ok(
-    page.indexOf("<FeaturedPartners />") < page.indexOf("<UpcomingEvents />"),
-    "rotating banner before the community strip",
+    page.indexOf("<FeaturedPartners />") < page.indexOf("<main>"),
+    "rotating banner before (and outside) the padded main column",
   );
   assert.ok(
-    page.indexOf("<UpcomingEvents />") < page.indexOf("<HighwayMap"),
-    "community strip before the map",
+    page.indexOf("<HighwayMap") < page.indexOf("<UpcomingEvents />"),
+    "the map component mounts first; the community strip renders INSIDE it, below the map (children slot)",
   );
 
   // Full-bleed: the banner renders before <main> — outside both the 90rem
   // padded page column and the 60rem content wrapper — so it spans the
-  // viewport edge to edge, like the site header above it. The strip and
-  // map stay contained.
-  assert.ok(
-    page.indexOf("<FeaturedPartners />") < page.indexOf("<main>"),
-    "the banner is mounted outside the padded <main> column",
-  );
+  // viewport edge to edge, like the site header above it. The strip keeps
+  // its centered wrapper as the map component's children.
   const wrapper = page.indexOf('maxWidth: "60rem"');
   assert.ok(
-    page.indexOf("<UpcomingEvents />") > wrapper,
-    "the community strip stays inside the padded wrapper",
+    page.indexOf("<UpcomingEvents />") > wrapper && wrapper > page.indexOf("<HighwayMap"),
+    "the 60rem wrapper (with the strip inside) nests within HighwayMap's children",
   );
 
   // The band full-bleeds by structure, not by viewport units — so the

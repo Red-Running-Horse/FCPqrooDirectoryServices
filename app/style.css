@@ -141,7 +141,7 @@ p {
 }
 
 .hero {
-  margin: 0 0 0.75rem;
+  margin: 1rem 0 0.75rem;
   border: 1px solid var(--sand-line);
   border-radius: var(--radius-card);
   background: linear-gradient(180deg, var(--cream), var(--sand-deep));
@@ -305,11 +305,10 @@ p {
    promoted entries (paid placement is always labeled). Every row links
    uniformly to /eventos#<id>. Native scroll-snap; no carousel JS. */
 .upcoming-strip {
-  /* Flush below the full-bleed banner — the banner's border + margin and
-     main's top padding carry the separation on their own; the final gap
-     pass measured the strip's own margin as the only compressible link in
-     the banner→header chain, so it went to zero. */
-  margin: 0;
+  /* Below the map since the restructure: the top margin is what separates
+     the ribbon from the map card above it (map is the product, the ribbon
+     the hook beneath it). */
+  margin: 1rem 0 0;
 }
 
 /* Slim single-line header: heading and /eventos link share one row, barely
