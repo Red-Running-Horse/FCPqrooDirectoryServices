@@ -134,6 +134,7 @@ export default function UpcomingEvents() {
             );
           })}
         </ul>
+        <div className="upcoming-strip__fade" hidden={atEnd} aria-hidden="true" />
         {desktop && (
           <div className="upcoming-strip__nav">
             <button

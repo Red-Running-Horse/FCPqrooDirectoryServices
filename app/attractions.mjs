@@ -1012,6 +1012,7 @@ export const attractions = [
     status: "unverified",
     locationAccuracy: "approximate",
     directionsUrl: null,
+    markerLogo: "/img/markers/selva-morena-logo.webp",
     email: "selvamorenaoficial@gmail.com",
     website: "https://selvamorenareserva.wixsite.com/selva-morena",
     socialLinks: {
@@ -1020,7 +1021,7 @@ export const attractions = [
       youtube: "https://www.youtube.com/@selva-morena",
     },
     verificationSourceUrls: ["https://www.booking.com/hotel/mx/selva-morena-felipe-carrillo-puerto.html"],
-    contactNote: "Verified with the operator Oct 2026 (banner client, kind: offer). Prices: wellness $500, tours $800, cabins $1,000–1,200 MXN. Marker logo pending November feature.",
+    contactNote: "Verified with the operator Oct 2026 (banner client, kind: offer). Prices: wellness $500, tours $800, cabins $1,000–1,200 MXN.",
     lastUpdated: "2026-11-06",
   },
 ];

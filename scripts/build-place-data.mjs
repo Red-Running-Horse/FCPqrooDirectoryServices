@@ -31,6 +31,7 @@ export const INDEX_FIELDS = [
   "status",
   "locationAccuracy",
   "name",
+  "markerLogo",
 ];
 
 // Ids become file names and URL segments, so keep them to a conservative slug alphabet.

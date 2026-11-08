@@ -75,7 +75,7 @@ export const UI_TEXT = {
       "Ayuda a los visitantes a descubrir tu negocio en Felipe Carrillo Puerto. Podemos ayudarte con tu ficha, sitio web y presencia en redes sociales.",
     ctaLearn: "Conoce el proyecto",
     ctaRequest: "Solicita información",
-    businessCtaUnderConstruction: "Esta sección está en construcción.",
+    ctaWhatsappNote: "Gratis — te contactamos por WhatsApp.",
     ctaLearnMessage:
       "Este mapa es una guía local de Felipe Carrillo Puerto. Los lugares se incluyen según información verificada, no por pago.",
     offlineSaveMap: "Guardar mapa para uso sin conexión",
@@ -180,7 +180,7 @@ export const UI_TEXT = {
       "Help visitors discover your business in Felipe Carrillo Puerto. We can help with your listing, website, and social media presence.",
     ctaLearn: "Learn about the project",
     ctaRequest: "Request information",
-    businessCtaUnderConstruction: "This section is under construction.",
+    ctaWhatsappNote: "Free — we reach you via WhatsApp.",
     ctaLearnMessage:
       "This map is a local guide to Felipe Carrillo Puerto. Places are listed based on verified information, not payment.",
     offlineSaveMap: "Save map for offline use",

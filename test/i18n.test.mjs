@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, UI_TEXT, uiText } from "../app/i18n.mjs";
 
@@ -30,7 +31,7 @@ test("search and business CTA copy is translated in Spanish and English", () => 
   );
   assert.equal(UI_TEXT.es.ctaLearn, "Conoce el proyecto");
   assert.equal(UI_TEXT.es.ctaRequest, "Solicita información");
-  assert.equal(UI_TEXT.es.businessCtaUnderConstruction, "Esta sección está en construcción.");
+  assert.equal(UI_TEXT.es.ctaWhatsappNote, "Gratis — te contactamos por WhatsApp.");
   assert.equal(UI_TEXT.en.ctaHeading, "Do you run a local business?");
   assert.equal(
     UI_TEXT.en.ctaDescription,
@@ -38,7 +39,7 @@ test("search and business CTA copy is translated in Spanish and English", () => 
   );
   assert.equal(UI_TEXT.en.ctaLearn, "Learn about the project");
   assert.equal(UI_TEXT.en.ctaRequest, "Request information");
-  assert.equal(UI_TEXT.en.businessCtaUnderConstruction, "This section is under construction.");
+  assert.equal(UI_TEXT.en.ctaWhatsappNote, "Free — we reach you via WhatsApp.");
   assert.equal(UI_TEXT.es.labelLastUpdated, "Última actualización");
   assert.equal(UI_TEXT.es.labelVerification, "Nota de verificación");
   assert.equal(UI_TEXT.en.labelLastUpdated, "Last updated");
@@ -49,6 +50,13 @@ test("search and business CTA copy is translated in Spanish and English", () => 
       assert.doesNotMatch(value, /@|https?:|\+?\d[\d\s-]{6,}/, `${language}.${key} sin contacto inventado`);
     }
   }
+  // The business CTA's primary action is a WhatsApp link (new tab, noopener) —
+  // the number lives in code, never in the translated strings above.
+  const map = readFileSync(new URL("../app/highway-map.js", import.meta.url), "utf8");
+  assert.match(map, /href="https:\/\/wa\.me\/529841841313"/);
+  assert.match(map, /className="business-cta__whatsapp"[^>]*target="_blank"/s);
+  assert.match(map, /rel="noopener noreferrer"/);
+  assert.doesNotMatch(map, /aria-disabled/);
 });
 
 test("every UI string is translated in both languages", () => {

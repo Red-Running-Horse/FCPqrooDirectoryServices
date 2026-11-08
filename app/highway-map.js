@@ -6,6 +6,7 @@ import { categoryIconSvg } from "./category-icons.mjs";
 import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
 import { entryKind, eventMarkerPosition, eventPopupView, upcomingEvents } from "./event-utils.mjs";
 import { syncMarkerSelection } from "./marker-selection.mjs";
+import { markerIconView } from "./marker-icon.mjs";
 import { loadPlaceDetail } from "./place-data.mjs";
 import { CATEGORIES, categorySummary, filterPlaces, isVerified, listingReferences } from "./place-index.mjs";
 import PlacePortal from "./place-portal";
@@ -455,12 +456,13 @@ export default function HighwayMap({ placesIndex, events = [] }) {
         const approximate = isVerified(attraction) ? "" : " attraction-marker--approximate";
         const multi = isMultiCategory(attraction);
         const bg = placeCategoryBackground(attraction);
+        const iconView = markerIconView(attraction);
         const icon = L.divIcon({
-          className: `attraction-marker attraction-marker--${attraction.category}${multi ? " attraction-marker--multi" : ""}${approximate}`,
-          html: categoryIconSvg(attraction.category, { size: 18, className: "attraction-marker__icon" }),
-          iconSize: [32, 32],
-          iconAnchor: [16, 16],
-          popupAnchor: [0, -16],
+          className: `attraction-marker attraction-marker--${attraction.category}${multi ? " attraction-marker--multi" : ""}${approximate}${iconView.kind === "logo" ? " attraction-marker--logo" : ""}`,
+          html: iconView.html,
+          iconSize: iconView.size,
+          iconAnchor: iconView.anchor,
+          popupAnchor: iconView.popupAnchor,
         });
         const title = markerTitle(attraction, selectedLanguage.current);
         const marker = L.marker([attraction.latitude, attraction.longitude], {
@@ -481,6 +483,9 @@ export default function HighwayMap({ placesIndex, events = [] }) {
           element?.classList.toggle("attraction-marker--selected", selected);
           if (element && multi) {
             element.style.background = bg;
+          }
+          if (element && iconView.kind === "logo") {
+            element.style.setProperty("--marker-ring-color", iconView.ringColor);
           }
         });
         // Leaflet toggles a bound popup on repeat clicks; selecting always shows the summary.
@@ -1002,6 +1007,14 @@ export default function HighwayMap({ placesIndex, events = [] }) {
         <h2 id="business-cta-heading">{text.ctaHeading}</h2>
         <p>{text.ctaDescription}</p>
         <div className="business-cta__actions">
+          <a
+            className="business-cta__whatsapp"
+            href="https://wa.me/529841841313"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {text.ctaRequest}
+          </a>
           <button
             type="button"
             aria-expanded={ctaMessage === "learn"}
@@ -1010,17 +1023,8 @@ export default function HighwayMap({ placesIndex, events = [] }) {
           >
             {text.ctaLearn}
           </button>
-          <button
-            type="button"
-            aria-disabled="true"
-            aria-describedby="business-cta-under-construction"
-          >
-            {text.ctaRequest}
-          </button>
         </div>
-        <p id="business-cta-under-construction" className="business-cta__helper">
-          {text.businessCtaUnderConstruction}
-        </p>
+        <p className="business-cta__helper">{text.ctaWhatsappNote}</p>
         <p id="business-cta-message" className="business-cta__message" role="status">
           {ctaMessage === "learn" && text.ctaLearnMessage}
         </p>

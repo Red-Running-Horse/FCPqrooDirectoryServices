@@ -20,7 +20,7 @@ import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSyn
 import { dirname, extname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-const ASSET_REF = /\/(?:promo|img|og|social)\/[A-Za-z0-9._-]+\.(?:webp|png|jpe?g)/g;
+const ASSET_REF = /\/(?:promo|img|og|social)\/[A-Za-z0-9._/-]+\.(?:webp|png|jpe?g)/g;
 const SOURCE_DIRS = ["app"];
 const TEXT_EXT = new Set([".html", ".js", ".css", ".json", ".txt", ".xml", ".webmanifest"]);
 

@@ -56,9 +56,11 @@ test("the committed index and detail files match the source records", () => {
 test("the index carries only the fields the first paint needs", () => {
   assert.equal(committedIndex.length, attractions.length);
   for (const entry of committedIndex) {
-    // secondaryCategories is optional: only places with one carry it.
+    // secondaryCategories and markerLogo are optional: only places with one carry it.
     const expectedFields = INDEX_FIELDS.filter(
-      (field) => field !== "secondaryCategories" || "secondaryCategories" in entry,
+      (field) =>
+        (field !== "secondaryCategories" || "secondaryCategories" in entry) &&
+        (field !== "markerLogo" || "markerLogo" in entry),
     );
     assert.deepEqual(Object.keys(entry).sort(), expectedFields.sort());
     assert.match(entry.id, /^[a-z0-9][a-z0-9-]*$/);

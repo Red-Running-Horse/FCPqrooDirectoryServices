@@ -18,6 +18,7 @@ function fixture() {
 test("asset discovery finds the real referenced public assets", () => {
   const refs = collectReferencedAssets(root);
   assert.ok(refs.includes("/img/fcp-letters.webp"), "hero letters are discovered");
+  assert.ok(refs.includes("/img/markers/selva-morena-logo.webp"), "nested marker logos are discovered");
   assert.ok(refs.includes("/promo/selvamorena_1280_720.webp"), "promo banners are discovered");
   assert.ok(refs.every((ref) => ref.startsWith("/") && !ref.includes("..")));
 });

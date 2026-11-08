@@ -552,13 +552,14 @@ test("the community strip gives mouse users a first-class input: wheel translati
 
   // The chevron chrome lives in the desktop query that already styles the
   // ribbon scroller, and the hidden attribute must beat the button's display
-  // rule at both ends.
+  // rule at both ends. The ribbon itself anchors the overlays (nav, edge
+  // fade) at every width — the base rule, not only the desktop query.
   const css = read("../app/style.css");
   const ribbonBlock = [...css.matchAll(/@media\s*\(min-width:\s*48rem\)\s*\{([\s\S]*?)\n\}/g)]
     .map((match) => match[1])
     .find((body) => body.includes(".upcoming-strip__scroller"));
   assert.ok(ribbonBlock, "the ribbon desktop rules live in a 48rem query");
-  assert.match(ribbonBlock, /\.upcoming-strip__ribbon\s*\{[^}]*position:\s*relative/s, "the ribbon anchors the nav overlay");
+  assert.match(css, /\.upcoming-strip__ribbon\s*\{[^}]*position:\s*relative/s, "the ribbon anchors the nav overlay at every width");
   assert.match(ribbonBlock, /\.upcoming-strip__nav\s*\{[^}]*position:\s*absolute/s, "chevrons sit at the ribbon's right edge");
   assert.match(ribbonBlock, /\.upcoming-strip__nav-btn\[hidden\]\s*\{\s*display:\s*none/s, "hidden wins over the button display");
 });
