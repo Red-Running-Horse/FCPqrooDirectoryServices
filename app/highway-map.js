@@ -703,72 +703,6 @@ export default function HighwayMap({ placesIndex, events = [] }) {
           ))}
         </div>
       </section>
-      <div className="offline-quickbar" role="region" aria-label={text.offlineHeading}>
-        <div className="offline-quickbar__content">
-          <div className="offline-quickbar__status" role="status" aria-live="polite">
-            <span
-              className={`offline-quickbar__dot offline-quickbar__dot--${offlineStatus}`}
-              aria-hidden="true"
-            />
-            <span className="offline-quickbar__text">{offlineStatusLabel()}</span>
-          </div>
-          <div className="offline-quickbar__actions">
-            {offlineStatus === "unsupported" ? null : offlineStatus === "idle" || offlineStatus === "failed" ? (
-              <button
-                type="button"
-                className="offline-quickbar__btn offline-quickbar__btn--primary"
-                onClick={handleSaveSharedMap}
-              >
-                {text.offlineSaveMap}
-              </button>
-            ) : offlineStatus === "ready" ? (
-              <>
-                <button
-                  type="button"
-                  className="offline-quickbar__btn"
-                  onClick={handleUpdateSharedMap}
-                >
-                  {text.offlineUpdateMap}
-                </button>
-                <button
-                  type="button"
-                  className="offline-quickbar__btn offline-quickbar__btn--danger"
-                  onClick={handleRemoveSharedMap}
-                >
-                  {text.offlineRemoveMap}
-                </button>
-              </>
-            ) : null}
-            <a
-              href="#offline-management"
-              className="offline-quickbar__link"
-              onClick={() => {
-                if (offlineDetailsRef.current) offlineDetailsRef.current.open = true;
-              }}
-            >
-              {text.offlineManage}
-            </a>
-          </div>
-        </div>
-      </div>
-      <div className="map-search" role="search">
-        <label className="map-search__label" htmlFor="map-search-input">
-          {text.searchLabel}
-        </label>
-        <input
-          id="map-search-input"
-          className="map-search__input"
-          type="search"
-          value={search}
-          placeholder={text.searchPlaceholder}
-          autoComplete="off"
-          aria-describedby="map-search-empty"
-          onChange={(event) => applyFilters(category, event.target.value)}
-        />
-        <p id="map-search-empty" className="map-search__empty" role="status">
-          {noResults ? text.searchEmpty : ""}
-        </p>
-      </div>
       <nav className="category-filters" aria-label={text.filtersLabel}>
         {CATEGORIES.map(({ id, label }) => (
           <button
@@ -854,6 +788,72 @@ export default function HighwayMap({ placesIndex, events = [] }) {
               {text.detailsError}
             </p>
           )}
+        </div>
+      </div>
+      <div className="map-search" role="search">
+        <label className="map-search__label" htmlFor="map-search-input">
+          {text.searchLabel}
+        </label>
+        <input
+          id="map-search-input"
+          className="map-search__input"
+          type="search"
+          value={search}
+          placeholder={text.searchPlaceholder}
+          autoComplete="off"
+          aria-describedby="map-search-empty"
+          onChange={(event) => applyFilters(category, event.target.value)}
+        />
+        <p id="map-search-empty" className="map-search__empty" role="status">
+          {noResults ? text.searchEmpty : ""}
+        </p>
+      </div>
+      <div className="offline-quickbar" role="region" aria-label={text.offlineHeading}>
+        <div className="offline-quickbar__content">
+          <div className="offline-quickbar__status" role="status" aria-live="polite">
+            <span
+              className={`offline-quickbar__dot offline-quickbar__dot--${offlineStatus}`}
+              aria-hidden="true"
+            />
+            <span className="offline-quickbar__text">{offlineStatusLabel()}</span>
+          </div>
+          <div className="offline-quickbar__actions">
+            {offlineStatus === "unsupported" ? null : offlineStatus === "idle" || offlineStatus === "failed" ? (
+              <button
+                type="button"
+                className="offline-quickbar__btn offline-quickbar__btn--primary"
+                onClick={handleSaveSharedMap}
+              >
+                {text.offlineSaveMap}
+              </button>
+            ) : offlineStatus === "ready" ? (
+              <>
+                <button
+                  type="button"
+                  className="offline-quickbar__btn"
+                  onClick={handleUpdateSharedMap}
+                >
+                  {text.offlineUpdateMap}
+                </button>
+                <button
+                  type="button"
+                  className="offline-quickbar__btn offline-quickbar__btn--danger"
+                  onClick={handleRemoveSharedMap}
+                >
+                  {text.offlineRemoveMap}
+                </button>
+              </>
+            ) : null}
+            <a
+              href="#offline-management"
+              className="offline-quickbar__link"
+              onClick={() => {
+                if (offlineDetailsRef.current) offlineDetailsRef.current.open = true;
+              }}
+            >
+              {text.offlineManage}
+            </a>
+          </div>
         </div>
       </div>
       <details className="places-dropdown" open={category !== "all"}>

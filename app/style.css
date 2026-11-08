@@ -305,10 +305,11 @@ p {
    promoted entries (paid placement is always labeled). Every row links
    uniformly to /eventos#<id>. Native scroll-snap; no carousel JS. */
 .upcoming-strip {
-  /* Nearly flush below the full-bleed banner — the banner's own margin and
-     main's top padding carry the separation; this is just a sliver so the
-     slim header label never touches the banner's border. */
-  margin: 0.25rem 0 0;
+  /* Flush below the full-bleed banner — the banner's border + margin and
+     main's top padding carry the separation on their own; the final gap
+     pass measured the strip's own margin as the only compressible link in
+     the banner→header chain, so it went to zero. */
+  margin: 0;
 }
 
 /* Slim single-line header: heading and /eventos link share one row, barely
@@ -757,7 +758,10 @@ p {
 .map-search {
   display: grid;
   gap: 0.35rem;
-  margin: 0 0 0.5rem;
+  /* Below the map card (user directive): the top margin is what separates
+     the moved search card from the map above it; the quickbar and the
+     disclosures carry their own top margins below. */
+  margin: 1rem 0 0.75rem;
   border: 1px solid var(--sand-line);
   border-radius: var(--radius-card);
   background: var(--cream);

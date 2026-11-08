@@ -273,6 +273,32 @@ test("the map events layer reuses the layer-group pattern without touching the s
   assert.match(initialMarkup, /map-mobile-overlay/);
 });
 
+test("homepage section order (user directive): hero → chips → map → search → quickbar → places → offline management → business CTA", () => {
+  const map = read("../app/highway-map.js");
+  const at = (needle) => {
+    const i = map.indexOf(needle);
+    assert.ok(i > -1, `missing: ${needle}`);
+    return i;
+  };
+  const order = [
+    ['<section className="hero"', "hero"],
+    ['<nav className="category-filters"', "category filter chips (stay above the map)"],
+    ['<div className="map-container map-workspace">', "map + portal"],
+    ['<div className="map-search" role="search">', "search box (moved below the map)"],
+    ['<div className="offline-quickbar" role="region"', "offline quickbar (moved below the map)"],
+    ['<details className="places-dropdown"', "places dropdown"],
+    ['id="offline-management"', "offline management disclosure"],
+    ['<section className="business-cta"', "business CTA"],
+  ].map(([needle, label]) => at(needle));
+  for (let i = 1; i < order.length; i++) {
+    assert.ok(order[i] > order[i - 1], `section ${i + 1} must follow section ${i}`);
+  }
+  // The quickbar's manage link still targets the management disclosure that
+  // now lives below it, and the search box still feeds the shared filter.
+  assert.match(map, /href="#offline-management"[\s\S]*?offlineDetailsRef\.current\.open = true/);
+  assert.match(map, /onChange=\{\(event\) => applyFilters\(category, event\.target\.value\)\}/, "search is state, not position");
+});
+
 test("events UI strings exist in both languages", () => {
   for (const key of [
     "eventsLayer",
