@@ -26,7 +26,7 @@ test("annual highlights data validates: bilingual fields, slug ids, valid catego
   const categoryIds = new Set(CATEGORIES.map(({ id }) => id));
   const seen = new Set();
   const allowedKeys = new Set(["id", "title", "window", "description", "category", "sourceUrl"]);
-  assert.equal(annualHighlights.length, 7, "three v1 seeds plus four curated additions");
+  assert.equal(annualHighlights.length, 8, "three v1 seeds plus five curated additions");
 
   for (const item of annualHighlights) {
     assert.match(item.id, /^[a-z0-9][a-z0-9-]*$/, `${item.id}: id must be a safe slug`);

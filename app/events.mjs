@@ -228,6 +228,89 @@ const events = [
     status: "published",
     lastUpdated: "2026-10-29",
   },
+  {
+    id: "ultima-nota-10-aniversario-2026",
+    title: {
+      es: "La Última Nota — 10.º Aniversario (Los Corceles de Cancún)",
+      en: "La Última Nota — 10th Anniversary (Los Corceles de Cancún)",
+    },
+    description: {
+      es: "Diez años de comunicación local celebrados en grande: actividades recreativas desde temprano (jala soga, palo encebado, carrera de costales), noche cultural de talento local y gran baile con Los Corceles de Cancún, Wilberth el meteoro de la cumbia, Oswaldo y la Magia del Sabor y Derleiter Night.",
+      en: "Ten years of local communication celebrated in style: recreational activities from early on (tug-of-war, greased pole, sack races), a night of local talent, and a grand dance with Los Corceles de Cancún, Wilberth el meteoro de la cumbia, Oswaldo y la Magia del Sabor and Derleiter Night.",
+    },
+    startAt: "2026-11-14",
+    endAt: "2026-11-14",
+    venue: {
+      name: { es: "Domo de la Juan Bautista Vega, FCP", en: "Domo de la Juan Bautista Vega, FCP" },
+    },
+    category: "culture",
+    contactNote: "Verified from La Última Nota posts, Nov 2026. Daytime games + evening cultural showcase and dance; start time not published — update when announced.",
+    sourceUrl: "https://www.facebook.com/share/1CjfJnJjg1/",
+    status: "published",
+    lastUpdated: "2026-11-09",
+  },
+  {
+    id: "maraton-musical-santa-cecilia-2026",
+    title: {
+      es: "Maratón Musical en honor a Santa Cecilia",
+      en: "Marathon Concert in Honor of Saint Cecilia",
+    },
+    description: {
+      es: "El Sindicato de Filarmónicos invita al maratón musical en honor a Santa Cecilia: solistas, DJs y tecladistas — talento local 100% en vivo. Baile completamente gratis; asista con la familia.",
+      en: "The Musicians' Union invites everyone to a marathon concert honoring Saint Cecilia: soloists, DJs and keyboard players — 100% live local talent. Dancing completely free; bring the family.",
+    },
+    startAt: "2026-11-14T18:00:00-05:00",
+    endAt: "2026-11-14T23:59:59-05:00",
+    venue: {
+      name: { es: "Parque Principal, Felipe Carrillo Puerto", en: "Main Plaza Park, Felipe Carrillo Puerto" },
+    },
+    category: "culture",
+    cost: { es: "Entrada libre", en: "Free admission" },
+    contactNote: "Verified Nov 2026. 'Maratón' — end time not published; listed through the evening.",
+    sourceUrl: "https://www.facebook.com/share/p/14zmLwPM7Ay/",
+    status: "published",
+    lastUpdated: "2026-11-09",
+  },
+  {
+    id: "mercado-joven-convocatoria-2026",
+    title: {
+      es: "Mercado Joven — Convocatoria para emprendedores",
+      en: "Mercado Joven — Call for Entrepreneurs",
+    },
+    description: {
+      es: "La Dirección para el Desarrollo de la Juventud invita a jóvenes emprendedores a participar en el Mercado Joven y dar a conocer su proyecto. Registro del 5 al 10 de noviembre; cupo limitado. Fecha del mercado por anunciarse.",
+      en: "The Youth Development Department invites young entrepreneurs to join Mercado Joven and showcase their project. Registration November 5–10; limited slots. Market date to be announced.",
+    },
+    startAt: "2026-11-09",
+    endAt: "2026-11-10",
+    venue: {
+      name: { es: "Felipe Carrillo Puerto (sede por anunciarse)", en: "Felipe Carrillo Puerto (venue TBA)" },
+    },
+    category: "culture",
+    contactNote: "Verified Nov 2026. Registration closes Nov 10 — EXTEND with the market date or REMOVE the record when registration ends.",
+    sourceUrl: "https://www.facebook.com/share/14t8X2a2NkN/",
+    status: "published",
+    lastUpdated: "2026-11-09",
+  },
+  {
+    id: "noche-nortena-epico-2026",
+    title: {
+      es: "La Noche se Pone Norteña en Épico — Banda 420",
+      en: "A Northern Night at Épico — Banda 420",
+    },
+    description: {
+      es: "Noche de música norteña en vivo con Banda 420: los mejores temas del regional mexicano para cantar y bailar. Cover de $100 MXN.",
+      en: "A night of live norteña music with Banda 420: the best of regional Mexican music to sing and dance to. Cover: MX$100.",
+    },
+    startAt: "2026-11-21T22:00:00-05:00",
+    venue: { placeId: "restaurante-epico" },
+    category: "culture",
+    cost: { es: "Cover $100 MXN", en: "Cover MX$100" },
+    contactNote: "Verified from the Facebook event, Nov 2026.",
+    sourceUrl: "https://www.facebook.com/events/1104811969005400/",
+    status: "published",
+    lastUpdated: "2026-11-09",
+  },
 ];
 
 // ---- Build-time guard: never more than MAX_PROMOTED sponsored events ----

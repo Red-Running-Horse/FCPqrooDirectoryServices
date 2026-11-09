@@ -109,6 +109,19 @@ const annualHighlights = [
     description: { es: "Conmemoración anual de un capítulo definitorio de la historia maya y regional.", en: "Annual commemoration of a defining chapter in Maya and regional history." },
     category: "culture",
   },
+  {
+    id: "natalicio-felipe-carrillo-puerto",
+    title: {
+      es: "Aniversario del Natalicio de Felipe Carrillo Puerto (Suku'un J-Pil)",
+      en: "Birth Anniversary of Felipe Carrillo Puerto (Suku'un J-Pil)",
+    },
+    window: { es: "8 de noviembre", en: "November 8" },
+    description: {
+      es: "Homenajes al 'hermano Felipe' — periodista, gobernador y defensor del pueblo maya, nacido en 1874; el pueblo maya lo llamó Suku'un J-Pil.",
+      en: "Tributes to 'brother Felipe' — journalist, governor and defender of the Maya people, born in 1874; the Maya people called him Suku'un J-Pil.",
+    },
+    category: "culture",
+  },
 ];
 
 export default annualHighlights;

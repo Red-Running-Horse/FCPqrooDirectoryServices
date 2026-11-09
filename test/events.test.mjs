@@ -273,7 +273,7 @@ test("the map events layer reuses the layer-group pattern without touching the s
   assert.match(initialMarkup, /map-mobile-overlay/);
 });
 
-test("homepage section order (user directive v2): chips → MAP → ribbon → hero → search → quickbar → places → offline management → business CTA", () => {
+test("homepage section order (user directive v3): chips → MAP → hero → ribbon → search → quickbar → places → offline management → business CTA", () => {
   const map = read("../app/highway-map.js");
   const at = (needle) => {
     const i = map.indexOf(needle);
@@ -283,8 +283,8 @@ test("homepage section order (user directive v2): chips → MAP → ribbon → h
   const order = [
     ['<nav className="category-filters"', "category filter chips (directly above the map — they filter it)"],
     ['<div className="map-container map-workspace">', "map + portal (the product, first)"],
-    ["{children}", "ribbon slot — page.js passes UpcomingEvents here, below the map"],
-    ['<section className="hero"', "hero (identity below the ribbon; internals unchanged)"],
+    ['<section className="hero"', "hero (identity right below the map)"],
+    ["{children}", "ribbon slot — page.js passes UpcomingEvents here, below the hero (map → identity → agenda)"],
     ['<div className="map-search" role="search">', "search box"],
     ['<div className="offline-quickbar" role="region"', "offline quickbar"],
     ['<details className="places-dropdown"', "places dropdown"],
@@ -670,6 +670,15 @@ test("events jump button: one slim anchor from the map's top edge to the ribbon,
     /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{\s*html\s*\{\s*scroll-behavior:\s*auto;\s*\}\s*\}/,
     "reduced motion gets an instant jump",
   );
+
+  // Landing: scroll-margin-top (~40–50vh) puts the ribbon in the MIDDLE of
+  // the viewport — hero visible above, ribbon presented as a centered
+  // section. Plain href anchor + scroll-margin, no JS scroll math.
+  const marginRule = css.match(/#upcoming-events\s*\{([^}]*)\}/)?.[1];
+  assert.ok(marginRule, "ribbon target owns a scroll-margin rule");
+  const marginVh = Number(marginRule.match(/scroll-margin-top:\s*(\d+(?:\.\d+)?)vh/)?.[1]);
+  assert.ok(marginVh >= 40 && marginVh <= 50, `mid-viewport landing (${marginVh}vh)`);
+  assert.doesNotMatch(map, /className="events-jump"[^>]*onClick/, "plain href anchor — no JS scroll math on the jump");
 
   // Visual: compact sand-outline chip — pill radius, outline border, quiet type.
   const chip = css.match(/\.events-jump\s*\{([^}]*)\}/)?.[1];

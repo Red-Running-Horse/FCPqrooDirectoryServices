@@ -317,10 +317,17 @@ p {
    promoted entries (paid placement is always labeled). Every row links
    uniformly to /eventos#<id>. Native scroll-snap; no carousel JS. */
 .upcoming-strip {
-  /* Below the map since the restructure: the top margin is what separates
-     the ribbon from the map card above it (map is the product, the ribbon
-     the hook beneath it). */
+  /* Below the hero since the order tweak: the top margin is what separates
+     the ribbon from the hero card above it (map → identity → agenda). */
   margin: 1rem 0 0;
+}
+
+/* The events-jump anchor (#upcoming-events) lands the ribbon in the MIDDLE
+   of the viewport: the scroll-margin pushes the target down ~45vh so the
+   hero stays visible above and the ribbon reads as a centered section.
+   Plain href anchor + scroll-margin — no JS scroll math. */
+#upcoming-events {
+  scroll-margin-top: 45vh;
 }
 
 /* Slim single-line header: heading and /eventos link share one row, barely

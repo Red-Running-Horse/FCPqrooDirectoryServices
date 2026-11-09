@@ -764,7 +764,6 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
           )}
         </div>
       </div>
-      {children}
       <section className="hero" aria-label={text.heading}>
         <p className="hero__eyebrow">{text.heroEyebrow}</p>
         <h1 className="hero__wordmark">
@@ -782,6 +781,7 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
         </h1>
         <p className="hero__subheading">{text.heroSubheading}</p>
       </section>
+      {children}
       <div className="map-search" role="search">
         <label className="map-search__label" htmlFor="map-search-input">
           {text.searchLabel}
