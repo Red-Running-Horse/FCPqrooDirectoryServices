@@ -3,6 +3,7 @@ import events from "../../events.mjs";
 import GrecaBand from "../../greca";
 import placesIndex from "../../../public/data/places-index.json";
 import { eventVenueView, formatEventRange, promotedEvents } from "../../event-utils.mjs";
+import L10n from "../../l10n.js";
 
 const placesById = new Map(placesIndex.map((place) => [place.id, place]));
 
@@ -55,16 +56,23 @@ export default async function PromoLanding({ params }) {
   if (!ev) notFound();
   const L = ev.landing ?? {};
   const highlights = L.highlights ?? [];
-  const venue = eventVenueView(ev, "es", placesById);
+  const venueEs = eventVenueView(ev, "es", placesById);
+  const venueEn = eventVenueView(ev, "en", placesById);
+  const venueNameDiffers = venueEn.name && venueEn.name !== venueEs.name;
 
   return (
     <main style={{ maxWidth: "46rem", margin: "0 auto", padding: "0 1rem 4rem", lineHeight: 1.65 }}>
       <GrecaBand />
-      <span style={badge}>Promocionado / Sponsored</span>
-      <h1 style={h1}>{ev.title.es}</h1>
+      <span style={badge}>
+        <span className="l10n-es">Promocionado</span>
+        <span className="l10n-en">Sponsored</span>
+      </span>
+      <h1 style={h1}>
+        <L10n pair={ev.title} />
+      </h1>
       {ev.promotion?.tagline && (
         <p style={{ fontSize: "1.05rem", color: "var(--terracotta)", fontWeight: 600, margin: "0.2rem 0 0.8rem" }}>
-          {ev.promotion.tagline.es}
+          <L10n pair={ev.promotion.tagline} />
         </p>
       )}
 
@@ -77,15 +85,26 @@ export default async function PromoLanding({ params }) {
         />
       )}
 
-      <p style={{ marginTop: "1rem" }}>{ev.description.es}</p>
-      {L.details?.es && <p>{L.details.es}</p>}
+      <p style={{ marginTop: "1rem" }}>
+        <L10n pair={ev.description} />
+      </p>
+      {L.details && (
+        <p>
+          <L10n pair={L.details} />
+        </p>
+      )}
 
       {highlights.length > 0 && (
         <>
-          <h2 style={{ fontSize: "1.1rem", marginTop: "1.6rem" }}>Incluye / Includes</h2>
+          <h2 style={{ fontSize: "1.1rem", marginTop: "1.6rem" }}>
+            <span className="l10n-es">Incluye</span>
+            <span className="l10n-en">Includes</span>
+          </h2>
           <ul style={{ paddingLeft: "1.2rem" }}>
             {highlights.map((h) => (
-              <li key={h.es} style={{ marginBottom: "0.3rem" }}>{h.es}</li>
+              <li key={h.es} style={{ marginBottom: "0.3rem" }}>
+                <L10n pair={h} />
+              </li>
             ))}
           </ul>
         </>
@@ -93,13 +112,39 @@ export default async function PromoLanding({ params }) {
 
       <div style={infoBox}>
         <p style={{ margin: "0.2rem 0" }}>
-          <strong>📅</strong> {formatEventRange(ev, "es")}
+          <strong>📅</strong>{" "}
+          <span className="l10n-es">{formatEventRange(ev, "es")}</span>
+          <span className="l10n-en">{formatEventRange(ev, "en")}</span>
         </p>
-        <p style={{ margin: "0.2rem 0" }}><strong>📍</strong> {venue.name ?? "Por confirmar / To be confirmed"}</p>
-        {ev.cost?.es && <p style={{ margin: "0.2rem 0" }}><strong>💲</strong> {ev.cost.es}</p>}
-        {venue.href && (
+        <p style={{ margin: "0.2rem 0" }}>
+          <strong>📍</strong>{" "}
+          {venueEs.name ? (
+            venueNameDiffers ? (
+              <>
+                <span className="l10n-es">{venueEs.name}</span>
+                <span className="l10n-en">{venueEn.name}</span>
+              </>
+            ) : (
+              venueEs.name
+            )
+          ) : (
+            <>
+              <span className="l10n-es">Por confirmar</span>
+              <span className="l10n-en">To be confirmed</span>
+            </>
+          )}
+        </p>
+        {ev.cost && (
+          <p style={{ margin: "0.2rem 0" }}>
+            <strong>💲</strong> <L10n pair={ev.cost} />
+          </p>
+        )}
+        {venueEs.href && (
           <p style={{ margin: "0.6rem 0 0" }}>
-            <a href={venue.href} style={btnGhost}>Ver en el mapa / View on map</a>
+            <a href={venueEs.href} style={btnGhost}>
+              <span className="l10n-es">Ver en el mapa</span>
+              <span className="l10n-en">View on map</span>
+            </a>
           </p>
         )}
       </div>
@@ -107,16 +152,24 @@ export default async function PromoLanding({ params }) {
       <div style={{ marginTop: "1.4rem" }}>
         {(ev.promotion?.siteUrl || ev.sourceUrl) && (
           <a href={ev.promotion?.siteUrl || ev.sourceUrl} target="_blank" rel="noopener noreferrer" style={btnPrimary}>
-            Visitar sitio oficial / Visit official site ↗
+            <span className="l10n-es">Visitar sitio oficial ↗</span>
+            <span className="l10n-en">Visit official site ↗</span>
           </a>
         )}
-        <a href="/eventos" style={btnGhost}>← Todos los eventos / All events</a>
+        <a href="/eventos" style={btnGhost}>
+          <span className="l10n-es">← Todos los eventos</span>
+          <span className="l10n-en">← All events</span>
+        </a>
       </div>
 
       {ev.sourceUrl && (
         <p style={{ marginTop: "2.5rem", fontSize: "0.85rem", color: "var(--charcoal-soft)" }}>
-          Promoción pagada verificada contra su fuente:{" "}
-          <a href={ev.sourceUrl} target="_blank" rel="noopener noreferrer">fuente / source ↗</a>
+          <span className="l10n-es">Promoción pagada verificada contra su fuente:</span>{" "}
+          <span className="l10n-en">Paid promotion verified against its source:</span>{" "}
+          <a href={ev.sourceUrl} target="_blank" rel="noopener noreferrer">
+            <span className="l10n-es">fuente ↗</span>
+            <span className="l10n-en">source ↗</span>
+          </a>
         </p>
       )}
     </main>

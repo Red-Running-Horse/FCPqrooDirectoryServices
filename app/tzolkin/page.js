@@ -31,12 +31,23 @@ export default function Tzolkin() {
     <main style={{ maxWidth: "46rem", margin: "0 auto", padding: "0 1rem 4rem", lineHeight: 1.65 }}>
       <GrecaBand />
       <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.7rem", margin: "1rem 0 0.25rem" }}>
-        Tzolk&rsquo;in <span style={{ fontSize: "1rem", fontWeight: 400 }}>— el calendario sagrado de 260 días</span>
+        Tzolk&rsquo;in{" "}
+        <span style={{ fontSize: "1rem", fontWeight: 400 }}>
+          <span className="l10n-es">— el calendario sagrado de 260 días</span>
+          <span className="l10n-en">— the 260-day sacred calendar</span>
+        </span>
       </h1>
       <p style={{ color: "var(--charcoal-soft)" }}>
-        The 260-day sacred count: 13 numbers cycling through 20 day signs, used for
-        ceremonies, naming, and divination since Classic times — still consulted by
-        Maya daykeepers in the Zona Maya today.
+        <span className="l10n-es">
+          La cuenta sagrada de 260 días: 13 números que ciclan a través de 20 señales, usada para
+          ceremonias, nombramiento y adivinación desde tiempos Clásicos — aún consultada por los
+          sacerdotes mayas de la Zona Maya.
+        </span>
+        <span className="l10n-en">
+          The 260-day sacred count: 13 numbers cycling through 20 day signs, used for
+          ceremonies, naming, and divination since Classic times — still consulted by
+          Maya daykeepers in the Zona Maya today.
+        </span>
       </p>
 
       <div
@@ -53,18 +64,25 @@ export default function Tzolkin() {
         {today ? (
           <>
             <div style={{ fontSize: "0.85rem", letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--terracotta)", fontWeight: 700 }}>
-              Hoy / Today
+              <span className="l10n-es">Hoy</span>
+              <span className="l10n-en">Today</span>
             </div>
             <div style={{ fontFamily: "var(--font-heading)", fontSize: "2.6rem", fontWeight: 600, color: "var(--obsidian)" }}>
               {today.number} {today.name}
             </div>
           </>
         ) : (
-          <div style={{ color: "var(--charcoal-soft)" }}>Calculando&hellip; / Calculating&hellip;</div>
+          <div style={{ color: "var(--charcoal-soft)" }}>
+            <span className="l10n-es">Calculando&hellip;</span>
+            <span className="l10n-en">Calculating&hellip;</span>
+          </div>
         )}
       </div>
 
-      <h2 style={{ fontSize: "1.1rem", marginTop: "2rem" }}>Los 20 señales / The 20 day signs</h2>
+      <h2 style={{ fontSize: "1.1rem", marginTop: "2rem" }}>
+        <span className="l10n-es">Los 20 señales</span>
+        <span className="l10n-en">The 20 day signs</span>
+      </h2>
       <ol style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(9rem, 1fr))", gap: "0.4rem", paddingLeft: "1.2rem" }}>
         {DAY_NAMES.map((name, i) => (
           <li key={name} style={{ fontSize: "0.92rem" }}>
@@ -73,7 +91,8 @@ export default function Tzolkin() {
         ))}
       </ol>
       <p style={{ marginTop: "2rem", fontSize: "0.85rem", color: "var(--charcoal-soft)" }}>
-        Correlación: 21 dic 2012 (13.0.0.0.0) = 4 Ajaw. Correlation: Dec 21, 2012 = 4 Ajaw.
+        <span className="l10n-es">Correlación: 21 dic 2012 (13.0.0.0.0) = 4 Ajaw.</span>
+        <span className="l10n-en">Correlation: Dec 21, 2012 = 4 Ajaw.</span>
       </p>
     </main>
   );

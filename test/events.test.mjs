@@ -251,8 +251,10 @@ test("/eventos filters at runtime, includes PROMOTED events and never offers, wi
   assert.match(page, /<details>/, "expandable entries");
   assert.match(page, /application\/ld\+json/);
   assert.match(page, /eventJsonLd\(event, placesById\)/, "JSON-LD rides on the event-filtered entry");
-  assert.match(page, /Próximamente \/ Coming soon/, "bilingual empty state");
-  assert.match(page, /Cargando eventos… \/ Loading events…/);
+  assert.match(page, /<span className="l10n-es">\s*Próximamente —/, "empty state renders the active language (ES)");
+  assert.match(page, /<span className="l10n-en">\s*Coming soon — /, "empty state EN variant");
+  assert.match(page, /<span className="l10n-es">Cargando eventos…<\/span>/);
+  assert.match(page, /<span className="l10n-en">Loading events…<\/span>/);
   assert.ok(!page.includes("contactNote"), "internal note must never render");
 });
 

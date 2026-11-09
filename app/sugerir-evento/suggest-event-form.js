@@ -2,11 +2,18 @@
 
 import { useState } from "react";
 import { CATEGORIES } from "../place-index.mjs";
+import { useSiteLanguage } from "../site-language";
 
 // Submission form for /sugerir-evento. POSTs to the relay configured via
 // NEXT_PUBLIC_EVENT_FORM_ENDPOINT (inlined at build time). When the variable
 // is unset the form never crashes: the submit button is replaced by a
 // graceful mailto fallback.
+//
+// Labels and notices render the active language only: gated l10n-* spans
+// (CSS keyed on <html lang>) everywhere except <option> text, which cannot
+// contain spans — those follow useSiteLanguage like the homepage surfaces.
+// The mailto body and datalist values stay intentionally bilingual (they are
+// form VALUES, not display copy).
 
 const FORM_ENDPOINT = process.env.NEXT_PUBLIC_EVENT_FORM_ENDPOINT;
 const CONTACT_EMAIL = "eventos@fcpqroo.mx";
@@ -50,6 +57,7 @@ const submitButton = {
 const initial = { name: "", start: "", end: "", venue: "", category: "", cost: "", description: "", contact: "" };
 
 export default function SuggestEventForm({ places }) {
+  const language = useSiteLanguage();
   const [form, setForm] = useState(initial);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -115,11 +123,16 @@ export default function SuggestEventForm({ places }) {
     return (
       <div style={notice} role="status">
         <p style={{ margin: 0, fontWeight: 700 }}>
-          ¡Gracias! / Thank you!
+          <span className="l10n-es">¡Gracias!</span>
+          <span className="l10n-en">Thank you!</span>
         </p>
         <p style={{ margin: "0.4rem 0 0" }}>
-          Recibimos tu propuesta. Tu evento aparecerá en el directorio solo después de la revisión. /
-          We received your suggestion. Your event will appear in the directory only after review.
+          <span className="l10n-es">
+            Recibimos tu propuesta. Tu evento aparecerá en el directorio solo después de la revisión.
+          </span>{" "}
+          <span className="l10n-en">
+            We received your suggestion. Your event will appear in the directory only after review.
+          </span>
         </p>
       </div>
     );
@@ -128,7 +141,8 @@ export default function SuggestEventForm({ places }) {
   return (
     <form onSubmit={handleSubmit} style={{ marginTop: "0.6rem" }}>
       <label style={label}>
-        Nombre del evento / Event name *
+        <span className="l10n-es">Nombre del evento *</span>
+        <span className="l10n-en">Event name *</span>
         <input
           style={field}
           name="name"
@@ -141,7 +155,8 @@ export default function SuggestEventForm({ places }) {
       </label>
 
       <label style={label}>
-        Fecha y hora de inicio / Start date and time *
+        <span className="l10n-es">Fecha y hora de inicio *</span>
+        <span className="l10n-en">Start date and time *</span>
         <input
           style={field}
           name="start"
@@ -153,7 +168,8 @@ export default function SuggestEventForm({ places }) {
       </label>
 
       <label style={label}>
-        Fecha y hora de fin (opcional) / End date and time (optional)
+        <span className="l10n-es">Fecha y hora de fin (opcional)</span>
+        <span className="l10n-en">End date and time (optional)</span>
         <input
           style={field}
           name="end"
@@ -164,11 +180,12 @@ export default function SuggestEventForm({ places }) {
       </label>
 
       <label style={label}>
-        Lugar / Venue *
+        <span className="l10n-es">Lugar *</span>
+        <span className="l10n-en">Venue *</span>
         <span style={hint}>
           {" "}
-          — ¿está en el directorio? Escríbelo y aparecerá en la lista. / Is it in the directory?
-          Start typing and it will show up in the list.
+          <span className="l10n-es">— ¿está en el directorio? Escríbelo y aparecerá en la lista.</span>
+          <span className="l10n-en">— Is it in the directory? Start typing and it will show up in the list.</span>
         </span>
         <input
           style={field}
@@ -188,21 +205,23 @@ export default function SuggestEventForm({ places }) {
       </label>
 
       <label style={label}>
-        Categoría / Category *
+        <span className="l10n-es">Categoría *</span>
+        <span className="l10n-en">Category *</span>
         <select style={field} name="category" required value={form.category} onChange={update("category")}>
           <option value="" disabled>
             —
           </option>
           {CATEGORIES.filter(({ id }) => id !== "all").map(({ id, label: categoryLabel }) => (
             <option key={id} value={id}>
-              {categoryLabel.es} / {categoryLabel.en}
+              {categoryLabel[language] ?? categoryLabel.es}
             </option>
           ))}
         </select>
       </label>
 
       <label style={label}>
-        Costo (opcional) / Cost (optional)
+        <span className="l10n-es">Costo (opcional)</span>
+        <span className="l10n-en">Cost (optional)</span>
         <input
           style={field}
           name="cost"
@@ -214,7 +233,8 @@ export default function SuggestEventForm({ places }) {
       </label>
 
       <label style={label}>
-        Descripción / Description *
+        <span className="l10n-es">Descripción *</span>
+        <span className="l10n-en">Description *</span>
         <textarea
           style={{ ...field, minHeight: "6rem", resize: "vertical" }}
           name="description"
@@ -225,8 +245,13 @@ export default function SuggestEventForm({ places }) {
       </label>
 
       <label style={label}>
-        Tu correo o teléfono / Your email or phone *
-        <span style={hint}> Solo para dudas sobre tu propuesta. / Only for questions about your suggestion.</span>
+        <span className="l10n-es">Tu correo o teléfono *</span>
+        <span className="l10n-en">Your email or phone *</span>
+        <span style={hint}>
+          {" "}
+          <span className="l10n-es">Solo para dudas sobre tu propuesta.</span>
+          <span className="l10n-en">Only for questions about your suggestion.</span>
+        </span>
         <input
           style={field}
           name="contact"
@@ -240,24 +265,43 @@ export default function SuggestEventForm({ places }) {
 
       {FORM_ENDPOINT ? (
         <button type="submit" style={submitButton} disabled={submitting}>
-          {submitting ? "Enviando… / Sending…" : "Enviar propuesta / Submit suggestion"}
+          {submitting ? (
+            <>
+              <span className="l10n-es">Enviando…</span>
+              <span className="l10n-en">Sending…</span>
+            </>
+          ) : (
+            <>
+              <span className="l10n-es">Enviar propuesta</span>
+              <span className="l10n-en">Submit suggestion</span>
+            </>
+          )}
         </button>
       ) : (
         <div style={notice} role="status">
           <p style={{ margin: 0 }}>
-            El formulario en línea no está configurado por el momento. / The online form is not set up
-            at the moment.
+            <span className="l10n-es">El formulario en línea no está configurado por el momento.</span>{" "}
+            <span className="l10n-en">The online form is not set up at the moment.</span>
           </p>
           <p style={{ margin: "0.4rem 0 0" }}>
-            <a href={mailto}>Envía tu evento por correo / Send your event by email</a>
+            <a href={mailto}>
+              <span className="l10n-es">Envía tu evento por correo</span>
+              <span className="l10n-en">Send your event by email</span>
+            </a>
           </p>
         </div>
       )}
 
       {failed && (
         <p style={{ ...notice, borderColor: "var(--terracotta)" }} role="alert">
-          No se pudo enviar la propuesta. Inténtalo de nuevo, o{" "}
-          <a href={mailto}>envíala por correo / send it by email</a>.
+          <span className="l10n-es">
+            No se pudo enviar la propuesta. Inténtalo de nuevo, o{" "}
+            <a href={mailto}>envíala por correo</a>.
+          </span>
+          <span className="l10n-en">
+            Couldn&apos;t send the suggestion. Try again, or{" "}
+            <a href={mailto}>send it by email</a>.
+          </span>
         </p>
       )}
     </form>

@@ -13,8 +13,8 @@ const theme = read("../app/maya-theme.css");
 
 test("bilingual differentiation: ES primary, EN muted secondary in its own span", () => {
   // Every language span carries its class and lang attribute.
-  assert.match(page, /const Es = \(\{ children \}\) => <span className="guide-es" lang="es">/, "ES span component");
-  assert.match(page, /const En = \(\{ children \}\) => <span className="guide-en" lang="en">/, "EN span component");
+  assert.match(page, /const Es = \(\{ children \}\) => <span className="guide-es l10n-es" lang="es">/, "ES span component (gated — one language per toggle state)");
+  assert.match(page, /const En = \(\{ children \}\) => <span className="guide-en l10n-en" lang="en">/, "EN span component (gated)");
 
   // The muted treatment: charcoal-soft, ~88% size, compact leading.
   const en = theme.match(/\.guide-en\s*\{([^}]*)\}/)?.[1];

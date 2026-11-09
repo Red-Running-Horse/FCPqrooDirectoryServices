@@ -46,7 +46,18 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es-MX">
+    // suppressHydrationWarning: the inline script below restores the stored
+    // language onto <html lang> before first paint, so the attribute can
+    // differ from the prerendered "es-MX" (see preventing-flash-before-
+    // hydration guide).
+    <html lang="es-MX" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var l=localStorage.getItem("fcp:language");if(l==="en"||l==="es")document.documentElement.lang=l;}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body>
         <SiteLanguageProvider>
           <SiteHeader />

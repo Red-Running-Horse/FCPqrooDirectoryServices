@@ -86,7 +86,8 @@ test("/eventos renders the annual highlights section after the upcoming list", (
 
   assert.match(page, /import annualHighlights from "\.\.\/annual-highlights\.mjs";/, "dataset imported");
   assert.match(page, /aria-label=\{UI_TEXT\.es\.annualHighlightsHeading\}/, "section labelled by the heading key");
-  assert.match(page, /\{UI_TEXT\.es\.annualHighlightsHeading\}\s*<\/h2>/, "heading renders from the i18n key");
+  assert.match(page, /<span className="l10n-es">Eventos que vuelven cada año<\/span>/, "heading renders the active language (ES variant)");
+  assert.match(page, /<span className="l10n-en">Annual highlights<\/span>/, "heading renders the active language (EN variant)");
   assert.match(page, /\{annualHighlights\.map\(\(item\) => \(/, "one card per entry");
   assert.match(
     page,

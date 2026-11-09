@@ -1,4 +1,5 @@
 import GrecaBand from "../greca";
+import L10n from "../l10n.js";
 
 export const metadata = {
   title: "Promociones — Felipe Carrillo Puerto",
@@ -20,12 +21,21 @@ export default function Promociones() {
     <main style={{ maxWidth: "46rem", margin: "0 auto", padding: "0 1rem 4rem", lineHeight: 1.65 }}>
       <GrecaBand />
       <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "1.7rem", margin: "1rem 0 0.25rem" }}>
-        Promociones <span style={{ fontSize: "1rem", fontWeight: 400 }}>— ofertas locales</span>
+        Promociones{" "}
+        <span style={{ fontSize: "1rem", fontWeight: 400 }}>
+          <span className="l10n-es">— ofertas locales</span>
+          <span className="l10n-en">— local offers</span>
+        </span>
       </h1>
       <p style={{ color: "var(--charcoal-soft)" }}>
-        Un tablón de ofertas de negocios y operadores comunitarios verificados, igual que el
-        mapa: sin verificación, no se publica. / A board of offers from verified local
-        businesses and community operators — same honesty rules as the map.
+        <span className="l10n-es">
+          Un tablón de ofertas de negocios y operadores comunitarios verificados, igual que el
+          mapa: sin verificación, no se publica.
+        </span>{" "}
+        <span className="l10n-en">
+          A board of offers from verified local businesses and community operators — same honesty
+          rules as the map.
+        </span>
       </p>
       <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: "0.6rem", marginTop: "1.5rem" }}>
         {COMING_SOON.map(({ es, en }) => (
@@ -39,8 +49,13 @@ export default function Promociones() {
               padding: "0.8rem 1rem",
             }}
           >
-            <strong>{es}</strong>
-            <div style={{ fontSize: "0.85rem", color: "var(--charcoal-soft)" }}>{en} — próximamente / coming soon</div>
+            <strong>
+              <L10n pair={{ es, en }} />
+            </strong>
+            <div style={{ fontSize: "0.85rem", color: "var(--charcoal-soft)" }}>
+              <span className="l10n-es">próximamente</span>
+              <span className="l10n-en">coming soon</span>
+            </div>
           </li>
         ))}
       </ul>

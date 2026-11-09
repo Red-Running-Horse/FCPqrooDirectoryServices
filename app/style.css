@@ -50,6 +50,36 @@ html {
   }
 }
 
+/* ---------- Active-language gating ----------
+   Static-export pages can't know the visitor's language at prerender time,
+   so bilingual text ships in both variants and CSS shows only the active
+   one. <html lang> is the switch: the inline script in layout.js restores
+   the stored choice BEFORE first paint, so there is no flash of the wrong
+   language on hard navigation, and the nav toggle flips instantly. The
+   prerendered HTML stays Spanish-primary (ES is the default-visible
+   variant). display:none also hides the inactive variant from screen
+   readers. `.l10n-block` is the block-level variant (whole paragraphs,
+   list items, figure captions). */
+.l10n-en {
+  display: none;
+}
+
+html[lang="en"] .l10n-es {
+  display: none;
+}
+
+html[lang="en"] .l10n-en {
+  display: inline;
+}
+
+.l10n-en.l10n-block {
+  display: none;
+}
+
+html[lang="en"] .l10n-en.l10n-block {
+  display: block;
+}
+
 main {
   max-width: 90rem;
   margin: 0 auto;

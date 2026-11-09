@@ -19,9 +19,12 @@ const h3 = { marginTop: "1.4rem", fontSize: "1.05rem" };
 const note = { background: "#faf3e7", padding: "0.8rem 1rem", borderRadius: "8px" };
 const li = { marginBottom: "0.4rem" };
 
-// Structured bilingual spans: ES primary, EN secondary.
-const Es = ({ children }) => <span className="guide-es" lang="es">{children}</span>;
-const En = ({ children }) => <span className="guide-en" lang="en">{children}</span>;
+// Structured bilingual spans: ES primary, EN secondary. The l10n-* gate
+// classes show only the active language (CSS keyed on <html lang>), so the
+// guide renders one language per toggle state — prerendered ES-first, no
+// flash on hard navigation.
+const Es = ({ children }) => <span className="guide-es l10n-es" lang="es">{children}</span>;
+const En = ({ children }) => <span className="guide-en l10n-en" lang="en">{children}</span>;
 
 // Place deep link into the homepage map (/?lugar=<place-id> selects and
 // focuses the place). Records without a place stay plain text.
@@ -42,12 +45,15 @@ export default function Guia() {
       />
 
       <p>
-        <a href="/">← Volver al mapa / Back to the map</a>
+        <a href="/">
+          <span className="l10n-es">← Volver al mapa</span>
+          <span className="l10n-en">← Back to the map</span>
+        </a>
       </p>
 
       <h1 style={{ fontSize: "1.7rem", lineHeight: 1.3 }}>
         <Es>Felipe Carrillo Puerto — Guía del Viajero 2026</Es>{" "}
-        <span className="guide-en" lang="en" style={{ fontSize: "0.62em", fontWeight: 400 }}>
+        <span className="guide-en l10n-en" lang="en" style={{ fontSize: "0.62em", fontWeight: 400 }}>
           Felipe Carrillo Puerto — Visitor&apos;s Guide 2026
         </span>
       </h1>
@@ -92,11 +98,13 @@ export default function Guia() {
       <ul>
         <li style={li}>
           <Es>Estación completa en el Tramo 6 (Tulum–Chetumal) con servicios de turismo Maya
-          Ka&apos;an.</Es>
+          Ka&apos;an.</Es>{" "}
+          <En>Full station on Segment 6 (Tulum–Chetumal) with Maya Ka&apos;an tourism services.</En>
         </li>
         <li style={li}>
           <Es>Desde Tulum: ~1 h. Desde Cancún: ~3.5 h. Hacia Bacalar ~45 min y Chetumal ~1
-          h.</Es>
+          h.</Es>{" "}
+          <En>From Tulum: ~1 h. From Cancún: ~3.5 h. Bacalar ~45 min and Chetumal ~1 h away.</En>
         </li>
         <li style={li}>
           <Es>Boletos y horarios en la app oficial del Tren Maya; reserva con anticipación los
@@ -108,7 +116,9 @@ export default function Guia() {
       <ul>
         <li style={li}>
           <Es>Terminal ADO en el centro: Tulum ~1 h, Playa del Carmen ~2 h, Cancún ~3.5–4 h,
-          Chetumal/Bacalar ~1.5–2 h. Boletos en la app ADO.</Es>
+          Chetumal/Bacalar ~1.5–2 h. Boletos en la app ADO.</Es>{" "}
+          <En>Downtown ADO terminal: Tulum ~1 h, Playa del Carmen ~2 h, Cancún ~3.5–4 h,
+          Chetumal/Bacalar ~1.5–2 h. Tickets in the ADO app.</En>
         </li>
         <li style={li}>
           <Es>Colectivos a Tulum (~MXN 60–80) desde las salidas junto a la terminal; pregunta por
