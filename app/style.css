@@ -1174,6 +1174,111 @@ p {
   outline-offset: 2px;
 }
 
+/* ---------- /promociones: offers, tiers, join ---------- */
+
+/* Active offers: data-driven cards, one per promoted OFFER in events.mjs.
+   Marigold left rule marks the paid placement; the «Advertising» badge is
+   the standing disclosure rule. */
+.promo-offers {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.promo-offer {
+  background: var(--cream);
+  border: 1px solid var(--sand-line);
+  border-left: 4px solid var(--marigold);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1rem;
+}
+
+.promo-offer__ad {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--sand-deep);
+  color: var(--charcoal-soft);
+  border-radius: 4px;
+  padding: 0.1rem 0.45rem;
+  margin-bottom: 0.4rem;
+}
+
+.promo-offer__name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+}
+
+.promo-offer__tagline {
+  margin: 0.3rem 0 0;
+  font-size: 0.92rem;
+}
+
+.promo-offer__cost {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: var(--charcoal-soft);
+}
+
+.promo-offer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Membership tiers: compact cards; the featured tier (Founder) carries the
+   marigold rule. */
+.promo-tiers {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.promo-tier {
+  background: var(--cream);
+  border: 1px solid var(--sand-line);
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 1rem;
+}
+
+.promo-tier--featured {
+  border-left: 4px solid var(--marigold);
+}
+
+.promo-tier__name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+}
+
+.promo-tier__features {
+  margin: 0.4rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+}
+
+.promo-tier__features li {
+  margin-bottom: 0.25rem;
+}
+
+.promo-join {
+  margin-top: 2rem;
+}
+
+.promo-join .business-cta__whatsapp {
+  margin-top: 0.6rem;
+}
+
+@media (min-width: 48rem) {
+  .promo-tiers {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 /* Offline map & saved places */
 .offline-quickbar {
   margin: 0.75rem 0;

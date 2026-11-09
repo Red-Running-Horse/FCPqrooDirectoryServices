@@ -121,9 +121,10 @@ test("/sugerir-evento renders the active language; form values that must stay bi
 test("the other bilingual pages render the active language (promociones, tours, tzolkin)", () => {
   const promociones = read("../app/promociones/page.js");
   assert.match(promociones, /import L10n from "\.\.\/l10n\.js";/);
-  assert.match(promociones, /<L10n pair=\{\{ es, en \}\} \/>/, "offer names gated");
-  assert.match(promociones, /<span className="l10n-es">próximamente<\/span>/, "offer status gated");
-  assert.doesNotMatch(promociones, /\{en\} — próximamente \/ coming soon/, "no slash-mash on offers");
+  assert.match(promociones, /<L10n pair=\{offer\.title\} \/>/, "offer names gated");
+  assert.match(promociones, /<span className="l10n-es">Publicidad<\/span>/, "Advertising label gated");
+  assert.match(promociones, /<L10n pair=\{tier\.name\} \/>/, "tier names gated");
+  assert.match(promociones, /<span className="l10n-es">Ofertas activas<\/span>/, "section heading gated");
 
   const tour = read("../app/tours/noj-kaaj/page.js");
   assert.match(tour, /<strong className="l10n-es">\{item\.es\}<\/strong>/, "includes list gated");
