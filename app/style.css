@@ -38,6 +38,18 @@ body {
   color: var(--charcoal);
 }
 
+/* Anchor jumps (events ribbon, offline management) glide instead of
+   snapping; reduced motion gets an instant jump. */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 main {
   max-width: 90rem;
   margin: 0 auto;
@@ -1096,6 +1108,33 @@ p {
 .legend .swatch {
   background: var(--terracotta-light);
   box-shadow: 0 0 0 2px var(--cream);
+}
+
+/* On-page jump to the events ribbon (which sits below the map since the
+   map-first restructure): a slim sand-outline chip at the map's top edge —
+   a hint, not a headline. Distinct from the nav "Eventos" link, which goes
+   to /eventos. */
+.events-jump {
+  display: inline-flex;
+  align-items: center;
+  margin: 0.1rem 0 0.7rem;
+  padding: 0.3rem 0.85rem;
+  border: 1px solid var(--sand-line);
+  border-radius: var(--radius-chip);
+  background: transparent;
+  color: var(--charcoal-soft);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.events-jump:hover {
+  background: var(--sand-deep);
+}
+
+.events-jump:focus-visible {
+  outline: 2px solid var(--charcoal);
+  outline-offset: 2px;
 }
 
 /* Offline map & saved places */

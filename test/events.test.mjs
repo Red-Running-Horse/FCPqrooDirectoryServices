@@ -636,3 +636,46 @@ test("the homepage mounts the sections in order: banner, then map → ribbon ins
   assert.doesNotMatch(css, /border-radius:\s*12px/, "full-bleed band drops the card corners");
   assert.match(css, /border-top:\s*2px solid var\(--marigold\)/, "the marigold top rule survives the bleed");
 });
+
+test("events jump button: one slim anchor from the map's top edge to the ribbon, smooth-scrolled", () => {
+  const map = read("../app/highway-map.js");
+  const upcoming = read("../app/upcoming-events.js");
+  const css = read("../app/style.css");
+
+  // Exactly one jump affordance on the page: a real <a href="#<stable-id>">
+  // (keyboard accessible by default), rendered between the chips/legend and
+  // the map container.
+  const jump = map.match(/<a className="events-jump" href="#upcoming-events">\s*\{text\.eventsJump\}\s*<\/a>/);
+  assert.ok(jump, "anchor + target id wired through the i18n label");
+  assert.equal((map.match(/className="events-jump"/g) ?? []).length, 1, "exactly one jump anchor in the map");
+  assert.match(upcoming, /<section className="upcoming-strip" id="upcoming-events" aria-labelledby="upcoming-strip-heading">/, "ribbon owns the stable target id");
+  assert.equal((upcoming.match(/id="upcoming-events"/g) ?? []).length, 1, "target id appears once");
+
+  // Placement: below the chips/legend, at the map's top edge.
+  const legend = map.indexOf('className="legend"');
+  const anchor = map.indexOf('className="events-jump"');
+  const workspace = map.indexOf("map-container map-workspace");
+  assert.ok(legend > -1 && legend < anchor && anchor < workspace, "legend → jump → map");
+
+  // Label: bilingual, distinct from the nav link target and the ribbon heading.
+  assert.equal(UI_TEXT.es.eventsJump, "Próximos eventos ↓");
+  assert.equal(UI_TEXT.en.eventsJump, "Upcoming events ↓");
+  assert.notEqual(UI_TEXT.es.eventsJump, UI_TEXT.es.upcomingAllEvents, "not the /eventos link label");
+  assert.doesNotMatch(map, /href="\/eventos"[^>]*>\s*\{text\.eventsJump\}/, "the jump never points at /eventos");
+
+  // Behavior: CSS smooth scrolling with an instant reduced-motion fallback.
+  assert.match(css, /html\s*\{\s*scroll-behavior:\s*smooth;\s*\}/, "smooth anchor jumps");
+  assert.match(
+    css,
+    /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{\s*html\s*\{\s*scroll-behavior:\s*auto;\s*\}\s*\}/,
+    "reduced motion gets an instant jump",
+  );
+
+  // Visual: compact sand-outline chip — pill radius, outline border, quiet type.
+  const chip = css.match(/\.events-jump\s*\{([^}]*)\}/)?.[1];
+  assert.ok(chip, "chip rule exists");
+  assert.match(chip, /border:\s*1px solid var\(--sand-line\)/, "sand outline, not a banner");
+  assert.match(chip, /border-radius:\s*var\(--radius-chip\)/, "chip pill shape");
+  assert.match(chip, /font-size:\s*0\.85rem/, "quiet type");
+  assert.doesNotMatch(chip, /text-transform:\s*uppercase/, "not shouting");
+});

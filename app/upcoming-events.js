@@ -103,7 +103,7 @@ export default function UpcomingEvents() {
   if (upcoming.length === 0) return null;
 
   return (
-    <section className="upcoming-strip" aria-labelledby="upcoming-strip-heading">
+    <section className="upcoming-strip" id="upcoming-events" aria-labelledby="upcoming-strip-heading">
       <div className="upcoming-strip__header">
         <h2 id="upcoming-strip-heading">{text.upcomingHeading}</h2>
         <a className="upcoming-strip__all" href="/eventos">

@@ -720,6 +720,9 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
           </li>
         ))}
       </ul>
+      <a className="events-jump" href="#upcoming-events">
+        {text.eventsJump}
+      </a>
       {error && <p role="alert">{text.loadError}</p>}
       <div className="map-container map-workspace">
         <div className="map-workspace__map">
