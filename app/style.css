@@ -1021,10 +1021,6 @@ p {
     flex-direction: column;
   }
 
-  .language-toggle {
-    align-self: flex-start;
-  }
-
   .hero__subheading {
     max-width: 42ch;
   }

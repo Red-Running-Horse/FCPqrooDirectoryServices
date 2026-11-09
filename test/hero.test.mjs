@@ -9,8 +9,8 @@ import { UI_TEXT } from "../app/i18n.mjs";
 // this card's cream) as one aria-hidden image inside the h1; the h1 keeps
 // the full localized sentence for screen readers in a visually-hidden span.
 // No letter-span machinery survives — no per-letter spans, no paint or
-// extrusion custom properties, no wordmark webfont, no sheen. The eyebrow,
-// caption and corner language toggle are unchanged.
+// extrusion custom properties, no wordmark webfont, no sheen. The eyebrow
+// and caption are unchanged; the ES/EN toggle moved to the site nav.
 const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 
 test("hero renders the monument letters image inside one accessible h1", () => {
@@ -37,15 +37,13 @@ test("hero renders the monument letters image inside one accessible h1", () => {
     assert.ok(UI_TEXT[lang].heading.length > 0, `${lang}: heading string feeds the sr-only sentence`);
   }
 
-  // Source order: eyebrow → wordmark → caption → toggle.
+  // Source order: eyebrow → wordmark → caption. The language toggle lives in
+  // the site nav now, not in this card (see the nav toggle test below).
   const eyebrow = map.indexOf('className="hero__eyebrow"');
   const h1 = map.indexOf('<h1 className="hero__wordmark">');
   const sub = map.indexOf('className="hero__subheading"');
-  const toggle = map.indexOf('className="language-toggle"');
-  assert.ok(
-    eyebrow > -1 && eyebrow < h1 && h1 < sub && sub < toggle,
-    "eyebrow, wordmark, caption, toggle render in that order",
-  );
+  assert.ok(eyebrow > -1 && eyebrow < h1 && h1 < sub, "eyebrow, wordmark, caption render in that order");
+  assert.equal(map.indexOf('className="language-toggle"'), -1, "no toggle in the hero — it moved to the nav");
 
   // No inline SVG of any kind in the hero markup.
   const heroMarkup = map.slice(
@@ -106,25 +104,30 @@ test("letters sizing: fluid width on mobile, ~54% at desktop, height auto", () =
   assert.match(desktop, /\.hero__letters\s*\{[^}]*width:\s*56%/, "desktop pins ~56% of the hero card");
 });
 
-test("language toggle parks in the hero card's top-right corner, padding-aware", () => {
+test("language toggle lives in the site nav (every page), not the hero card", () => {
   const theme = read("../app/maya-theme.css");
+  const style = read("../app/style.css");
   const map = read("../app/highway-map.js");
+  const header = read("../app/site-header.js");
+  const language = read("../app/site-language.js");
 
-  const hero = theme.match(/\.hero\s*\{([^}]*)\}/)?.[1];
-  assert.match(hero, /position:\s*relative/, "hero card anchors the corner toggle");
-  const toggle = theme.match(/\.language-toggle\s*\{([^}]*)\}/)?.[1];
-  assert.match(toggle, /position:\s*absolute/, "toggle is positioned, not in flow");
-  assert.match(toggle, /top:\s*0\.7rem/, "toggle inset matches the hero card padding");
-  assert.match(toggle, /inset-inline-end:\s*0\.8rem/, "toggle flush to the card's right padding");
+  assert.equal(map.indexOf('className="language-toggle"'), -1, "hero no longer renders a toggle");
+  assert.match(header, /import \{ LanguageToggle \} from "\.\/site-language";/, "nav imports the shared toggle");
+  assert.match(header, /<LanguageToggle \/>/, "toggle renders inside the site header");
+  assert.match(language, /export function LanguageToggle\(\)/, "one shared toggle component");
+  assert.match(language, /aria-pressed=\{language === id\}/, "pressed state still drives the active language");
 
-  const desktop = theme.match(/@media\s*\(min-width:\s*48rem\)\s*\{([\s\S]*?)\n\}/)?.[1];
-  assert.ok(desktop, "desktop media query exists");
-  assert.match(desktop, /\.language-toggle\s*\{[^}]*top:\s*0\.9rem/s, "toggle follows the desktop padding");
-  assert.match(desktop, /inset-inline-end:\s*1rem/, "toggle follows the desktop side padding");
-
-  // Behavior and accessibility are unchanged: same group, same buttons.
-  assert.match(map, /className="language-toggle" role="group" aria-label=\{`\$\{text\.languageLabel\} \/ Language`\}/);
-  assert.match(map, /aria-pressed=\{language === id\}/, "pressed state still drives the active language");
+  // In the header the toggle is a sand pill in flow (pushed to the bar's
+  // end), never absolutely positioned over a card.
+  const inHeader = theme.match(/\.site-header \.language-toggle\s*\{([^}]*)\}/)?.[1];
+  assert.ok(inHeader, "header-scoped toggle rule exists");
+  assert.match(inHeader, /margin-inline-start:\s*auto/, "toggle parks at the end of the header bar");
+  const positioned = style.match(/\.language-toggle\s*\{[^}]*\}/)?.[0] ?? "";
+  for (const rule of style.match(/\.language-toggle[^{]*\{[^}]*\}/g) ?? []) {
+    assert.doesNotMatch(rule, /position:\s*absolute/, `no absolute corner positioning left in ${rule.split("{")[0].trim()}`);
+  }
+  assert.doesNotMatch(positioned, /position:\s*absolute/);
+  assert.doesNotMatch(theme, /\.language-toggle\s*\{[^}]*top:/s, "no corner inset left in the theme layer");
 });
 
 test("hero composition is fully centered — eyebrow above, caption below", () => {
@@ -133,7 +136,7 @@ test("hero composition is fully centered — eyebrow above, caption below", () =
 
   const eyebrow = theme.match(/\.hero__eyebrow\s*\{([^}]*)\}/)?.[1];
   assert.match(eyebrow, /text-align:\s*center/, "eyebrow centered");
-  assert.match(eyebrow, /margin:\s*2\.7rem 0 0\.3rem/, "toggle clearance above, air below");
+  assert.match(eyebrow, /margin:\s*1rem 0 0\.3rem/, "air above, no toggle to clear");
   const kicker = map.indexOf('className="hero__eyebrow"');
   const h1 = map.indexOf('<h1 className="hero__wordmark">');
   const caption = map.indexOf('className="hero__subheading"');

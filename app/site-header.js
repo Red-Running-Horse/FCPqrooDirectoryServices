@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import GrecaBand from "./greca";
+import { LanguageToggle } from "./site-language";
 
-// Shared site header: greca band + obsidian bar with the section menu.
-// ES/EN stays in the map hero (it owns the language state); this nav is section-level.
+// Shared site header: greca band + obsidian bar with the section menu and the
+// site-wide ES/EN toggle (the layout-level provider owns the language state).
 const NAV_ITEMS = [
   { href: "/", label: "Mapa", match: (p) => p === "/" },
   { href: "/guia", label: "Guía", match: (p) => p.startsWith("/guia") },
@@ -40,6 +40,7 @@ export default function SiteHeader() {
             ))}
           </ul>
         </nav>
+        <LanguageToggle />
       </div>
     </header>
   );

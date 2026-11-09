@@ -122,15 +122,14 @@
    the full sentence for screen readers in a visually-hidden span. */
 .hero {
   background: var(--cream);
-  position: relative;   /* the language toggle anchors to this card's corner */
 }
 
 /* The eyebrow opens the centered stack: a turquoise kicker line above the
-   wordmark. Its top margin clears the corner toggle at narrow widths,
-   where the centered kicker shares the hero's top band with it. */
+   wordmark. With the language toggle gone from this card, it needs only a
+   breath of air above it. */
 .hero__eyebrow {
   text-align: center;
-  margin: 2.7rem 0 0.3rem;
+  margin: 1rem 0 0.3rem;
 }
 
 .hero__wordmark {
@@ -159,30 +158,74 @@
   margin-top: 0.3rem;
 }
 
-/* Language toggle: parked in the hero card's top-right corner, inset by
-   exactly the card padding. Behavior and accessibility are unchanged. */
-.language-toggle {
-  position: absolute;
-  top: 0.7rem;
-  inset-inline-end: 0.8rem;
+/* ---------- Visitor's guide (/guia) ---------- */
+
+/* "El español guía": ES renders as the primary copy (charcoal, full size);
+   EN is clearly secondary — muted charcoal-soft, ~88% size, compact
+   leading — in its own span. Headings, paragraphs, list items and captions
+   all follow the same contract; identical proper nouns render once, outside
+   the language spans. */
+.guide-es {
+  color: var(--charcoal);
+}
+
+.guide-en {
+  color: var(--charcoal-soft);
+  font-size: 0.88em;
+  line-height: 1.5;
+}
+
+.guide-figure {
+  margin: 1.25rem auto;
+  max-width: 34rem;
+}
+
+.guide-figure--portrait {
+  max-width: 22rem;
+}
+
+.guide-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--sand-line);
+}
+
+.guide-figure figcaption {
+  margin-top: 0.45rem;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* Language toggle: lives in the site nav now (one toggle site-wide, driven
+   by the layout-level provider). On the terracotta bar it reads as a sand
+   pill: transparent buttons, sand text, marigold pressed state. */
+.site-header .language-toggle {
+  margin-inline-start: auto;
+  border-color: rgba(245, 238, 218, 0.55);
+}
+
+.site-header .language-toggle button {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.85rem;
+  background: transparent;
+  color: var(--sand);
+}
+
+.site-header .language-toggle button[aria-pressed="true"] {
+  background: var(--marigold);
+  color: var(--obsidian);
 }
 
 @media (min-width: 48rem) {
-  /* The hero card padding grows at this breakpoint (style.css); the corner
-     toggle follows it so it stays padding-aware. */
-  .language-toggle {
-    top: 0.9rem;
-    inset-inline-end: 1rem;
-  }
-
   /* Desktop scale: the letters image spans ~56% of the hero card, landing
      the whole hero in the 400–440px height target at 1366. */
   .hero__letters {
     width: 56%;
   }
 
-  /* Above this width the centered eyebrow clears the toggle horizontally,
-     so it needs only a breath of air above it. */
+  /* Above this width the eyebrow sits well clear of the card's top edge. */
   .hero__eyebrow {
     margin-top: 0.4rem;
   }

@@ -5,6 +5,7 @@ import "./featured-partners.css";
 import "@fontsource-variable/fraunces";
 import "@fontsource-variable/inter";
 import SiteHeader from "./site-header";
+import { SiteLanguageProvider } from "./site-language";
 
 export const metadata = {
   metadataBase: new URL("https://fcpqroo.mx"),
@@ -47,8 +48,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es-MX">
       <body>
-        <SiteHeader />
-        {children}
+        <SiteLanguageProvider>
+          <SiteHeader />
+          {children}
+        </SiteLanguageProvider>
       </body>
     </html>
   );

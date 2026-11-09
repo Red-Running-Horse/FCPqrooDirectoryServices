@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { isMultiCategory, placeCategoryBackground, placeCategoryStyle } from "./category-colors.mjs";
 import { categoryIconSvg } from "./category-icons.mjs";
-import { DEFAULT_LANGUAGE, LANGUAGES, localize, uiText } from "./i18n.mjs";
+import { DEFAULT_LANGUAGE, localize, uiText } from "./i18n.mjs";
+import { useSiteLanguageState } from "./site-language";
 import { entryKind, eventMarkerPosition, eventPopupView, upcomingEvents } from "./event-utils.mjs";
 import { syncMarkerSelection } from "./marker-selection.mjs";
 import { markerIconView } from "./marker-icon.mjs";
@@ -138,7 +139,10 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
   const [search, setSearch] = useState("");
   const [ctaMessage, setCtaMessage] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
-  const [language, setLanguage] = useState(DEFAULT_LANGUAGE);
+  // Language state lives in the layout-level provider (the nav toggle owns it);
+  // this component follows it and still mirrors it into selectedLanguage for
+  // the imperative Leaflet code below.
+  const { language } = useSiteLanguageState();
   const [error, setError] = useState(false);
   // places holds the lightweight index (marker fields only); detail holds the selected place
   // merged with its lazily fetched detail file.
@@ -312,6 +316,7 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
 
   useEffect(() => {
     document.documentElement.lang = language;
+    selectedLanguage.current = language;
     if (resetButton.current) resetButton.current.textContent = uiText(language).resetView;
     const current = attractionLayer.current;
     if (!current) return;
@@ -773,23 +778,6 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
           <span className="visually-hidden">{text.heading}</span>
         </h1>
         <p className="hero__subheading">{text.heroSubheading}</p>
-        <div className="language-toggle" role="group" aria-label={`${text.languageLabel} / Language`}>
-          {LANGUAGES.map(({ id, label, name }) => (
-            <button
-              key={id}
-              type="button"
-              lang={id}
-              aria-label={name}
-              aria-pressed={language === id}
-              onClick={() => {
-                selectedLanguage.current = id;
-                setLanguage(id);
-              }}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
       </section>
       <div className="map-search" role="search">
         <label className="map-search__label" htmlFor="map-search-input">
