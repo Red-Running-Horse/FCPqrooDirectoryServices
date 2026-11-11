@@ -17,6 +17,7 @@ const NAV_ITEMS = [
   },
   { href: "/tzolkin", label: "Tzolk'in", match: (p) => p.startsWith("/tzolkin") },
   { href: "/promociones", label: "Promociones", match: (p) => p.startsWith("/promociones") },
+  { href: "/contacto", label: "Contacto", match: (p) => p.startsWith("/contacto") },
 ];
 
 export default function SiteHeader() {

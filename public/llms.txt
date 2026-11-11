@@ -1,0 +1,24 @@
+# Directorio de Servicios de Felipe Carrillo Puerto
+
+> Directorio y mapa bilingüe (en español primero) de servicios, turismo comunitario y eventos en Felipe Carrillo Puerto y la Zona Maya de Quintana Roo, México. Bilingual (Spanish-primary) directory and community-tourism map of services, places, and events in Felipe Carrillo Puerto and the Zona Maya, Quintana Roo, Mexico.
+
+## Directorio
+
+- [Mapa y directorio](https://fcpqroo.mx/): mapa interactivo con lugares, servicios y comercios locales verificados / interactive map of verified local places, services, and businesses.
+
+## Eventos y calendario anual
+
+- [Eventos](https://fcpqroo.mx/eventos): eventos próximos de la región, con fechas y sedes / upcoming regional events with dates and venues.
+- [Calendario anual](https://fcpqroo.mx/eventos#calendario-anual): eventos que vuelven cada año / recurring annual highlights.
+
+## Guía del visitante
+
+- [Guía](https://fcpqroo.mx/guia): dónde comer, dormir y qué visitar en Felipe Carrillo Puerto / where to eat, stay, and what to visit.
+
+## Idioma / Language
+
+El sitio es primero en español; cada página tiene un selector ES/EN persistente. The site is Spanish-primary; every page has a persisted ES/EN toggle.
+
+## Contacto / Contact
+
+- [Contacto](https://fcpqroo.mx/contacto): WhatsApp y correo del directorio / directory WhatsApp and email.

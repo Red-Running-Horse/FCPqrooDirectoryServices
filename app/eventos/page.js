@@ -174,7 +174,7 @@ export default function Eventos() {
           keep PAST events out of the prerender. A highlight can never be
           past, and gating it would only flash a loading state and hide the
           section from the prerendered HTML. */}
-      <section aria-label={UI_TEXT.es.annualHighlightsHeading} style={{ marginTop: "1.8rem" }}>
+      <section id="calendario-anual" aria-label={UI_TEXT.es.annualHighlightsHeading} style={{ marginTop: "1.8rem" }}>
         <h2 style={{ fontSize: "1.05rem", margin: "0 0 0.6rem" }}>
           <span className="l10n-es">Eventos que vuelven cada año</span>
           <span className="l10n-en">Annual highlights</span>

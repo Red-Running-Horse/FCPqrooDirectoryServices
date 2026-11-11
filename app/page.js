@@ -2,10 +2,10 @@ import HighwayMap from "./highway-map";
 import FeaturedPartners from "./featured-partners";
 import UpcomingEvents from "./upcoming-events";
 import events from "./events.mjs";
+import organization from "./organization.mjs";
 import placesIndex from "../public/data/places-index.json";
 
-const structuredData = {
-  "@context": "https://schema.org",
+const website = {
   "@type": "WebSite",
   name: "Directorio de Servicios de Felipe Carrillo Puerto",
   url: "https://fcpqroo.mx",
@@ -14,6 +14,12 @@ const structuredData = {
     name: "Felipe Carrillo Puerto, Quintana Roo",
   },
   inLanguage: "es-MX",
+  publisher: { "@id": "https://fcpqroo.mx/#organization" },
+};
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [website, organization],
 };
 
 export default function Home() {

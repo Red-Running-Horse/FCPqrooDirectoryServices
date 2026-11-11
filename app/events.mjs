@@ -187,48 +187,6 @@ const events = [
     lastUpdated: "2026-10-21",
   },
   {
-    id: "uqroo-tsikbal-jaanal-pixan-2026",
-    title: {
-      es: "Tsikbal — Raíces que dialogan: cambios y continuidades del Jaanal Pixan (UQROO)",
-      en: "Tsikbal — Roots in Dialogue: change and continuity in Jaanal Pixan (UQROO)",
-    },
-    description: {
-      es: "Conversatorio entre personas mayas mayores portadoras de la tradición, académicos y jóvenes universitarios sobre cómo ha cambiado el Jaanal Pixan frente a la migración, la escolarización, la religión, el turismo y la vida urbana — con proyección de un video documental. Organizan la División de Ciencias Sociales y Humanidades y Fundación Mundo Sustentable.",
-      en: "A dialogue between elder Maya tradition-bearers, academics and young university students on how Jaanal Pixan has changed with migration, schooling, religion, tourism and urban life — including a documentary screening. Organized by the Division of Social Sciences and Humanities and Fundación Mundo Sustentable.",
-    },
-    startAt: "2026-11-09T16:00:00-05:00",
-    endAt: "2026-11-09T18:00:00-05:00",
-    venue: {
-      name: { es: "Aula Popol Naj 2, UQROO Campus FCP", en: "Popol Naj Hall 2, UQROO FCP Campus" },
-    },
-    category: "culture",
-    contactNote: "Verified from UQROO Campus FCP post, Oct 2026. University-community event; open attendance presumed — confirm with the Division if promoting widely.",
-    sourceUrl: "https://www.facebook.com/share/p/19ctTkP1jS/",
-    status: "published",
-    lastUpdated: "2026-10-29",
-  },
-  {
-    id: "uqroo-memorial-universitario-2026",
-    title: {
-      es: "Memorial Universitario — Jaanal Pixan (UQROO)",
-      en: "University Memorial — Jaanal Pixan (UQROO)",
-    },
-    description: {
-      es: "Un espacio de escucha, reciprocidad y aprendizaje entre saber académico y saber comunitario: mesa de memoria colectiva, degustación de alimentos de la temporada, exposición de altares, muestra de calaveritas literarias y música maya pax y mesoamericana.",
-      en: "A space of listening, reciprocity and learning between academic and community knowledge: a collective memory table, seasonal food tasting, altar exhibition, literary calaveritas showcase, and Maya pax and Mesoamerican music.",
-    },
-    startAt: "2026-11-10T18:00:00-05:00",
-    endAt: "2026-11-10T20:00:00-05:00",
-    venue: {
-      name: { es: "Instalaciones de la UQROO, Campus FCP", en: "UQROO FCP Campus grounds" },
-    },
-    category: "culture",
-    contactNote: "Verified from UQROO Campus FCP post, Oct 2026. Organized with Fundación Mundo Sustentable.",
-    sourceUrl: "https://www.facebook.com/share/p/19ctTkP1jS/",
-    status: "published",
-    lastUpdated: "2026-10-29",
-  },
-  {
     id: "ultima-nota-10-aniversario-2026",
     title: {
       es: "La Última Nota — 10.º Aniversario (Los Corceles de Cancún)",
@@ -268,27 +226,6 @@ const events = [
     cost: { es: "Entrada libre", en: "Free admission" },
     contactNote: "Verified Nov 2026. 'Maratón' — end time not published; listed through the evening.",
     sourceUrl: "https://www.facebook.com/share/p/14zmLwPM7Ay/",
-    status: "published",
-    lastUpdated: "2026-11-09",
-  },
-  {
-    id: "mercado-joven-convocatoria-2026",
-    title: {
-      es: "Mercado Joven — Convocatoria para emprendedores",
-      en: "Mercado Joven — Call for Entrepreneurs",
-    },
-    description: {
-      es: "La Dirección para el Desarrollo de la Juventud invita a jóvenes emprendedores a participar en el Mercado Joven y dar a conocer su proyecto. Registro del 5 al 10 de noviembre; cupo limitado. Fecha del mercado por anunciarse.",
-      en: "The Youth Development Department invites young entrepreneurs to join Mercado Joven and showcase their project. Registration November 5–10; limited slots. Market date to be announced.",
-    },
-    startAt: "2026-11-09",
-    endAt: "2026-11-10",
-    venue: {
-      name: { es: "Felipe Carrillo Puerto (sede por anunciarse)", en: "Felipe Carrillo Puerto (venue TBA)" },
-    },
-    category: "culture",
-    contactNote: "Verified Nov 2026. Registration closes Nov 10 — EXTEND with the market date or REMOVE the record when registration ends.",
-    sourceUrl: "https://www.facebook.com/share/14t8X2a2NkN/",
     status: "published",
     lastUpdated: "2026-11-09",
   },
