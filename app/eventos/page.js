@@ -8,6 +8,7 @@ import FeaturedPartners from "../featured-partners";
 import placesIndex from "../../public/data/places-index.json";
 import {
   entryKind,
+  eventImage,
   eventJsonLd,
   eventVenueView,
   formatEventRange,
@@ -36,12 +37,25 @@ const card = {
 
 const meta = { margin: "0.3rem 0", fontSize: "0.88rem", color: "var(--charcoal-soft)" };
 
+// Flyer image: one fixed 3:2 box so the layout never shifts while the image
+// decodes (CLS); object-fit crops portrait/landscape flyers to the box.
+const flyerImage = {
+  display: "block",
+  width: "100%",
+  aspectRatio: "3 / 2",
+  objectFit: "cover",
+  borderRadius: "8px",
+};
+
 // A bilingual value renders through the shared gated renderer (see l10n.js):
 // both variants ship in the HTML, CSS shows only the active language.
 function EventEntry({ event }) {
   const venueEs = eventVenueView(event, "es", placesById);
   const venueEn = eventVenueView(event, "en", placesById);
   const venueNameDiffers = venueEn.name && venueEn.name !== venueEs.name;
+  const imageEs = eventImage(event, "es");
+  const imageEn = eventImage(event, "en");
+  const imageAltDiffers = imageEn && imageEn.alt !== imageEs.alt;
   const jsonLd = JSON.stringify(eventJsonLd(event, placesById)).replace(/</g, "\\u003c");
   return (
     // id anchors the homepage upcoming-events strip links (/eventos#<id>).
@@ -57,6 +71,26 @@ function EventEntry({ event }) {
           </strong>
         </summary>
         <div style={{ marginTop: "0.6rem", fontSize: "0.92rem" }}>
+          {imageEs && (
+            // Bilingual alt, same-origin flyer: different alts ship behind the
+            // CSS l10n gate (no inline display on the gated spans — that would
+            // override the gate); identical alt renders once, ungated (L10n
+            // rule). Same URL behind both spans — fetched only once.
+            <div style={{ margin: "0 0 0.6rem" }}>
+              {imageAltDiffers ? (
+                <>
+                  <span className="l10n-es">
+                    <img src={imageEs.url} alt={imageEs.alt} loading="lazy" decoding="async" style={flyerImage} />
+                  </span>
+                  <span className="l10n-en">
+                    <img src={imageEn.url} alt={imageEn.alt} loading="lazy" decoding="async" style={flyerImage} />
+                  </span>
+                </>
+              ) : (
+                <img src={imageEs.url} alt={imageEs.alt} loading="lazy" decoding="async" style={flyerImage} />
+              )}
+            </div>
+          )}
           <p style={{ margin: "0.3rem 0" }}>
             <L10n pair={event.description} />
           </p>

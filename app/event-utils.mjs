@@ -174,9 +174,23 @@ export function eventChipDate(event, language) {
   return { day: pick("day"), month: pick("month").replace(/\.$/, "") };
 }
 
+// ---- Event image --------------------------------------------------------------
+// Optional flyer image on an event record: { url, alt: { es, en } }. Same-origin
+// url only (offline + performance), bilingual alt per the project's bilingual
+// rule; alt falls back to the localized title so the <img> always carries a
+// usable text alternative. Returns { url, alt } or null when the record carries
+// no image (or no url) — callers then render exactly as before.
+
+export function eventImage(event, language) {
+  const url = event?.image?.url;
+  if (typeof url !== "string" || url.trim() === "") return null;
+  const alt = localize(event.image.alt, language) ?? localize(event.title, language) ?? "";
+  return { url: url.trim(), alt };
+}
+
 // ---- schema.org/Event JSON-LD ------------------------------------------------
 
-export function eventJsonLd(event, places) {
+export function eventJsonLd(event, places, origin = "https://fcpqroo.mx") {
   const venue = eventVenueView(event, "es", places);
   const data = {
     "@context": "https://schema.org",
@@ -191,6 +205,10 @@ export function eventJsonLd(event, places) {
   };
   const endMs = eventEndMs(event);
   if (event.endAt && endMs !== null) data.endDate = event.endAt;
+  // Absolute image URL for image-rich search results; omitted when the event
+  // carries no flyer.
+  const image = eventImage(event, "es");
+  if (image) data.image = [new URL(image.url, origin).href];
   return data;
 }
 

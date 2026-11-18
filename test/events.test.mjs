@@ -7,6 +7,7 @@ import { UI_TEXT } from "../app/i18n.mjs";
 import {
   entryKind,
   eventChipDate,
+  eventImage,
   eventJsonLd,
   eventMarkerPosition,
   eventStartMs,
@@ -90,6 +91,26 @@ test("events data validates: required bilingual fields, venue references, catego
     assert.ok(categoryIds.has(event.category) && event.category !== "all", `${event.id}: category must be a directory category`);
     if (event.cost) {
       assert.ok(typeof event.cost.es === "string" && event.cost.es.trim() !== "", `${event.id}: cost.es`);
+    }
+  }
+});
+
+test("optional event flyer images: same-origin /img/eventos/ urls, bilingual non-empty alt", () => {
+  // The flyer field is optional; when present it must be a same-origin WebP
+  // under /img/eventos/ (no external hotlinks — offline + performance) with
+  // real alt text in both languages.
+  for (const event of events) {
+    if (!event.image) continue;
+    assert.match(
+      event.image.url,
+      /^\/img\/eventos\/[a-z0-9][a-z0-9-]*\.webp$/,
+      `${event.id}: image.url must be a same-origin /img/eventos/<slug>.webp path`,
+    );
+    for (const language of ["es", "en"]) {
+      assert.ok(
+        typeof event.image.alt?.[language] === "string" && event.image.alt[language].trim() !== "",
+        `${event.id}: image.alt.${language} required`,
+      );
     }
   }
 });
@@ -213,6 +234,49 @@ test("schema.org/Event JSON-LD: name, startDate, endDate, location, description;
   assert.ok(!("endDate" in openEnded), "endDate omitted when the event has no endAt");
 });
 
+test("eventImage: localized alt with title fallback; null without an image", () => {
+  const flyer = {
+    id: "fixture-flyer",
+    title: { es: "Feria de prueba", en: "Fixture fair" },
+    image: {
+      url: "/img/eventos/feria-de-prueba.webp",
+      alt: { es: "Cartel de la feria", en: "Fair poster" },
+    },
+  };
+  assert.deepEqual(eventImage(flyer, "es"), { url: "/img/eventos/feria-de-prueba.webp", alt: "Cartel de la feria" });
+  assert.deepEqual(eventImage(flyer, "en"), { url: "/img/eventos/feria-de-prueba.webp", alt: "Fair poster" });
+
+  // Alt falls back to the localized title when the record omits it, so the
+  // <img> always carries a usable text alternative.
+  const titleFallback = { id: "x", title: { es: "Feria", en: "Fair" }, image: { url: "/img/eventos/x.webp" } };
+  assert.equal(eventImage(titleFallback, "es").alt, "Feria");
+  assert.equal(eventImage(titleFallback, "en").alt, "Fair");
+
+  // No image → null, so callers render exactly as before the feature existed.
+  assert.equal(eventImage({ id: "no-image", title: { es: "X" } }, "es"), null);
+  assert.equal(eventImage({ id: "blank-url", image: { url: "   " } }, "es"), null);
+  assert.equal(eventImage({}, "en"), null);
+});
+
+test("event JSON-LD carries an absolute image URL only for image-carrying events", () => {
+  const withImage = {
+    id: "fixture-image",
+    title: { es: "Feria de prueba", en: "Fixture fair" },
+    startAt: "2026-11-01T10:00:00-05:00",
+    venue: { placeId: "mercado-felipe-carrillo-puerto" },
+    image: { url: "/img/eventos/feria-de-prueba.webp", alt: { es: "Cartel", en: "Poster" } },
+  };
+  assert.deepEqual(eventJsonLd(withImage, placesById).image, ["https://fcpqroo.mx/img/eventos/feria-de-prueba.webp"]);
+  assert.deepEqual(
+    eventJsonLd(withImage, placesById, "https://example.org").image,
+    ["https://example.org/img/eventos/feria-de-prueba.webp"],
+    "custom origin honored",
+  );
+
+  const bare = { id: "open", title: { es: "X" }, startAt: "2026-11-01T10:00:00-05:00", venue: { name: { es: "Y", en: "Y" } } };
+  assert.ok(!("image" in eventJsonLd(bare, placesById)), "no image key when the event has no flyer");
+});
+
 test("event date ranges are formatted bilingually in Cancun wall time", () => {
   const sameDay = { id: "d", startAt: "2026-10-15T18:00:00-05:00", endAt: "2026-10-15T22:00:00-05:00" };
   const es = formatEventRange(sameDay, "es");
@@ -256,6 +320,26 @@ test("/eventos filters at runtime, includes PROMOTED events and never offers, wi
   assert.match(page, /<span className="l10n-es">Cargando eventos…<\/span>/);
   assert.match(page, /<span className="l10n-en">Loading events…<\/span>/);
   assert.ok(!page.includes("contactNote"), "internal note must never render");
+});
+
+test("/eventos renders the optional flyer behind the CSS language gate, with a CLS-safe box", () => {
+  const page = read("../app/eventos/page.js");
+  assert.match(page, /eventImage\(event, "es"\)/, "the localized image drives the render");
+  assert.match(page, /imageAltDiffers/, "identical alts render once, ungated (L10n rule)");
+  // Bilingual alt: the gated spans wrap the <img>; a fixed 3:2 box reserves
+  // space before decode (CLS), flyers crop rather than stretch, and the
+  // image lazy-loads.
+  assert.match(page, /<span className="l10n-es">\s*<img/s);
+  assert.match(page, /<span className="l10n-en">\s*<img/s);
+  assert.doesNotMatch(
+    page,
+    /className="l10n-(?:es|en)"[^>]*style=/,
+    "no inline display on the gated spans — inline style would override the CSS language gate",
+  );
+  assert.match(page, /aspectRatio:\s*"3 \/ 2"/, "fixed aspect-ratio box (the CLS guard)");
+  assert.match(page, /objectFit:\s*"cover"/, "flyers crop to the box, never stretch");
+  assert.match(page, /loading="lazy"/);
+  assert.match(page, /decoding="async"/);
 });
 
 test("the map events layer reuses the layer-group pattern without touching the scroll-trap markup", () => {

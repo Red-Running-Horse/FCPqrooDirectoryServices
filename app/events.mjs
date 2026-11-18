@@ -26,6 +26,12 @@
 //               bilingual { name } with optional latitude/longitude for the
 //               map marker (no coordinates → no marker).
 //   category    one of the directory categories (app/place-index.mjs, not "all").
+//   image       optional flyer for kind "event": { url, alt: { es, en } }.
+//               Same-origin only, served from /img/eventos/<slug>.webp
+//               (WebP, long edge <= 1600 px, <= 150 KB; guarded by
+//               test/performance-guardrails.test.mjs). Rendered on /eventos
+//               only — the community strip stays text-only, and offers ignore
+//               the field (their surface is the promotion/landing media).
 //   contactNote INTERNAL ONLY — operational note for the editors; must never
 //               be rendered anywhere user-facing.
 //
@@ -108,10 +114,14 @@ const events = [
       },
     },
     category: "culture",
+    image: {
+      url: "/img/eventos/congreso-avivamiento-llamas-de-fuego-2026.webp",
+      alt: { es: "Cartel del Congreso de Avivamiento Llamas de Fuego", en: "Poster for the 'Flames of Fire' Revival Congress" },
+    },
     contactNote: "Verified from Facebook event listing, 2026-10-15. No venue, schedule, or contact published yet — update when announced.",
     sourceUrl: "https://www.facebook.com/events/930745553313771/",
     status: "published",
-    lastUpdated: "2026-10-15",
+    lastUpdated: "2026-11-18",
   },
   {
     id: "selva-morena",
@@ -187,47 +197,271 @@ const events = [
     lastUpdated: "2026-10-21",
   },
   {
-    id: "ultima-nota-10-aniversario-2026",
-    title: {
-      es: "La Última Nota — 10.º Aniversario (Los Corceles de Cancún)",
-      en: "La Última Nota — 10th Anniversary (Los Corceles de Cancún)",
-    },
+    id: "ciclos-2026-negra",
+    title: { es: "Festival CICLOS 2026 — Negra", en: "Festival CICLOS 2026 — Negra" },
     description: {
-      es: "Diez años de comunicación local celebrados en grande: actividades recreativas desde temprano (jala soga, palo encebado, carrera de costales), noche cultural de talento local y gran baile con Los Corceles de Cancún, Wilberth el meteoro de la cumbia, Oswaldo y la Magia del Sabor y Derleiter Night.",
-      en: "Ten years of local communication celebrated in style: recreational activities from early on (tug-of-war, greased pole, sack races), a night of local talent, and a grand dance with Los Corceles de Cancún, Wilberth el meteoro de la cumbia, Oswaldo y la Magia del Sabor and Derleiter Night.",
+      es: "Función de «Negra» en el Festival CICLOS 2026, el festival de cine de Árbol Rojo en Felipe Carrillo Puerto. Entrada gratuita.",
+      en: "Screening of 'Negra' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
     },
-    startAt: "2026-11-14",
-    endAt: "2026-11-14",
+    startAt: "2026-11-23T18:00:00-05:00",
     venue: {
-      name: { es: "Domo de la Juan Bautista Vega, FCP", en: "Domo de la Juan Bautista Vega, FCP" },
+      name: { es: "Domo Infonavit, Felipe Carrillo Puerto", en: "Domo Infonavit, Felipe Carrillo Puerto" },
+      latitude: 19.571900853488934,
+      longitude: -88.04064636746081,
     },
     category: "culture",
-    contactNote: "Verified from La Última Nota posts, Nov 2026. Daytime games + evening cultural showcase and dance; start time not published — update when announced.",
-    sourceUrl: "https://www.facebook.com/share/1CjfJnJjg1/",
+    image: {
+      url: "/img/eventos/ciclos-2026-a.webp",
+      alt: { es: "Cartel del Festival CICLOS 2026 de Árbol Rojo", en: "Poster for Árbol Rojo's 2026 Festival CICLOS" },
+    },
+    cost: { es: "Entrada libre", en: "Free admission" },
+    contactNote: "Verified from the CICLOS 2026 program sheet, 2026-11-18. Organizer: Árbol Rojo (arbolrojocine.com).",
+    sourceUrl: "https://arbolrojocine.com/",
     status: "published",
-    lastUpdated: "2026-11-09",
+    lastUpdated: "2026-11-18",
   },
   {
-    id: "maraton-musical-santa-cecilia-2026",
-    title: {
-      es: "Maratón Musical en honor a Santa Cecilia",
-      en: "Marathon Concert in Honor of Saint Cecilia",
-    },
+    id: "ciclos-2026-hilando-sones",
+    title: { es: "Festival CICLOS 2026 — Hilando Sones", en: "Festival CICLOS 2026 — Hilando Sones" },
     description: {
-      es: "El Sindicato de Filarmónicos invita al maratón musical en honor a Santa Cecilia: solistas, DJs y tecladistas — talento local 100% en vivo. Baile completamente gratis; asista con la familia.",
-      en: "The Musicians' Union invites everyone to a marathon concert honoring Saint Cecilia: soloists, DJs and keyboard players — 100% live local talent. Dancing completely free; bring the family.",
+      es: "Función de «Hilando Sones» en el Festival CICLOS 2026, el festival de cine de Árbol Rojo en Felipe Carrillo Puerto. Entrada gratuita.",
+      en: "Screening of 'Hilando Sones' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
     },
-    startAt: "2026-11-14T18:00:00-05:00",
-    endAt: "2026-11-14T23:59:59-05:00",
+    startAt: "2026-11-23T20:00:00-05:00",
     venue: {
-      name: { es: "Parque Principal, Felipe Carrillo Puerto", en: "Main Plaza Park, Felipe Carrillo Puerto" },
+      name: { es: "Domo Infonavit, Felipe Carrillo Puerto", en: "Domo Infonavit, Felipe Carrillo Puerto" },
+      latitude: 19.571900853488934,
+      longitude: -88.04064636746081,
     },
     category: "culture",
+    image: {
+      url: "/img/eventos/ciclos-2026-a.webp",
+      alt: { es: "Cartel del Festival CICLOS 2026 de Árbol Rojo", en: "Poster for Árbol Rojo's 2026 Festival CICLOS" },
+    },
     cost: { es: "Entrada libre", en: "Free admission" },
-    contactNote: "Verified Nov 2026. 'Maratón' — end time not published; listed through the evening.",
-    sourceUrl: "https://www.facebook.com/share/p/14zmLwPM7Ay/",
+    contactNote: "Verified from the CICLOS 2026 program sheet, 2026-11-18. Organizer: Árbol Rojo (arbolrojocine.com).",
+    sourceUrl: "https://arbolrojocine.com/",
     status: "published",
-    lastUpdated: "2026-11-09",
+    lastUpdated: "2026-11-18",
+  },
+  {
+    id: "ciclos-2026-valentina-y-la-serenidad",
+    title: { es: "Festival CICLOS 2026 — Valentina y la serenidad", en: "Festival CICLOS 2026 — Valentina y la serenidad" },
+    description: {
+      es: "Función de «Valentina y la serenidad» en el Festival CICLOS 2026, el festival de cine de Árbol Rojo en Felipe Carrillo Puerto. Entrada gratuita.",
+      en: "Screening of 'Valentina y la serenidad' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
+    },
+    startAt: "2026-11-24T18:00:00-05:00",
+    venue: {
+      name: { es: "Teatro de la Ciudad, Felipe Carrillo Puerto", en: "Teatro de la Ciudad, Felipe Carrillo Puerto" },
+      latitude: 19.577983460373655,
+      longitude: -88.04476419814225,
+    },
+    category: "culture",
+    image: {
+      url: "/img/eventos/ciclos-2026-b.webp",
+      alt: { es: "Cartel del Festival CICLOS 2026 de Árbol Rojo", en: "Poster for Árbol Rojo's 2026 Festival CICLOS" },
+    },
+    cost: { es: "Entrada libre", en: "Free admission" },
+    contactNote: "Verified from the CICLOS 2026 program sheet, 2026-11-18. Organizer: Árbol Rojo (arbolrojocine.com).",
+    sourceUrl: "https://arbolrojocine.com/",
+    status: "published",
+    lastUpdated: "2026-11-18",
+  },
+  {
+    id: "ciclos-2026-formas-de-atravesar-un-territorio",
+    title: { es: "Festival CICLOS 2026 — Formas de atravesar un territorio", en: "Festival CICLOS 2026 — Formas de atravesar un territorio" },
+    description: {
+      es: "Función de «Formas de atravesar un territorio» en el Festival CICLOS 2026, el festival de cine de Árbol Rojo en Felipe Carrillo Puerto. Entrada gratuita.",
+      en: "Screening of 'Formas de atravesar un territorio' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
+    },
+    startAt: "2026-11-24T20:00:00-05:00",
+    venue: {
+      name: { es: "Teatro de la Ciudad, Felipe Carrillo Puerto", en: "Teatro de la Ciudad, Felipe Carrillo Puerto" },
+      latitude: 19.577983460373655,
+      longitude: -88.04476419814225,
+    },
+    category: "culture",
+    image: {
+      url: "/img/eventos/ciclos-2026-b.webp",
+      alt: { es: "Cartel del Festival CICLOS 2026 de Árbol Rojo", en: "Poster for Árbol Rojo's 2026 Festival CICLOS" },
+    },
+    cost: { es: "Entrada libre", en: "Free admission" },
+    contactNote: "Verified from the CICLOS 2026 program sheet, 2026-11-18. Organizer: Árbol Rojo (arbolrojocine.com).",
+    sourceUrl: "https://arbolrojocine.com/",
+    status: "published",
+    lastUpdated: "2026-11-18",
+  },
+  {
+    id: "ciclos-2026-vaychiletik",
+    title: { es: "Festival CICLOS 2026 — Vaychiletik", en: "Festival CICLOS 2026 — Vaychiletik" },
+    description: {
+      es: "Función de «Vaychiletik» en el Festival CICLOS 2026, el festival de cine de Árbol Rojo en Felipe Carrillo Puerto. Entrada gratuita.",
+      en: "Screening of 'Vaychiletik' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
+    },
+    startAt: "2026-11-25T18:00:00-05:00",
+    venue: {
+      name: { es: "Teatro de la Ciudad, Felipe Carrillo Puerto", en: "Teatro de la Ciudad, Felipe Carrillo Puerto" },
+      latitude: 19.577983460373655,
+      longitude: -88.04476419814225,
+    },
+    category: "culture",
+    image: {
+      url: "/img/eventos/ciclos-2026-c.webp",
+      alt: { es: "Cartel del Festival CICLOS 2026 de Árbol Rojo", en: "Poster for Árbol Rojo's 2026 Festival CICLOS" },
+    },
+    cost: { es: "Entrada libre", en: "Free admission" },
+    contactNote: "Verified from the CICLOS 2026 program sheet, 2026-11-18. Organizer: Árbol Rojo (arbolrojocine.com).",
+    sourceUrl: "https://arbolrojocine.com/",
+    status: "published",
+    lastUpdated: "2026-11-18",
+  },
+  {
+    id: "ciclos-2026-mi-no-lugar",
+    title: { es: "Festival CICLOS 2026 — Mi no lugar", en: "Festival CICLOS 2026 — Mi no lugar" },
+    description: {
+      es: "Función de «Mi no lugar» en el Festival CICLOS 2026, el festival de cine de Árbol Rojo en Felipe Carrillo Puerto. Entrada gratuita.",
+      en: "Screening of 'Mi no lugar' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
+    },
+    startAt: "2026-11-25T20:00:00-05:00",
+    venue: {
+      name: { es: "Teatro de la Ciudad, Felipe Carrillo Puerto", en: "Teatro de la Ciudad, Felipe Carrillo Puerto" },
+      latitude: 19.577983460373655,
+      longitude: -88.04476419814225,
+    },
+    category: "culture",
+    image: {
+      url: "/img/eventos/ciclos-2026-c.webp",
+      alt: { es: "Cartel del Festival CICLOS 2026 de Árbol Rojo", en: "Poster for Árbol Rojo's 2026 Festival CICLOS" },
+    },
+    cost: { es: "Entrada libre", en: "Free admission" },
+    contactNote: "Verified from the CICLOS 2026 program sheet, 2026-11-18. Organizer: Árbol Rojo (arbolrojocine.com).",
+    sourceUrl: "https://arbolrojocine.com/",
+    status: "published",
+    lastUpdated: "2026-11-18",
+  },
+  {
+    id: "ciclos-2026-tio-yim",
+    title: { es: "Festival CICLOS 2026 — Tío Yim", en: "Festival CICLOS 2026 — Tío Yim" },
+    description: {
+      es: "Función de «Tío Yim» en el Festival CICLOS 2026, el festival de cine de Árbol Rojo en Felipe Carrillo Puerto. Entrada gratuita.",
+      en: "Screening of 'Tío Yim' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
+    },
+    startAt: "2026-11-26T18:00:00-05:00",
+    venue: {
+      name: { es: "Domo Infonavit, Felipe Carrillo Puerto", en: "Domo Infonavit, Felipe Carrillo Puerto" },
+      latitude: 19.571900853488934,
+      longitude: -88.04064636746081,
+    },
+    category: "culture",
+    image: {
+      url: "/img/eventos/ciclos-2026-a.webp",
+      alt: { es: "Cartel del Festival CICLOS 2026 de Árbol Rojo", en: "Poster for Árbol Rojo's 2026 Festival CICLOS" },
+    },
+    cost: { es: "Entrada libre", en: "Free admission" },
+    contactNote: "Verified from the CICLOS 2026 program sheet, 2026-11-18. Organizer: Árbol Rojo (arbolrojocine.com).",
+    sourceUrl: "https://arbolrojocine.com/",
+    status: "published",
+    lastUpdated: "2026-11-18",
+  },
+  {
+    id: "ciclos-2026-hijas-del-bosque",
+    title: { es: "Festival CICLOS 2026 — Hijas del bosque", en: "Festival CICLOS 2026 — Hijas del bosque" },
+    description: {
+      es: "Función de «Hijas del bosque» en el Festival CICLOS 2026, el festival de cine de Árbol Rojo en Felipe Carrillo Puerto. Entrada gratuita.",
+      en: "Screening of 'Hijas del bosque' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
+    },
+    startAt: "2026-11-26T20:00:00-05:00",
+    venue: {
+      name: { es: "Domo Infonavit, Felipe Carrillo Puerto", en: "Domo Infonavit, Felipe Carrillo Puerto" },
+      latitude: 19.571900853488934,
+      longitude: -88.04064636746081,
+    },
+    category: "culture",
+    image: {
+      url: "/img/eventos/ciclos-2026-a.webp",
+      alt: { es: "Cartel del Festival CICLOS 2026 de Árbol Rojo", en: "Poster for Árbol Rojo's 2026 Festival CICLOS" },
+    },
+    cost: { es: "Entrada libre", en: "Free admission" },
+    contactNote: "Verified from the CICLOS 2026 program sheet, 2026-11-18. Organizer: Árbol Rojo (arbolrojocine.com).",
+    sourceUrl: "https://arbolrojocine.com/",
+    status: "published",
+    lastUpdated: "2026-11-18",
+  },
+  {
+    id: "ciclos-2026-foro-cineastas-pueblos-originarios",
+    title: { es: "Festival CICLOS 2026 — Foro de Cineastas de Pueblos Originarios", en: "Festival CICLOS 2026 — Forum of Filmmakers from Indigenous Peoples" },
+    description: {
+      es: "Foro de Cineastas de Pueblos Originarios con invitados especiales, dentro del Festival CICLOS 2026 de Árbol Rojo en Felipe Carrillo Puerto. Entrada gratuita.",
+      en: "Forum of filmmakers from indigenous peoples, with special guests, at Árbol Rojo's Festival CICLOS 2026 in Felipe Carrillo Puerto. Free admission.",
+    },
+    startAt: "2026-11-27T11:00:00-05:00",
+    venue: {
+      name: { es: "Auditorio del Instituto Tecnológico de Felipe Carrillo Puerto", en: "Auditorio del Instituto Tecnológico de Felipe Carrillo Puerto" },
+      latitude: 19.5839823294831,
+      longitude: -88.03015056745785,
+    },
+    category: "culture",
+    image: {
+      url: "/img/eventos/ciclos-2026-b.webp",
+      alt: { es: "Cartel del Festival CICLOS 2026 de Árbol Rojo", en: "Poster for Árbol Rojo's 2026 Festival CICLOS" },
+    },
+    cost: { es: "Entrada libre", en: "Free admission" },
+    contactNote: "Verified from the CICLOS 2026 program sheet, 2026-11-18. Organizer: Árbol Rojo (arbolrojocine.com).",
+    sourceUrl: "https://arbolrojocine.com/",
+    status: "published",
+    lastUpdated: "2026-11-18",
+  },
+  {
+    id: "ciclos-2026-li-cham-gala-fcp",
+    title: { es: "Festival CICLOS 2026 — «Li Cham», gala Felipe Carrillo Puerto", en: "Festival CICLOS 2026 — 'Li Cham', FCP Gala" },
+    description: {
+      es: "Gala de «Li Cham» con la presencia de la directora Ana Ts'uyeb, en la Explanada del Parque Principal: cierre del Festival CICLOS 2026 de Árbol Rojo. Entrada gratuita.",
+      en: "'Li Cham' gala screening with director Ana Ts'uyeb in attendance, at the Main Plaza — the closing of Árbol Rojo's Festival CICLOS 2026. Free admission.",
+    },
+    startAt: "2026-11-27T20:00:00-05:00",
+    venue: {
+      name: { es: "Explanada del Parque Principal, Felipe Carrillo Puerto", en: "Explanada del Parque Principal, Felipe Carrillo Puerto" },
+      latitude: 19.582198310725833,
+      longitude: -88.04538629099666,
+    },
+    category: "culture",
+    image: {
+      url: "/img/eventos/ciclos-2026-b.webp",
+      alt: { es: "Cartel del Festival CICLOS 2026 de Árbol Rojo", en: "Poster for Árbol Rojo's 2026 Festival CICLOS" },
+    },
+    cost: { es: "Entrada libre", en: "Free admission" },
+    contactNote: "Verified from the CICLOS 2026 program sheet, 2026-11-18. Organizer: Árbol Rojo (arbolrojocine.com).",
+    sourceUrl: "https://arbolrojocine.com/",
+    status: "published",
+    lastUpdated: "2026-11-18",
+  },
+  {
+    id: "festival-kooneex-kaay-sikil-2026",
+    title: {
+      es: "Festival Ko’one’ex K’aay + Festival Gastronómico SIKIL 2026",
+      en: "Ko'one'ex K'aay Festival + SIKIL Gastronomic & Cultural Festival 2026",
+    },
+    description: {
+      es: "Sexta edición del Festival Ko’one’ex K’aay junto al segundo Festival Gastronómico y Cultural SIKIL (Pepita): música que promueve las lenguas originarias con Carlos CHG, Sonido en Movimiento, Xéti NdáJnió Rap Mazateco, ADN Maya Colectivo, Cinturón de Orión Crotálico, Sayab K’aay Coro Infantil y Gigante Records, más exposición de platillos tradicionales a base de sikil (pepita de calabaza), productos artesanales y actividades de gastronomía ancestral. A partir de las 5:00 de la tarde. Expositores e inscripciones: 983 180 5680.",
+      en: "Sixth edition of the Ko'one'ex K'aay Festival together with the 2nd SIKIL (Pepita) Gastronomic and Cultural Festival: music promoting indigenous languages with Carlos CHG, Sonido en Movimiento, Xéti NdáJnió Rap Mazateco, ADN Maya Colectivo, Cinturón de Orión Crotálico, Sayab K'aay Coro Infantil and Gigante Records, plus an exhibition of traditional dishes based on sikil (pumpkin seed), artisan products and ancestral gastronomy activities. From 5:00 PM. Exhibitors and registration: 983 180 5680.",
+    },
+    startAt: "2026-11-28T17:00:00-05:00",
+    venue: {
+      name: { es: "Concha Acústica “Alameda del Niño”, Felipe Carrillo Puerto", en: "Concha Acústica “Alameda del Niño”, Felipe Carrillo Puerto" },
+      latitude: 19.576077358569158,
+      longitude: -88.05435345779186,
+    },
+    category: "culture",
+    image: {
+      url: "/img/eventos/festival-kooneex-kaay-sikil-2026.webp",
+      alt: { es: "Cartel del Festival Ko’one’ex K’aay y del Festival Gastronómico SIKIL 2026", en: "Poster for the Ko'one'ex K'aay Festival and the 2026 SIKIL Gastronomic Festival" },
+    },
+    cost: { es: "Entrada libre", en: "Free admission" },
+    contactNote: "Verified from the Facebook share + press copy, 2026-11-18. Venue at Santiago Pacheco Cruz, Rafael E. Melgar (Google Maps pin on file). Exhibitor line: 983 180 5680.",
+    sourceUrl: "https://www.facebook.com/share/1AANkeP82U/",
+    status: "published",
+    lastUpdated: "2026-11-18",
   },
   {
     id: "noche-nortena-epico-2026",
@@ -242,11 +476,15 @@ const events = [
     startAt: "2026-11-21T22:00:00-05:00",
     venue: { placeId: "restaurante-epico" },
     category: "culture",
+    image: {
+      url: "/img/eventos/noche-nortena-epico-2026.webp",
+      alt: { es: "Cartel de La Noche se Pone Norteña en Épico con Banda 420", en: "Poster for La Noche se Pone Norteña at Épico with Banda 420" },
+    },
     cost: { es: "Cover $100 MXN", en: "Cover MX$100" },
     contactNote: "Verified from the Facebook event, Nov 2026.",
     sourceUrl: "https://www.facebook.com/events/1104811969005400/",
     status: "published",
-    lastUpdated: "2026-11-09",
+    lastUpdated: "2026-11-18",
   },
 ];
 

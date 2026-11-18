@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { checkGeoJson, MAX_GEOJSON_BYTES } from "../scripts/check-performance-budgets.mjs";
+import events from "../app/events.mjs";
 
 const roadFile = new URL("../public/regional-highways.geojson", import.meta.url);
 const source = readFileSync(roadFile);
@@ -25,6 +26,28 @@ test("budget and optimizer failures give independent, actionable errors without 
   ] }));
   assert.match(checkGeoJson(unoptimized).errors.join("\n"), /not optimized; run npm run optimize:geojson/);
   assert.match(checkGeoJson(Buffer.from("{")).errors.join("\n"), /invalid GeoJSON JSON/);
+});
+
+test("event flyer assets exist under public/img/eventos, are WebP and within the byte budget", () => {
+  // Optional field — permissive until wired: only records carrying an image
+  // are checked, so the suite stays green with zero flyers and bites the
+  // moment one is wired without its asset.
+  const MAX_EVENT_IMAGE_BYTES = 150 * 1024; // 150 KB per flyer
+  const withImage = events.filter((event) => event.image?.url);
+  for (const event of withImage) {
+    assert.ok(
+      event.image.url.startsWith("/img/eventos/"),
+      `${event.id}: flyer must live under /img/eventos/ (same-origin, cacheable)`,
+    );
+    assert.ok(event.image.url.endsWith(".webp"), `${event.id}: flyer must be WebP`);
+    const file = new URL(`../public${event.image.url}`, import.meta.url);
+    assert.ok(existsSync(file), `${event.id}: ${event.image.url} must exist under public/img/eventos/`);
+    const { size } = statSync(file);
+    assert.ok(
+      size <= MAX_EVENT_IMAGE_BYTES,
+      `${event.id}: ${event.image.url} is ${size} bytes — above the ${MAX_EVENT_IMAGE_BYTES}-byte flyer budget`,
+    );
+  }
 });
 
 test("the map reserves responsive height before roads or details arrive", () => {
