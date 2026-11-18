@@ -1,9 +1,12 @@
 /* Service Worker for FCPqroo Directory Services */
 const CACHE_VERSION = "v1";
-const SHARED_CACHE_NAME = `fcp-shared-${CACHE_VERSION}`;
+// Bumped in lockstep with app/offline.mjs (SHARED_CACHE_VERSION): the shared
+// cache name must match there, or this activate handler would delete the new
+// cache as "old". Places cache stays on CACHE_VERSION.
+const SHARED_CACHE_VERSION = "v2";
+const SHARED_CACHE_NAME = `fcp-shared-${SHARED_CACHE_VERSION}`;
 const PLACES_CACHE_NAME = `fcp-places-${CACHE_VERSION}`;
 const SHARED_CACHE_PREFIX = "fcp-shared-";
-
 self.addEventListener("install", () => {
   self.skipWaiting();
 });
