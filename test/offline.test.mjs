@@ -5,6 +5,7 @@ import {
   SHARED_CACHE_NAME,
   PLACES_CACHE_NAME,
   collectAppShellUrls,
+  collectUpcomingEventImageUrls,
   saveSharedMap,
   updateSharedMap,
   removeSharedMap,
@@ -219,6 +220,36 @@ test("shared map save, update, and remove lifecycle updates state and caches", a
   assert.equal(await mockCaches.has(SHARED_CACHE_NAME), false, "shared cache deleted");
 });
 
+test("upcoming event flyers ride the shared offline save", async () => {
+  const { mockCaches } = setupMockEnvironment();
+
+  // The save fetches and caches flyer URLs alongside the app shell.
+  const saveResult = await saveSharedMap({ eventImageUrls: ["/img/eventos/flyer.webp"] });
+  const sharedCache = await mockCaches.open(SHARED_CACHE_NAME);
+  assert.ok(await sharedCache.match("/img/eventos/flyer.webp"), "flyer cached in the shared cache");
+  assert.ok(saveResult.count >= 2, "flyer counted in the saved manifest");
+
+  // A flyer already present in the base manifest is saved exactly once.
+  const { mockCaches: freshCaches } = setupMockEnvironment();
+  const deduped = await saveSharedMap({
+    urls: ["/", "/img/eventos/flyer.webp"],
+    eventImageUrls: ["/img/eventos/flyer.webp"],
+    cacheStorage: freshCaches,
+  });
+  assert.equal(deduped.count, 2, "manifest dedupes overlapping flyer URLs");
+
+  // The default manifest contribution mirrors the wired events data: non-empty
+  // once flyers exist, deduped, same-origin paths only. (Written when zero
+  // flyers were wired; now that they are, it pins the live contract instead
+  // of an empty snapshot.)
+  const urls = collectUpcomingEventImageUrls();
+  assert.ok(urls.length > 0, "wired flyers contribute to the shared offline save");
+  assert.equal(new Set(urls).size, urls.length, "flyer URLs deduped");
+  for (const url of urls) {
+    assert.match(url, /^\/img\/eventos\/[a-z0-9][a-z0-9-]*\.webp$/, `${url}: same-origin flyer path`);
+  }
+});
+
 test("per-place save and remove caches only the target place detail", async () => {
   const { mockCaches } = setupMockEnvironment();
 
@@ -297,6 +328,40 @@ test("the shipped service worker self-heals: skipWaiting on install, clients.cla
     sw.indexOf("clients.claim") > sw.indexOf("caches"),
     "claim runs after cache cleanup in the activate handler",
   );
+});
+
+test("offline.mjs and the shipped sw.js agree on the shared and places cache names", () => {
+  // Lockstep hazard: the SW activate handler deletes every fcp-shared-* cache
+  // it does not recognize as current — a version bump landed in only one file
+  // makes it prune the other's cache as "stale".
+  const offline = readFileSync(new URL("../app/offline.mjs", import.meta.url), "utf8");
+  const sw = readFileSync(new URL("../public/sw.js", import.meta.url), "utf8");
+
+  // Compare RESOLVED versions, not template text: both files build the shared
+  // name from a SHARED_CACHE_VERSION constant whose VALUE must match.
+  const sharedVersion = {
+    app: offline.match(/SHARED_CACHE_VERSION\s*=\s*"([^"]+)"/)?.[1],
+    sw: sw.match(/SHARED_CACHE_VERSION\s*=\s*"([^"]+)"/)?.[1],
+  };
+  assert.ok(sharedVersion.app && sharedVersion.sw, "SHARED_CACHE_VERSION defined in both files");
+  assert.equal(
+    sharedVersion.app,
+    sharedVersion.sw,
+    "shared cache version mismatch — the SW activate handler would prune the app's cache as stale",
+  );
+  assert.equal(SHARED_CACHE_NAME, `fcp-shared-${sharedVersion.app}`, "the app builds its shared cache from that version");
+
+  // The base version drives the places cache in both files — and stays
+  // version-independent of the shared bump on purpose: individually saved
+  // place details must survive a shared-manifest update.
+  const baseVersion = {
+    app: offline.match(/(?:^|\s)CACHE_VERSION\s*=\s*"([^"]+)"/m)?.[1],
+    sw: sw.match(/(?:^|\s)CACHE_VERSION\s*=\s*"([^"]+)"/m)?.[1],
+  };
+  assert.ok(baseVersion.app && baseVersion.sw, "CACHE_VERSION defined in both files");
+  assert.equal(baseVersion.app, baseVersion.sw, "places cache version mismatch");
+  assert.equal(PLACES_CACHE_NAME, `fcp-places-${baseVersion.app}`);
+  assert.match(offline, /SHARED_CACHE_VERSION !== CACHE_VERSION|SHARED_CACHE_VERSION/, "shared version tracked separately from CACHE_VERSION");
 });
 
 test("service worker fetch handles navigation, saved places, and unsaved places offline", async () => {

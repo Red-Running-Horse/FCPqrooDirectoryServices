@@ -1,9 +1,18 @@
+import events from "./events.mjs";
+import { entryKind, upcomingEvents } from "./event-utils.mjs";
+
 // Client-side offline storage and manifest management for FCPqrooDirectoryServices.
-// Manages the shared offline map cache (app shell, road GeoJSON, place index) and
-// individually saved place details.
+// Manages the shared offline map cache (app shell, road GeoJSON, place index,
+// upcoming event flyer images) and individually saved place details.
 
 export const CACHE_VERSION = "v1";
-export const SHARED_CACHE_NAME = `fcp-shared-${CACHE_VERSION}`;
+// Shared cache version, tracked separately from CACHE_VERSION: bumping it
+// invalidates every saved shared map so the new manifest re-caches. v1 → v2
+// when upcoming event flyer images joined the shared save. The places cache
+// deliberately stays on CACHE_VERSION — individually saved place details must
+// survive a shared-manifest update.
+export const SHARED_CACHE_VERSION = "v2";
+export const SHARED_CACHE_NAME = `fcp-shared-${SHARED_CACHE_VERSION}`;
 export const PLACES_CACHE_NAME = `fcp-places-${CACHE_VERSION}`;
 export const SHARED_CACHE_PREFIX = "fcp-shared-";
 export const PLACES_CACHE_PREFIX = "fcp-places-";
@@ -17,6 +26,24 @@ export const DEFAULT_SHARED_ASSETS = [
   "/icon.png",
   "/apple-icon.png",
 ];
+
+// Event flyer images ride the shared offline map save. Only UPCOMING events
+// contribute (mirroring the /eventos runtime filter): a past event never
+// renders, so caching its flyer would waste storage — and expired entries
+// drop off the manifest on the next save/update.
+export function collectUpcomingEventImageUrls({
+  eventRecords = events,
+  nowMs = Date.now(),
+} = {}) {
+  return [
+    ...new Set(
+      upcomingEvents(
+        eventRecords.filter((event) => entryKind(event) === "event" && event.image?.url),
+        nowMs,
+      ).map((event) => event.image.url),
+    ),
+  ];
+}
 
 // Feature detection for Service Worker and Cache Storage APIs
 export function isOfflineSupported() {
@@ -131,8 +158,9 @@ export async function registerServiceWorker() {
   }
 }
 
-// Caches the shared offline map assets. Reports progress and throws on any failed request,
-// ensuring "ready" is never reported until all assets are cached.
+// Caches the shared offline map assets, including upcoming event flyers.
+// Reports progress and throws on any failed request, ensuring "ready" is
+// never reported until all assets are cached.
 export async function saveSharedMap({
   urls = null,
   document = typeof window !== "undefined" ? window.document : null,
@@ -143,13 +171,16 @@ export async function saveSharedMap({
   onProgress = null,
   cacheStorage = typeof window !== "undefined" ? window.caches : null,
   fetchFn = typeof fetch !== "undefined" ? fetch : null,
+  eventImageUrls = collectUpcomingEventImageUrls(),
   storage = typeof localStorage !== "undefined" ? localStorage : null,
 } = {}) {
   if (!cacheStorage || !fetchFn) {
     throw new Error("Offline storage not supported in this environment");
   }
 
-  const manifest = urls ?? collectAppShellUrls({ document, performanceEntries, location });
+  const baseManifest = urls ?? collectAppShellUrls({ document, performanceEntries, location });
+  // Upcoming event flyers ride the shared save (collectUpcomingEventImageUrls).
+  const manifest = Array.from(new Set([...baseManifest, ...eventImageUrls]));
   const cache = await cacheStorage.open(SHARED_CACHE_NAME);
   const total = manifest.length;
   let current = 0;
