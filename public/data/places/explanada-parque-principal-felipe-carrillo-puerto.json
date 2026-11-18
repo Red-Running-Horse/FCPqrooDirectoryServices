@@ -1,0 +1,21 @@
+{
+  "id": "explanada-parque-principal-felipe-carrillo-puerto",
+  "description": {
+    "es": "Explanada abierta junto al Parque Principal: escenario de eventos masivos al aire libre, como la gala del Festival CICLOS y celebraciones públicas.",
+    "en": "Open esplanade by the Main Plaza: host to large outdoor events such as the Festival CICLOS gala and public celebrations."
+  },
+  "directionsUrl": null,
+  "address": {
+    "es": "Parque Principal, Col. Centro, Felipe Carrillo Puerto, Quintana Roo (punto exacto por confirmar)",
+    "en": "Main Plaza, Downtown, Felipe Carrillo Puerto, Quintana Roo (exact point to be confirmed)"
+  },
+  "hoursDisplay": {
+    "es": "Espacio público abierto; eventos según cartelera",
+    "en": "Public open space; events per program"
+  },
+  "verificationNote": {
+    "es": "Pin de Google Maps del programa Festival CICLOS 2026 (gala «Li Cham»). El pin queda ~450 m al norte del registro “Plaza Cívica / Parque de las Palapas”; confirmar en campo si es el mismo complejo o una explanada distinta.",
+    "en": "Google Maps pin from the Festival CICLOS 2026 program ('Li Cham' gala). The pin sits ~450 m north of the 'Civic Plaza / Palapa Park' record; confirm in the field whether it is the same complex or a different esplanade."
+  },
+  "lastUpdated": "2026-11-18"
+}

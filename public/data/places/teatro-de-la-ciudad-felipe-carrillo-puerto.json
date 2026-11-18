@@ -1,0 +1,21 @@
+{
+  "id": "teatro-de-la-ciudad-felipe-carrillo-puerto",
+  "description": {
+    "es": "Teatro municipal de Felipe Carrillo Puerto: cartelera de teatro, música y cine; sede recurrente del Festival CICLOS de Árbol Rojo.",
+    "en": "Municipal theater in Felipe Carrillo Puerto: theater, music and film programming; recurring Festival CICLOS venue (Árbol Rojo)."
+  },
+  "directionsUrl": null,
+  "address": {
+    "es": "Centro, Felipe Carrillo Puerto, Quintana Roo (dirección exacta por confirmar)",
+    "en": "Downtown, Felipe Carrillo Puerto, Quintana Roo (exact address to be confirmed)"
+  },
+  "hoursDisplay": {
+    "es": "Según cartelera",
+    "en": "Per program"
+  },
+  "verificationNote": {
+    "es": "Ubicación tomada del pin de Google Maps del programa Festival CICLOS 2026; horarios y taquilla no publicados — verificar en campo.",
+    "en": "Location taken from the Festival CICLOS 2026 program's Google Maps pin; box office hours not published — verify in the field."
+  },
+  "lastUpdated": "2026-11-18"
+}

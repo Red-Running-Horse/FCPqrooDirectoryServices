@@ -285,5 +285,65 @@
       "en": "Selva Morena"
     },
     "markerLogo": "/img/markers/selva-morena-logo.svg"
+  },
+  {
+    "id": "domo-infonavit-felipe-carrillo-puerto",
+    "category": "culture",
+    "latitude": 19.571900853488934,
+    "longitude": -88.04064636746081,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Domo Infonavit, Felipe Carrillo Puerto",
+      "en": "Domo Infonavit, Felipe Carrillo Puerto"
+    }
+  },
+  {
+    "id": "teatro-de-la-ciudad-felipe-carrillo-puerto",
+    "category": "culture",
+    "latitude": 19.577983460373655,
+    "longitude": -88.04476419814225,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Teatro de la Ciudad, Felipe Carrillo Puerto",
+      "en": "Teatro de la Ciudad, Felipe Carrillo Puerto"
+    }
+  },
+  {
+    "id": "concha-acustica-alameda-del-nino-felipe-carrillo-puerto",
+    "category": "culture",
+    "latitude": 19.576077358569158,
+    "longitude": -88.05435345779186,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Concha Acústica “Alameda del Niño”, Felipe Carrillo Puerto",
+      "en": "Concha Acústica “Alameda del Niño”, Felipe Carrillo Puerto"
+    }
+  },
+  {
+    "id": "auditorio-tecnologico-felipe-carrillo-puerto",
+    "category": "culture",
+    "latitude": 19.5839823294831,
+    "longitude": -88.03015056745785,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Auditorio del Instituto Tecnológico de Felipe Carrillo Puerto",
+      "en": "Auditorium of the Felipe Carrillo Puerto Institute of Technology"
+    }
+  },
+  {
+    "id": "explanada-parque-principal-felipe-carrillo-puerto",
+    "category": "culture",
+    "latitude": 19.582198310725833,
+    "longitude": -88.04538629099666,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Explanada del Parque Principal, Felipe Carrillo Puerto",
+      "en": "Main Plaza Esplanade, Felipe Carrillo Puerto"
+    }
   }
 ]

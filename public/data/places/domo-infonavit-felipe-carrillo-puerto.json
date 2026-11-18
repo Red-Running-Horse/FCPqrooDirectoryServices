@@ -1,0 +1,21 @@
+{
+  "id": "domo-infonavit-felipe-carrillo-puerto",
+  "description": {
+    "es": "Domo techado en la zona Infonavit de Felipe Carrillo Puerto: escenario de conciertos, funciones de cine (Festival CICLOS) y eventos comunitarios. El acceso y los horarios dependen de cada evento.",
+    "en": "Covered dome in FCP's Infonavit area: host to concerts, film screenings (Festival CICLOS) and community events. Access and hours depend on each event."
+  },
+  "directionsUrl": null,
+  "address": {
+    "es": "Col. Infonavit, Felipe Carrillo Puerto, Quintana Roo (ubicación exacta por confirmar)",
+    "en": "Infonavit neighborhood, Felipe Carrillo Puerto, Quintana Roo (exact location to be confirmed)"
+  },
+  "hoursDisplay": {
+    "es": "Según evento",
+    "en": "Per event"
+  },
+  "verificationNote": {
+    "es": "Ubicación tomada del pin de Google Maps del programa Festival CICLOS 2026; sede recurrente de funciones y conciertos. Horarios, teléfono y acceso no publicados — verificar en campo.",
+    "en": "Location taken from the Festival CICLOS 2026 program's Google Maps pin; recurring screening and concert venue. Hours, phone and access not published — verify in the field."
+  },
+  "lastUpdated": "2026-11-18"
+}

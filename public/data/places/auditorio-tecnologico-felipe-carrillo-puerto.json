@@ -1,0 +1,21 @@
+{
+  "id": "auditorio-tecnologico-felipe-carrillo-puerto",
+  "description": {
+    "es": "Auditorio del TecNM campus Felipe Carrillo Puerto: foros académicos, conferencias y presentaciones culturales; sede de eventos del Festival CICLOS.",
+    "en": "Auditorium of the TecNM campus in Felipe Carrillo Puerto: academic forums, conferences and cultural presentations; Festival CICLOS venue."
+  },
+  "directionsUrl": null,
+  "address": {
+    "es": "Instituto Tecnológico de Felipe Carrillo Puerto, Quintana Roo (dirección exacta por confirmar)",
+    "en": "Felipe Carrillo Puerto Institute of Technology, Quintana Roo (exact address to be confirmed)"
+  },
+  "hoursDisplay": {
+    "es": "Según evento",
+    "en": "Per event"
+  },
+  "verificationNote": {
+    "es": "Ubicación tomada del pin de Google Maps del programa Festival CICLOS 2026 (Foro de Cineastas); acceso y horarios sujetos al calendario del instituto.",
+    "en": "Location taken from the Festival CICLOS 2026 program's Google Maps pin (Filmmakers' Forum); access and hours subject to the institute's calendar."
+  },
+  "lastUpdated": "2026-11-18"
+}

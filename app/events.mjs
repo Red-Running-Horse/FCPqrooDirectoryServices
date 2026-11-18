@@ -204,11 +204,7 @@ const events = [
       en: "Screening of 'Negra' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
     },
     startAt: "2026-11-23T18:00:00-05:00",
-    venue: {
-      name: { es: "Domo Infonavit, Felipe Carrillo Puerto", en: "Domo Infonavit, Felipe Carrillo Puerto" },
-      latitude: 19.571900853488934,
-      longitude: -88.04064636746081,
-    },
+    venue: { placeId: "domo-infonavit-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/ciclos-2026-a.webp",
@@ -228,11 +224,7 @@ const events = [
       en: "Screening of 'Hilando Sones' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
     },
     startAt: "2026-11-23T20:00:00-05:00",
-    venue: {
-      name: { es: "Domo Infonavit, Felipe Carrillo Puerto", en: "Domo Infonavit, Felipe Carrillo Puerto" },
-      latitude: 19.571900853488934,
-      longitude: -88.04064636746081,
-    },
+    venue: { placeId: "domo-infonavit-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/ciclos-2026-a.webp",
@@ -252,11 +244,7 @@ const events = [
       en: "Screening of 'Valentina y la serenidad' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
     },
     startAt: "2026-11-24T18:00:00-05:00",
-    venue: {
-      name: { es: "Teatro de la Ciudad, Felipe Carrillo Puerto", en: "Teatro de la Ciudad, Felipe Carrillo Puerto" },
-      latitude: 19.577983460373655,
-      longitude: -88.04476419814225,
-    },
+    venue: { placeId: "teatro-de-la-ciudad-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/ciclos-2026-b.webp",
@@ -276,11 +264,7 @@ const events = [
       en: "Screening of 'Formas de atravesar un territorio' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
     },
     startAt: "2026-11-24T20:00:00-05:00",
-    venue: {
-      name: { es: "Teatro de la Ciudad, Felipe Carrillo Puerto", en: "Teatro de la Ciudad, Felipe Carrillo Puerto" },
-      latitude: 19.577983460373655,
-      longitude: -88.04476419814225,
-    },
+    venue: { placeId: "teatro-de-la-ciudad-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/ciclos-2026-b.webp",
@@ -300,11 +284,7 @@ const events = [
       en: "Screening of 'Vaychiletik' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
     },
     startAt: "2026-11-25T18:00:00-05:00",
-    venue: {
-      name: { es: "Teatro de la Ciudad, Felipe Carrillo Puerto", en: "Teatro de la Ciudad, Felipe Carrillo Puerto" },
-      latitude: 19.577983460373655,
-      longitude: -88.04476419814225,
-    },
+    venue: { placeId: "teatro-de-la-ciudad-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/ciclos-2026-c.webp",
@@ -324,11 +304,7 @@ const events = [
       en: "Screening of 'Mi no lugar' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
     },
     startAt: "2026-11-25T20:00:00-05:00",
-    venue: {
-      name: { es: "Teatro de la Ciudad, Felipe Carrillo Puerto", en: "Teatro de la Ciudad, Felipe Carrillo Puerto" },
-      latitude: 19.577983460373655,
-      longitude: -88.04476419814225,
-    },
+    venue: { placeId: "teatro-de-la-ciudad-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/ciclos-2026-c.webp",
@@ -348,11 +324,7 @@ const events = [
       en: "Screening of 'Tío Yim' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
     },
     startAt: "2026-11-26T18:00:00-05:00",
-    venue: {
-      name: { es: "Domo Infonavit, Felipe Carrillo Puerto", en: "Domo Infonavit, Felipe Carrillo Puerto" },
-      latitude: 19.571900853488934,
-      longitude: -88.04064636746081,
-    },
+    venue: { placeId: "domo-infonavit-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/ciclos-2026-a.webp",
@@ -372,11 +344,7 @@ const events = [
       en: "Screening of 'Hijas del bosque' at Festival CICLOS 2026, Árbol Rojo's film festival in Felipe Carrillo Puerto. Free admission.",
     },
     startAt: "2026-11-26T20:00:00-05:00",
-    venue: {
-      name: { es: "Domo Infonavit, Felipe Carrillo Puerto", en: "Domo Infonavit, Felipe Carrillo Puerto" },
-      latitude: 19.571900853488934,
-      longitude: -88.04064636746081,
-    },
+    venue: { placeId: "domo-infonavit-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/ciclos-2026-a.webp",
@@ -396,11 +364,7 @@ const events = [
       en: "Forum of filmmakers from indigenous peoples, with special guests, at Árbol Rojo's Festival CICLOS 2026 in Felipe Carrillo Puerto. Free admission.",
     },
     startAt: "2026-11-27T11:00:00-05:00",
-    venue: {
-      name: { es: "Auditorio del Instituto Tecnológico de Felipe Carrillo Puerto", en: "Auditorio del Instituto Tecnológico de Felipe Carrillo Puerto" },
-      latitude: 19.5839823294831,
-      longitude: -88.03015056745785,
-    },
+    venue: { placeId: "auditorio-tecnologico-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/ciclos-2026-b.webp",
@@ -420,11 +384,7 @@ const events = [
       en: "'Li Cham' gala screening with director Ana Ts'uyeb in attendance, at the Main Plaza — the closing of Árbol Rojo's Festival CICLOS 2026. Free admission.",
     },
     startAt: "2026-11-27T20:00:00-05:00",
-    venue: {
-      name: { es: "Explanada del Parque Principal, Felipe Carrillo Puerto", en: "Explanada del Parque Principal, Felipe Carrillo Puerto" },
-      latitude: 19.582198310725833,
-      longitude: -88.04538629099666,
-    },
+    venue: { placeId: "explanada-parque-principal-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/ciclos-2026-b.webp",
@@ -447,11 +407,7 @@ const events = [
       en: "Sixth edition of the Ko'one'ex K'aay Festival together with the 2nd SIKIL (Pepita) Gastronomic and Cultural Festival: music promoting indigenous languages with Carlos CHG, Sonido en Movimiento, Xéti NdáJnió Rap Mazateco, ADN Maya Colectivo, Cinturón de Orión Crotálico, Sayab K'aay Coro Infantil and Gigante Records, plus an exhibition of traditional dishes based on sikil (pumpkin seed), artisan products and ancestral gastronomy activities. From 5:00 PM. Exhibitors and registration: 983 180 5680.",
     },
     startAt: "2026-11-28T17:00:00-05:00",
-    venue: {
-      name: { es: "Concha Acústica “Alameda del Niño”, Felipe Carrillo Puerto", en: "Concha Acústica “Alameda del Niño”, Felipe Carrillo Puerto" },
-      latitude: 19.576077358569158,
-      longitude: -88.05435345779186,
-    },
+    venue: { placeId: "concha-acustica-alameda-del-nino-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/festival-kooneex-kaay-sikil-2026.webp",
