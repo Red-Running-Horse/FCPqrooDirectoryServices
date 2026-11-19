@@ -359,7 +359,7 @@ test("the map events layer reuses the layer-group pattern without touching the s
   assert.match(initialMarkup, /map-mobile-overlay/);
 });
 
-test("homepage section order (user directive v3): chips → MAP → hero → ribbon → search → quickbar → places → offline management → business CTA", () => {
+test("homepage section order (user directive v4): MAP → hero → ribbon → chips → search → quickbar → places → offline management → business CTA", () => {
   const map = read("../app/highway-map.js");
   const at = (needle) => {
     const i = map.indexOf(needle);
@@ -367,10 +367,10 @@ test("homepage section order (user directive v3): chips → MAP → hero → rib
     return i;
   };
   const order = [
-    ['<nav className="category-filters"', "category filter chips (directly above the map — they filter it)"],
     ['<div className="map-container map-workspace">', "map + portal (the product, first)"],
     ['<section className="hero"', "hero (identity right below the map)"],
     ["{children}", "ribbon slot — page.js passes UpcomingEvents here, below the hero (map → identity → agenda)"],
+    ['<nav className="category-filters"', "category filter chips — directly above the list they filter (user directive v4): tapping a chip updates the places list below without scrolling, since the map stays scroll-locked"],
     ['<div className="map-search" role="search">', "search box"],
     ['<div className="offline-quickbar" role="region"', "offline quickbar"],
     ['<details className="places-dropdown"', "places dropdown"],
@@ -604,17 +604,13 @@ test("the community strip lists ALL upcoming EVENTS at runtime as date-first row
     "chip day scaled up with the roomier row",
   );
   assert.match(css, /\.upcoming-row:hover\s*\{[^}]*border-color/s, "hover border stays");
-  // Mobile-first: cards own ~80vw at 360px (a second card peeks); desktop
-  // cards scale up proportionally inside the column.
-  assert.match(css, /\.upcoming-strip__scroller > li\s*\{[^}]*flex:\s*0 0 clamp\([^)]*80vw[^)]*\)/s, "fixed-flex cards sized ~80vw");
-  // Slim single-line header: the scroll hint is gone entirely, and heading +
-  // "all events" link share one row barely taller than the text.
-  assert.doesNotMatch(source, /upcoming-strip__hint|upcomingScrollHint/, "hint span removed");
-  assert.doesNotMatch(source, /upcoming-strip__header-actions/, "no actions wrapper — link sits in the header row");
+  // Vertical list (user directive): rows stack full width in a capped
+  // column — no fixed-width cards, no horizontal overflow.
+  assert.doesNotMatch(css, /\.upcoming-strip__scroller > li/, "no fixed-width card columns");
   assert.match(
-    source,
-    /<h2 id="upcoming-strip-heading">\{text\.upcomingHeading\}<\/h2>\s*<a className="upcoming-strip__all"/,
-    "heading and /eventos link are siblings on one line",
+    css,
+    /\.upcoming-strip__scroller\s*\{[^}]*flex-direction:\s*column/s,
+    "rows stack in a vertical column",
   );
   assert.doesNotMatch(css, /upcoming-strip__hint|upcoming-strip__header-actions/, "hint styles removed");
   assert.match(
@@ -641,49 +637,28 @@ test("eventChipDate: day + month in Cancun wall time, bilingual, year omitted, n
   assert.equal(eventChipDate({}, "en"), null);
 });
 
-test("the community strip gives mouse users a first-class input: wheel translation without scroll-trap, plus edge chevrons", () => {
+test("the community strip is a vertical fading list — swipe-free (user directive)", () => {
   const source = read("../app/upcoming-events.js");
-
-  // The wheel is translated by hand: React's synthetic onWheel attaches a
-  // passive listener, so preventDefault() inside it is ignored.
-  assert.match(source, /addEventListener\("wheel", onWheel, \{ passive: false \}\)/, "non-passive wheel listener via ref");
-  assert.match(source, /return \(\) => scroller\.removeEventListener\("wheel", onWheel\)/, "listener cleaned up on unmount");
-  assert.doesNotMatch(source, /onWheel=/, "no React synthetic wheel handler anywhere");
-
-  // No scroll-trap: the handler returns BEFORE preventDefault when the strip
-  // can't move further in the wheel's direction — at either end (or with no
-  // overflow at all) the page scrolls normally.
-  assert.match(
-    source,
-    /if \(goingForward \? max - scroller\.scrollLeft <= 1 : scroller\.scrollLeft <= 1\) return;[\s\S]*?event\.preventDefault\(\)/,
-    "pass-through is decided before any preventDefault",
-  );
-
-  // Touch keeps the native pan — no touch handlers on the strip.
-  assert.doesNotMatch(source, /onTouch|touchstart|touchmove/, "touch behavior untouched");
-
-  // Edge chevrons: desktop only, one ~80% page per click, hidden at the ends,
-  // bilingual aria-labels through the shared uiText pattern.
-  assert.match(source, /window\.matchMedia\("\(min-width: 48rem\)"\)/, "desktop = the 48rem breakpoint used by the styles");
-  assert.match(source, /\{desktop && \(/, "chevrons render on desktop only");
-  assert.match(source, /scrollBy\(\{ left: direction \* scroller\.clientWidth \* 0\.8, behavior: "smooth" \}\)/, "one ~80% page per click");
-  assert.match(source, /aria-label=\{text\.upcomingPrevious\}/);
-  assert.match(source, /aria-label=\{text\.upcomingNext\}/);
-  assert.match(source, /hidden=\{atStart\}/, "previous chevron hides at the start");
-  assert.match(source, /hidden=\{atEnd\}/, "next chevron hides at the end");
-
-  // The chevron chrome lives in the desktop query that already styles the
-  // ribbon scroller, and the hidden attribute must beat the button's display
-  // rule at both ends. The ribbon itself anchors the overlays (nav, edge
-  // fade) at every width — the base rule, not only the desktop query.
+  // The horizontal carousel machinery is gone: no wheel translation, paging,
+  // chevrons, desktop-only chrome, or edge-fade state.
+  assert.doesNotMatch(source, /addEventListener\("wheel"/, "no wheel translation");
+  assert.doesNotMatch(source, /scrollBy|scrollLeft|scrollPage|canScrollLeft|canScrollRight|atStart|atEnd/, "no paging machinery");
+  assert.doesNotMatch(source, /matchMedia/, "no desktop-only chrome");
+  assert.doesNotMatch(source, /onTouchStart|onTouchMove|onWheel=/, "touch behavior untouched");
+  assert.doesNotMatch(source, /upcoming-strip__(nav|ribbon|fade)/, "no chevron/fade chrome in markup");
+  // Vertical column with a bottom fade in CSS — the "more below" affordance
+  // that replaces the undiscoverable swipe gesture.
   const css = read("../app/style.css");
-  const ribbonBlock = [...css.matchAll(/@media\s*\(min-width:\s*48rem\)\s*\{([\s\S]*?)\n\}/g)]
-    .map((match) => match[1])
-    .find((body) => body.includes(".upcoming-strip__scroller"));
-  assert.ok(ribbonBlock, "the ribbon desktop rules live in a 48rem query");
-  assert.match(css, /\.upcoming-strip__ribbon\s*\{[^}]*position:\s*relative/s, "the ribbon anchors the nav overlay at every width");
-  assert.match(ribbonBlock, /\.upcoming-strip__nav\s*\{[^}]*position:\s*absolute/s, "chevrons sit at the ribbon's right edge");
-  assert.match(ribbonBlock, /\.upcoming-strip__nav-btn\[hidden\]\s*\{\s*display:\s*none/s, "hidden wins over the button display");
+  const scroller = css.match(/\.upcoming-strip__scroller\s*\{[^}]*\}/s)?.[0] ?? "";
+  assert.match(scroller, /flex-direction:\s*column/, "the scroller is a vertical column");
+  assert.match(scroller, /overflow:\s*hidden/, "capped, not scrollable");
+  assert.match(scroller, /mask-image:\s*linear-gradient\(to bottom/, "bottom fade mask");
+  assert.match(scroller, /-webkit-mask-image/, "prefixed mask for Safari");
+  assert.doesNotMatch(scroller, /overflow-x|scroll-snap/, "no horizontal machinery in the scroller rule");
+  assert.doesNotMatch(css, /\.upcoming-strip__(nav|ribbon|fade)/, "chevron/fade styles gone");
+  // The rows contract survives: date chip + title + sponsored marker rows,
+  // every row linking uniformly to /eventos#<id>.
+  assert.match(source, /href=\{`\/eventos#\$\{event\.id\}`\}/, "rows still deep-link into /eventos");
 });
 
 test("/eventos entries carry anchor ids that the homepage strip targets", () => {

@@ -129,7 +129,7 @@
    breath of air above it. */
 .hero__eyebrow {
   text-align: center;
-  margin: 1rem 0 0.3rem;
+  margin: 0.4rem 0 0.2rem;
 }
 
 .hero__wordmark {
@@ -146,7 +146,7 @@
    the baked aspect — no fixed heights anywhere. */
 .hero__letters {
   display: block;
-  width: 88%;
+  width: 60%;
   height: auto;
   margin-inline: auto;
 }
@@ -155,7 +155,7 @@
 .hero__subheading {
   text-align: center;
   margin-inline: auto;
-  margin-top: 0.3rem;
+  margin-top: 0.15rem;
 }
 
 /* ---------- Visitor's guide (/guia) ---------- */
@@ -222,12 +222,12 @@
   /* Desktop scale: the letters image spans ~56% of the hero card, landing
      the whole hero in the 400–440px height target at 1366. */
   .hero__letters {
-    width: 56%;
+    width: 36%;
   }
 
   /* Above this width the eyebrow sits well clear of the card's top edge. */
   .hero__eyebrow {
-    margin-top: 0.4rem;
+    margin-top: 0.2rem;
   }
 }
 

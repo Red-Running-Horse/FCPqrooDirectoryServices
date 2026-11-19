@@ -341,11 +341,11 @@ p {
   display: block;
 }
 
-/* Upcoming events strip (community strip): every upcoming EVENT as a
-   compact date-first row — a category-colored chip (day over month), the
-   full title wrapping to three lines max, and a minimal sponsored marker on
-   promoted entries (paid placement is always labeled). Every row links
-   uniformly to /eventos#<id>. Native scroll-snap; no carousel JS. */
+/* Upcoming events strip (community strip) — the site's agenda, a VERTICAL
+   fading list (user directive): date-first rows stacked full width, capped
+   at ~5 visible rows with a CSS mask fading the tail as the "more below"
+   affordance. No horizontal scroll, snap, wheel translation, or chevrons —
+   the slim header's /eventos link is the full agenda. */
 .upcoming-strip {
   /* Below the hero since the order tweak: the top margin is what separates
      the ribbon from the hero card above it (map → identity → agenda). */
@@ -392,45 +392,21 @@ p {
   text-decoration: underline;
 }
 
+/* Vertical fading agenda (user directive): a plain column capped at ~5
+   visible rows; a CSS mask fades the tail as the "more below" affordance —
+   no horizontal scroll, snap, wheel translation, or chevrons. The header's
+   /eventos link is the full agenda. */
 .upcoming-strip__scroller {
   display: flex;
-  gap: 0.75rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 24rem; /* ≈5 rows of the pinned 72px geometry + gaps, then fade */
+  overflow: hidden;
   list-style: none;
   margin: 0;
-  padding: 0.25rem 0.25rem 0.75rem;
-}
-
-.upcoming-strip__scroller > li {
-  /* Mobile cards own ~80vw (a second card peeks past the edge); desktop
-     cards scale up proportionally inside the 60rem column. */
-  flex: 0 0 clamp(17.5rem, 80vw, 21rem);
-  scroll-snap-align: start;
-}
-
-.upcoming-strip__ribbon {
-  position: relative;
-}
-
-/* Right-edge scroll affordance: a gradient over the scroller's last ~2.5rem
-   shows the ribbon continues past the viewport edge. Scroll-linked — the
-   component hides it at the end (and whenever nothing overflows) via the
-   hidden attribute. Always-on was the fallback; the linked version won.
-   The desktop chevrons keep their own gradient and stay on top. */
-.upcoming-strip__fade {
-  position: absolute;
-  top: 0.25rem;
-  bottom: 0.75rem;
-  right: 0;
-  width: 2.5rem;
-  background: linear-gradient(to right, transparent, var(--sand));
-  pointer-events: none;
-}
-
-.upcoming-strip__fade[hidden] {
-  display: none;
+  padding: 0.25rem;
+  mask-image: linear-gradient(to bottom, #000 78%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent);
 }
 
 /* Date-first agenda rows: a 72px-tall card with a category-colored date
@@ -1719,57 +1695,3 @@ p {
   color: var(--charcoal-soft);
 }
 
-
-@media (min-width: 48rem) {
-  .upcoming-strip__scroller {
-    scrollbar-width: thin;
-    scrollbar-color: var(--terracotta) var(--sand-line);
-    padding-bottom: 4px;
-  }
-  .upcoming-strip__scroller::-webkit-scrollbar {
-    height: 8px;
-  }
-  .upcoming-strip__scroller::-webkit-scrollbar-thumb {
-    background: var(--terracotta);
-    border-radius: 4px;
-  }
-  .upcoming-strip__scroller::-webkit-scrollbar-track {
-    background: var(--sand-line);
-  }
-
-  /* Ribbon input: chevrons at the right edge, rendered only by JS on desktop
-     (≥48rem). They page by ~80% of the ribbon per click and hide at the ends
-     via the hidden attribute. */
-  .upcoming-strip__nav {
-    position: absolute;
-    top: 50%;
-    right: 0.25rem;
-    transform: translateY(-50%);
-    display: flex;
-    gap: 0.25rem;
-    padding: 0.15rem;
-    background: linear-gradient(to right, transparent, var(--sand) 35%);
-  }
-  .upcoming-strip__nav-btn {
-    display: grid;
-    place-items: center;
-    width: 1.5rem;
-    height: 1.5rem;
-    padding: 0;
-    border: 1px solid var(--sand-line);
-    border-radius: 50%;
-    background: var(--cream);
-    color: var(--charcoal);
-    font-size: 0.8rem;
-    line-height: 1;
-    cursor: pointer;
-  }
-  .upcoming-strip__nav-btn:hover {
-    border-color: var(--terracotta);
-    color: var(--terracotta);
-  }
-  /* The hidden attribute must win over the button display above. */
-  .upcoming-strip__nav-btn[hidden] {
-    display: none;
-  }
-}

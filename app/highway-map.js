@@ -674,36 +674,7 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
 
   return (
     <>
-      <nav className="category-filters" aria-label={text.filtersLabel}>
-        {CATEGORIES.map(({ id, label }) => (
-          <button
-            key={id}
-            type="button"
-            aria-pressed={category === id}
-            onClick={() => applyFilters(id, search)}
-          >
-            <span
-              className="category-filters__icon"
-              aria-hidden="true"
-              dangerouslySetInnerHTML={{ __html: categoryIconSvg(id, { size: 16, className: "category-icon" }) }}
-            />
-            {localize(label, language)}
-          </button>
-        ))}
-        <button
-          type="button"
-          className="category-filters__events"
-          aria-pressed={showEvents}
-          onClick={() => setShowEvents((value) => !value)}
-        >
-          <span
-            className="category-filters__icon"
-            aria-hidden="true"
-            dangerouslySetInnerHTML={{ __html: EVENT_MARKER_ICON }}
-          />
-          {text.eventsLayer}
-        </button>
-      </nav>
+
       <ul className="legend" aria-label={text.legendCategories}>
         <li>
           <span className="swatch" aria-hidden="true" />
@@ -782,6 +753,36 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
         <p className="hero__subheading">{text.heroSubheading}</p>
       </section>
       {children}
+      <nav className="category-filters" aria-label={text.filtersLabel}>
+        {CATEGORIES.map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            aria-pressed={category === id}
+            onClick={() => applyFilters(id, search)}
+          >
+            <span
+              className="category-filters__icon"
+              aria-hidden="true"
+              dangerouslySetInnerHTML={{ __html: categoryIconSvg(id, { size: 16, className: "category-icon" }) }}
+            />
+            {localize(label, language)}
+          </button>
+        ))}
+        <button
+          type="button"
+          className="category-filters__events"
+          aria-pressed={showEvents}
+          onClick={() => setShowEvents((value) => !value)}
+        >
+          <span
+            className="category-filters__icon"
+            aria-hidden="true"
+            dangerouslySetInnerHTML={{ __html: EVENT_MARKER_ICON }}
+          />
+          {text.eventsLayer}
+        </button>
+      </nav>
       <div className="map-search" role="search">
         <label className="map-search__label" htmlFor="map-search-input">
           {text.searchLabel}

@@ -92,16 +92,16 @@ test("letter-span machinery is fully gone from markup and both CSS layers", () =
   );
 });
 
-test("letters sizing: fluid width on mobile, ~54% at desktop, height auto", () => {
+test("letters sizing: fluid width on mobile, ~36% at desktop, height auto", () => {
   const theme = read("../app/maya-theme.css");
 
   const base = theme.match(/\.hero__letters\s*\{([^}]*)\}/)?.[1];
-  assert.match(base, /width:\s*88%/, "fluid width on narrow screens");
+  assert.match(base, /width:\s*60%/, "fluid width on narrow screens");
   assert.match(base, /height:\s*auto/, "height follows the baked aspect");
   assert.doesNotMatch(base, /height:\s*\d+(\.\d+)?px/, "no fixed pixel height");
 
   const desktop = theme.match(/@media\s*\(min-width:\s*48rem\)\s*\{([\s\S]*?)\n\}/)?.[1];
-  assert.match(desktop, /\.hero__letters\s*\{[^}]*width:\s*56%/, "desktop pins ~56% of the hero card");
+  assert.match(desktop, /\.hero__letters\s*\{[^}]*width:\s*36%/, "desktop pins ~36% of the hero card");
 });
 
 test("language toggle lives in the site nav (every page), not the hero card", () => {
@@ -136,7 +136,7 @@ test("hero composition is fully centered — eyebrow above, caption below", () =
 
   const eyebrow = theme.match(/\.hero__eyebrow\s*\{([^}]*)\}/)?.[1];
   assert.match(eyebrow, /text-align:\s*center/, "eyebrow centered");
-  assert.match(eyebrow, /margin:\s*1rem 0 0\.3rem/, "air above, no toggle to clear");
+  assert.match(eyebrow, /margin:\s*0\.4rem 0 0\.2rem/, "air above, no toggle to clear");
   const kicker = map.indexOf('className="hero__eyebrow"');
   const h1 = map.indexOf('<h1 className="hero__wordmark">');
   const caption = map.indexOf('className="hero__subheading"');
