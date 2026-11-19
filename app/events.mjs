@@ -420,6 +420,52 @@ const events = [
     lastUpdated: "2026-11-18",
   },
   {
+    id: "piedras-vivas-fest-2026",
+    title: { es: "Piedras Vivas Fest — 2.ª edición", en: "Piedras Vivas Fest — 2nd Edition" },
+    description: {
+      es: "Segunda edición del festival de alabanza del Ministerio Piedras Vivas en el domo doble de la colonia Cecilio Chi: música cristiana en vivo, con un invitado local (banda o rapero) elegido por votación en redes.",
+      en: "Second edition of the Piedras Vivas Ministry worship festival at the Cecilio Chi double dome: live Christian music, with a local guest (band or rapper) chosen by vote on social media.",
+    },
+    startAt: "2026-11-27",
+    venue: {
+      name: { es: "Domo doble, Colonia Cecilio Chi, Felipe Carrillo Puerto", en: "Domo doble, Colonia Cecilio Chi, Felipe Carrillo Puerto" },
+      latitude: 19.579347084416455,
+      longitude: -88.05433233045568,
+    },
+    category: "culture",
+    image: {
+      url: "/img/eventos/piedras-vivas-fest-2026.webp",
+      alt: { es: "Cartel del Piedras Vivas Fest 2026", en: "Poster for Piedras Vivas Fest 2026" },
+    },
+    contactNote: "Verified from the organizer's Facebook post, Nov 2026. Start time not published; lineup partially open (local guest by mentions).",
+    sourceUrl: "https://www.facebook.com/share/1E6PG5DPCd/",
+    status: "published",
+    lastUpdated: "2026-11-19",
+  },
+  {
+    id: "juntas-florecemos-2026",
+    title: {
+      es: "Juntas Florecemos — Encuentro de Mujeres",
+      en: "Juntas Florecemos — Women's Gathering",
+    },
+    description: {
+      es: "Encuentro entre mujeres para reconectar con la naturaleza, compartir experiencias y sanar en comunidad, desde el sagrado femenino y la sabiduría de la Tierra, en Balam-Nah. Aportación $555 MXN; reservaciones al 984 184 1313.",
+      en: "A gathering of women to reconnect with nature, share experiences and heal in community, drawing on the sacred feminine and the wisdom of the Earth, at Balam-Nah. Contribution MX$555; reservations at 984 184 1313.",
+    },
+    startAt: "2026-12-05",
+    venue: { placeId: "balam-nah-felipe-carrillo-puerto" },
+    category: "culture",
+    image: {
+      url: "/img/eventos/juntas-florecemos-2026.webp",
+      alt: { es: "Cartel del encuentro Juntas Florecemos", en: "Poster for the Juntas Florecemos gathering" },
+    },
+    cost: { es: "Aportación $555 MXN", en: "Contribution MX$555" },
+    contactNote: "Verified from the organizer's Instagram reel, Nov 2026. Reservations: 984 184 1313.",
+    sourceUrl: "https://www.instagram.com/reel/DfhPR5WBXxA/",
+    status: "published",
+    lastUpdated: "2026-11-19",
+  },
+  {
     id: "noche-nortena-epico-2026",
     title: {
       es: "La Noche se Pone Norteña en Épico — Banda 420",
