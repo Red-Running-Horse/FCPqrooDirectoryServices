@@ -386,6 +386,16 @@ test("homepage section order (user directive v4): MAP → hero → ribbon → ch
   assert.match(map, /onChange=\{\(event\) => applyFilters\(category, event\.target\.value\)\}/, "search is state, not position");
 });
 
+test("category chips wrap instead of scrolling, at compact size (user directive)", () => {
+  const css = read("../app/style.css");
+  const nav = css.match(/\.category-filters\s*\{[^}]*\}/s)?.[0] ?? "";
+  assert.match(nav, /flex-wrap:\s*wrap/, "chips wrap to new lines — every category visible without scrolling");
+  assert.doesNotMatch(nav, /overflow-x/, "no horizontal scroll on the chip row");
+  const btn = css.match(/\.category-filters button\s*\{[^}]*\}/s)?.[0] ?? "";
+  assert.match(btn, /padding:\s*0\.3rem 0\.7rem/, "compact chip padding");
+  assert.match(btn, /font-size:\s*0\.85rem/, "smaller chip text for mobile screens");
+});
+
 test("events UI strings exist in both languages", () => {
   for (const key of [
     "eventsLayer",
