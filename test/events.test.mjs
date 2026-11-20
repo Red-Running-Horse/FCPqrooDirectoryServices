@@ -342,6 +342,31 @@ test("/eventos renders the optional flyer behind the CSS language gate, with a C
   assert.match(page, /decoding="async"/);
 });
 
+test("/eventos share links: the URL hash opens the event; a copy-link button sits in the details body (user directive)", () => {
+  const page = read("../app/eventos/page.js");
+  // Hash-open: a fragment alone only scrolls — the page must open the
+  // target <details> once the runtime filter has rendered the list.
+  assert.match(page, /window\.location\.hash/, "reads the shared hash");
+  assert.match(page, /querySelector\("details"\)/, "finds the target <details>");
+  assert.match(page, /details\.open = true/, "opens it, not just scrolls");
+  assert.match(page, /scrollIntoView/, "brings the shared event into view");
+  assert.match(page, /\}, \[now\]\);/, "waits for the runtime-rendered list");
+  assert.match(page, /scrollMarginTop/, "anchor lands clear of the sticky header");
+  // Copy affordance: canonical /eventos#<id> URL, bilingual gated labels,
+  // transient copied feedback, clipboard API with a legacy fallback.
+  assert.match(page, /navigator\.clipboard\.writeText/, "copies the share URL");
+  assert.match(page, /\/eventos#\$\{id\}/, "canonical share URL shape");
+  assert.match(page, /className="l10n-es">copiar enlace</, "ES label");
+  assert.match(page, /className="l10n-en">copy link</, "EN label");
+  assert.match(page, /enlace copiado/, "ES copied feedback");
+  assert.match(page, /link copied/, "EN copied feedback");
+  // The share control never sits in the summary — a click there would
+  // toggle the details shut.
+  const summaries = page.match(/<summary[\s\S]*?<\/summary>/g) ?? [];
+  assert.ok(summaries.length > 0, "summary template present");
+  for (const s of summaries) assert.ok(!s.includes("copyEventLink"), "no share control inside <summary>");
+});
+
 test("the map events layer reuses the layer-group pattern without touching the scroll-trap markup", () => {
   const map = read("../app/highway-map.js");
   assert.match(map, /const eventLayer = useRef\(null\);/);

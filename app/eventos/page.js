@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import GrecaBand from "../greca";
 import events from "../events.mjs";
 import annualHighlights from "../annual-highlights.mjs";
@@ -33,6 +33,9 @@ const card = {
   border: "1px solid var(--sand-line)",
   borderRadius: "10px",
   padding: "0.9rem 1rem",
+  // Shared-link landings (/eventos#<id>) and strip jumps anchor below the
+  // sticky header instead of sliding underneath it.
+  scrollMarginTop: "3.5rem",
 };
 
 const meta = { margin: "0.3rem 0", fontSize: "0.88rem", color: "var(--charcoal-soft)" };
@@ -56,6 +59,27 @@ function EventEntry({ event }) {
   const imageEs = eventImage(event, "es");
   const imageEn = eventImage(event, "en");
   const imageAltDiffers = imageEn && imageEn.alt !== imageEs.alt;
+  const [copied, setCopied] = useState(false);
+  const copyTimer = useRef(null);
+  useEffect(() => () => clearTimeout(copyTimer.current), []);
+  // Share affordance: copy the canonical /eventos#<id> link. Clipboard API
+  // with a legacy fallback for older webviews; transient "copied" feedback.
+  const copyEventLink = async (id) => {
+    const url = `${window.location.origin}/eventos#${id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+    }
+    setCopied(true);
+    clearTimeout(copyTimer.current);
+    copyTimer.current = setTimeout(() => setCopied(false), 2000);
+  };
   const jsonLd = JSON.stringify(eventJsonLd(event, placesById)).replace(/</g, "\\u003c");
   return (
     // id anchors the homepage upcoming-events strip links (/eventos#<id>).
@@ -125,14 +149,31 @@ function EventEntry({ event }) {
               💲 <L10n pair={event.cost} />
             </p>
           )}
-          {event.sourceUrl && (
-            <p style={meta}>
+          <p style={{ ...meta, display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+            {event.sourceUrl && (
               <a href={event.sourceUrl} target="_blank" rel="noopener noreferrer">
                 <span className="l10n-es">fuente ↗</span>
                 <span className="l10n-en">source ↗</span>
               </a>
-            </p>
-          )}
+            )}
+            <button
+              type="button"
+              onClick={() => copyEventLink(event.id)}
+              style={{ background: "none", border: "none", padding: 0, font: "inherit", fontSize: "0.88rem", color: "var(--link)", cursor: "pointer", textDecoration: "underline" }}
+            >
+              {copied ? (
+                <>
+                  <span className="l10n-es">enlace copiado ✓</span>
+                  <span className="l10n-en">link copied ✓</span>
+                </>
+              ) : (
+                <>
+                  <span className="l10n-es">copiar enlace</span>
+                  <span className="l10n-en">copy link</span>
+                </>
+              )}
+            </button>
+          </p>
         </div>
       </details>
       <script
@@ -146,6 +187,20 @@ function EventEntry({ event }) {
 export default function Eventos() {
   const [now, setNow] = useState(null);
   useEffect(() => setNow(new Date()), []);
+
+  // Shared links (/eventos#<id>): a fragment alone only scrolls — it never
+  // opens a <details>. Once the runtime filter has rendered, open the target
+  // event and bring it into view.
+  useEffect(() => {
+    if (!now) return;
+    const id = window.location.hash.replace("#", "");
+    if (!id) return;
+    const li = document.getElementById(id);
+    const details = li?.querySelector("details");
+    if (!details) return;
+    details.open = true;
+    requestAnimationFrame(() => li.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }, [now]);
 
   const upcoming = now ? upcomingEvents(events, now.getTime()) : [];
   const listed = upcoming.filter((ev) => entryKind(ev) === "event");
