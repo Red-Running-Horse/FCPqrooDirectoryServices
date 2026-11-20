@@ -271,7 +271,6 @@ test("place photos: same-origin /img/lugares/ WebP urls with bilingual non-empty
     }
   }
   // Photos ride the detail payload, never the index (bundle stays lean).
-  const { buildPlaceData } = placeDataModule;
   const { index } = buildPlaceData(attractions);
   for (const entry of index) {
     assert.ok(!("photos" in entry), `${entry.id}: photos must not ship in the index`);
