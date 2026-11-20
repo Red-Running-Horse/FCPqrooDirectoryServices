@@ -292,7 +292,9 @@ export async function savePlaceOffline(
   // places render complete offline. Photo failures never fail the save.
   if (fetchFn) {
     const cachedDetail = await cache.match(url);
-    if (cachedDetail) await cachePlacePhotos(cachedDetail, cache, fetchFn);
+    // Clone before parsing: the cached Response stays unread so callers can
+    // consume the detail body after the save (a Response body reads once).
+    if (cachedDetail) await cachePlacePhotos(cachedDetail.clone(), cache, fetchFn);
   }
 
   if (storage) {
