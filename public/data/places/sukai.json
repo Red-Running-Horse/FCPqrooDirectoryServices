@@ -1,0 +1,25 @@
+{
+  "id": "sukai",
+  "description": {
+    "es": "Restaurante japonés en el centro de Felipe Carrillo Puerto: sushi y platillos de la cocina nipona en un ambiente casual, tranquilo y trendy. Para llevar, a domicilio y en mesa; popular para la cena. Precios aproximados $100–200 MXN por persona.",
+    "en": "Japanese restaurant in downtown Felipe Carrillo Puerto: sushi and Japanese dishes in a casual, quiet, trendy setting. Takeaway, delivery and dine-in; popular for dinner. Roughly MX$100–200 per person."
+  },
+  "directionsUrl": null,
+  "hoursDisplay": {
+    "es": "Jueves a lunes, 5:00 – 10:30 PM; martes y miércoles cerrado",
+    "en": "Thursday to Monday, 5:00 – 10:30 PM; closed Tuesday and Wednesday"
+  },
+  "phone": "+52 983 132 1237",
+  "whatsapp": "+52 983 132 1237",
+  "email": "dgtorcuatoeuan@hotmail.com",
+  "socialLinks": {
+    "facebook": "https://www.facebook.com/sukaisushii",
+    "instagram": "https://www.instagram.com/sukai_sushi_fcp/"
+  },
+  "verificationNote": {
+    "es": "Datos tomados de la ficha de Google Maps (nov 2026), aún sin verificación en campo; Google advierte que el horario del viernes (Día de la Revolución) puede variar.",
+    "en": "Details from the Google Maps listing (Nov 2026), not yet field-verified; Google flags Friday (Revolution Day) hours as possibly differing."
+  },
+  "contactNote": "WhatsApp recorded as the canonical wa.me link — the link provided in the notes was a Facebook CTA token URL, which is fragile. Source image (Sukai.webp) is local-only, not yet in the repo.",
+  "lastUpdated": "2026-11-19"
+}

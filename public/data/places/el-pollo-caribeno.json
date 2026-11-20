@@ -1,0 +1,19 @@
+{
+  "id": "el-pollo-caribeno",
+  "description": {
+    "es": "Pollería de precios accesibles en el centro: pollo asado al carbón con salsa, cebolla y pasta por ~$150 MXN, listo en menos de 10 minutos. Abierto lunes a domingo, 10:00 AM – 5:00 PM.",
+    "en": "Budget-friendly rotisserie chicken downtown: charcoal-grilled chicken with salsa, onions and pasta sides for ~MX$150, ready in under 10 minutes. Open Monday to Sunday, 10:00 AM – 5:00 PM."
+  },
+  "directionsUrl": null,
+  "hoursDisplay": {
+    "es": "Lunes a domingo, 10:00 AM – 5:00 PM",
+    "en": "Monday to Sunday, 10:00 AM – 5:00 PM"
+  },
+  "phone": "+52 983 136 4227",
+  "verificationNote": {
+    "es": "Datos tomados de la ficha de Google Maps (nov 2026), aún sin verificación en campo; sin redes sociales publicadas.",
+    "en": "Details from the Google Maps listing (Nov 2026), not yet field-verified; no social media published."
+  },
+  "contactNote": "Second contact line: +52 983 733 3076. Source image (Pollo_Caribeno.webp) is local-only, not yet in the repo.",
+  "lastUpdated": "2026-11-19"
+}

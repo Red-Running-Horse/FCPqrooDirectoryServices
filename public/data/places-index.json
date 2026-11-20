@@ -345,5 +345,41 @@
       "es": "Explanada del Parque Principal, Felipe Carrillo Puerto",
       "en": "Main Plaza Esplanade, Felipe Carrillo Puerto"
     }
+  },
+  {
+    "id": "rancho-cenote-sayab-kuxtal",
+    "category": "nature",
+    "latitude": 19.610638008233,
+    "longitude": -88.13936783312786,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Rancho Cenote “Sayab Kuxtal”",
+      "en": "Sayab Kuxtal Ranch Cenote"
+    }
+  },
+  {
+    "id": "sukai",
+    "category": "food",
+    "latitude": 19.581200614385473,
+    "longitude": -88.04814265211712,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "SUKAI — Restaurante japonés",
+      "en": "SUKAI — Japanese Restaurant"
+    }
+  },
+  {
+    "id": "el-pollo-caribeno",
+    "category": "food",
+    "latitude": 19.580580149599978,
+    "longitude": -88.04160493398605,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "El Pollo Caribeño",
+      "en": "El Pollo Caribeño"
+    }
   }
 ]
