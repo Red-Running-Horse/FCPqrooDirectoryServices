@@ -1000,10 +1000,6 @@ export const attractions = [
         url: "/img/lugares/el-tekaxeno-mercado-fcp.webp",
         alt: { es: "Platillos yucatecos de El Tekaxeño en el Mercado Público", en: "Yucatecan dishes at El Tekaxeño in the Public Market" },
       },
-      {
-        url: "/img/lugares/el-tekaxeno-mercado-fcp-2.webp",
-        alt: { es: "El Tekaxeño en el Mercado Público de Felipe Carrillo Puerto", en: "El Tekaxeño at the Felipe Carrillo Puerto Public Market" },
-      },
     ],
     hoursDisplay: { es: "Todos los días hasta las 4:00 pm", en: "Daily until 4:00 PM" },
     contactNote: "Editor visited Oct 2026 — food and service confirmed. Inside the Mercado Público food court (~10 seats at two tables); pin dropped at the stall.",
