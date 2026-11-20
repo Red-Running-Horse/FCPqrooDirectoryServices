@@ -69,6 +69,21 @@ export default function PlacePortal({
             )}
             <span className={`status-badge status-badge--${view.status}`}>{view.statusLabel}</span>
           </p>
+          {view.photos && (
+            <div className="place-portal__photos">
+              {view.photos.map((photo) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={photo.url}
+                  className="place-portal__photo"
+                  src={photo.url}
+                  alt={photo.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ))}
+            </div>
+          )}
           {onToggleSave && (
             <div className="place-portal__offline-bar">
               {isSaved ? (

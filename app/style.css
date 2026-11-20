@@ -570,6 +570,25 @@ p {
   margin-top: 0.5rem;
 }
 
+/* Place photos (user directive): stacked fixed-ratio boxes — a fixed
+   aspect-ratio reserves space before decode (CLS), object-fit crops varied
+   sources to the same box. */
+.place-portal__photos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0.75rem;
+}
+
+.place-portal__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 8px;
+  background: var(--sand);
+}
+
 .status-badge {
   border-radius: var(--radius-chip);
   padding: 0.15rem 0.55rem;

@@ -279,6 +279,34 @@ test("per-place save and remove caches only the target place detail", async () =
   assert.equal(afterRemove, null, "place detail removed from cache");
 });
 
+test("per-place save also caches the place's photos, best-effort (user directive)", async () => {
+  const { mockCaches } = setupMockEnvironment();
+  const placeId = "rancho-cenote-sayab-kuxtal";
+  const good = "/img/lugares/rancho-cenote-sayab-kuxtal.webp";
+  const missing = "/img/lugares/missing-photo.webp";
+  const fetched = [];
+  await savePlaceOffline(placeId, {
+    placeData: {
+      id: placeId,
+      name: { es: "Sayab Kuxtal" },
+      photos: [
+        { url: good, alt: { es: "El cenote", en: "The cenote" } },
+        { url: missing, alt: { es: "x", en: "x" } },
+      ],
+    },
+    fetchFn: async (url) => {
+      fetched.push(url);
+      if (url === missing) return { ok: false, status: 404 };
+      return { ok: true, clone() { return { ok: true }; } };
+    },
+  });
+  const placesCache = await mockCaches.open(PLACES_CACHE_NAME);
+  assert.ok(await placesCache.match(good), "photo cached alongside the detail");
+  assert.ok(fetched.includes(missing), "a failing photo is still attempted");
+  assert.equal(await placesCache.match(missing), null, "a failed photo is not cached");
+  // The save itself resolved — photo failures never fail a place save.
+});
+
 test("service worker activate cleans stale shared caches but preserves places and unrelated caches", async () => {
   const { mockCaches } = setupMockEnvironment();
   await mockCaches.open("fcp-shared-v0");

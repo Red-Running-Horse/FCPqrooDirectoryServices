@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import { checkGeoJson, MAX_GEOJSON_BYTES } from "../scripts/check-performance-budgets.mjs";
 import events from "../app/events.mjs";
+import { attractions } from "../app/attractions.mjs";
 
 const roadFile = new URL("../public/regional-highways.geojson", import.meta.url);
 const source = readFileSync(roadFile);
@@ -74,4 +75,22 @@ test("the map workspace, portal placeholder and listing references are present w
   assert.match(initialMarkup, /<div className="map-workspace__portal">\s*<PlacePortal/);
   assert.match(initialMarkup, /<section className="listing-references"[\s\S]*\{filteredReferences\.map\(/);
   assert.match(portal, /!view\.selected\s*\?\s*\(\s*<p className="place-portal__prompt">/);
+});
+
+test("place photo assets exist under public/img/lugares and are within the byte budget", () => {
+  // Optional field — permissive until wired (same rule as the event flyers):
+  // only records carrying photos are checked.
+  const MAX_PHOTO_BYTES = 150 * 1024; // 150 KB per photo
+  const withPhotos = attractions.filter((a) => (a.photos ?? []).length > 0);
+  for (const a of withPhotos) {
+    for (const p of a.photos) {
+      const file = new URL(`../public${p.url}`, import.meta.url);
+      assert.ok(existsSync(file), `${a.id}: ${p.url} must exist under public/img/lugares/`);
+      const { size } = statSync(file);
+      assert.ok(
+        size <= MAX_PHOTO_BYTES,
+        `${a.id}: ${p.url} is ${size} bytes — above the ${MAX_PHOTO_BYTES}-byte place-photo budget`,
+      );
+    }
+  }
 });

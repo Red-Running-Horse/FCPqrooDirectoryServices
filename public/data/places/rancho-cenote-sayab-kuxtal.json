@@ -15,6 +15,15 @@
   "socialLinks": {
     "facebook": "https://www.facebook.com/rcsayabkuxtal"
   },
+  "photos": [
+    {
+      "url": "/img/lugares/rancho-cenote-sayab-kuxtal.webp",
+      "alt": {
+        "es": "Cenote Sayab Kuxtal con su plataforma para saltar",
+        "en": "Sayab Kuxtal cenote with its jumping platform"
+      }
+    }
+  ],
   "verificationNote": {
     "es": "Datos tomados de la ficha de Google Maps (nov 2026), aún sin verificación en campo; el precio de entrada proviene de reseñas recientes de visitantes — confirmar en la entrada.",
     "en": "Details from the Google Maps listing (Nov 2026), not yet field-verified; the entrance fee comes from recent visitor reviews — confirm at the gate."

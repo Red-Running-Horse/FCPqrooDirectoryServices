@@ -362,3 +362,51 @@ test("the market renders phone-only contact with no empty Batch A rows", () => {
     assert.equal(view.accessibility, null);
   }
 });
+
+test("place photos: localized, name-fallback alt, same-origin only, absent by default", async () => {
+  const { placePortal } = await import("../app/place-portal.mjs");
+  const photos = {
+    url: "/img/lugares/rancho-cenote-sayab-kuxtal.webp",
+    alt: { es: "El cenote", en: "The cenote" },
+  };
+  const withPhotos = placePortal(
+    {
+      ...selvaMorena,
+      id: "with-photos",
+      name: { es: "Lugar", en: "Place" },
+      description: { es: "D", en: "D" },
+      address: { es: "A", en: "A" },
+      photos: [
+        photos,
+        { url: "https://evil.example/x.webp", alt: { es: "externa", en: "external" } },
+        { url: "/img/lugares/no-alt.webp" },
+      ],
+    },
+    "es",
+    placesById,
+  );
+  assert.deepEqual(withPhotos.photos, [
+    { url: photos.url, alt: "El cenote" },
+    { url: "/img/lugares/no-alt.webp", alt: "Lugar" },
+  ], "localized alt, name fallback, non-/img/lugares urls dropped");
+
+  const en = placePortal(
+    {
+      ...selvaMorena,
+      id: "with-photos-en",
+      name: { es: "Lugar", en: "Place" },
+      description: { es: "D", en: "D" },
+      address: { es: "A", en: "A" },
+      photos: [photos],
+    },
+    "en",
+    placesById,
+  );
+  assert.equal(en.photos[0].alt, "The cenote", "EN alt localized");
+
+  // Records without photos render exactly as before (null, not an empty list).
+  assert.equal(placePortal(selvaMorena, "es", placesById).photos, null, "absent → null");
+  // The compact map popup never carries photos.
+  const popup = placePopup({ ...selvaMorena, photos: [photos] }, "es", placesById);
+  assert.ok(!("photos" in popup), "popup stays text-only");
+});

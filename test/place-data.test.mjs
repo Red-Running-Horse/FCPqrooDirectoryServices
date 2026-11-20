@@ -252,3 +252,28 @@ test("loadPlaceDetail falls back to cache storage when network fetch fails", asy
   }
 });
 
+test("place photos: same-origin /img/lugares/ WebP urls with bilingual non-empty alt (optional field)", () => {
+  // Optional — permissive until wired: only records carrying photos are
+  // checked, so the suite stays green with zero photo'd places.
+  for (const attraction of attractions) {
+    for (const [i, photo] of (attraction.photos ?? []).entries()) {
+      assert.match(
+        photo.url,
+        /^\/img\/lugares\/[a-z0-9][a-z0-9-]*\.webp$/,
+        `${attraction.id}[${i}]: photo url must be a same-origin /img/lugares/<slug>.webp path`,
+      );
+      for (const language of ["es", "en"]) {
+        assert.ok(
+          typeof photo.alt?.[language] === "string" && photo.alt[language].trim() !== "",
+          `${attraction.id}[${i}]: photo alt.${language} required`,
+        );
+      }
+    }
+  }
+  // Photos ride the detail payload, never the index (bundle stays lean).
+  const { buildPlaceData } = placeDataModule;
+  const { index } = buildPlaceData(attractions);
+  for (const entry of index) {
+    assert.ok(!("photos" in entry), `${entry.id}: photos must not ship in the index`);
+  }
+});

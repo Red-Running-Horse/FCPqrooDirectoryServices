@@ -288,12 +288,40 @@ export async function savePlaceOffline(
     throw new Error("No place data or fetch function provided");
   }
 
+  // Best-effort: cache the place's photos alongside its detail so saved
+  // places render complete offline. Photo failures never fail the save.
+  if (fetchFn) {
+    const cachedDetail = await cache.match(url);
+    if (cachedDetail) await cachePlacePhotos(cachedDetail, cache, fetchFn);
+  }
+
   if (storage) {
     const saved = new Set(getSavedPlaceIds(storage));
     saved.add(id);
     storage.setItem(SAVED_PLACES_STORAGE_KEY, JSON.stringify(Array.from(saved)));
   }
   return true;
+}
+
+// Fetch + cache a saved place's photos into the places cache. Best-effort
+// per photo: the detail JSON remains the offline contract, photos are
+// enrichment. Skips photos already cached.
+async function cachePlacePhotos(cachedDetail, cache, fetchFn) {
+  let detail;
+  try {
+    detail = await cachedDetail.json();
+  } catch {
+    return;
+  }
+  for (const photoUrl of (detail?.photos ?? []).map((p) => p?.url).filter(Boolean)) {
+    try {
+      if (await cache.match(photoUrl)) continue;
+      const response = await fetchFn(photoUrl);
+      if (response?.ok) await cache.put(photoUrl, response.clone());
+    } catch {
+      // Offline or missing asset — the detail is already saved.
+    }
+  }
 }
 
 export async function removePlaceOffline(

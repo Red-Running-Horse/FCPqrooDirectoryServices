@@ -73,6 +73,23 @@ function accessibilityLines(info, language, ui) {
 }
 
 // Builds the deterministic content of the below-map portal for the selected place (or null).
+// Place photos (user directive): optional gallery rendered at the top of
+// the portal. Same-origin /img/lugares/ paths only (offline + performance),
+// bilingual alt with the place name as fallback so the <img> always carries a
+// usable text alternative. Returns null when the record has no usable photos,
+// so the default view shape and the map popup stay unchanged.
+function photosView(attraction, language) {
+  const list = (attraction?.photos ?? [])
+    .map((photo) => {
+      const url = typeof photo?.url === "string" ? photo.url.trim() : "";
+      if (!url.startsWith("/img/lugares/")) return null;
+      const alt = text(photo?.alt, language) ?? text(attraction.name, language) ?? "";
+      return { url, alt };
+    })
+    .filter(Boolean);
+  return list.length ? list : null;
+}
+
 export function placePortal(attraction, language) {
   const ui = uiText(language);
   if (!attraction) {
@@ -142,6 +159,7 @@ export function placePortal(attraction, language) {
     status,
     statusLabel: statusLabels[status],
     description: text(attraction.description, language),
+    photos: photosView(attraction, language),
     details,
     emailAction: email ? { id: "email", label: ui.actionEmail, href: email, external: false } : null,
     socialLinks,
