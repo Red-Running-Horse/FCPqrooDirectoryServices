@@ -995,6 +995,16 @@ export const attractions = [
     phone: "+52 983 105 6062",
     whatsapp: "+52 983 105 6062",
     socialLinks: { facebook: "https://www.facebook.com/profile.php?id=61562438241881" },
+    photos: [
+      {
+        url: "/img/lugares/el-tekaxeno-mercado-fcp.webp",
+        alt: { es: "Platillos yucatecos de El Tekaxeño en el Mercado Público", en: "Yucatecan dishes at El Tekaxeño in the Public Market" },
+      },
+      {
+        url: "/img/lugares/el-tekaxeno-mercado-fcp-2.webp",
+        alt: { es: "El Tekaxeño en el Mercado Público de Felipe Carrillo Puerto", en: "El Tekaxeño at the Felipe Carrillo Puerto Public Market" },
+      },
+    ],
     hoursDisplay: { es: "Todos los días hasta las 4:00 pm", en: "Daily until 4:00 PM" },
     contactNote: "Editor visited Oct 2026 — food and service confirmed. Inside the Mercado Público food court (~10 seats at two tables); pin dropped at the stall.",
     lastUpdated: "2026-10-29",
@@ -1188,6 +1198,12 @@ export const attractions = [
     status: "unverified",
     locationAccuracy: "approximate",
     directionsUrl: null,
+    photos: [
+      {
+        url: "/img/lugares/sukai.webp",
+        alt: { es: "SUKAI, restaurante japonés en el centro de Felipe Carrillo Puerto", en: "SUKAI, Japanese restaurant in downtown Felipe Carrillo Puerto" },
+      },
+    ],
     hoursDisplay: { es: "Jueves a lunes, 5:00 – 10:30 PM; martes y miércoles cerrado", en: "Thursday to Monday, 5:00 – 10:30 PM; closed Tuesday and Wednesday" },
     phone: "+52 983 132 1237",
     whatsapp: "+52 983 132 1237",
@@ -1218,6 +1234,12 @@ export const attractions = [
     directionsUrl: null,
     hoursDisplay: { es: "Lunes a domingo, 10:00 AM – 5:00 PM", en: "Monday to Sunday, 10:00 AM – 5:00 PM" },
     phone: "+52 983 136 4227",
+    photos: [
+      {
+        url: "/img/lugares/el-pollo-caribeno.webp",
+        alt: { es: "El Pollo Caribeño, pollo asado al carbón en el centro de Felipe Carrillo Puerto", en: "El Pollo Caribeño, charcoal-grilled chicken in downtown Felipe Carrillo Puerto" },
+      },
+    ],
     verificationNote: {
       es: "Datos tomados de la ficha de Google Maps (nov 2026), aún sin verificación en campo; sin redes sociales publicadas.",
       en: "Details from the Google Maps listing (Nov 2026), not yet field-verified; no social media published.",

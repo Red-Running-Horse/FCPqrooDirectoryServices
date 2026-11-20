@@ -10,6 +10,15 @@
     "en": "Monday to Sunday, 10:00 AM – 5:00 PM"
   },
   "phone": "+52 983 136 4227",
+  "photos": [
+    {
+      "url": "/img/lugares/el-pollo-caribeno.webp",
+      "alt": {
+        "es": "El Pollo Caribeño, pollo asado al carbón en el centro de Felipe Carrillo Puerto",
+        "en": "El Pollo Caribeño, charcoal-grilled chicken in downtown Felipe Carrillo Puerto"
+      }
+    }
+  ],
   "verificationNote": {
     "es": "Datos tomados de la ficha de Google Maps (nov 2026), aún sin verificación en campo; sin redes sociales publicadas.",
     "en": "Details from the Google Maps listing (Nov 2026), not yet field-verified; no social media published."

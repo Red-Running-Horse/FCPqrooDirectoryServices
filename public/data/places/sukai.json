@@ -5,6 +5,15 @@
     "en": "Japanese restaurant in downtown Felipe Carrillo Puerto: sushi and Japanese dishes in a casual, quiet, trendy setting. Takeaway, delivery and dine-in; popular for dinner. Roughly MX$100–200 per person."
   },
   "directionsUrl": null,
+  "photos": [
+    {
+      "url": "/img/lugares/sukai.webp",
+      "alt": {
+        "es": "SUKAI, restaurante japonés en el centro de Felipe Carrillo Puerto",
+        "en": "SUKAI, Japanese restaurant in downtown Felipe Carrillo Puerto"
+      }
+    }
+  ],
   "hoursDisplay": {
     "es": "Jueves a lunes, 5:00 – 10:30 PM; martes y miércoles cerrado",
     "en": "Thursday to Monday, 5:00 – 10:30 PM; closed Tuesday and Wednesday"

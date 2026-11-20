@@ -10,6 +10,22 @@
   "socialLinks": {
     "facebook": "https://www.facebook.com/profile.php?id=61562438241881"
   },
+  "photos": [
+    {
+      "url": "/img/lugares/el-tekaxeno-mercado-fcp.webp",
+      "alt": {
+        "es": "Platillos yucatecos de El Tekaxeño en el Mercado Público",
+        "en": "Yucatecan dishes at El Tekaxeño in the Public Market"
+      }
+    },
+    {
+      "url": "/img/lugares/el-tekaxeno-mercado-fcp-2.webp",
+      "alt": {
+        "es": "El Tekaxeño en el Mercado Público de Felipe Carrillo Puerto",
+        "en": "El Tekaxeño at the Felipe Carrillo Puerto Public Market"
+      }
+    }
+  ],
   "hoursDisplay": {
     "es": "Todos los días hasta las 4:00 pm",
     "en": "Daily until 4:00 PM"
