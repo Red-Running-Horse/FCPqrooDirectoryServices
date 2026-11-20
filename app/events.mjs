@@ -191,10 +191,17 @@ const events = [
       name: { es: "Quintana Roo (sede FCP por anunciarse)", en: "Quintana Roo (FCP venue TBA)" },
     },
     category: "culture",
+    image: {
+      url: "/img/eventos/festival-cultura-del-caribe-2026.webp",
+      alt: {
+        es: "Cartel del Festival de Cultura del Caribe 2026 — Belice país invitado",
+        en: "Poster for the 2026 Caribbean Culture Festival — Belize guest country",
+      },
+    },
     contactNote: "Verified Oct 2026. Statewide festival; FCP-specific programming not yet published — update when announced.",
     sourceUrl: "https://www.facebook.com/share/p/1F7XkMNN4b/",
     status: "published",
-    lastUpdated: "2026-10-21",
+    lastUpdated: "2026-11-19",
   },
   {
     id: "ciclos-2026-negra",
@@ -449,10 +456,10 @@ const events = [
       en: "Juntas Florecemos — Women's Gathering",
     },
     description: {
-      es: "Encuentro entre mujeres para reconectar con la naturaleza, compartir experiencias y sanar en comunidad, desde el sagrado femenino y la sabiduría de la Tierra, en Balam-Nah. Aportación $555 MXN; reservaciones al 984 184 1313.",
-      en: "A gathering of women to reconnect with nature, share experiences and heal in community, drawing on the sacred feminine and the wisdom of the Earth, at Balam-Nah. Contribution MX$555; reservations at 984 184 1313.",
+      es: "Encuentro entre mujeres para reconectar con la naturaleza, compartir experiencias y sanar en comunidad, desde el sagrado femenino y la sabiduría de la Tierra, en Balam-Nah, a partir de las 9:00 AM. Aportación $555 MXN; reservaciones al 984 184 1313.",
+      en: "A gathering of women to reconnect with nature, share experiences and heal in community, drawing on the sacred feminine and the wisdom of the Earth, at Balam-Nah, starting at 9:00 AM. Contribution MX$555; reservations at 984 184 1313.",
     },
-    startAt: "2026-12-05",
+    startAt: "2026-12-05T09:00:00-05:00",
     venue: { placeId: "balam-nah-felipe-carrillo-puerto" },
     category: "culture",
     image: {
