@@ -270,30 +270,43 @@ test("the church of San Servacio preserves its source verified:true without upgr
   }
 });
 
-test("Balam-Nah user-provided coordinates remain unverified and approximate", () => {
+test("Balam-Nah is field-verified (Nov 2026): exact coordinates, lagoon and dome notes, directions", () => {
   assert.ok(balamNah);
   assert.equal(balamNah.category, "nature");
   assert.deepEqual(balamNah.secondaryCategories, ["lodging"]);
   assert.deepEqual(placeCategories(balamNah), ["nature", "lodging"]);
   assert.equal(balamNah.name.es, "Balam-Nah");
   assert.equal(balamNah.name.en, "Balam-Nah");
-  assert.equal(balamNah.description.es, balamNah.shortDescriptionEs);
-  assert.equal(balamNah.description.en, balamNah.shortDescriptionEn);
+  // Field verification (Nov 2026) legitimately upgraded the record: the pin now
+  // DEMANDS verified + exact + directions — the sourced const fields below are
+  // unchanged. Source-level "verified" stays as attributed (see the church test).
+  assert.equal(balamNah.verified, false);
+  assert.equal(balamNah.status, "verified");
+  assert.equal(balamNah.locationAccuracy, "exact");
+  assert.equal(isVerified(balamNah), true);
   assert.equal(balamNah.website, "https://balamnah.fcpqroo.mx/");
   assert.equal(balamNah.latitude, 19.476991842956);
   assert.equal(balamNah.longitude, -88.06736291757169);
   assert.ok(inside(FCP_MAX_BOUNDS, balamNah));
-  assert.equal(balamNah.verified, false);
-  assert.equal(balamNah.status, "unverified");
-  assert.equal(balamNah.locationAccuracy, "approximate");
   assert.match(balamNah.coordinateSource, /User-provided.*not independently GPS-verified/);
-  assert.match(balamNah.verificationNotes, /coordinates were provided by the user.*not been independently GPS-verified/);
-  assert.equal(balamNah.directionsUrl, null);
-  assert.equal(directionsUrlFor(balamNah), null);
-  assert.equal(
-    placePortal(balamNah, "en").actions.some(({ id }) => id === "directions"),
-    false,
+  assert.match(
+    balamNah.verificationNotes,
+    /coordinates were provided by the user.*not been independently GPS-verified/,
   );
+  // The array entry overrides description/verificationNote with the field-visit facts.
+  assert.match(balamNah.description.es, /laguna/i);
+  assert.match(balamNah.description.en, /lagoon/i);
+  assert.match(balamNah.verificationNote.es, /cafetería/i);
+  assert.match(balamNah.verificationNote.en, /lagoon/i);
+  assert.match(balamNah.verificationNote.es, /domo/i);
+  assert.equal(
+    balamNah.verificationSourceUrls.at(0),
+    "https://ioverlander.com/places/8d33b2aa-009a-4915-ac52-6775b96a5568",
+  );
+  assert.equal(balamNah.directionsUrl, "https://maps.app.goo.gl/KwaZNGD5pbZUf6bw8");
+  assert.equal(directionsUrlFor(balamNah), "https://maps.app.goo.gl/KwaZNGD5pbZUf6bw8");
+  assert.ok(placePortal(balamNah, "en").actions.some(({ id }) => id === "directions"));
+  assert.equal(balamNah.lastUpdated, "2026-11-21");
 });
 
 test("Balam-Nah is listed once under both Nature and Lodging", () => {
