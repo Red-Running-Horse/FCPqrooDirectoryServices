@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { categoryIconSvg } from "./category-icons.mjs";
 import { placeCategoryStyle } from "./category-colors.mjs";
 import { placePortal } from "./place-portal.mjs";
@@ -11,6 +12,27 @@ export default function PlacePortal({
   detailUnavailable = false,
 }) {
   const view = placePortal(attraction, language);
+  const [linkCopied, setLinkCopied] = useState(false);
+  const copyTimer = useRef(null);
+  useEffect(() => () => clearTimeout(copyTimer.current), []);
+  // Share affordance: copy the canonical /?lugar=<id> deep link. Opening it
+  // selects and focuses the place (the map reads ?lugar= on load).
+  const copyPlaceLink = async () => {
+    const url = `${window.location.origin}/?lugar=${attraction.id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+    }
+    setLinkCopied(true);
+    clearTimeout(copyTimer.current);
+    copyTimer.current = setTimeout(() => setLinkCopied(false), 2000);
+  };
 
   return (
     <section
@@ -84,6 +106,21 @@ export default function PlacePortal({
               ))}
             </div>
           )}
+          <div className="place-portal__share">
+            <button type="button" className="place-portal__offline-btn" onClick={copyPlaceLink}>
+              {linkCopied ? (
+                <>
+                  <span className="l10n-es">enlace copiado ✓</span>
+                  <span className="l10n-en">link copied ✓</span>
+                </>
+              ) : (
+                <>
+                  <span className="l10n-es">copiar enlace</span>
+                  <span className="l10n-en">copy link</span>
+                </>
+              )}
+            </button>
+          </div>
           {onToggleSave && (
             <div className="place-portal__offline-bar">
               {isSaved ? (

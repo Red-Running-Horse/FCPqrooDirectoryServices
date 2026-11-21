@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import { attractions } from "../app/attractions.mjs";
 import { UI_TEXT } from "../app/i18n.mjs";
@@ -390,4 +391,18 @@ test("place photos: localized, name-fallback alt, same-origin only, absent by de
   assert.equal(placePortal(approximatePlace, "es").photos, null, "absent → null");
   // The compact map popup never carries photos.
   assert.ok(!("photos" in placePopup({ ...verifiedPlace, photos: [photo] }, "es")), "popup stays text-only");
+});
+
+test("place portal share link: copies the canonical /?lugar=<id> deep link (user directive)", () => {
+  const source = readFileSync(new URL("../app/place-portal.js", import.meta.url), "utf8");
+  // The deep link itself already works (the map selects and focuses ?lugar= on
+  // load) — this pins the affordance that creates it.
+  assert.match(source, /navigator\.clipboard\.writeText/, "copies the share URL");
+  assert.match(source, /window\.location\.origin/, "absolute URL");
+  assert.match(source, /\?lugar=\$\{attraction\.id\}/, "canonical deep-link shape");
+  assert.match(source, /className="l10n-es">copiar enlace</, "ES label");
+  assert.match(source, /className="l10n-en">copy link</, "EN label");
+  assert.match(source, /enlace copiado/, "ES copied feedback");
+  assert.match(source, /link copied/, "EN copied feedback");
+  assert.match(source, /useState\(false\)/, "transient copied state");
 });
