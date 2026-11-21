@@ -19,6 +19,15 @@
     "facebook": "https://www.facebook.com/AldeaCruzoob",
     "instagram": "https://www.instagram.com/aldeacruzoob"
   },
+  "photos": [
+    {
+      "url": "/img/lugares/hotel-aldea-cruzoob.webp",
+      "alt": {
+        "es": "Hotel Aldea Cruzo'ob, cabañas y restaurante a las afueras de Felipe Carrillo Puerto",
+        "en": "Hotel Aldea Cruzo'ob cabins and restaurant just outside Felipe Carrillo Puerto"
+      }
+    }
+  ],
   "verificationSourceUrls": [
     "https://maps.app.goo.gl/b3vrt6UNrCFVmCUd6",
     "https://www.booking.com/hotel/mx/aldea-cruzo-ob-felipe-carrillo-puerto1.html",

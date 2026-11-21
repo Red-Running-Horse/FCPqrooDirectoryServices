@@ -1313,6 +1313,12 @@ export const attractions = [
       facebook: "https://www.facebook.com/AldeaCruzoob",
       instagram: "https://www.instagram.com/aldeacruzoob",
     },
+    photos: [
+      {
+        url: "/img/lugares/hotel-aldea-cruzoob.webp",
+        alt: { es: "Hotel Aldea Cruzo'ob, cabañas y restaurante a las afueras de Felipe Carrillo Puerto", en: "Hotel Aldea Cruzo'ob cabins and restaurant just outside Felipe Carrillo Puerto" },
+      },
+    ],
     verificationSourceUrls: [
       "https://maps.app.goo.gl/b3vrt6UNrCFVmCUd6",
       "https://www.booking.com/hotel/mx/aldea-cruzo-ob-felipe-carrillo-puerto1.html",
@@ -1370,6 +1376,12 @@ export const attractions = [
     },
     hoursDisplay: { es: "Entrada 1:00 PM / salida 12:00 PM", en: "Check-in 1:00 PM / check-out 12:00 PM" },
     phone: "+52 983 176 3230",
+    photos: [
+      {
+        url: "/img/lugares/camino-al-mar-hotel.webp",
+        alt: { es: "Camino al Mar Hotel en Felipe Carrillo Puerto", en: "Camino al Mar Hotel in Felipe Carrillo Puerto" },
+      },
+    ],
     verificationNote: {
       es: "Datos del anuncio publicado por el hotel (nov 2026), sin verificación en campo; sin redes publicadas.",
       en: "Details from the hotel's own listing (Nov 2026), not field-verified; no social media published.",
