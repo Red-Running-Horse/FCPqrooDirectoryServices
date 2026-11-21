@@ -1,0 +1,23 @@
+{
+  "id": "camino-al-mar-hotel",
+  "description": {
+    "es": "Hotel económico con habitaciones de $500 MXN: aire acondicionado, WiFi, TV smart y agua caliente. Entrada 1:00 PM / salida 12:00 PM. También renta kayaks (bibibletas) para la laguna.",
+    "en": "Budget hotel with rooms at MX$500: air conditioning, WiFi, smart TV and hot water. Check-in 1:00 PM / check-out 12:00 PM. Also rents kayaks ('bibibletas') for the lagoon."
+  },
+  "directionsUrl": null,
+  "address": {
+    "es": "Felipe Carrillo Puerto, Quintana Roo (dirección exacta por confirmar)",
+    "en": "Felipe Carrillo Puerto, Quintana Roo (exact address to be confirmed)"
+  },
+  "hoursDisplay": {
+    "es": "Entrada 1:00 PM / salida 12:00 PM",
+    "en": "Check-in 1:00 PM / check-out 12:00 PM"
+  },
+  "phone": "+52 983 176 3230",
+  "verificationNote": {
+    "es": "Datos del anuncio publicado por el hotel (nov 2026), sin verificación en campo; sin redes publicadas.",
+    "en": "Details from the hotel's own listing (Nov 2026), not field-verified; no social media published."
+  },
+  "contactNote": "Phone number comes from the kayak-rental line — confirm it doubles as the hotel contact. Rate MXN500/night per the owner's post.",
+  "lastUpdated": "2026-11-21"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "hotel-aldea-cruzoob",
+  "description": {
+    "es": "Hotel de cabañas con restaurante a unos minutos del centro: cabañas amplias y frescas con baño, refrigerador pequeño, internet y clóset; estacionamiento gratis, alberca, room service y wifi. Apto para familias, niños y mascotas. Check-in de 3:00 a 7:00 PM. Desde $1,580 MXN por noche por cabaña.",
+    "en": "Cabin hotel with a restaurant minutes from downtown: large, airy cabins with bathroom, small fridge, internet and closet; free parking, pool, room service and WiFi. Suitable for families, children and pets. Check-in 3:00–7:00 PM. From MX$1,580 per night per cabin."
+  },
+  "directionsUrl": "https://maps.app.goo.gl/b3vrt6UNrCFVmCUd6",
+  "address": {
+    "es": "A las afueras de Felipe Carrillo Puerto, Quintana Roo",
+    "en": "Just outside Felipe Carrillo Puerto, Quintana Roo"
+  },
+  "hoursDisplay": {
+    "es": "Check-in: 3:00 – 7:00 PM",
+    "en": "Check-in: 3:00 – 7:00 PM"
+  },
+  "phone": "+52 983 114 5758",
+  "website": "https://www.hotelaldeacruzoob.com/",
+  "socialLinks": {
+    "facebook": "https://www.facebook.com/AldeaCruzoob",
+    "instagram": "https://www.instagram.com/aldeacruzoob"
+  },
+  "verificationSourceUrls": [
+    "https://maps.app.goo.gl/b3vrt6UNrCFVmCUd6",
+    "https://www.booking.com/hotel/mx/aldea-cruzo-ob-felipe-carrillo-puerto1.html",
+    "https://www.tripadvisor.com/Hotel_Review-g2048778-d33956872-Reviews-Hotel_Aldea_Cruzo_ob-Felipe_Carrillo_Puerto_Yucatan_Peninsula.html"
+  ],
+  "verificationNote": {
+    "es": "Verificado en campo por el equipo (nov 2026): cabañas limpias, grandes y frescas, con buenos baños, refrigerador pequeño, internet y clóset. Ideal para niños y familias; hay personal disponible hasta las 9 PM; restaurante en el sitio. Acepta efectivo, Visa y Mastercard.",
+    "en": "Field-verified by the team (Nov 2026): clean, large, airy cabins with nice bathrooms, small fridge, internet and closet. Great for kids and families; staff on call until 9 PM; restaurant on site. Accepts cash, Visa and Mastercard."
+  },
+  "contactNote": "Official website (hotelaldeacruzoob.com) was NOT working at verification — booking via phone or socials recommended. Amenities per listing: free parking, airport shuttle, non-smoking rooms, pool, room service, WiFi, family rooms, pet friendly.",
+  "lastUpdated": "2026-11-21"
+}

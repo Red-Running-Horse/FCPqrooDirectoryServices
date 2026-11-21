@@ -74,7 +74,7 @@
     "cardUrl": "/promo/promotion0_1280_720.webp",
     "eventId": "promo-balam-nah"
   },
-  "directionsUrl": null,
+  "directionsUrl": "https://maps.app.goo.gl/KwaZNGD5pbZUf6bw8",
   "priceLevel": null,
   "paymentMethods": [],
   "languagesSpoken": [
@@ -99,14 +99,14 @@
   "verifiedAt": "",
   "verifiedBy": "",
   "verificationSourceUrls": [
-    "https://maps.app.goo.gl/KwaZNGD5pbZUf6bw8",
-    "https://balamnah.fcpqroo.mx/"
+    "https://ioverlander.com/places/8d33b2aa-009a-4915-ac52-6775b96a5568",
+    "https://maps.app.goo.gl/KwaZNGD5pbZUf6bw8"
   ],
   "verificationNotes": "Data is limited to the Google Maps listing and the official website (balamnah.fcpqroo.mx). No address, coordinates, hours, phone, or contact information could be extracted from either source — the Google Maps link does not reveal a precise address or coordinates in available snippets, and the website content was not accessible for extraction. The name 'Balam-Nah' means 'Casa del Jaguar' (jaguar house) in Maya. The center is described as focused on Maya cultural preservation, workshops, and exhibitions. It is mentioned in local tourism contexts as part of the cultural circuit. No independent verification of hours, accessibility, pricing, or physical location is available. The website domain (fcpqroo.mx) suggests a municipal or local affiliation but this is unconfirmed. Significant gaps remain: exact address, GPS coordinates, operating hours, contact details, and accessibility information are all unknown. The coordinates were provided by the user and have not been independently GPS-verified.",
-  "lastUpdated": "2026-09-30",
+  "lastUpdated": "2026-11-21",
   "description": {
-    "es": "Centro cultural y museo maya dedicado a preservar la cultura, lengua y tradiciones del pueblo maya en Felipe Carrillo Puerto. Ofrece talleres, exposiciones y eventos culturales.",
-    "en": "Maya cultural center and museum dedicated to preserving the culture, language, and traditions of the Maya people in Felipe Carrillo Puerto. Offers workshops, exhibitions, and cultural events."
+    "es": "Centro cultural y museo maya ('Casa del Jaguar') con acceso a la laguna: domo con baño propio para hospedaje, cafetería, zonas de descanso y anclaje para RV. Talleres, exposiciones y eventos culturales dedicados a la preservación de la cultura maya.",
+    "en": "Maya cultural center and museum ('Jaguar House') with lagoon access: a dome with its own washroom for stays, a cafeteria, rest areas and RV parking. Workshops, exhibitions and cultural events dedicated to preserving Maya culture."
   },
   "address": {
     "es": "",
@@ -116,5 +116,8 @@
     "es": "",
     "en": ""
   },
-  "verificationNote": "Data is limited to the Google Maps listing and the official website (balamnah.fcpqroo.mx). No address, coordinates, hours, phone, or contact information could be extracted from either source — the Google Maps link does not reveal a precise address or coordinates in available snippets, and the website content was not accessible for extraction. The name 'Balam-Nah' means 'Casa del Jaguar' (jaguar house) in Maya. The center is described as focused on Maya cultural preservation, workshops, and exhibitions. It is mentioned in local tourism contexts as part of the cultural circuit. No independent verification of hours, accessibility, pricing, or physical location is available. The website domain (fcpqroo.mx) suggests a municipal or local affiliation but this is unconfirmed. Significant gaps remain: exact address, GPS coordinates, operating hours, contact details, and accessibility information are all unknown. The coordinates were provided by the user and have not been independently GPS-verified."
+  "verificationNote": {
+    "es": "Verificado en campo por el equipo (nov 2026). La zona es muy agradable para descansar y excelente para RV. La laguna no está limpia y tiene mucha alga. El domo es agradable, con baño propio, pero se calienta mucho por dentro; hay muchos perros sueltos pero muy amistosos. La zona aún parece en construcción (grava y cables por doquier). Buen internet. Duchas y baños compartidos a veces sin agua. La cafetería no siempre está abierta — no depender de comida en el sitio; si no pernoctas, tu propia bebida paga cuota.",
+    "en": "Field-verified by the team (Nov 2026). The area is very nice for resting and great for RVs. The lagoon is not clean and has a lot of algae. The dome is nice with its own washroom but gets very hot inside; many dogs roaming but very friendly. The area still looks under construction (gravel and wires around). Good internet. Shared showers and toilets sometimes have no water. The cafeteria is not always open — do not rely on food on site; bringing your own drinks carries a fee if not staying overnight."
+  }
 }

@@ -94,8 +94,8 @@
     ],
     "latitude": 19.476991842956,
     "longitude": -88.06736291757169,
-    "status": "unverified",
-    "locationAccuracy": "approximate",
+    "status": "verified",
+    "locationAccuracy": "exact",
     "name": {
       "es": "Balam-Nah",
       "en": "Balam-Nah"
@@ -380,6 +380,57 @@
     "name": {
       "es": "El Pollo Caribeño",
       "en": "El Pollo Caribeño"
+    }
+  },
+  {
+    "id": "tumben-chankaj",
+    "category": "nature",
+    "secondaryCategories": [
+      "lodging"
+    ],
+    "latitude": 19.480288084447153,
+    "longitude": -88.02947759726901,
+    "status": "verified",
+    "locationAccuracy": "exact",
+    "name": {
+      "es": "Tumben Chankaj",
+      "en": "Tumben Chankaj"
+    }
+  },
+  {
+    "id": "hotel-aldea-cruzoob",
+    "category": "lodging",
+    "latitude": 19.47981191239688,
+    "longitude": -88.0294859208214,
+    "status": "verified",
+    "locationAccuracy": "exact",
+    "name": {
+      "es": "Hotel Aldea Cruzo'ob — Cabañas y Restaurante",
+      "en": "Hotel Aldea Cruzo'ob — Cabins & Restaurant"
+    }
+  },
+  {
+    "id": "hotel-salome",
+    "category": "lodging",
+    "latitude": 19.579435872561728,
+    "longitude": -88.04472540011648,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Hotel Salome",
+      "en": "Hotel Salome"
+    }
+  },
+  {
+    "id": "camino-al-mar-hotel",
+    "category": "lodging",
+    "latitude": 19.58452239389103,
+    "longitude": -88.0267314186808,
+    "status": "unverified",
+    "locationAccuracy": "approximate",
+    "name": {
+      "es": "Camino al Mar Hotel",
+      "en": "Camino al Mar Hotel"
     }
   }
 ]

@@ -1,0 +1,25 @@
+{
+  "id": "hotel-salome",
+  "description": {
+    "es": "Hotel económico en el centro, a dos cuadras de la terminal de autobuses y cerca de mercados, bancos y la iglesia maya histórica: habitaciones muy limpias con aire acondicionado, TV de cable, baño privado con agua caliente y wifi. Alberca al aire libre y jardín; apto para niños. Check-in a las 3:00 PM.",
+    "en": "Budget hotel downtown, two blocks from the bus terminal and close to markets, banks and the historic Maya church: very clean rooms with air conditioning, cable TV, private bathroom with hot water and WiFi. Outdoor pool and garden area; kid-friendly. Check-in at 3:00 PM."
+  },
+  "directionsUrl": null,
+  "address": {
+    "es": "Centro, Felipe Carrillo Puerto, Quintana Roo (a dos cuadras de la terminal)",
+    "en": "Downtown, Felipe Carrillo Puerto, Quintana Roo (two blocks from the terminal)"
+  },
+  "hoursDisplay": {
+    "es": "Check-in: 3:00 PM",
+    "en": "Check-in: 3:00 PM"
+  },
+  "phone": "+52 983 834 1005",
+  "verificationSourceUrls": [
+    "https://mindtrip.ai/hotel/felipe-carrillo-puerto-quintana-roo/hotel-salome/ho-F2DORFc0"
+  ],
+  "verificationNote": {
+    "es": "Datos de la ficha de Google Maps/mindtrip (nov 2026), sin verificación en campo; una reseña reciente indica que la alberca no funcionaba durante su estancia — confirmar antes de depender de ella.",
+    "en": "Details from the Google Maps/mindtrip listing (Nov 2026), not field-verified; one recent review notes the pool was not working during their stay — confirm before relying on it."
+  },
+  "lastUpdated": "2026-11-21"
+}
