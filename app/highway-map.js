@@ -8,6 +8,7 @@ import { useSiteLanguageState } from "./site-language";
 import { entryKind, eventMarkerPosition, eventPopupView, upcomingEvents } from "./event-utils.mjs";
 import { syncMarkerSelection } from "./marker-selection.mjs";
 import { markerIconView } from "./marker-icon.mjs";
+import { spreadOffsets } from "./marker-spread.mjs";
 import { loadPlaceDetail } from "./place-data.mjs";
 import { CATEGORIES, categorySummary, filterPlaces, isVerified, listingReferences } from "./place-index.mjs";
 import PlacePortal from "./place-portal";
@@ -559,6 +560,33 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
         eventGroup.addTo(map);
         eventLayer.current.visible = true;
       }
+
+      // Coincident pins (an event on its venue, double screenings, close
+      // neighbors) would render on top of each other with one invisible —
+      // spread them apart at low zoom and converge to true coordinates as
+      // you zoom in (marker-spread.mjs). Applies to places + events together.
+      const spreadItems = [];
+      const placeById = new Map(placesIndex.map((p) => [p.id, p]));
+      for (const [id, marker] of markers) {
+        const place = placeById.get(id);
+        if (place) spreadItems.push({ id: `place:${id}`, position: [place.latitude, place.longitude], marker });
+      }
+      for (const { event, marker } of eventEntries) {
+        const position = eventMarkerPosition(event, placesById);
+        if (position) spreadItems.push({ id: `event:${event.id}`, position, marker });
+      }
+      const spreadMarkers = () => {
+        const offsets = spreadOffsets(
+          spreadItems.map(({ id, position }) => ({ id, position })),
+          map.getZoom(),
+        );
+        for (const { id, position, marker } of spreadItems) {
+          const [dLat, dLon] = offsets.get(id) ?? [0, 0];
+          marker.setLatLng([position[0] + dLat, position[1] + dLon]);
+        }
+      };
+      spreadMarkers();
+      map.on("zoomend", spreadMarkers);
       const response = await fetch("/regional-highways.geojson", {
         signal: controller.signal,
       });
