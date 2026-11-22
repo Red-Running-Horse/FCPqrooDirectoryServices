@@ -21,7 +21,7 @@ export default function sitemap() {
     page("/tzolkin", 0.6),     // tzolkin
     page("/promociones", 0.6), // promociones
     page("/contacto", 0.5),    // contact
-    page("/tours/noj-kaaj", 0.6), // Noj Kaaj tour
+    page("/tours/tulum-noj-kaaj", 0.6), // Noj Kaaj tour
     ...promotedLandings,       // client landing pages (data-driven)
   ];
 }

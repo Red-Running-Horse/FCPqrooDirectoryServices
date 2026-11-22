@@ -480,8 +480,8 @@ const nojkaajTour = {
   nameEn: "Noj Kaaj — Resistance Route",
   shortDescriptionEs: "Caminata histórica de 5 estaciones por el centro de Felipe Carrillo Puerto: comida tradicional maya, arte, música y testimonios, con traductor de inglés. $3,500 MXN por 2 personas.",
   shortDescriptionEn: "Five-station historical walking tour through downtown Felipe Carrillo Puerto: traditional Maya food, art, music and testimonies, with an English translator. $3,500 MXN for 2 people.",
-  fullDescriptionEs: "Noj Kaaj («la Gran Ciudad», hoy Felipe Carrillo Puerto) guarda la memoria viva de la resistencia maya en el corazón de la Zona Maya. En este recorrido de 3–4 horas la historia no se cuenta: se camina, se saborea y se escucha, junto a la comunidad que la mantiene viva. Incluye recorrido a pie de cinco estaciones por el centro histórico, preparación y degustación de comida tradicional maya, recorrido de arte (murales y arte maya contemporáneo), historia musical de la resistencia, traductor de inglés, botanas tradicionales y recogida en la estación del Tren Maya. Requiere reservación mínima 3 días antes. Punto de encuentro: Plaza Cívica.",
-  fullDescriptionEn: "Noj Kaaj ('the Great Town,' today's Felipe Carrillo Puerto) holds the living memory of the Maya resistance in the heart of the Zona Maya. On this 3–4 hour experience, history isn't told — it's walked, tasted and heard, alongside the community that keeps it alive. Includes a five-station walking route through the historic center, preparation and tasting of traditional Maya food, an art tour (murals and contemporary Maya art), the music history of the resistance, an English translator, traditional appetizers, and pickup at the Tren Maya station. Booking at least 3 days in advance is required. Meeting point: Civic Plaza.",
+  fullDescriptionEs: "Noj Kaaj («la Gran Ciudad», hoy Felipe Carrillo Puerto) guarda la memoria viva de la resistencia maya en el corazón de la Zona Maya. En este recorrido de 3–4 horas la historia no se cuenta: se camina, se saborea y se escucha, junto a la comunidad que la mantiene viva. Incluye recorrido a pie de cinco estaciones por el centro histórico, preparación y degustación de comida tradicional maya, recorrido de arte (murales y arte maya contemporáneo), historia musical de la resistencia, traductor de inglés y botanas tradicionales. Requiere reservación mínima 3 días antes. Punto de encuentro: Plaza Cívica.",
+  fullDescriptionEn: "Noj Kaaj ('the Great Town,' today's Felipe Carrillo Puerto) holds the living memory of the Maya resistance in the heart of the Zona Maya. On this 3–4 hour experience, history isn't told — it's walked, tasted and heard, alongside the community that keeps it alive. Includes a five-station walking route through the historic center, preparation and tasting of traditional Maya food, an art tour (murals and contemporary Maya art), the music history of the resistance, an English translator and traditional appetizers. Booking at least 3 days in advance is required. Meeting point: Civic Plaza.",
   latitude: 19.57814,
   longitude: -88.04605,
   coordinateSource: "Approximate meeting point (Plaza Cívica); not GPS-verified",
@@ -508,7 +508,7 @@ const nojkaajTour = {
   languagesSpoken: ["es", "maya", "en"],
   amenities: [
     "walking_tour", "food_tasting", "art_tour", "music_history",
-    "english_translator", "tren_maya_pickup", "advance_booking_required",
+    "english_translator", "advance_booking_required",
   ],
   accessibility: {
     wheelchairAccess: null,
@@ -521,9 +521,9 @@ const nojkaajTour = {
   verifiedAt: "",
   verifiedBy: "",
   verificationSourceUrls: [],
-  verificationNotes: "Listing provided by the tour operator; meeting point pinned approximately at Plaza Cívica and not GPS-verified. Price ($3,500 MXN for 2), schedule and inclusions are per the operator's promotional copy — verify all details with the operator before publishing. Tren Maya times cited (Tulum 10:45 → FCP 12:07; return 18:40) must be confirmed on the official portal as schedules change.",
+  verificationNotes: "Listing provided by the tour operator; meeting point pinned approximately at Plaza Cívica and not GPS-verified. Price ($3,500 MXN for 2), schedule and inclusions are per the operator's promotional copy — verify all details with the operator before publishing. Schedules and inclusions change — confirm all details with the operator when booking.",
   lastUpdated: "2026-10-08",
-  tourPage: { url: "/tours/noj-kaaj" },
+  tourPage: { url: "/tours/tulum-noj-kaaj" },
 };
 
 export const nonMappablePlaces = [];
