@@ -6,19 +6,23 @@
 // one reads as "missing". The data is correct; the rendering is not.
 //
 // What: markers grouped by EXACT coordinate fan out deterministically around
-// their true point. The spread radius shrinks with zoom and reaches zero at
-// SPREAD_ANCHOR_ZOOM, so at street level every pin sits exactly on its true
-// coordinates (honest), while at city zoom stacked pins separate (readable).
-// Angles are derived from a stable hash of each marker's id, so the layout is
-// identical on every render — no flicker, independent of input order.
+// their true point. The spread is sized in SCREEN PIXELS (SPREAD_RADIUS_PX —
+// about one marker width, so stacked pins are always separately clickable),
+// converted to meters at the current zoom and latitude. It reaches exactly
+// zero at SPREAD_ANCHOR_ZOOM (the map's max zoom), so at the deepest zoom
+// every pin sits exactly on its true coordinates (honest), while at every
+// shallower zoom stacked pins separate (readable). Angles come from a stable
+// hash of each marker's id, so the layout is identical on every render — no
+// flicker, independent of input order.
 //
 // Deliberately NOT changed: coordinates in the data. This module only affects
 // where markers are drawn; the underlying records stay exact.
 
-export const SPREAD_ANCHOR_ZOOM = 16;
-export const SPREAD_BASE_METERS = 6;
+export const SPREAD_ANCHOR_ZOOM = 20;
+export const SPREAD_RADIUS_PX = 40;
 const COORD_PRECISION = 7;
 const METERS_PER_DEGREE_LAT = 111320;
+const METERS_PER_PIXEL_AT_EQUATOR = 156543.03392;
 
 // FNV-1a 32-bit — stable across runs and platforms.
 function hashId(id) {
@@ -42,10 +46,7 @@ export function spreadOffsets(items, zoom) {
   }
 
   const offsets = new Map();
-  // Zero at (and beyond) the anchor zoom: street level shows true coordinates;
-  // each zoom level out doubles the radius.
-  const radiusMeters =
-    zoom >= SPREAD_ANCHOR_ZOOM ? 0 : SPREAD_BASE_METERS * 2 ** (SPREAD_ANCHOR_ZOOM - zoom);
+  const converged = zoom >= SPREAD_ANCHOR_ZOOM;
 
   for (const group of groups.values()) {
     if (group.length === 1) {
@@ -60,6 +61,11 @@ export function spreadOffsets(items, zoom) {
       // Evenly spaced around the circle, with a stable per-id jitter inside
       // each slot so the same id lands in the same place on every render.
       const angle = (2 * Math.PI * (i + 0.5 * hashId(id))) / n;
+      // Radius in meters for THIS zoom and latitude: SPREAD_RADIUS_PX screen
+      // pixels at the current meters-per-pixel. Zero once converged.
+      const metersPerPixel =
+        (METERS_PER_PIXEL_AT_EQUATOR * Math.cos((position[0] * Math.PI) / 180)) / 2 ** zoom;
+      const radiusMeters = converged ? 0 : SPREAD_RADIUS_PX * metersPerPixel;
       const dLat = (radiusMeters * Math.sin(angle)) / METERS_PER_DEGREE_LAT;
       const dLon =
         (radiusMeters * Math.cos(angle)) /
