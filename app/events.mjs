@@ -371,7 +371,11 @@ const events = [
       en: "Forum of filmmakers from indigenous peoples, with special guests, at Árbol Rojo's Festival CICLOS 2026 in Felipe Carrillo Puerto. Free admission.",
     },
     startAt: "2026-11-27T11:00:00-05:00",
-    venue: { placeId: "auditorio-tecnologico-felipe-carrillo-puerto" },
+    venue: {
+      name: { es: "Auditorio del Instituto Tecnológico de Felipe Carrillo Puerto", en: "Auditorio del Instituto Tecnológico de Felipe Carrillo Puerto" },
+      latitude: 19.58356381181467,
+      longitude: -88.03022079085898,
+    },
     category: "culture",
     image: {
       url: "/img/eventos/ciclos-2026-b.webp",
@@ -381,7 +385,7 @@ const events = [
     contactNote: "Verified from the CICLOS 2026 program sheet, 2026-11-18. Organizer: Árbol Rojo (arbolrojocine.com).",
     sourceUrl: "https://arbolrojocine.com/",
     status: "published",
-    lastUpdated: "2026-11-18",
+    lastUpdated: "2026-11-21",
   },
   {
     id: "ciclos-2026-li-cham-gala-fcp",
@@ -460,7 +464,11 @@ const events = [
       en: "A gathering of women to reconnect with nature, share experiences and heal in community, drawing on the sacred feminine and the wisdom of the Earth, at Balam-Nah, starting at 9:00 AM. Contribution MX$555; reservations at 984 184 1313.",
     },
     startAt: "2026-12-05T09:00:00-05:00",
-    venue: { placeId: "balam-nah-felipe-carrillo-puerto" },
+    venue: {
+      name: { es: "Balam-Nah, Felipe Carrillo Puerto", en: "Balam-Nah, Felipe Carrillo Puerto" },
+      latitude: 19.47833420045194,
+      longitude: -88.06680592757888,
+    },
     category: "culture",
     image: {
       url: "/img/eventos/juntas-florecemos-2026.webp",
@@ -470,7 +478,7 @@ const events = [
     contactNote: "Verified from the organizer's Instagram reel, Nov 2026. Reservations: 984 184 1313.",
     sourceUrl: "https://www.instagram.com/reel/DfhPR5WBXxA/",
     status: "published",
-    lastUpdated: "2026-11-19",
+    lastUpdated: "2026-11-21",
   },
   {
     id: "noche-nortena-epico-2026",
