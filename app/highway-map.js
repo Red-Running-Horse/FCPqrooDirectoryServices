@@ -309,23 +309,17 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
       setSelectedId(null);
     }
     // Reveal the filter's effect (user directive): on a category change,
-    // unlock the tap-to-activate guard so the map is immediately pannable,
-    // and GLIDE the focus to the filtered results at the CURRENT zoom (pan
-    // only — zoom-to-fit would yank the user's zoom context). Search
-    // keystrokes don't trigger any of this.
-    const layer = attractionLayer.current;
-    if (layer && categoryChanged && nextCategory !== "all" && filtered.length > 0) {
+    // unlock the tap-to-activate guard so the map is immediately pannable and
+    // the user can explore the filtered markers themselves. NO automatic
+    // pan/zoom: a category's results can span the whole region (Muyil to
+    // Tihosuco to Tumben), and any auto-framing lands on irrelevant
+    // in-between locations. The list below + the user's own pan do the rest.
+    if (categoryChanged && nextCategory !== "all") {
       setMapActive(true);
-      const lats = filtered.map((place) => place.latitude);
-      const lons = filtered.map((place) => place.longitude);
-      const center = [(Math.min(...lats) + Math.max(...lats)) / 2, (Math.min(...lons) + Math.max(...lons)) / 2];
-      requestAnimationFrame(() => {
-        layer.map.flyTo(center, layer.map.getZoom(), { duration: 0.6 });
-      });
     }
   }
 
-  function focusMarker(current, id) {
+    function focusMarker(current, id) {
     const marker = current.markers.get(id);
     if (!marker) return;
     current.group.addLayer(marker);
