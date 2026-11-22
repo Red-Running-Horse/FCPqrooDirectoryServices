@@ -308,17 +308,19 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
     if (!filtered.some((place) => place.id === selectedPlace.current)) {
       setSelectedId(null);
     }
-    // Reveal the filter's effect (user directive): the map is scroll-locked —
-    // especially on mobile — so changed markers alone are invisible. Fly the
-    // map to fit the filtered results whenever the CATEGORY changes (search
-    // keystrokes don't fly). Array bounds need no Leaflet import.
+    // Reveal the filter's effect (user directive): on a category change,
+    // unlock the tap-to-activate guard so the map is immediately pannable,
+    // and GLIDE the focus to the filtered results at the CURRENT zoom (pan
+    // only — zoom-to-fit would yank the user's zoom context). Search
+    // keystrokes don't trigger any of this.
     const layer = attractionLayer.current;
     if (layer && categoryChanged && nextCategory !== "all" && filtered.length > 0) {
+      setMapActive(true);
+      const lats = filtered.map((place) => place.latitude);
+      const lons = filtered.map((place) => place.longitude);
+      const center = [(Math.min(...lats) + Math.max(...lats)) / 2, (Math.min(...lons) + Math.max(...lons)) / 2];
       requestAnimationFrame(() => {
-        layer.map.flyToBounds(
-          filtered.map((place) => [place.latitude, place.longitude]),
-          { padding: [48, 48], maxZoom: 16, duration: 0.8 },
-        );
+        layer.map.flyTo(center, layer.map.getZoom(), { duration: 0.6 });
       });
     }
   }

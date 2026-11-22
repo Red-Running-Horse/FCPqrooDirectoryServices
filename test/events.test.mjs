@@ -400,8 +400,9 @@ test("homepage section order (user directive v5): top filters → map → hero �
     ['<div className="map-search" role="search">', "search box"],
   ].map(([needle, label]) => at(needle));
   for (let i = 1; i < order.length; i++) assert.ok(order[i] > order[i - 1], `section ${i + 1} must follow section ${i}`);
-  assert.match(map, /flyToBounds\(/, "category change flies the map to the filtered results");
-  assert.match(map, /maxZoom: 16/, "fly capped so a single result doesn't over-zoom");
+  assert.doesNotMatch(map, /flyToBounds/, "no zoom-to-fit: the user's zoom context stays put");
+  assert.match(map, /flyTo\(center, layer\.map\.getZoom\(\)/, "the focus pans to the results at the CURRENT zoom");
+  assert.match(map, /setMapActive\(true\)/, "category change unlocks the tap-to-activate map on mobile");
 });
 
 test("the list-cluster filter row is not sticky (user directive v5)", () => {
