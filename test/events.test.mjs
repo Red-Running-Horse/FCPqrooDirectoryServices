@@ -784,3 +784,12 @@ test("events jump button: one slim anchor from the map's top edge to the ribbon,
   assert.match(chip, /font-size:\s*0\.85rem/, "quiet type");
   assert.doesNotMatch(chip, /text-transform:\s*uppercase/, "not shouting");
 });
+
+test("the in-map event popup links to the event's own detail card (user directive)", () => {
+  const source = read("../app/highway-map.js");
+  assert.match(source, /detail\.href = `\/eventos#\$\{event\.id\}`;/, "popup links to the event anchor");
+  assert.match(source, /detailEs\.textContent = "Ver evento";/, "ES label via the CSS language gate");
+  assert.match(source, /detailEn\.textContent = "View event";/, "EN label via the CSS language gate");
+  assert.match(source, /detailEs\.className = "l10n-es";/, "ES span gated");
+  assert.match(source, /detailEn\.className = "l10n-en";/, "EN span gated");
+});

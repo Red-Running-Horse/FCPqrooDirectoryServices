@@ -70,6 +70,20 @@ function eventPopupContent(event, placesById, language, onVenueClick) {
   venue.className = "place-popup__meta";
   venue.textContent = `${ui.eventPopupVenue}: ${view.venue.name ?? "—"}`;
   root.append(name, when, venue);
+  // Link to the event's own detail card: /eventos#<id> lands with the entry
+  // open (the page reads the hash). Bilingual via the CSS l10n gate — UI_TEXT
+  // parity is pinned, so no new keys.
+  const detail = document.createElement("a");
+  detail.href = `/eventos#${event.id}`;
+  detail.className = "place-popup__details";
+  const detailEs = document.createElement("span");
+  detailEs.className = "l10n-es";
+  detailEs.textContent = "Ver evento";
+  const detailEn = document.createElement("span");
+  detailEn.className = "l10n-en";
+  detailEn.textContent = "View event";
+  detail.append(detailEs, detailEn);
+  root.append(detail);
   if (view.venue.href) {
     const place = document.createElement("button");
     place.type = "button";
