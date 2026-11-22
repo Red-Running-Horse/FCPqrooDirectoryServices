@@ -371,11 +371,7 @@ const events = [
       en: "Forum of filmmakers from indigenous peoples, with special guests, at Árbol Rojo's Festival CICLOS 2026 in Felipe Carrillo Puerto. Free admission.",
     },
     startAt: "2026-11-27T11:00:00-05:00",
-    venue: {
-      name: { es: "Auditorio del Instituto Tecnológico de Felipe Carrillo Puerto", en: "Auditorio del Instituto Tecnológico de Felipe Carrillo Puerto" },
-      latitude: 19.58356381181467,
-      longitude: -88.03022079085898,
-    },
+    venue: { placeId: "auditorio-tecnologico-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/ciclos-2026-b.webp",
@@ -464,11 +460,7 @@ const events = [
       en: "A gathering of women to reconnect with nature, share experiences and heal in community, drawing on the sacred feminine and the wisdom of the Earth, at Balam-Nah, starting at 9:00 AM. Contribution MX$555; reservations at 984 184 1313.",
     },
     startAt: "2026-12-05T09:00:00-05:00",
-    venue: {
-      name: { es: "Balam-Nah, Felipe Carrillo Puerto", en: "Balam-Nah, Felipe Carrillo Puerto" },
-      latitude: 19.47833420045194,
-      longitude: -88.06680592757888,
-    },
+    venue: { placeId: "balam-nah-felipe-carrillo-puerto" },
     category: "culture",
     image: {
       url: "/img/eventos/juntas-florecemos-2026.webp",
@@ -479,29 +471,6 @@ const events = [
     sourceUrl: "https://www.instagram.com/reel/DfhPR5WBXxA/",
     status: "published",
     lastUpdated: "2026-11-21",
-  },
-  {
-    id: "noche-nortena-epico-2026",
-    title: {
-      es: "La Noche se Pone Norteña en Épico — Banda 420",
-      en: "A Northern Night at Épico — Banda 420",
-    },
-    description: {
-      es: "Noche de música norteña en vivo con Banda 420: los mejores temas del regional mexicano para cantar y bailar. Cover de $100 MXN.",
-      en: "A night of live norteña music with Banda 420: the best of regional Mexican music to sing and dance to. Cover: MX$100.",
-    },
-    startAt: "2026-11-21T22:00:00-05:00",
-    venue: { placeId: "restaurante-epico" },
-    category: "culture",
-    image: {
-      url: "/img/eventos/noche-nortena-epico-2026.webp",
-      alt: { es: "Cartel de La Noche se Pone Norteña en Épico con Banda 420", en: "Poster for La Noche se Pone Norteña at Épico with Banda 420" },
-    },
-    cost: { es: "Cover $100 MXN", en: "Cover MX$100" },
-    contactNote: "Verified from the Facebook event, Nov 2026.",
-    sourceUrl: "https://www.facebook.com/events/1104811969005400/",
-    status: "published",
-    lastUpdated: "2026-11-18",
   },
 ];
 
