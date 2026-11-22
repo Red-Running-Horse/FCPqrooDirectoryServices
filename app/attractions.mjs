@@ -523,7 +523,7 @@ const nojkaajTour = {
   verificationSourceUrls: [],
   verificationNotes: "Listing provided by the tour operator; meeting point pinned approximately at Plaza Cívica and not GPS-verified. Price ($3,500 MXN for 2), schedule and inclusions are per the operator's promotional copy — verify all details with the operator before publishing. Schedules and inclusions change — confirm all details with the operator when booking.",
   lastUpdated: "2026-10-08",
-  tourPage: { url: "/tours/tulum-noj-kaaj" },
+  tourPage: { url: "/tours/noj-kaaj" },
 };
 
 export const nonMappablePlaces = [];
