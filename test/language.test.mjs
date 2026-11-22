@@ -134,8 +134,13 @@ test("the other bilingual pages render the active language (promociones, tours, 
   assert.doesNotMatch(tour, /C\u00f3mo llegar|Getting here/, "no transportation section (operator request)");
   assert.doesNotMatch(tour, /La experiencia incluye \/ Your experience includes/, "no slash-mashed heading");
 
+  // The old URL serves a real page too: same transportation-free content, but
+  // pricing is replaced with "contact the tour operator" (operator's request).
   const oldTour = read("../app/tours/noj-kaaj/page.js");
-  assert.match(oldTour, /redirect\("\/tours\/tulum-noj-kaaj"\)/, "old URL redirects to the new page");
+  assert.match(oldTour, /<strong className="l10n-es">\{item\.es\}<\/strong>/, "old page keeps the includes grid");
+  assert.doesNotMatch(oldTour, /C\u00f3mo llegar|Getting here/, "old page: no transportation section");
+  assert.doesNotMatch(oldTour, /\$3,500/, "old page: no pricing \u2014 contact the operator instead");
+  assert.match(oldTour, /Contact the tour operator/, "contact wording present");
 
   const tzolkin = read("../app/tzolkin/page.js");
   assert.match(tzolkin, /<span className="l10n-es">Hoy<\/span>/, "today label gated");
