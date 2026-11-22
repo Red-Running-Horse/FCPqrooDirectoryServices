@@ -126,11 +126,16 @@ test("the other bilingual pages render the active language (promociones, tours, 
   assert.match(promociones, /<L10n pair=\{tier\.name\} \/>/, "tier names gated");
   assert.match(promociones, /<span className="l10n-es">Ofertas activas<\/span>/, "section heading gated");
 
-  const tour = read("../app/tours/noj-kaaj/page.js");
+  // The tour moved to /tours/tulum-noj-kaaj — a transportation-free revision
+  // requested by the operator. The old URL is now a redirect stub.
+  const tour = read("../app/tours/tulum-noj-kaaj/page.js");
   assert.match(tour, /<strong className="l10n-es">\{item\.es\}<\/strong>/, "includes list gated");
   assert.match(tour, /<strong className="l10n-en">\{item\.en\}<\/strong>/, "includes EN variant");
-  assert.match(tour, /<span className="l10n-es">Cómo llegar<\/span>/, "section heading gated");
+  assert.doesNotMatch(tour, /C\u00f3mo llegar|Getting here/, "no transportation section (operator request)");
   assert.doesNotMatch(tour, /La experiencia incluye \/ Your experience includes/, "no slash-mashed heading");
+
+  const oldTour = read("../app/tours/noj-kaaj/page.js");
+  assert.match(oldTour, /redirect\("\/tours\/tulum-noj-kaaj"\)/, "old URL redirects to the new page");
 
   const tzolkin = read("../app/tzolkin/page.js");
   assert.match(tzolkin, /<span className="l10n-es">Hoy<\/span>/, "today label gated");
