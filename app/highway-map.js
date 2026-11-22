@@ -299,12 +299,27 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
 
   // Clears the selected place when it drops out of the active category + search results.
   function applyFilters(nextCategory, nextSearch) {
+    const categoryChanged = nextCategory !== selectedCategory.current;
     selectedCategory.current = nextCategory;
     selectedSearch.current = nextSearch;
     setCategory(nextCategory);
     setSearch(nextSearch);
-    if (!filterPlaces(places, nextCategory, nextSearch).some((place) => place.id === selectedPlace.current)) {
+    const filtered = filterPlaces(places, nextCategory, nextSearch);
+    if (!filtered.some((place) => place.id === selectedPlace.current)) {
       setSelectedId(null);
+    }
+    // Reveal the filter's effect (user directive): the map is scroll-locked —
+    // especially on mobile — so changed markers alone are invisible. Fly the
+    // map to fit the filtered results whenever the CATEGORY changes (search
+    // keystrokes don't fly). Array bounds need no Leaflet import.
+    const layer = attractionLayer.current;
+    if (layer && categoryChanged && nextCategory !== "all" && filtered.length > 0) {
+      requestAnimationFrame(() => {
+        layer.map.flyToBounds(
+          filtered.map((place) => [place.latitude, place.longitude]),
+          { padding: [48, 48], maxZoom: 16, duration: 0.8 },
+        );
+      });
     }
   }
 
@@ -714,6 +729,43 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
     };
   }, []);
 
+  // Category filters render TWICE (user directive): above the map (sticky,
+  // for filtering before scrolling) and above the places list (in the filters
+  // cluster). Both instances read the same state, so they stay in sync.
+  // The list variant drops the sticky bar so the two don't fight.
+  const renderCategoryFilters = (extraClassName = "") => (
+    <nav className={`category-filters${extraClassName}`} aria-label={text.filtersLabel}>
+      {CATEGORIES.map(({ id, label }) => (
+        <button
+          key={id}
+          type="button"
+          aria-pressed={category === id}
+          onClick={() => applyFilters(id, search)}
+        >
+          <span
+            className="category-filters__icon"
+            aria-hidden="true"
+            dangerouslySetInnerHTML={{ __html: categoryIconSvg(id, { size: 16, className: "category-icon" }) }}
+          />
+          {localize(label, language)}
+        </button>
+      ))}
+      <button
+        type="button"
+        className="category-filters__events"
+        aria-pressed={showEvents}
+        onClick={() => setShowEvents((value) => !value)}
+      >
+        <span
+          className="category-filters__icon"
+          aria-hidden="true"
+          dangerouslySetInnerHTML={{ __html: EVENT_MARKER_ICON }}
+        />
+        {text.eventsLayer}
+      </button>
+    </nav>
+  );
+
   return (
     <>
 
@@ -737,6 +789,7 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
         {text.eventsJump}
       </a>
       {error && <p role="alert">{text.loadError}</p>}
+      {renderCategoryFilters("")}
       <div className="map-container map-workspace">
         <div className="map-workspace__map">
           <div className="map-wrapper">
@@ -795,36 +848,7 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
         <p className="hero__subheading">{text.heroSubheading}</p>
       </section>
       {children}
-      <nav className="category-filters" aria-label={text.filtersLabel}>
-        {CATEGORIES.map(({ id, label }) => (
-          <button
-            key={id}
-            type="button"
-            aria-pressed={category === id}
-            onClick={() => applyFilters(id, search)}
-          >
-            <span
-              className="category-filters__icon"
-              aria-hidden="true"
-              dangerouslySetInnerHTML={{ __html: categoryIconSvg(id, { size: 16, className: "category-icon" }) }}
-            />
-            {localize(label, language)}
-          </button>
-        ))}
-        <button
-          type="button"
-          className="category-filters__events"
-          aria-pressed={showEvents}
-          onClick={() => setShowEvents((value) => !value)}
-        >
-          <span
-            className="category-filters__icon"
-            aria-hidden="true"
-            dangerouslySetInnerHTML={{ __html: EVENT_MARKER_ICON }}
-          />
-          {text.eventsLayer}
-        </button>
-      </nav>
+      {renderCategoryFilters(" category-filters--list")}
       <div className="map-search" role="search">
         <label className="map-search__label" htmlFor="map-search-input">
           {text.searchLabel}

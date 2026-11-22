@@ -130,6 +130,12 @@ p {
   padding: 0.4rem 0.25rem 0.5rem;
 }
 
+/* The list-cluster instance (below the ribbon) is not sticky — only the
+   above-map row keeps the sticky bar. */
+.category-filters--list {
+  position: static;
+}
+
 .category-filters button {
   display: inline-flex;
   align-items: center;
