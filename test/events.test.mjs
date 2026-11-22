@@ -384,31 +384,29 @@ test("the map events layer reuses the layer-group pattern without touching the s
   assert.match(initialMarkup, /map-mobile-overlay/);
 });
 
-test("homepage section order (user directive v4): MAP → hero → ribbon → chips → search → quickbar → places → offline management → business CTA", () => {
+test("homepage section order (user directive v5): top filters → map → hero → ribbon → search", () => {
   const map = read("../app/highway-map.js");
   const at = (needle) => {
     const i = map.indexOf(needle);
     assert.ok(i > -1, `missing: ${needle}`);
     return i;
   };
+  assert.equal(map.split("{renderCategoryFilters(").length - 1, 2, "filters render above the map AND above the list");
   const order = [
-    ['<div className="map-container map-workspace">', "map + portal (the product, first)"],
-    ['<section className="hero"', "hero (identity right below the map)"],
-    ["{children}", "ribbon slot — page.js passes UpcomingEvents here, below the hero (map → identity → agenda)"],
-    ['<nav className="category-filters"', "category filter chips — directly above the list they filter (user directive v4): tapping a chip updates the places list below without scrolling, since the map stays scroll-locked"],
+    ['{renderCategoryFilters("")}', "top filter row directly above the map"],
+    ['<div className="map-container map-workspace">', "map + portal"],
+    ['<section className="hero"', "hero"],
+    ["{children}", "ribbon slot"],
     ['<div className="map-search" role="search">', "search box"],
-    ['<div className="offline-quickbar" role="region"', "offline quickbar"],
-    ['<details className="places-dropdown"', "places dropdown"],
-    ['id="offline-management"', "offline management disclosure"],
-    ['<section className="business-cta"', "business CTA"],
   ].map(([needle, label]) => at(needle));
-  for (let i = 1; i < order.length; i++) {
-    assert.ok(order[i] > order[i - 1], `section ${i + 1} must follow section ${i}`);
-  }
-  // The quickbar's manage link still targets the management disclosure that
-  // lives below it, and the search box still feeds the shared filter.
-  assert.match(map, /href="#offline-management"[\s\S]*?offlineDetailsRef\.current\.open = true/);
-  assert.match(map, /onChange=\{\(event\) => applyFilters\(category, event\.target\.value\)\}/, "search is state, not position");
+  for (let i = 1; i < order.length; i++) assert.ok(order[i] > order[i - 1], `section ${i + 1} must follow section ${i}`);
+  assert.match(map, /flyToBounds\(/, "category change flies the map to the filtered results");
+  assert.match(map, /maxZoom: 16/, "fly capped so a single result doesn't over-zoom");
+});
+
+test("the list-cluster filter row is not sticky (user directive v5)", () => {
+  const css = read("../app/style.css");
+  assert.match(css, /\.category-filters--list\s*\{[^}]*position:\s*static/, "only the above-map row sticks");
 });
 
 test("category chips wrap instead of scrolling, at compact size (user directive)", () => {
