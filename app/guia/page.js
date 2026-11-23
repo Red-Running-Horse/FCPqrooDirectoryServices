@@ -76,8 +76,8 @@ export default function Guia() {
         Castas y sigue siendo una de las comunidades de más fuerte identidad maya de México — el
         maya yucateco se habla a diario en hogares y mercados junto al español. Ven por Sian
         Ka&apos;an sin las multitudes de Tulum, el ecoturismo comunitario, la comida regional a
-        precio local y una ventana a la cultura maya viva. Es también estación del Tren Maya, un
-        traslado fácil entre Tulum y Bacalar/Chetumal.</Es>{" "}
+        precio local y una ventana a la cultura maya viva. Es también {placeLink("estacion-tren-maya-felipe-carrillo-puerto", "estación del Tren
+        Maya")}, un traslado fácil entre Tulum y Bacalar/Chetumal.</Es>{" "}
         <En>It is the cultural capital of the Zona Maya — a living Maya town, not a resort, and an
         easy Tren Maya stop between Tulum and Bacalar/Chetumal.</En>
       </p>
@@ -97,8 +97,8 @@ export default function Guia() {
       </h3>
       <ul>
         <li style={li}>
-          <Es>Estación completa en el Tramo 6 (Tulum–Chetumal) con servicios de turismo Maya
-          Ka&apos;an.</Es>{" "}
+          <Es>{placeLink("estacion-tren-maya-felipe-carrillo-puerto", "Estación completa")} en el Tramo 6 (Tulum–Chetumal) con
+          servicios de turismo Maya Ka&apos;an.</Es>{" "}
           <En>Full station on Segment 6 (Tulum–Chetumal) with Maya Ka&apos;an tourism services.</En>
         </li>
         <li style={li}>
@@ -115,8 +115,8 @@ export default function Guia() {
       <h3 style={h3}>ADO y colectivos</h3>
       <ul>
         <li style={li}>
-          <Es>Terminal ADO en el centro: Tulum ~1 h, Playa del Carmen ~2 h, Cancún ~3.5–4 h,
-          Chetumal/Bacalar ~1.5–2 h. Boletos en la app ADO.</Es>{" "}
+          <Es>{placeLink("terminal-ado-felipe-carrillo-puerto", "Terminal ADO")} en el centro: Tulum ~1 h, Playa del Carmen ~2 h,
+          Cancún ~3.5–4 h, Chetumal/Bacalar ~1.5–2 h. Boletos en la app ADO.</Es>{" "}
           <En>Downtown ADO terminal: Tulum ~1 h, Playa del Carmen ~2 h, Cancún ~3.5–4 h,
           Chetumal/Bacalar ~1.5–2 h. Tickets in the ADO app.</En>
         </li>
@@ -139,20 +139,22 @@ export default function Guia() {
       </h3>
       <ul>
         <li style={li}>
-          <strong>Santuario de la Cruz Parlante</strong> —{" "}
+          <strong>{placeLink("santuario-de-la-cruz-parlante-fcp", "Santuario de la Cruz Parlante")}</strong> —{" "}
           <Es>corazón espiritual de la Guerra de Castas; sitio de peregrinación activo. Vístete con
           modestia, pide permiso para fotos, sin sombrero ni calzado al entrar.</Es>{" "}
           <En>Active pilgrimage site: dress modestly, no hats or shoes inside, ask before
           photographing.</En>
         </li>
         <li style={li}>
-          <strong>Museo de la Ciudad</strong> y <strong>Casa de la Cultura</strong> (Plaza Cívica) —{" "}
+          <strong>{placeLink("museo-de-la-ciudad-felipe-carrillo-puerto", "Museo de la Ciudad")}</strong> y{" "}
+          <strong>{placeLink("casa-de-la-cultura-felipe-carrillo-puerto", "Casa de la Cultura")}</strong> (Plaza Cívica) —{" "}
           <Es>historia local, galerías y la tienda de artesanías mayas Kábo&apos;ob Ku
           Meyajo&apos;ob.</Es>{" "}
           <En>City history, galleries and the Maya artisan shop on the plaza.</En>
         </li>
         <li style={li}>
-          <strong>Iglesia de la Santa Cruz</strong> y <strong>Pila de los Azotes</strong> —{" "}
+          <strong>{placeLink("iglesia-de-san-servacio-felipe-carrillo-puerto", "Iglesia de la Santa Cruz")}</strong> y{" "}
+          <strong>{placeLink("pila-de-los-azotes-felipe-carrillo-puerto", "Pila de los Azotes")}</strong> —{" "}
           <Es>circuito del centro histórico.</Es> <En>Historic-center circuit.</En>
         </li>
         <li style={li}>
@@ -172,6 +174,24 @@ export default function Guia() {
           <strong>{placeLink("restaurante-epico", "Restaurante Épico")}</strong> (Col. Francisco
           May): <Es>platillos para compartir, terraza y ambiente local.</Es>{" "}
           <En>Small plates, terrace and a local atmosphere.</En>
+        </li>
+        <li style={li}>
+          <strong>{placeLink("balam-nah-felipe-carrillo-puerto", "Balam-Nah")}</strong> —{" "}
+          <Es>centro cultural y museo maya con acceso a la laguna: exposiciones, talleres,
+          cafetería y zona para acampar; verificado en campo en 2026.</Es>{" "}
+          <En>Maya cultural center and museum with lagoon access — exhibitions, workshops, a
+          cafeteria and camping areas; field-verified 2026.</En>
+        </li>
+        <li style={li}>
+          <strong>
+            <a href="/tours/tulum-noj-kaaj">Noj Kaaj — Ruta de la Resistencia</a>
+          </strong>{" "}
+          — <Es>recorrido comunitario a pie de cinco estaciones por el centro: historia caminada,
+          comida tradicional y música, con traductor de inglés; cada aportación va directamente a
+          familias locales.</Es>{" "}
+          <En>A five-station community walking route through downtown — history walked, tasted
+          and heard, with an English translator; every contribution goes directly to local
+          families.</En>
         </li>
       </ul>
       <figure className="guide-figure">
@@ -193,14 +213,15 @@ export default function Guia() {
       </h3>
       <ul>
         <li style={li}>
-          <strong>Muyil (Chunyaxché)</strong> (~30 min):{" "}
-          <Es>zona arqueológica en la selva + camino de maderas + flotador por el canal Maya en
-          Laguna Muyil, operado por guías comunitarios (2–3 h). Ve temprano.</Es>{" "}
+          <strong>{placeLink("zona-arqueologica-muyil-chunyaxche", "Muyil (Chunyaxché)")}</strong> (~30
+          min): <Es>zona arqueológica en la selva + camino de maderas +{" "}
+          {placeLink("laguna-muyil-flotador-sian-kaan", "flotador por el canal Maya en Laguna Muyil")}, operado
+          por guías comunitarios (2–3 h). Ve temprano.</Es>{" "}
           <En>Jungle ruins + boardwalk + the famous Maya-canal float with community guides; go
           early.</En>
         </li>
         <li style={li}>
-          <strong>Reserva Much Kanan K&apos;áax / Síijil Noh Ha</strong> (~10 km):{" "}
+          <strong>{placeLink("reserva-much-kanan-kaax-siijil-noh-ha", "Reserva Much Kanan K&apos;áax / Síijil Noh Ha")}</strong> (~10 km):{" "}
           <Es>cabañas rústicas, kayak, temazcal y comida casera; reserva por WhatsApp.</Es>{" "}
           <En>Community reserve: cabins, kayaking, temazcal, home cooking.</En>
         </li>
@@ -211,13 +232,13 @@ export default function Guia() {
           restaurant.</En>
         </li>
         <li style={li}>
-          <strong>Tihosuco</strong> (~1 h):{" "}
+          <strong>{placeLink("museo-de-la-guerra-de-castas-tihosuco", "Tihosuco")}</strong> (~1 h):{" "}
           <Es>Museo de la Guerra de Castas, templo colonial con mural y talleres de
           artesanía.</Es>{" "}
           <En>Caste War Museum, colonial church mural, artisan workshops.</En>
         </li>
         <li style={li}>
-          <strong>Cueva de las Serpientes Colgantes, Kantemó</strong>:{" "}
+          <strong>{placeLink("kantemo-cueva-de-las-serpientes-colgantes", "Cueva de las Serpientes Colgantes, Kantemó")}</strong>:{" "}
           <Es>al atardecer, murciélagos y culebras en pleno vuelo; tour comunitario.</Es>{" "}
           <En>Dusk bat flight and hunting snakes; community tour on a dirt road.</En>
         </li>
@@ -229,11 +250,13 @@ export default function Guia() {
           families; by appointment.</En>
         </li>
         <li style={li}>
-          <strong>Cenotes y lagunas de la Zona Maya</strong>:{" "}
-          <Es>pregunta en el módulo de turismo o consulta el mapa de fcpqroo.mx; algunos son de
-          cuota comunitaria, solo efectivo.</Es>{" "}
-          <En>Ask at the tourism kiosk or check the fcpqroo.mx map; community fees, cash
-          only.</En>
+          <strong>{placeLink("tumben-chankaj", "Tumben Chankaj")}</strong> (~10 min):{" "}
+          <Es>balneario y campamento junto a la laguna: poza para nadar, renta de hamacas y
+          cabañas sencillas, y amplio espacio para RV; cocina los fines de semana (~$50 MXN por
+          persona; verificado en 2026).</Es>{" "}
+          <En>Lagoon-side swimming spot and campground minutes from downtown — swimming area,
+          hammock and simple-cabin rental, and ample RV space; weekend kitchen (~MX$50 entry;
+          field-verified 2026).</En>
         </li>
       </ul>
 
@@ -241,6 +264,41 @@ export default function Guia() {
         <Es>Dónde dormir</Es> <En>Where to stay</En>
       </h2>
       <ul>
+        <li style={li}>
+          <strong>{placeLink("hotel-aldea-cruzoob", "Hotel Aldea Cruzo'ob — Cabañas y Restaurante")}</strong>{" "}
+          (~10 min del centro):{" "}
+          <Es>cabañas amplias y frescas con alberca, restaurante y wifi; acepta mascotas;
+          verificado en campo en 2026 — reserva por{" "}
+          <a
+            href="https://www.booking.com/hotel/mx/aldea-cruzo-ob-felipe-carrillo-puerto1.html"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Booking.com
+          </a>
+          .</Es>{" "}
+          <En>Large, airy cabins with pool, restaurant and WiFi; pet friendly; field-verified
+          2026 — book via Booking.com.</En>
+        </li>
+        <li style={li}>
+          <strong>{placeLink("hotel-salome", "Hotel Salome")}</strong> (centro):{" "}
+          <Es>opción económica a dos cuadras de la terminal: habitaciones limpias con aire
+          acondicionado y alberca.</Es>{" "}
+          <En>Budget option two blocks from the bus terminal: clean air-conditioned rooms and a
+          pool.</En>
+        </li>
+        <li style={li}>
+          <strong>{placeLink("camino-al-mar-hotel", "Camino al Mar Hotel")}</strong>:{" "}
+          <Es>habitaciones de ~$500 MXN con aire acondicionado y WiFi; también renta kayaks para
+          la laguna.</Es>{" "}
+          <En>Rooms around MX$500 with air conditioning and WiFi; also rents kayaks for the
+          lagoon.</En>
+        </li>
+        <li style={li}>
+          <strong>{placeLink("tumben-chankaj", "Tumben Chankaj")}</strong> (~10 min):{" "}
+          <Es>camping y RV junto a la laguna — la opción de pernocta más flexible de la zona.</Es>{" "}
+          <En>Lagoon-side camping and RV — the most flexible overnight option around.</En>
+        </li>
         <li style={li}>
           <strong>{placeLink("hotel-tihosuco-colonial", "Hotel Tihosuco Colonial")}</strong>{" "}
           (Tihosuco, ~1 h):{" "}
@@ -284,7 +342,9 @@ export default function Guia() {
         <Es>Temporada alta de noviembre a abril — y agenda cultural todo el año. Consulta los{" "}
         <a href="/eventos">próximos eventos</a>: el Festival de la Xtáabay (octubre), las veladas
         de Día de Muertos en el museo (finales de octubre), el Festival de Cultura del Caribe con
-        Belice (noviembre) y la gran feria de la Santa Cruz (23 de abril–3 de mayo).</Es>{" "}
+        Belice (noviembre) y la gran feria de la Santa Cruz (23 de abril–3 de mayo). Este mes:
+        el Festival Ko&apos;one&apos;ex K&apos;aay y el Festival Gastronómico SIKIL (28 de noviembre)
+        y las funciones gratuitas del Festival CICLOS de cine (23–27 de noviembre).</Es>{" "}
         <En>High season is November–April, with a full cultural calendar year-round — see the
         events board for the Xtabay Festival (October), Día de Muertos evenings (late October),
         the Caribbean Culture Festival with Belize (November) and the Santa Cruz fair (April

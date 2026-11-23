@@ -36,18 +36,40 @@ test("bilingual differentiation: ES primary, EN muted secondary in its own span"
 
 test("place mentions deep-link into the map with verified ids", () => {
   const ids = [
+    // the original six
     "mercado-felipe-carrillo-puerto",
     "el-tekaxeno-mercado-fcp",
     "restaurante-epico",
     "selva-morena",
     "casa-saastal",
     "hotel-tihosuco-colonial",
+    // guide revision v2 (2026-11-22): every directory mention is now linked
+    "santuario-de-la-cruz-parlante-fcp",
+    "museo-de-la-ciudad-felipe-carrillo-puerto",
+    "casa-de-la-cultura-felipe-carrillo-puerto",
+    "iglesia-de-san-servacio-felipe-carrillo-puerto",
+    "pila-de-los-azotes-felipe-carrillo-puerto",
+    "zona-arqueologica-muyil-chunyaxche",
+    "laguna-muyil-flotador-sian-kaan",
+    "reserva-much-kanan-kaax-siijil-noh-ha",
+    "kantemo-cueva-de-las-serpientes-colgantes",
+    "museo-de-la-guerra-de-castas-tihosuco",
+    "estacion-tren-maya-felipe-carrillo-puerto",
+    "terminal-ado-felipe-carrillo-puerto",
+    "balam-nah-felipe-carrillo-puerto",
+    "tumben-chankaj",
+    "hotel-aldea-cruzoob",
+    "hotel-salome",
+    "camino-al-mar-hotel",
   ];
   for (const id of ids) {
     assert.ok(page.includes(`{placeLink("${id}",`), `${id} deep link wired`);
   }
   const deepLinks = page.match(/\/?\?lugar=\$\{id\}/g) ?? [];
   assert.equal(deepLinks.length, 1, "one placeLink helper builds all deep links");
+  // Revision v2 (2026-11-22): the community tour and the live season are linked too.
+  assert.match(page, /href="\/tours\/tulum-noj-kaaj"/, "the Noj Kaaj community tour is linked");
+  assert.ok(page.includes("Festival CICLOS"), "current-season events named with dates");
 });
 
 test("external links are sanitized (new tab, noopener) and internal ones same-tab", () => {
