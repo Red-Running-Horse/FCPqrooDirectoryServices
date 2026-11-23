@@ -7,17 +7,19 @@
 //
 // What: markers grouped by EXACT coordinate fan out deterministically around
 // their true point. The spread is sized in SCREEN PIXELS (SPREAD_RADIUS_PX —
-// about one marker width, so stacked pins are always separately clickable),
-// converted to meters at the current zoom and latitude. It reaches exactly
-// zero at SPREAD_ANCHOR_ZOOM (the map's max zoom), so at the deepest zoom
-// every pin sits exactly on its true coordinates (honest), while at every
-// shallower zoom stacked pins separate (readable). Angles come from a stable
-// hash of each marker's id, so the layout is identical on every render — no
-// flicker, independent of input order.
+// about one marker width) and is active only inside the zoom window
+// [SPREAD_FLOOR_ZOOM, SPREAD_ANCHOR_ZOOM): below the floor, stacked pins
+// stay stacked (city zoom is for orientation, not clicking, and a fixed
+// pixel spread drifts meters apart over real geography as you zoom out);
+// at the anchor (max zoom) every pin sits exactly on its true coordinates
+// (honest). In between, stacked pins separate enough to be clickable
+// (readable). Angles come from a stable hash of each marker's id, so the
+// layout is identical on every render — no flicker, input-order independent.
 //
 // Deliberately NOT changed: coordinates in the data. This module only affects
 // where markers are drawn; the underlying records stay exact.
 
+export const SPREAD_FLOOR_ZOOM = 13;
 export const SPREAD_ANCHOR_ZOOM = 20;
 export const SPREAD_RADIUS_PX = 40;
 const COORD_PRECISION = 7;
@@ -46,7 +48,7 @@ export function spreadOffsets(items, zoom) {
   }
 
   const offsets = new Map();
-  const converged = zoom >= SPREAD_ANCHOR_ZOOM;
+  const spread = zoom >= SPREAD_FLOOR_ZOOM && zoom < SPREAD_ANCHOR_ZOOM;
 
   for (const group of groups.values()) {
     if (group.length === 1) {
@@ -62,10 +64,10 @@ export function spreadOffsets(items, zoom) {
       // each slot so the same id lands in the same place on every render.
       const angle = (2 * Math.PI * (i + 0.5 * hashId(id))) / n;
       // Radius in meters for THIS zoom and latitude: SPREAD_RADIUS_PX screen
-      // pixels at the current meters-per-pixel. Zero once converged.
+      // pixels at the current meters-per-pixel. Zero outside the window.
       const metersPerPixel =
         (METERS_PER_PIXEL_AT_EQUATOR * Math.cos((position[0] * Math.PI) / 180)) / 2 ** zoom;
-      const radiusMeters = converged ? 0 : SPREAD_RADIUS_PX * metersPerPixel;
+      const radiusMeters = spread ? SPREAD_RADIUS_PX * metersPerPixel : 0;
       const dLat = (radiusMeters * Math.sin(angle)) / METERS_PER_DEGREE_LAT;
       const dLon =
         (radiusMeters * Math.cos(angle)) /
