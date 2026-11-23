@@ -791,3 +791,9 @@ test("the in-map event popup links to the event's own detail card (user directiv
   assert.match(source, /detailEs\.className = "l10n-es";/, "ES span gated");
   assert.match(source, /detailEn\.className = "l10n-en";/, "EN span gated");
 });
+
+test("the list-cluster filter row glides the results into view (user directive)", () => {
+  const source = read("../app/highway-map.js");
+  assert.match(source, /scrollIntoView\(\{ behavior: "smooth", block: "start" \}\)/, "glides to the places list");
+  assert.match(source, /extraClassName\.includes\("--list"\)/, "only the second bar scrolls — the above-map row doesn't");
+});

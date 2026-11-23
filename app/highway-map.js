@@ -729,14 +729,29 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
   // for filtering before scrolling) and above the places list (in the filters
   // cluster). Both instances read the same state, so they stay in sync.
   // The list variant drops the sticky bar so the two don't fight.
-  const renderCategoryFilters = (extraClassName = "") => (
+  const renderCategoryFilters = (extraClassName = "") => {
+    const fromListRow = extraClassName.includes("--list");
+    return (
     <nav className={`category-filters${extraClassName}`} aria-label={text.filtersLabel}>
       {CATEGORIES.map(({ id, label }) => (
         <button
           key={id}
           type="button"
           aria-pressed={category === id}
-          onClick={() => applyFilters(id, search)}
+          onClick={() => {
+            applyFilters(id, search);
+            // The list-cluster row (user directive): glide the page down to
+            // the results — the dropdown opens automatically once state lands,
+            // so scroll on the NEXT frames when its height is final. The
+            // above-map row never scrolls (the user is already at the map).
+            if (fromListRow) {
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                  document.querySelector(".places-dropdown")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                });
+              });
+            }
+          }}
         >
           <span
             className="category-filters__icon"
@@ -760,7 +775,8 @@ export default function HighwayMap({ placesIndex, events = [], children }) {
         {text.eventsLayer}
       </button>
     </nav>
-  );
+    );
+  };
 
   return (
     <>
