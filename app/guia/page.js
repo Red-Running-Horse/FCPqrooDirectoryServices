@@ -315,7 +315,7 @@ export default function Guia() {
           route; book via Booking.com.</En>
         </li>
         <li style={li}>
-          <strong>Selva Morena</strong> (~20 min):{" "}
+          <strong>{placeLink("selva-morena", "Selva Morena")}</strong> (~20 min):{" "}
           <Es>cabañas con jacuzzi, temazcal y cacao — bienestar en la selva; reserva por{" "}
           <a
             href="https://selvamorenareserva.wixsite.com/selva-morena"
@@ -328,7 +328,7 @@ export default function Guia() {
           <En>Cabins with jacuzzi, temazcal and cacao — book via their website or Booking.</En>
         </li>
         <li style={li}>
-          <strong>Reserva Much Kanan K&apos;áax</strong>:{" "}
+          <strong>{placeLink("reserva-much-kanan-kaax-siijil-noh-ha", "Reserva Much Kanan K&apos;áax")}</strong>:{" "}
           <Es>cabañas rústicas dentro de la reserva.</Es>{" "}
           <En>Rustic cabins inside the community reserve itself.</En>
         </li>
