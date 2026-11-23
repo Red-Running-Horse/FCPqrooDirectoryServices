@@ -76,8 +76,7 @@ export default function Guia() {
         Castas y sigue siendo una de las comunidades de más fuerte identidad maya de México — el
         maya yucateco se habla a diario en hogares y mercados junto al español. Ven por Sian
         Ka&apos;an sin las multitudes de Tulum, el ecoturismo comunitario, la comida regional a
-        precio local y una ventana a la cultura maya viva. Es también {placeLink("estacion-tren-maya-felipe-carrillo-puerto", "estación del Tren
-        Maya")}, un traslado fácil entre Tulum y Bacalar/Chetumal.</Es>{" "}
+        precio local y una ventana a la cultura maya viva. Es también {placeLink("estacion-tren-maya-felipe-carrillo-puerto", "estación del Tren Maya")}, un traslado fácil entre Tulum y Bacalar/Chetumal.</Es>{" "}
         <En>It is the cultural capital of the Zona Maya — a living Maya town, not a resort, and an
         easy Tren Maya stop between Tulum and Bacalar/Chetumal.</En>
       </p>
